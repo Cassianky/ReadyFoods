@@ -1,0 +1,12 @@
+/ReadyFoods-ejb/build/
+/ReadyFoods-ejb/dist/
+/ReadyFoods-ejb/nbproject/private/
+
+/build/
+/nbproject/private/
+/ReadyFoods/nbproject/private/
+/dist/
+
+/ReadyFoods-war/nbproject/private/
+/ReadyFoods-war/build/
+/ReadyFoods-war/dist/
