@@ -9,7 +9,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
@@ -58,7 +57,6 @@ public class Recipe implements Serializable {
     @Column(nullable = false)
     @NotNull
     private String videoURL;
-    private Boolean recipeDisabled;
     
     @OneToMany
     private List<Review> reviews;
@@ -73,7 +71,6 @@ public class Recipe implements Serializable {
         this.ingredientSpecificationList = new ArrayList<>();
         this.recipeSteps = new ArrayList<>();
         this.categories = new ArrayList<>();
-        this.recipeDisabled = false;
     }
 
     public Recipe(String recipeTitle, Integer cookingTime, Integer reorderQuantity, Integer caloriesPerServing, Integer carbsPerServing, Integer fatsPerServing, Integer proteinsPerServing, Integer sugarPerServing, String videoURL) {
@@ -192,14 +189,6 @@ public class Recipe implements Serializable {
 
     public void setVideoURL(String videoURL) {
         this.videoURL = videoURL;
-    }
-
-    public Boolean getRecipeDisabled() {
-        return recipeDisabled;
-    }
-
-    public void setRecipeDisabled(Boolean recipeDisabled) {
-        this.recipeDisabled = recipeDisabled;
     }
 
     public List<Category> getCategories() {
