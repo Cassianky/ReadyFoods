@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-public class CategoryEntity implements Serializable {
+public class Category implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -31,24 +31,24 @@ public class CategoryEntity implements Serializable {
     @Size(max = 128)
     private String description;
     
-    //clarify on relatopnship
+   
     @ManyToOne
-    private CategoryEntity parentCategory; // necessary to have parent? or use enum if we are not adding anymore parent category
+    private Category parentCategory; //necessary to have parent? or use enum if we are not adding anymore parent category
     @OneToMany(mappedBy = "parentCategory")
-    private List<CategoryEntity> subCategories;
+    private List<Category> subCategories;
     
     @ManyToMany(mappedBy = "categories")
-    private List<RecipeEntity> recipes;
+    private List<Recipe> recipes;
 
     
-    public CategoryEntity() {
+    public Category() {
     }
 
-    public CategoryEntity(List<CategoryEntity> subCategories) {
+    public Category(List<Category> subCategories) {
         this.subCategories = new ArrayList<>();
     }
 
-    public CategoryEntity(String name, String description) {
+    public Category(String name, String description) {
         this();
         
         this.name = name;
@@ -72,19 +72,19 @@ public class CategoryEntity implements Serializable {
         this.description = description;
     }
 
-    public CategoryEntity getParentCategory() {
+    public Category getParentCategory() {
         return parentCategory;
     }
 
-    public void setParentCategory(CategoryEntity parentCategory) {
+    public void setParentCategory(Category parentCategory) {
         this.parentCategory = parentCategory;
     }
 
-    public List<CategoryEntity> getSubCategories() {
+    public List<Category> getSubCategories() {
         return subCategories;
     }
 
-    public void setSubCategories(List<CategoryEntity> subCategories) {
+    public void setSubCategories(List<Category> subCategories) {
         this.subCategories = subCategories;
     }
     
@@ -106,10 +106,10 @@ public class CategoryEntity implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the categoryId fields are not set
-        if (!(object instanceof CategoryEntity)) {
+        if (!(object instanceof Category)) {
             return false;
         }
-        CategoryEntity other = (CategoryEntity) object;
+        Category other = (Category) object;
         if ((this.categoryId == null && other.categoryId != null) || (this.categoryId != null && !this.categoryId.equals(other.categoryId))) {
             return false;
         }

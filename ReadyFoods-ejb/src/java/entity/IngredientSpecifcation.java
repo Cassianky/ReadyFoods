@@ -8,12 +8,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class IngredientSpecifcationEntity implements Serializable {
+public class IngredientSpecifcation implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -22,17 +21,17 @@ public class IngredientSpecifcationEntity implements Serializable {
     @Column(nullable = false)
     @NotNull
     @Min(1)
-    private Integer quantity;
+    private Integer quantityPerServing;
     @Column(nullable = false)
     @NotNull
-    private IngredientEntity ingredient;
+    private Ingredient ingredient;
     
     @ManyToOne(optional = false)
-    private RecipeEntity recipe;
+    private Recipe recipe;
 
     
-    public IngredientSpecifcationEntity(Integer quantity, IngredientEntity ingredient) {
-        this.quantity = quantity;
+    public IngredientSpecifcation(Integer quantity, Ingredient ingredient) {
+        this.quantityPerServing = quantity;
         this.ingredient = ingredient;
     }
     
@@ -55,10 +54,10 @@ public class IngredientSpecifcationEntity implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the ingredientSpecificationId fields are not set
-        if (!(object instanceof IngredientSpecifcationEntity)) {
+        if (!(object instanceof IngredientSpecifcation)) {
             return false;
         }
-        IngredientSpecifcationEntity other = (IngredientSpecifcationEntity) object;
+        IngredientSpecifcation other = (IngredientSpecifcation) object;
         if ((this.ingredientSpecificationId == null && other.ingredientSpecificationId != null) || (this.ingredientSpecificationId != null && !this.ingredientSpecificationId.equals(other.ingredientSpecificationId))) {
             return false;
         }
@@ -70,27 +69,27 @@ public class IngredientSpecifcationEntity implements Serializable {
         return "entity.IngredientSpecifcationEntity[ id=" + ingredientSpecificationId + " ]";
     }
 
-    public Integer getQuantity() {
-        return quantity;
+    public Integer getQuantityPerServing() {
+        return quantityPerServing;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.setQuantity(quantity);
+    public void setQuantityPerServing(Integer quantityPerServing) {
+        this.setQuantityPerServing(quantityPerServing);
     }
 
-    public IngredientEntity getIngredient() {
+    public Ingredient getIngredient() {
         return ingredient;
     }
 
-    public void setIngredient(IngredientEntity ingredient) {
+    public void setIngredient(Ingredient ingredient) {
         this.ingredient = ingredient;
     }
 
-    public RecipeEntity getRecipe() {
+    public Recipe getRecipe() {
         return recipe;
     }
 
-    public void setRecipe(RecipeEntity recipe) {
+    public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
     }
     

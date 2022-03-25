@@ -9,11 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-public class IngredientEntity implements Serializable {
+public class Ingredient implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -30,12 +31,22 @@ public class IngredientEntity implements Serializable {
     @DecimalMin("0.00")
     @Digits(integer = 9, fraction = 2) // 11 - 2 digits to the left of the decimal point
     private BigDecimal unitPrice; //1 thing, 10gram, 10ml.
+    @Column(nullable = false)
+    @NotNull
+    @Min(0)
+    private Integer reorderQuantity;
+    //insufficient stock to fulfil customer's order function
+    //implement backend, kiv frontend
+    @Column(nullable = false)
+    @NotNull
+    @Min(0) 
+    private Integer stockQuantity;
 
     
-    public IngredientEntity() {
+    public Ingredient() {
     }
 
-    public IngredientEntity(String name, String description, BigDecimal unitPrice) {
+    public Ingredient(String name, String description, BigDecimal unitPrice) {
         this();
         this.name = name;
         this.description = description;
@@ -63,10 +74,10 @@ public class IngredientEntity implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the ingredientId fields are not set
-        if (!(object instanceof IngredientEntity)) {
+        if (!(object instanceof Ingredient)) {
             return false;
         }
-        IngredientEntity other = (IngredientEntity) object;
+        Ingredient other = (Ingredient) object;
         if ((this.ingredientId == null && other.ingredientId != null) || (this.ingredientId != null && !this.ingredientId.equals(other.ingredientId))) {
             return false;
         }

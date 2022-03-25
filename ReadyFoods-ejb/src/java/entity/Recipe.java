@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-public class RecipeEntity implements Serializable {
+public class Recipe implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -33,14 +33,10 @@ public class RecipeEntity implements Serializable {
     @Column(nullable = false)
     @NotNull
     @OneToMany(mappedBy = "recipe")
-    private List<IngredientSpecifcationEntity> ingredientSpecifcations;
+    private List<IngredientSpecifcation> ingredientSpecifcations;
     @Column(nullable = false)
     @NotNull
     private List<String> recipeSteps;
-    @Column(nullable = false)
-    @NotNull
-    @Min(0)
-    private Integer reorderQuantity;
     @Column(nullable = false)
     @NotNull
     @Min(0)
@@ -67,30 +63,25 @@ public class RecipeEntity implements Serializable {
     private Boolean recipeDisabled;
     
     @OneToMany(mappedBy = "recipe")
-    private List<ReviewEntity> reviews;
+    private List<Review> reviews;
 
     @OneToMany(mappedBy = "recipe")
-    private List<IngredientSpecifcationEntity> ingredientSpecificationList;
+    private List<IngredientSpecifcation> ingredientSpecificationList;
     @ManyToMany
-    private List<CategoryEntity> categories;//seperate or combine categories?
-//    private CategoryEntity cuisineCategory;
-//    private CategoryEntity dietCategory;
-//    private CategoryEntity mealTypeCategory;
-//    private CategoryEntity prepTimeCategory;
-//    private CategoryEntity cookMethodCategory;
+    private List<Category> categories;//seperate or combine categories?
+    //5 parent category - cuisine, diet, mealType, prepTime,cookMethod;
     
-    public RecipeEntity() {
+    public Recipe() {
         this.ingredientSpecifcations = new ArrayList<>();
         this.recipeSteps = new ArrayList<>();
         this.categories = new ArrayList<>();
         this.recipeDisabled = false;
     }
 
-    public RecipeEntity(String recipeTitle, Integer cookingTime, Integer reorderQuantity, Integer caloriesPerServing, Integer carbsPerServing, Integer fatsPerServing, Integer proteinsPerServing, Integer sugarPerServing, String videoURL) {
+    public Recipe(String recipeTitle, Integer cookingTime, Integer reorderQuantity, Integer caloriesPerServing, Integer carbsPerServing, Integer fatsPerServing, Integer proteinsPerServing, Integer sugarPerServing, String videoURL) {
         this();
         this.recipeTitle = recipeTitle;
         this.cookingTime = cookingTime;
-        this.reorderQuantity = reorderQuantity;
         this.caloriesPerServing = caloriesPerServing;
         this.carbsPerServing = carbsPerServing;
         this.fatsPerServing = fatsPerServing;
@@ -118,10 +109,10 @@ public class RecipeEntity implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the recipeId fields are not set
-        if (!(object instanceof RecipeEntity)) {
+        if (!(object instanceof Recipe)) {
             return false;
         }
-        RecipeEntity other = (RecipeEntity) object;
+        Recipe other = (Recipe) object;
         if ((this.recipeId == null && other.recipeId != null) || (this.recipeId != null && !this.recipeId.equals(other.recipeId))) {
             return false;
         }
@@ -149,11 +140,11 @@ public class RecipeEntity implements Serializable {
         this.cookingTime = cookingTime;
     }
 
-    public List<IngredientSpecifcationEntity> getIngredientSpecifcations() {
+    public List<IngredientSpecifcation> getIngredientSpecifcations() {
         return ingredientSpecifcations;
     }
 
-    public void setIngredientSpecifcations(List<IngredientSpecifcationEntity> ingredientSpecifcations) {
+    public void setIngredientSpecifcations(List<IngredientSpecifcation> ingredientSpecifcations) {
         this.ingredientSpecifcations = ingredientSpecifcations;
     }
 
@@ -163,14 +154,6 @@ public class RecipeEntity implements Serializable {
 
     public void setRecipeSteps(List<String> recipeSteps) {
         this.recipeSteps = recipeSteps;
-    }
-
-    public Integer getReorderQuantity() {
-        return reorderQuantity;
-    }
-
-    public void setReorderQuantity(Integer reorderQuantity) {
-        this.reorderQuantity = reorderQuantity;
     }
 
     public Integer getCaloriesPerServing() {
@@ -229,11 +212,11 @@ public class RecipeEntity implements Serializable {
         this.recipeDisabled = recipeDisabled;
     }
 
-    public List<CategoryEntity> getCategories() {
+    public List<Category> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<CategoryEntity> categories) {
+    public void setCategories(List<Category> categories) {
         this.categories = categories;
     }
 
