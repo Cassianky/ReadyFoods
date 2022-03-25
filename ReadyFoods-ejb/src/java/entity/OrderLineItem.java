@@ -41,7 +41,7 @@ public class OrderLineItem implements Serializable {
     private List<CustomisedIngredient> customisedIngredients;
     
     @ManyToOne(optional = true)
-    private Recipe recipe;
+    private RecipeEntity recipe;
 
     public Long getOrderLineItemId() {
         return orderLineItemId;
