@@ -46,14 +46,13 @@ public class Ingredient implements Serializable {
     public Ingredient() {
     }
 
-    public Ingredient(String name, String description, BigDecimal unitPrice) {
+    public Ingredient(String name, String description, BigDecimal unitPrice, Integer stockQuantity) {
         this();
         this.name = name;
         this.description = description;
         this.unitPrice = unitPrice;
+        this.stockQuantity = stockQuantity;
     }
-    
-    
     
     
     public Long getIngredientId() {
@@ -111,6 +110,14 @@ public class Ingredient implements Serializable {
 
     public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
+    }
+
+    public Integer getStockQuantity() {
+        return stockQuantity;
+    }
+
+    public void setStockQuantity(Integer stockQuantity) {
+        this.stockQuantity = stockQuantity;
     }
     
 }

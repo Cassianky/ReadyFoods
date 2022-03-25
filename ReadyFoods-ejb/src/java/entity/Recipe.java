@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
@@ -30,10 +32,6 @@ public class Recipe implements Serializable {
     @NotNull
     @Min(15)
     private Integer cookingTime;
-    @Column(nullable = false)
-    @NotNull
-    @OneToMany(mappedBy = "recipe")
-    private List<IngredientSpecifcation> ingredientSpecifcations;
     @Column(nullable = false)
     @NotNull
     private List<String> recipeSteps;
@@ -62,17 +60,17 @@ public class Recipe implements Serializable {
     private String videoURL;
     private Boolean recipeDisabled;
     
-    @OneToMany(mappedBy = "recipe")
+    @OneToMany
     private List<Review> reviews;
 
-    @OneToMany(mappedBy = "recipe")
+    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)
     private List<IngredientSpecifcation> ingredientSpecificationList;
     @ManyToMany
     private List<Category> categories;//seperate or combine categories?
     //5 parent category - cuisine, diet, mealType, prepTime,cookMethod;
     
     public Recipe() {
-        this.ingredientSpecifcations = new ArrayList<>();
+        this.ingredientSpecificationList = new ArrayList<>();
         this.recipeSteps = new ArrayList<>();
         this.categories = new ArrayList<>();
         this.recipeDisabled = false;
@@ -138,14 +136,6 @@ public class Recipe implements Serializable {
 
     public void setCookingTime(Integer cookingTime) {
         this.cookingTime = cookingTime;
-    }
-
-    public List<IngredientSpecifcation> getIngredientSpecifcations() {
-        return ingredientSpecifcations;
-    }
-
-    public void setIngredientSpecifcations(List<IngredientSpecifcation> ingredientSpecifcations) {
-        this.ingredientSpecifcations = ingredientSpecifcations;
     }
 
     public List<String> getRecipeSteps() {

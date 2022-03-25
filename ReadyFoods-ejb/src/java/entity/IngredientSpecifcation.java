@@ -3,10 +3,10 @@ package entity;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -22,13 +22,16 @@ public class IngredientSpecifcation implements Serializable {
     @NotNull
     @Min(1)
     private Integer quantityPerServing;
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     @NotNull
     private Ingredient ingredient;
     
     @ManyToOne(optional = false)
     private Recipe recipe;
 
+    
+    public IngredientSpecifcation() {
+    }
     
     public IngredientSpecifcation(Integer quantity, Ingredient ingredient) {
         this.quantityPerServing = quantity;
