@@ -6,18 +6,25 @@
 package ejb.session.stateless;
 
 import entity.Staff;
+import java.util.List;
 import java.util.Set;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import util.exception.InputDataValidationException;
+import util.exception.InvalidLoginCredentialException;
+import util.exception.StaffNotFoundException;
 import util.exception.StaffUsernameExistException;
 import util.exception.UnknownPersistenceException;
+import util.security.CryptographicHelper;
 
 /**
  *
@@ -64,6 +71,54 @@ public class StaffSessionBean implements StaffSessionBeanLocal {
         }
     }
 
+    @Override
+    public List<Staff> retrieveAllStaffs() {
+        Query query = em.createQuery("SELECT s FROM Staff s");
+
+        return query.getResultList();
+    }
+
+    @Override
+    public Staff retrieveStaffByStaffId(Long staffId) throws StaffNotFoundException {
+        Staff staff = em.find(Staff.class, staffId);
+
+        if (staff != null) {
+            return staff;
+        } else {
+            throw new StaffNotFoundException("Staff ID " + staffId + " does not exist!");
+        }
+    }
+
+    @Override
+    public Staff retrieveStaffByUsername(String username) throws StaffNotFoundException {
+        Query query = em.createQuery("SELECT s FROM Staff s WHERE s.username = :inUsername");
+        query.setParameter("inUsername", username);
+
+        try {
+            return (Staff) query.getSingleResult();
+        } catch (NoResultException | NonUniqueResultException ex) {
+            throw new StaffNotFoundException("Staff Username " + username + " does not exist!");
+        }
+    }
+
+    @Override
+    public Staff staffLogin(String username, String password) throws InvalidLoginCredentialException {
+        try {
+            Staff staff = retrieveStaffByUsername(username);
+            String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(
+                    CryptographicHelper.getInstance().doMD5Hashing(password + staff.getSalt()));
+
+            if (staff.getPassword().equals(passwordHash)) {
+                return staff;
+            } else {
+                throw new InvalidLoginCredentialException("Username does not exist or invalid password!");
+            }
+        } catch (StaffNotFoundException ex) {
+            throw new InvalidLoginCredentialException("Username does not exist or invalid password!");
+        }
+    }
+
+    // update and delete?
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Staff>> constraintViolations) {
         String msg = "Input data validation error!:";
 
@@ -76,6 +131,4 @@ public class StaffSessionBean implements StaffSessionBeanLocal {
         return msg;
     }
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
 }
