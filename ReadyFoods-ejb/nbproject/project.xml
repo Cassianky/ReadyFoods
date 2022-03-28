@@ -6,11 +6,7 @@
             <name>ReadyFoods-ejb</name>
             <minimum-ant-version>1.6.5</minimum-ant-version>
             <included-library dirs="200">libs.jakartaee-api-8.0.classpath</included-library>
-            <included-library dirs="200">file.reference.pepper-grinder-1.0.10.jar</included-library>
-            <included-library dirs="200">file.reference.primefaces-8.0-sources.jar</included-library>
-            <included-library dirs="200">file.reference.primefaces-8.0.jar</included-library>
-            <included-library dirs="200">libs.jsf20.classpath</included-library>
-            <included-library dirs="200">libs.jakartaee-web-api-8.0.classpath</included-library>
+            <included-library dirs="200">libs.PrimeFaces_Pepper_Grind_1.0.10.classpath</included-library>
             <source-roots>
                 <root id="src.dir" name="Source Packages"/>
             </source-roots>
