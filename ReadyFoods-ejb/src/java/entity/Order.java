@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,6 +26,7 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import util.enumeration.Status;
 
 /**
  *
@@ -62,9 +65,10 @@ public class Order implements Serializable {
     @NotNull
     private Date dateForDelivery;
     
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @NotNull
-    private Boolean delivered;
+    private Status status;
     
     @Size(max = 128)
     private String additionalNotes;
@@ -180,20 +184,6 @@ public class Order implements Serializable {
     }
 
     /**
-     * @return the delivered
-     */
-    public Boolean getDelivered() {
-        return delivered;
-    }
-
-    /**
-     * @param delivered the delivered to set
-     */
-    public void setDelivered(Boolean delivered) {
-        this.delivered = delivered;
-    }
-
-    /**
      * @return the additionalNotes
      */
     public String getAdditionalNotes() {
@@ -233,6 +223,20 @@ public class Order implements Serializable {
      */
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    /**
+     * @return the status
+     */
+    public Status getStatus() {
+        return status;
+    }
+
+    /**
+     * @param status the status to set
+     */
+    public void setStatus(Status status) {
+        this.status = status;
     }
     
 }

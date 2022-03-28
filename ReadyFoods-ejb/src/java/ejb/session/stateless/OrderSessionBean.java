@@ -31,7 +31,7 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
     @PersistenceContext(unitName = "ReadyFoods-ejbPU")
     private EntityManager entityManager;
     
-    //inject customerSessionBean here
+    
 
     public OrderSessionBean() {
     }
