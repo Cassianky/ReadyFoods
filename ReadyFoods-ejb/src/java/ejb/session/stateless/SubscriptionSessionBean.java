@@ -49,14 +49,21 @@ public class SubscriptionSessionBean implements SubscriptionSessionBeanLocal {
 
     public List<Subscription> retrieveAllSubscriptions() {
         Query query = em.createQuery("SELECT s FROM Subscription s");
+        List<Subscription> subscriptions = query.getResultList();
 
-        return query.getResultList();
+        for (Subscription s : subscriptions) {
+            s.getSubscriptionOrders().size();
+
+        }
+
+        return subscriptions;
     }
 
     public Subscription retrieveSubscriptionBySubscriptionId(Long subId) throws SubscriptionNotFoundException {
         Subscription subscription = em.find(Subscription.class, subId);
 
         if (subscription != null) {
+            subscription.getSubscriptionOrders().size();
             return subscription;
         } else {
             throw new SubscriptionNotFoundException("Subscription ID " + subId + " does not exist!");
