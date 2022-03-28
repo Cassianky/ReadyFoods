@@ -11,6 +11,8 @@ import javax.ejb.Local;
 import util.exception.CreateNewEnquiryException;
 import util.exception.CustomerNotFoundException;
 import util.exception.EnquiryNotFoundException;
+import util.exception.InputDataValidationException;
+import util.exception.UnknownPersistenceException;
 
 /**
  *
@@ -19,10 +21,11 @@ import util.exception.EnquiryNotFoundException;
 @Local
 public interface EnquirySessionBeanLocal {
 
-    public Enquiry createNewEnquiry(Long customerId, Enquiry newEnquiry) throws CustomerNotFoundException, CreateNewEnquiryException;
 
     public List<Enquiry> retrieveAllEnquires();
 
     public Enquiry retrieveEnquiryByEnquiryId(Long enId) throws EnquiryNotFoundException;
+
+    public Enquiry createNewEnquiry(Long customerId, Enquiry newEnquiry) throws CustomerNotFoundException, CreateNewEnquiryException, InputDataValidationException, UnknownPersistenceException;
     
 }

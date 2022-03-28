@@ -8,14 +8,21 @@ package ejb.session.stateless;
 import entity.Customer;
 import entity.Enquiry;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import util.exception.CreateNewEnquiryException;
 import util.exception.CustomerNotFoundException;
 import util.exception.EnquiryNotFoundException;
+import util.exception.InputDataValidationException;
+import util.exception.UnknownPersistenceException;
 
 /**
  *
@@ -30,24 +37,39 @@ public class EnquirySessionBean implements EnquirySessionBeanLocal {
     @PersistenceContext(unitName = "ReadyFoods-ejbPU")
     private EntityManager em;
 
+    private final ValidatorFactory validatorFactory;
+    private final Validator validator;
+
+    public EnquirySessionBean() {
+        validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.getValidator();
+    }
+
     @Override
     public Enquiry createNewEnquiry(Long customerId, Enquiry newEnquiry)
-            throws CustomerNotFoundException, CreateNewEnquiryException {
+            throws CustomerNotFoundException, CreateNewEnquiryException, InputDataValidationException, UnknownPersistenceException {
 
-        if (newEnquiry != null) {
+        Set<ConstraintViolation<Enquiry>> constraintViolations = validator.validate(newEnquiry);
 
-            Customer customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(customerId);
+        if (constraintViolations.isEmpty()) {
 
-            customer.getEnquiries().add(newEnquiry);
+            if (newEnquiry != null) {
 
-            em.persist(newEnquiry);
+                Customer customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(customerId);
 
-            em.flush();
+                customer.getEnquiries().add(newEnquiry);
 
-            return newEnquiry;
+                em.persist(newEnquiry);
 
+                em.flush();
+
+                return newEnquiry;
+
+            } else {
+                throw new CreateNewEnquiryException("Enquiry information not provided");
+            }
         } else {
-            throw new CreateNewEnquiryException("Enquiry information not provided");
+            throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
 
@@ -69,6 +91,15 @@ public class EnquirySessionBean implements EnquirySessionBeanLocal {
         }
     }
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Enquiry>> constraintViolations) {
+        String msg = "Input data validation error!:";
+
+        for (ConstraintViolation constraintViolation : constraintViolations) {
+            msg += "\n\t" + constraintViolation.getPropertyPath() + " - "
+                    + constraintViolation.getInvalidValue() + "; "
+                    + constraintViolation.getMessage();
+        }
+
+        return msg;
+    }
 }
