@@ -21,6 +21,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import util.exception.CreateNewEnquiryException;
 import util.exception.CustomerNotFoundException;
+import util.exception.InputDataValidationException;
+import util.exception.UnknownPersistenceException;
 
 /**
  *
@@ -76,7 +78,7 @@ public class EnquiryManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO,
                             "Enquiry has been submitted. (Enquiry ID: " + enquiry.getEnquiryId() + ")", null));
-        } catch (CreateNewEnquiryException | CustomerNotFoundException ex) {
+        } catch (CreateNewEnquiryException | CustomerNotFoundException | InputDataValidationException | UnknownPersistenceException ex) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, ""
                             + "An error has occurred while creating the new enquiry: " + ex.getMessage(), null));
