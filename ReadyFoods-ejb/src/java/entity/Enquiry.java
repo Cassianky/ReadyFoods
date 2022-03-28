@@ -1,11 +1,13 @@
 package entity;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Enquiry implements Serializable {
@@ -14,11 +16,24 @@ public class Enquiry implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long enquiryId;
-    
-    @ManyToOne
-    private Customer customer;
-    
-    //link to order?
+
+    @Column(nullable = false)
+    @Size(max = 128)
+    @NotNull
+    private String title;
+
+    @Column(nullable = false)
+    @Size(max = 128)
+    @NotNull
+    private String description;
+
+    public Enquiry() {
+    }
+
+    public Enquiry(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
 
     public Long getEnquiryId() {
         return enquiryId;
@@ -52,5 +67,33 @@ public class Enquiry implements Serializable {
     public String toString() {
         return "entity.Enquiry[ id=" + enquiryId + " ]";
     }
-    
+
+    /**
+     * @return the title
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * @param title the title to set
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
 }
