@@ -96,7 +96,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     }
 
     @Override
-    public List<Customer> retrieveAllStaffs()
+    public List<Customer> retrieveAllCustomers()
     {
         Query query = em.createQuery("SELECT c FROM Customer c");
         
