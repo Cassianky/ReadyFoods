@@ -8,6 +8,7 @@ package ejb.session.stateless;
 import entity.Customer;
 import entity.Enquiry;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,16 +24,19 @@ import util.exception.EnquiryNotFoundException;
 @Stateless
 public class EnquirySessionBean implements EnquirySessionBeanLocal {
 
+    @EJB(name = "CustomerSessionBeanLocal")
+    private CustomerSessionBeanLocal customerSessionBeanLocal;
+
     @PersistenceContext(unitName = "ReadyFoods-ejbPU")
     private EntityManager em;
 
+    @Override
     public Enquiry createNewEnquiry(Long customerId, Enquiry newEnquiry)
             throws CustomerNotFoundException, CreateNewEnquiryException {
 
         if (newEnquiry != null) {
 
-            //Customer customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(customerId);
-            Customer customer = null; // placeholder
+            Customer customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(customerId);
 
             customer.getEnquiries().add(newEnquiry);
 
@@ -47,12 +51,14 @@ public class EnquirySessionBean implements EnquirySessionBeanLocal {
         }
     }
 
+    @Override
     public List<Enquiry> retrieveAllEnquires() {
         Query query = em.createQuery("SELECT e FROM Enquiry e");
 
         return query.getResultList();
     }
 
+    @Override
     public Enquiry retrieveEnquiryByEnquiryId(Long enId) throws EnquiryNotFoundException {
         Enquiry enquiry = em.find(Enquiry.class, enId);
 
