@@ -5,6 +5,7 @@
  */
 package jsf.managedbean;
 
+import ejb.session.stateless.CustomerSessionBeanLocal;
 import entity.Customer;
 import entity.Enquiry;
 import javax.inject.Named;
@@ -13,6 +14,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -25,6 +27,9 @@ import util.exception.CustomerNotFoundException;
 @Named(value = "enquiryManagedBean")
 @ViewScoped
 public class EnquiryManagedBean implements Serializable {
+
+    @EJB(name = "CustomerSessionBeanLocal")
+    private CustomerSessionBeanLocal customerSessionBeanLocal;
 
     private List<Enquiry> pastEnquiries;
     private Enquiry newEnquiry;
@@ -43,7 +48,7 @@ public class EnquiryManagedBean implements Serializable {
                 getExternalContext().getSessionMap().get("currentCustomerEntity");
         Customer customer;
         try {
-            customer = customerEntitySessionBeanLocal.retrieveCustomerById(currentCustomerEntity.getCustomerId());
+            customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomerEntity.getCustomerId());
 
             this.pastEnquiries = customer.getEnquiries();
         } catch (CustomerNotFoundException ex) {
