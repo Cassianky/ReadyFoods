@@ -25,6 +25,8 @@ import javax.validation.constraints.Size;
 import util.enumeration.ActivityLevel;
 import util.enumeration.DietType;
 import util.enumeration.Gender;
+import util.exception.EntityInstanceExistsInCollectionException;
+import util.exception.EntityInstanceMissingInCollectionException;
 import util.security.CryptographicHelper;
 
 @Entity
@@ -122,6 +124,7 @@ public class Customer implements Serializable {
     }
 
     public Customer(String userName, String firstName, String lastName, String contactNumber, String password, String salt, String address, Integer age, DietType dietType, Gender gender, ActivityLevel activityLevel) {
+        this();
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -328,8 +331,30 @@ public class Customer implements Serializable {
         return orders;
     }
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
+    public void addOrder(Order order) throws EntityInstanceExistsInCollectionException
+    {
+        if(!this.orders.contains(order))
+        {
+            this.orders.add(order);
+        }
+        else
+        {
+            throw new EntityInstanceExistsInCollectionException("Sale Transaction Line Item already exist");
+        }
+    }
+    
+    
+    
+    public void removeOrder(Order order) throws EntityInstanceMissingInCollectionException
+    {
+        if(this.orders.contains(order))
+        {
+            this.orders.remove(order);
+        }
+        else
+        {
+            throw new EntityInstanceMissingInCollectionException("Sale Transaction Line Item missing");
+        }
     }
 
     public List<Food> getFoods() {

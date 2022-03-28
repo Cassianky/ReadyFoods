@@ -9,6 +9,7 @@ import entity.Customer;
 import entity.Order;
 import entity.OrderLineItem;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,6 +24,9 @@ import util.exception.OrderNotFoundException;
  */
 @Stateless
 public class OrderSessionBean implements OrderSessionBeanLocal {
+
+    @EJB
+    private CustomerSessionBeanLocal customerSessionBeanLocal;
 
     @PersistenceContext(unitName = "ReadyFoods-ejbPU")
     private EntityManager entityManager;
