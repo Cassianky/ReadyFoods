@@ -70,10 +70,10 @@ public class Order implements Serializable {
     private String additionalNotes;
     
     @OneToMany
-    private List<OrderLineItem> recipes;
+    private List<OrderLineItem> orderLineItems;
     
     @ManyToOne(optional = true)
-    @JoinColumn(nullable = true)
+    @JoinColumn(nullable = false)
     private Customer customer;
 
     public Long getOrderId() {
@@ -208,17 +208,17 @@ public class Order implements Serializable {
     }
 
     /**
-     * @return the recipes
+     * @return the orderLineItems
      */
-    public List<OrderLineItem> getRecipes() {
-        return recipes;
+    public List<OrderLineItem> getOrderLineItems() {
+        return orderLineItems;
     }
 
     /**
-     * @param recipes the recipes to set
+     * @param orderLineItems the orderLineItems to set
      */
-    public void setRecipes(List<OrderLineItem> recipes) {
-        this.recipes = recipes;
+    public void setOrderLineItems(List<OrderLineItem> orderLineItems) {
+        this.orderLineItems = orderLineItems;
     }
 
     /**
