@@ -53,56 +53,56 @@
                 </p:panelGrid>
 
             </h:form>
-            
+
             <h:form id="formAllEnquires">
+                <h1>Enquiry History</h1>
 
-            <p:dataTable id="dataTableAllEnquires" widgetVar="dataTableAllEnquires" 
-                         value="#{enquiryManagedBean.pastEnquiries}" var="enquiry" 
-                         rowKey="#{enquiry.enquiryId}" rowIndexVar="row"
-                         rows="10" paginator="true" 
-                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">
-
-
-
-                <p:column headerText="Enquiry ID" sortBy="#{enquiry.enquiryId}" 
-                          filterBy="#{enquiry.enquiryId}" filterMatchMode="contains">
-                    <h:outputText value="#{enquiry.enquiryId}" />
-                </p:column>
-
-                <p:column headerText="Title" sortBy="#{enquiry.title}" 
-                          filterBy="#{enquiry.title}" filterMatchMode="contains">
-                    <h:outputText value="#{enquiry.title}" />
-                </p:column>        
-                <p:column headerText="Description" sortBy="#{enquiry.description}" 
-                          filterBy="#{enquiry.dateOfEnquiry}" filterMatchMode="contains">
-                    <h:outputText value="#{enquiry.description}" />
-                </p:column>
-
-                <p:column headerText="Date" sortBy="#{enquiry.dateOfEnquiry}" 
-                          filterBy="#{enquiry.dateOfEnquiry}" filterMatchMode="contains">
-                    <h:outputText value="#{enquiry.dateOfEnquiry}" />
-                </p:column>
+                <p:dataTable id="dataTableAllEnquires" widgetVar="dataTableAllEnquires" 
+                             value="#{enquiryManagedBean.pastEnquiries}" var="enquiry" 
+                             rowKey="#{enquiry.enquiryId}" rowIndexVar="row"
+                             styleClass="ui-noborder">
 
 
-                <p:column headerText="Action" >
 
-                    <p:commandButton icon="ui-icon-trash" 
-                                     update="dataTableAllEnquires">
-                        <f:attribute name="enquiryToDelete" value="#{enquiry}" />
-                        <p:confirm header="Confirmation" message="Are you sure you want to delete 
-                                   #{enquiry.enquiryId}?" 
-                                   icon="ui-icon-alert" />
-                    </p:commandButton>
-                </p:column>
+                    <p:column headerText="Enquiry ID" sortBy="#{enquiry.enquiryId}" 
+                              >
+                        <h:outputText value="#{enquiry.enquiryId}" />
+                    </p:column>
+
+                    <p:column headerText="Title" sortBy="#{enquiry.title}" 
+                              >
+                        <h:outputText value="#{enquiry.title}" />
+                    </p:column>        
+                    <p:column headerText="Description" sortBy="#{enquiry.description}" 
+                              >
+                        <h:outputText value="#{enquiry.description}" />
+                    </p:column>
+
+                    <p:column headerText="Date" sortBy="#{enquiry.dateOfEnquiry}" 
+                              >
+                        <h:outputText value="#{enquiry.dateOfEnquiry}" />
+                    </p:column>
 
 
-            </p:dataTable>
+                    <p:column headerText="Action" >
 
-            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-            </p:confirmDialog>
-            
+                        <p:commandButton icon="ui-icon-trash" 
+                                         update="dataTableAllEnquires">
+                            <f:attribute name="enquiryToDelete" value="#{enquiry}" />
+                            <p:confirm header="Confirmation" message="Are you sure you want to delete enquiry
+                                       #{enquiry.enquiryId}?" 
+                                       icon="ui-icon-alert" />
+                        </p:commandButton>
+                    </p:column>
+
+
+                </p:dataTable>
+
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+
             </h:form>
 
         </main>

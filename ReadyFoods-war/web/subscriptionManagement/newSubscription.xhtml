@@ -16,6 +16,10 @@
         <!--        <p:messages closable="true" redisplay="false" >
                     <p:autoUpdate/>
                 </p:messages>-->
+        <div class="container">
+            <p:graphicImage class="banner1" style="width: 100% ;border-radius: 25px;" name="banner1.jpg" library="images"/>
+            <div class="centered">Ready to cook.</div>
+        </div>
 
         <p:growl>
             <p:autoUpdate />
@@ -131,7 +135,7 @@
 
 
             <h:form id="pricePanel" rendered="#{newSubscriptionManagedBean.ongoing == false}">
-                <p:panel style="float: right; width: 40%; margin-right: 20px" >
+                <p:panel style=" margin-left: auto; margin-right: 0; width: 40%; margin-right: 20px" >
                     <p>#{newSubscriptionManagedBean.newSubscription.numOfRecipes} recipes 
                         for #{newSubscriptionManagedBean.newSubscription.numOfPeople} people per week</p>
                     <p>#{newSubscriptionManagedBean.newSubscription.numOfRecipes * newSubscriptionManagedBean.newSubscription.numOfPeople} total servings</p>
@@ -163,6 +167,8 @@
                 </p:panel>
             </h:form>
         </main>
+
+
 
 
     </ui:define>
