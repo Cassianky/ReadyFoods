@@ -12,6 +12,7 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import util.enumeration.IngredientUnit;
 
 @Entity
 public class Ingredient implements Serializable {
@@ -27,6 +28,9 @@ public class Ingredient implements Serializable {
     @Column(length = 128)
     @Size(max = 128)
     private String description;
+    @Column(nullable = false)
+    @NotNull
+    private IngredientUnit ingredientUnit; //ml, pcs, etc.
     @NotNull
     @DecimalMin("0.00")
     @Digits(integer = 9, fraction = 2) // 11 - 2 digits to the left of the decimal point
@@ -93,7 +97,7 @@ public class Ingredient implements Serializable {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.setName(name);
     }
 
     public String getDescription() {
@@ -101,7 +105,7 @@ public class Ingredient implements Serializable {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.setDescription(description);
     }
 
     public BigDecimal getUnitPrice() {
@@ -109,7 +113,7 @@ public class Ingredient implements Serializable {
     }
 
     public void setUnitPrice(BigDecimal unitPrice) {
-        this.unitPrice = unitPrice;
+        this.setUnitPrice(unitPrice);
     }
 
     public Integer getStockQuantity() {
@@ -117,7 +121,23 @@ public class Ingredient implements Serializable {
     }
 
     public void setStockQuantity(Integer stockQuantity) {
-        this.stockQuantity = stockQuantity;
+        this.setStockQuantity(stockQuantity);
+    }
+
+    public IngredientUnit getIngredientUnit() {
+        return ingredientUnit;
+    }
+
+    public void setIngredientUnit(IngredientUnit ingredientUnit) {
+        this.ingredientUnit = ingredientUnit;
+    }
+
+    public Integer getReorderQuantity() {
+        return reorderQuantity;
+    }
+
+    public void setReorderQuantity(Integer reorderQuantity) {
+        this.reorderQuantity = reorderQuantity;
     }
     
 }

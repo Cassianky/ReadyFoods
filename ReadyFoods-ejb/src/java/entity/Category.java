@@ -120,5 +120,13 @@ public class Category implements Serializable {
     public String toString() {
         return "entity.CategoryEntity[ id=" + categoryId + " ]";
     }
+
+    public List<Recipe> getRecipes() {
+        return recipes;
+    }
+
+    public void setRecipes(List<Recipe> recipes) {
+        this.recipes = recipes;
+    }
     
 }
