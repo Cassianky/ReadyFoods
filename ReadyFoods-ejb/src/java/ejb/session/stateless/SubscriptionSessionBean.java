@@ -9,6 +9,7 @@ import entity.Customer;
 import entity.Subscription;
 import java.util.List;
 import java.util.Set;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,6 +21,7 @@ import javax.validation.ValidatorFactory;
 import util.exception.CreateNewSubscriptionException;
 import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
+import util.exception.NoOngoingSubscriptionException;
 import util.exception.SubscriptionNotFoundException;
 
 /**
@@ -28,6 +30,9 @@ import util.exception.SubscriptionNotFoundException;
  */
 @Stateless
 public class SubscriptionSessionBean implements SubscriptionSessionBeanLocal {
+
+    @EJB(name = "CustomerSessionBeanLocal")
+    private CustomerSessionBeanLocal customerSessionBeanLocal;
 
     @PersistenceContext(unitName = "ReadyFoods-ejbPU")
     private EntityManager em;
@@ -81,6 +86,7 @@ public class SubscriptionSessionBean implements SubscriptionSessionBeanLocal {
         return subscriptions;
     }
 
+    @Override
     public Subscription retrieveSubscriptionBySubscriptionId(Long subId) throws SubscriptionNotFoundException {
         Subscription subscription = em.find(Subscription.class, subId);
 
@@ -90,6 +96,22 @@ public class SubscriptionSessionBean implements SubscriptionSessionBeanLocal {
         } else {
             throw new SubscriptionNotFoundException("Subscription ID " + subId + " does not exist!");
         }
+    }
+
+    @Override
+    public Subscription retrieveOngoingSubscriptionForCustomer(Long customerId)
+            throws CustomerNotFoundException, NoOngoingSubscriptionException {
+        Customer customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(customerId);
+
+        List<Subscription> subscriptions = customer.getSubscriptions();
+        for (Subscription s : subscriptions) {
+            if (s.getOngoing()) {
+                s.getSubscriptionOrders().size();
+                return s;
+            }
+        }
+        throw new NoOngoingSubscriptionException("Customer does not have an ongoing subscription.");
+
     }
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Subscription>> constraintViolations) {

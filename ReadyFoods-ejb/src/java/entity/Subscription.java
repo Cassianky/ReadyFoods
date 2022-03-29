@@ -42,17 +42,14 @@ public class Subscription implements Serializable {
 
     @Column(nullable = false)
     @NotNull
-    @Size(min = 12, max = 48)
-    private Integer duration; // 3 months, 6 months, 12 months, 1 month = 4 weeks
+    private Integer duration; 
 
     @Column(nullable = false)
     @NotNull
-    @Size(min = 1, max = 4)
     private Integer numOfRecipes;
 
     @Column(nullable = false)
     @NotNull
-    @Size(min = 1, max = 4)
     private Integer numOfPeople;
 
     @Column(nullable = false, precision = 11, scale = 2)

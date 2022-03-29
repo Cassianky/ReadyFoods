@@ -11,6 +11,7 @@ import javax.ejb.Local;
 import util.exception.CreateNewSubscriptionException;
 import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
+import util.exception.NoOngoingSubscriptionException;
 import util.exception.SubscriptionNotFoundException;
 
 /**
@@ -25,5 +26,7 @@ public interface SubscriptionSessionBeanLocal {
     public List<Subscription> retrieveAllSubscriptions();
 
     public Subscription retrieveSubscriptionBySubscriptionId(Long subId) throws SubscriptionNotFoundException;
+
+    public Subscription retrieveOngoingSubscriptionForCustomer(Long customerId) throws CustomerNotFoundException, NoOngoingSubscriptionException;
     
 }

@@ -21,7 +21,7 @@
                     </p:submenu>
                     
                     <p:submenu label="Subscription Management" rendered="#{sessionScope.isLogin == true}">
-                        <p:menuitem value="Test 1" />
+                        <p:menuitem value="New Subscription" outcome="/subscriptionManagement/newSubscription.xhtml" icon="pi pi-briefcase" />
                     </p:submenu>
                     <p:menuitem rendered="#{sessionScope.isLogin == false}" value="Home" outcome="/index" icon="pi pi-home" />
                     <p:menuitem rendered="#{sessionScope.isLogin == false}" value="Register" outcome="/registerCustomer" />
