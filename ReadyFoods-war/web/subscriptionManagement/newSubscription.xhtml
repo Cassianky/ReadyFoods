@@ -16,10 +16,12 @@
         <!--        <p:messages closable="true" redisplay="false" >
                     <p:autoUpdate/>
                 </p:messages>-->
-        <div class="container">
+        <section class="container">
             <p:graphicImage class="banner1" style="width: 100% ;border-radius: 25px;" name="banner1.jpg" library="images"/>
-            <div class="centered">Ready to cook.</div>
-        </div>
+            <div class="centered" style="line-height: 0%"><p>Ready to cook.</p>
+                <p style="font-size: 20px;">Simple. Healthy. Delicious.</p>
+            </div>
+        </section>
 
         <p:growl>
             <p:autoUpdate />
@@ -34,7 +36,8 @@
         </h:panelGroup>
         <main style="margin: 30px">
             <h:form id="formSubscribe" rendered="#{newSubscriptionManagedBean.ongoing == false}">
-                <h1>Subscribe to our meal kit plan</h1>
+                <p:graphicImage class="mealspng" style="width: 5%; float: left;" name="meals.png" library="images"/>
+                <h1 style="text-align: justify;">Subscribe to our meal kit plan</h1>
 
                 <p:panelGrid styleClass="ui-noborder">
 
