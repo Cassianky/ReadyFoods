@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
@@ -18,22 +19,37 @@ import javax.validation.constraints.Size;
 @Entity
 public class Recipe implements Serializable {
 
+    public List<IngredientSpecifcation> getIngredientSpecificationList() {
+        return ingredientSpecificationList;
+    }
+
+    public void setIngredientSpecificationList(List<IngredientSpecifcation> ingredientSpecificationList) {
+        this.ingredientSpecificationList = ingredientSpecificationList;
+    }
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long recipeId;
 
+    @Column(nullable = false, length = 64, unique = true)
+    @NotNull
+    @Size(min = 2 , max = 64)
+    private String recipeTitle;
+    //kiv recipe chef for search and filter?
+    //kiv recipe customer for display?
     @Column(nullable = false, length = 64)
     @NotNull
-    @Size(max = 64)
-    private String recipeTitle;
+    @Size(min = 2, max = 64)
+    private String recipeChef;
     @Column(nullable = false)
     @NotNull
     @Min(15)
     private Integer cookingTime;
     @Column(nullable = false)
     @NotNull
-    private List<String> recipeSteps;
+    @Lob
+    private String recipeSteps;
     @Column(nullable = false)
     @NotNull
     @Min(0)
@@ -57,7 +73,7 @@ public class Recipe implements Serializable {
     @Column(nullable = false)
     @NotNull
     private String videoURL;
-    
+
     @OneToMany
     private List<Review> reviews;
 
@@ -66,17 +82,22 @@ public class Recipe implements Serializable {
     @ManyToMany
     private List<Category> categories;//seperate or combine categories?
     //5 parent category - cuisine, diet, mealType, prepTime,cookMethod;
-    
+
     public Recipe() {
         this.ingredientSpecificationList = new ArrayList<>();
-        this.recipeSteps = new ArrayList<>();
         this.categories = new ArrayList<>();
+        this.reviews = new ArrayList<>();
     }
 
-    public Recipe(String recipeTitle, Integer cookingTime, Integer reorderQuantity, Integer caloriesPerServing, Integer carbsPerServing, Integer fatsPerServing, Integer proteinsPerServing, Integer sugarPerServing, String videoURL) {
+    public Recipe(String recipeTitle, String recipeChef, Integer cookingTime, String recipeSteps,
+            Integer reorderQuantity, Integer caloriesPerServing, Integer carbsPerServing,
+            Integer fatsPerServing, Integer proteinsPerServing, Integer sugarPerServing,
+            String videoURL) {
         this();
         this.recipeTitle = recipeTitle;
+        this.recipeChef = recipeChef;
         this.cookingTime = cookingTime;
+        this.recipeSteps = recipeSteps; // how to input by admin?
         this.caloriesPerServing = caloriesPerServing;
         this.carbsPerServing = carbsPerServing;
         this.fatsPerServing = fatsPerServing;
@@ -84,8 +105,7 @@ public class Recipe implements Serializable {
         this.sugarPerServing = sugarPerServing;
         this.videoURL = videoURL;
     }
-    
-    
+
     public Long getRecipeId() {
         return recipeId;
     }
@@ -135,11 +155,11 @@ public class Recipe implements Serializable {
         this.cookingTime = cookingTime;
     }
 
-    public List<String> getRecipeSteps() {
+    public String getRecipeSteps() {
         return recipeSteps;
     }
 
-    public void setRecipeSteps(List<String> recipeSteps) {
+    public void setRecipeSteps(String recipeSteps) {
         this.recipeSteps = recipeSteps;
     }
 
@@ -197,6 +217,14 @@ public class Recipe implements Serializable {
 
     public void setCategories(List<Category> categories) {
         this.categories = categories;
+    }
+
+    public String getRecipeChef() {
+        return recipeChef;
+    }
+
+    public void setRecipeChef(String recipeChef) {
+        this.recipeChef = recipeChef;
     }
 
 }

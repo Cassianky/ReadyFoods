@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import entity.Customer;
 import entity.Enquiry;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.EJB;
@@ -48,6 +49,7 @@ public class EnquirySessionBean implements EnquirySessionBeanLocal {
     @Override
     public Enquiry createNewEnquiry(Long customerId, Enquiry newEnquiry)
             throws CustomerNotFoundException, CreateNewEnquiryException, InputDataValidationException, UnknownPersistenceException {
+        newEnquiry.setDateOfEnquiry(new Date());
 
         Set<ConstraintViolation<Enquiry>> constraintViolations = validator.validate(newEnquiry);
 
@@ -56,6 +58,7 @@ public class EnquirySessionBean implements EnquirySessionBeanLocal {
             if (newEnquiry != null) {
 
                 Customer customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(customerId);
+                newEnquiry.setCustomer(customer);
 
                 customer.getEnquiries().add(newEnquiry);
 

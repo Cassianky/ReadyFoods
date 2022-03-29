@@ -48,13 +48,13 @@ public class EnquiryManagedBean implements Serializable {
     public EnquiryManagedBean() {
         this.pastEnquiries = new ArrayList<>();
         this.newEnquiry = new Enquiry();
-        
+
     }
 
     @PostConstruct
     public void postConstruct() {
         currentCustomerEntity = (Customer) FacesContext.getCurrentInstance().
-                getExternalContext().getSessionMap().get("currentCustomerEntity");
+                getExternalContext().getSessionMap().get("currentCustomer");
         Customer customer;
         try {
             customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomerEntity.getCustomerId());
@@ -84,6 +84,25 @@ public class EnquiryManagedBean implements Serializable {
                             + "An error has occurred while creating the new enquiry: " + ex.getMessage(), null));
         }
     }
+
+//    public void deleteProduct(ActionEvent event) {
+//        try {
+//            ProductEntity productEntityToDelete = (ProductEntity) event.getComponent().getAttributes().get("productEntityToDelete");
+//            productEntitySessionBeanLocal.deleteProduct(productEntityToDelete.getProductId());
+//
+//            productEntities.remove(productEntityToDelete);
+//
+//            if (filteredProductEntities != null) {
+//                filteredProductEntities.remove(productEntityToDelete);
+//            }
+//
+//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product deleted successfully", null));
+//        } catch (ProductNotFoundException | DeleteProductException ex) {
+//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while deleting product: " + ex.getMessage(), null));
+//        } catch (Exception ex) {
+//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
+//        }
+//    }
 
     /**
      * @return the pastEnquiries

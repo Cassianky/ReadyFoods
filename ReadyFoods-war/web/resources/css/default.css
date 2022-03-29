@@ -7,11 +7,27 @@ body {
 }
 
 h1 {
-    font-family: Verdana;
+    font-family: Arial;
     font-size:  25px;
+    font-weight: 200;
     margin: 0px;
     padding: 10px;
     color: #94774b;
+}
+
+.h1title {
+    font-family: Arial;
+    font-size:  25px;
+    font-weight: 200;
+    text-align: justify;
+    margin: 0px;
+    padding: 20px;
+    color: #94774b;
+}
+
+.titleicon{
+    width: 5%;
+    float: left;
 }
 
 a:link, a:visited {
@@ -56,4 +72,29 @@ a:link:hover, a:visited:hover  {
 .registerBg {
     background: url("#{resource['images/register.png']}");
     background-size: cover;
+
+}
+
+
+.container {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+/* Bottom left text */
+.bottom-left {
+    position: absolute;
+    bottom: 8px;
+    left: 16px;
+}
+
+/* Centered text */
+.centered {
+    position: absolute;
+    font-size:  70px;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }

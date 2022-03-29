@@ -17,11 +17,15 @@
                     </p:submenu>
 
                     <p:submenu label="Account Management" rendered="#{sessionScope.isLogin == true}">
-                        <p:menuitem value="My Profile" />
+                        <p:menuitem value="My Profile" icon="pi pi-user" />
+                        <p:menuitem value="Enquires" outcome="/accountManagement/enquiryManagement.xhtml" icon="pi pi-ticket" />
                     </p:submenu>
                     
                     <p:submenu label="Subscription Management" rendered="#{sessionScope.isLogin == true}">
                         <p:menuitem value="New Subscription" outcome="/subscriptionManagement/newSubscription.xhtml" icon="pi pi-briefcase" />
+                        <p:menuitem value="My Subscriptions" outcome="/subscriptionManagement/mySubscriptions.xhtml" icon="pi pi-list" />
+                        <p:menuitem value="Select Recipes" outcome="/subscriptionManagement/selectRecipes.xhtml" icon="pi pi-pencil" />
+                        
                     </p:submenu>
                     <p:menuitem rendered="#{sessionScope.isLogin == false}" value="Home" outcome="/index" icon="pi pi-home" />
                     <p:menuitem rendered="#{sessionScope.isLogin == false}" value="Register" outcome="/registerCustomer" />

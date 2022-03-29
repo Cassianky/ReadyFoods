@@ -169,7 +169,11 @@ public class CustomisedIngredient implements Serializable {
      * @return the subtotal
      */
     public BigDecimal getSubtotal() {
-        return subtotal;
+        Integer quantity = this.getQuantityOfIngredient();
+        BigDecimal uP = this.getUnitPrice();
+        BigDecimal subT = uP.multiply(BigDecimal.valueOf(quantity));
+        this.setSubtotal(subT);
+        return subT;
     }
 
     /**

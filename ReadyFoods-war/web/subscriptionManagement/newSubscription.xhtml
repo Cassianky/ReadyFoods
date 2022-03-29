@@ -9,13 +9,23 @@
                 template="./../template/defaultTemplate.xhtml">
 
     <ui:define name="content" >
-         <ez:Breadcrumb pageName="newSubscription" />
+        <ez:Breadcrumb pageName="newSubscription" />
 
 
 
-        <p:messages closable="true" redisplay="false" >
-            <p:autoUpdate/>
-        </p:messages>
+        <!--        <p:messages closable="true" redisplay="false" >
+                    <p:autoUpdate/>
+                </p:messages>-->
+        <section class="container">
+            <p:graphicImage class="banner1" style="width: 100% ;border-radius: 25px;" name="banner1.jpg" library="images"/>
+            <div class="centered" style="line-height: 0%"><p>Ready to cook.</p>
+                <p style="font-size: 20px;">Simple. Healthy. Delicious.</p>
+            </div>
+        </section>
+
+        <p:growl>
+            <p:autoUpdate />
+        </p:growl>
 
         <h:panelGroup rendered="#{newSubscriptionManagedBean.ongoing == true}">
             <article style="padding-left: 15px">
@@ -24,9 +34,11 @@
 
             </article>
         </h:panelGroup>
+        
         <main style="margin: 30px">
             <h:form id="formSubscribe" rendered="#{newSubscriptionManagedBean.ongoing == false}">
-                <h3>New subscription:</h3>
+                <p:graphicImage class="titleicon"  name="meals.png" library="images"/>
+                <h1 class="h1title">Subscribe to our meal kit plan</h1>
 
                 <p:panelGrid styleClass="ui-noborder">
 
@@ -45,9 +57,7 @@
                                         listener="#{newSubscriptionManagedBean.updateWeeklyPrice}"/>
                             </p:selectOneButton>
                         </p:column>
-                        <p:column>
-                            <p:message for="numOfPeople" />
-                        </p:column>
+
                     </p:row>
 
                     <p:row>
@@ -71,9 +81,7 @@
                                         listener="#{newSubscriptionManagedBean.updateWeeklyPrice}"/>
                             </p:selectOneButton>
                         </p:column>
-                        <p:column>
-                            <p:message for="numOfPeople" />
-                        </p:column>
+
                     </p:row>
 
                     <p:row>
@@ -96,15 +104,12 @@
 
                             </p:selectOneButton>
                         </p:column>
-                        <p:column>
-                            <p:message for="duration" />
-                        </p:column>
+
                     </p:row> 
 
 
                     <p:row>
-                        <p:column colspan="3">
-                            <p:commandButton type="reset" value="Clear" />&nbsp;
+                        <p:column colspan="2">
                             <p:commandButton  value="Subscribe"
                                               actionListener="#{newSubscriptionManagedBean.doCreatenewSubscription}">
                                 <p:confirm header="Confirmation" 
@@ -133,7 +138,9 @@
 
 
             <h:form id="pricePanel" rendered="#{newSubscriptionManagedBean.ongoing == false}">
-                <p:panel style="float: right; width: 40%; margin-right: 20px" >
+               
+                <p:panel style=" margin-left: auto; margin-right: 0; width: 40%; margin-right: 20px" >
+                    <h1 class="h1title">Your Kit</h1>
                     <p>#{newSubscriptionManagedBean.newSubscription.numOfRecipes} recipes 
                         for #{newSubscriptionManagedBean.newSubscription.numOfPeople} people per week</p>
                     <p>#{newSubscriptionManagedBean.newSubscription.numOfRecipes * newSubscriptionManagedBean.newSubscription.numOfPeople} total servings</p>
@@ -142,8 +149,9 @@
 
                     <h3> Weekly Box Price: 
 
-                        <h:outputText style=" float: right"
-                                      value="#{newSubscriptionManagedBean.newSubscription.weeklyPrice - newSubscriptionManagedBean.shippingCost}">
+                        <h:outputText style="float: right"
+                                      value="#{newSubscriptionManagedBean.newSubscription.weeklyPrice - 
+                                               newSubscriptionManagedBean.shippingCost}">
                             <f:convertNumber minFractionDigits="2" maxFractionDigits="2" type="currency" currencyCode="SGD" />
                         </h:outputText>
                     </h3>
@@ -165,6 +173,8 @@
                 </p:panel>
             </h:form>
         </main>
+
+
 
 
     </ui:define>
