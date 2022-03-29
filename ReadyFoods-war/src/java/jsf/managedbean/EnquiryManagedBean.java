@@ -5,6 +5,8 @@
  */
 package jsf.managedbean;
 
+import ejb.session.stateless.CustomerSessionBeanLocal;
+import ejb.session.stateless.EnquirySessionBeanLocal;
 import entity.Customer;
 import entity.Enquiry;
 import javax.inject.Named;
@@ -13,10 +15,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import util.exception.CreateNewEnquiryException;
 import util.exception.CustomerNotFoundException;
+import util.exception.InputDataValidationException;
+import util.exception.UnknownPersistenceException;
 
 /**
  *
@@ -26,6 +32,12 @@ import util.exception.CustomerNotFoundException;
 @ViewScoped
 public class EnquiryManagedBean implements Serializable {
 
+    @EJB(name = "EnquirySessionBeanLocal")
+    private EnquirySessionBeanLocal enquirySessionBeanLocal;
+
+    @EJB(name = "CustomerSessionBeanLocal")
+    private CustomerSessionBeanLocal customerSessionBeanLocal;
+
     private List<Enquiry> pastEnquiries;
     private Enquiry newEnquiry;
     private Customer currentCustomerEntity;
@@ -34,7 +46,9 @@ public class EnquiryManagedBean implements Serializable {
      * Creates a new instance of EnquiryManagedBean
      */
     public EnquiryManagedBean() {
-        pastEnquiries = new ArrayList<>();
+        this.pastEnquiries = new ArrayList<>();
+        this.newEnquiry = new Enquiry();
+        
     }
 
     @PostConstruct
@@ -43,7 +57,7 @@ public class EnquiryManagedBean implements Serializable {
                 getExternalContext().getSessionMap().get("currentCustomerEntity");
         Customer customer;
         try {
-            customer = customerEntitySessionBeanLocal.retrieveCustomerById(currentCustomerEntity.getCustomerId());
+            customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomerEntity.getCustomerId());
 
             this.pastEnquiries = customer.getEnquiries();
         } catch (CustomerNotFoundException ex) {
@@ -55,6 +69,20 @@ public class EnquiryManagedBean implements Serializable {
 
     public void doCreateNewEnquiry(ActionEvent event) {
 
+        try {
+            Enquiry enquiry = enquirySessionBeanLocal.createNewEnquiry(currentCustomerEntity.getCustomerId(), newEnquiry);
+            pastEnquiries.add(newEnquiry);
+
+            this.newEnquiry = new Enquiry();
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO,
+                            "Enquiry has been submitted. (Enquiry ID: " + enquiry.getEnquiryId() + ")", null));
+        } catch (CreateNewEnquiryException | CustomerNotFoundException | InputDataValidationException | UnknownPersistenceException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, ""
+                            + "An error has occurred while creating the new enquiry: " + ex.getMessage(), null));
+        }
     }
 
     /**

@@ -5,7 +5,13 @@
  */
 package ejb.session.stateless;
 
+import entity.Subscription;
+import java.util.List;
 import javax.ejb.Local;
+import util.exception.CreateNewSubscriptionException;
+import util.exception.CustomerNotFoundException;
+import util.exception.InputDataValidationException;
+import util.exception.SubscriptionNotFoundException;
 
 /**
  *
@@ -13,5 +19,11 @@ import javax.ejb.Local;
  */
 @Local
 public interface SubscriptionSessionBeanLocal {
+
+    public Subscription createNewSubscription(Long customerId, Subscription newSubscription) throws CustomerNotFoundException, CreateNewSubscriptionException, InputDataValidationException;
+
+    public List<Subscription> retrieveAllSubscriptions();
+
+    public Subscription retrieveSubscriptionBySubscriptionId(Long subId) throws SubscriptionNotFoundException;
     
 }
