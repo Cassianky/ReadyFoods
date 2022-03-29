@@ -10,7 +10,7 @@ h1 {
     font-family: Verdana;
     font-size:  25px;
     margin: 0px;
-    padding: 20px;
+    padding: 10px;
     color: #94774b;
 }
 
@@ -49,7 +49,7 @@ a:link:hover, a:visited:hover  {
     height: 100%;
     margin-left: auto;
     margin-right: auto;
-    width: 40%;
+    width: 30%;
     background-color: #94774b;
 }
 
