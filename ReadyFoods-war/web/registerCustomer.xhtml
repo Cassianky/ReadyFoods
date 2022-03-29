@@ -8,16 +8,17 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-        <h:panelGroup class="register">
+        <div class="registerBg">
+        <h:panelGroup>
             <h:form id="registerForm">
-
-                <p:panelGrid>
+                
+                <p:panelGrid class="register">
 
                     <p:row>
                         <p:column colspan="2">
-                            <h:outputText value="Registration" style="font-weight: bold;"/>
+                          <h1 style="text-align: center;">Register with ReadyFoods Today!</h1>
                         </p:column>
-                    </p:row> 
+                    </p:row>
                     <p:row>
                         <p:column>
                             <p:outputLabel for="email" value="Email: "/>
@@ -66,9 +67,9 @@
                             <p:outputLabel for="password" value="Password: "/>
                         </p:column>
                         <p:column>
-                            <p:inputText id="password" value="#{registerCustomerManagedBeanRF.newCustomer.password}" required="true" requiredMessage="Password is required">
+                            <p:password toggleMask="true" redisplay="true" id="password" value="#{registerCustomerManagedBeanRF.newCustomer.password}" required="true" requiredMessage="Password is required">
                                 <f:validateLength minimum="8" />
-                            </p:inputText>
+                            </p:password>
                         </p:column>
                     </p:row>
 
@@ -77,7 +78,7 @@
                             <p:outputLabel for="address" value="Address: "/>
                         </p:column>
                         <p:column>
-                            <p:inputText id="address" value="#{registerCustomerManagedBeanRF.newCustomer.password}" required="true" requiredMessage="Address is required">
+                            <p:inputText id="address" value="#{registerCustomerManagedBeanRF.newCustomer.address}" required="true" requiredMessage="Address is required">
                             </p:inputText>
                         </p:column>
                     </p:row>
@@ -97,16 +98,37 @@
                         <p:column>
                             <p:selectOneMenu id="selGender" value="#{registerCustomerManagedBeanRF.newCustomer.gender}">
                                 <f:selectItem itemValue="0" itemLabel="[Select One]" noSelectionOption="true" />
-                                <f:selectItems value="#{data.genders}" var="gender"/>
+                                <f:selectItems value="#{registerCustomerManagedBeanRF.genders}" var="gender"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="selActivityLevel" value="Activity Level "/>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="selActivityLevel" value="#{registerCustomerManagedBeanRF.newCustomer.activityLevel}">
+                                <f:selectItem itemValue="0" itemLabel="[Select One]" noSelectionOption="true" />
+                                <f:selectItems value="#{registerCustomerManagedBeanRF.activityLevels}" var="activityLevel"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="selDietType" value="Diet Type "/>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="selDietType" value="#{registerCustomerManagedBeanRF.newCustomer.dietType}">
+                                <f:selectItem itemValue="0" itemLabel="[Select One]" noSelectionOption="true" />
+                                <f:selectItems value="#{registerCustomerManagedBeanRF.dietTypes}" var="dietType"/>
                             </p:selectOneMenu>
                         </p:column>
                     </p:row>
                     <p:row>
                         <p:column colspan="2">
-                            <p:commandButton value="Register" type="submit" actionListener="#{registerCustomerManagedBeanRF.registerNewCustomer}"/>
+                            <p:commandButton style="float:right;" value="Register" type="submit" actionListener="#{registerCustomerManagedBeanRF.registerNewCustomer}"/>
                         </p:column>
                     </p:row>
-
                     <p:growl>
                         <p:autoUpdate />
                     </p:growl>
@@ -114,6 +136,7 @@
 
             </h:form>
         </h:panelGroup>
+        </div>
     </ui:define>
 
 </ui:composition>

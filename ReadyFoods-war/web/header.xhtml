@@ -17,13 +17,13 @@
                     </p:inputText>
                     &nbsp;
                     <p:outputLabel for="password" value="Password" />&nbsp;
-                    <p:password id="password" size="16" value="#{loginManagedBeanRF.password}" required="true" requiredMessage="Password is required" maxlength="32">
+                    <p:password toggleMask="true" redisplay="true" id="password" size="16" value="#{loginManagedBeanRF.password}" required="true" requiredMessage="Password is required" maxlength="32">
                         <f:validateLength minimum="4" />
                     </p:password>
                     &nbsp;
                     <p:commandButton type="reset" value="Clear" icon="pi pi-undo" />&nbsp;
                     <p:commandButton type="submit" actionListener="#{loginManagedBeanRF.login}" value="Login" icon="pi pi-sign-in" />
-
+                    
                     <p:growl>
                         <p:autoUpdate />
                     </p:growl>

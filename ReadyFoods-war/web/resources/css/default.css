@@ -7,12 +7,11 @@ body {
 }
 
 h1 {
-    font-family: Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
-    font-size:  30px;
-    font-weight: bold;
+    font-family: Verdana;
+    font-size:  25px;
     margin: 0px;
-    padding: 10px;
-    color: #7d5758;
+    padding: 20px;
+    color: #94774b;
 }
 
 a:link, a:visited {
@@ -44,4 +43,17 @@ a:link:hover, a:visited:hover  {
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+
+.register{
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+    background-color: #94774b;
+}
+
+.registerBg {
+    background: url("#{resource['images/register.png']}");
+    background-size: cover;
 }
