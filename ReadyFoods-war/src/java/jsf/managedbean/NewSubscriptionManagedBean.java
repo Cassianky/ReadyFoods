@@ -97,6 +97,7 @@ public class NewSubscriptionManagedBean implements Serializable {
     }
 
     public void doCreatenewSubscription(ActionEvent event) throws CustomerNotFoundException, CreateNewSubscriptionException, InputDataValidationException {
+        this.newSubscription.setRemainingDuration(this.newSubscription.getDuration() * 4);
         Subscription createdSubscription = subscriptionSessionBeanLocal.
                 createNewSubscription(currentCustomerEntity.getCustomerId(), newSubscription);
 

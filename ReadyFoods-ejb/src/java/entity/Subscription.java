@@ -61,6 +61,10 @@ public class Subscription implements Serializable {
     @Column(nullable = false)
     @NotNull
     private Boolean ongoing;
+    
+    @Column(nullable = false)
+    @NotNull
+    private Integer remainingDuration; // in weeks
 
     @OneToMany
     private List<OrderEntity> subscriptionOrders;
@@ -222,6 +226,20 @@ public class Subscription implements Serializable {
      */
     public void setSubscriptionOrders(List<OrderEntity> subscriptionOrders) {
         this.subscriptionOrders = subscriptionOrders;
+    }
+
+    /**
+     * @return the remainingDuration
+     */
+    public Integer getRemainingDuration() {
+        return remainingDuration;
+    }
+
+    /**
+     * @param remainingDuration the remainingDuration to set
+     */
+    public void setRemainingDuration(Integer remainingDuration) {
+        this.remainingDuration = remainingDuration;
     }
 
 }
