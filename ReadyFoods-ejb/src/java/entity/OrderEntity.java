@@ -27,15 +27,15 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author PYT
+ * @author ngcas
  */
 @Entity
-public class Order implements Serializable {
+public class OrderEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderId;
+    private Long orderEntityId;
     
     @Column(nullable = false)
     @NotNull
@@ -72,33 +72,36 @@ public class Order implements Serializable {
     @OneToMany
     private List<OrderLineItem> orderLineItems;
     
-    @ManyToOne(optional = true)
+    @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private Customer customer;
 
-    public Long getOrderId() {
-        return orderId;
+    public OrderEntity() {
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public Long getOrderEntityId() {
+        return orderEntityId;
+    }
+
+    public void setOrderEntityId(Long orderEntityId) {
+        this.orderEntityId = orderEntityId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (orderId != null ? orderId.hashCode() : 0);
+        hash += (orderEntityId != null ? orderEntityId.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the orderId fields are not set
-        if (!(object instanceof Order)) {
+        if (!(object instanceof OrderEntity)) {
             return false;
         }
-        Order other = (Order) object;
-        if ((this.orderId == null && other.orderId != null) || (this.orderId != null && !this.orderId.equals(other.orderId))) {
+        OrderEntity other = (OrderEntity) object;
+        if ((this.orderEntityId == null && other.orderEntityId != null) || (this.orderEntityId != null && !this.orderEntityId.equals(other.orderEntityId))) {
             return false;
         }
         return true;
@@ -106,7 +109,7 @@ public class Order implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Order[ id=" + orderId + " ]";
+        return "entity.Order[ id=" + orderEntityId + " ]";
     }
 
     /**
@@ -234,5 +237,6 @@ public class Order implements Serializable {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
+    
     
 }

@@ -101,7 +101,7 @@ public class Customer implements Serializable {
     private List<Enquiry> enquiries;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-    private List<Order> orders;
+    private List<OrderEntity> orders;
     
     @OneToMany(fetch = FetchType.LAZY)
     private List<Food> foods;
@@ -123,19 +123,19 @@ public class Customer implements Serializable {
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);
     }
 
-    public Customer(String userName, String firstName, String lastName, String contactNumber, String password, String salt, String address, Integer age, DietType dietType, Gender gender, ActivityLevel activityLevel) {
+    public Customer(String userName, String firstName, String lastName, String contactNumber, String password, String email, String address, Integer age, DietType dietType, Gender gender, ActivityLevel activityLevel) {
         this();
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.contactNumber = contactNumber;
-        this.password = password;
-        this.salt = salt;
+        this.email = email;
         this.address = address;
         this.age = age;
         this.dietType = dietType;
         this.gender = gender;
         this.activityLevel = activityLevel;
+        setPassword(password);
     }
 
     
@@ -327,11 +327,11 @@ public class Customer implements Serializable {
         }
     }
 
-    public List<Order> getOrders() {
+    public List<OrderEntity> getOrders() {
         return orders;
     }
 
-    public void addOrder(Order order) throws EntityInstanceExistsInCollectionException
+    public void addOrder(OrderEntity order) throws EntityInstanceExistsInCollectionException
     {
         if(!this.orders.contains(order))
         {
@@ -339,13 +339,13 @@ public class Customer implements Serializable {
         }
         else
         {
-            throw new EntityInstanceExistsInCollectionException("Sale Transaction Line Item already exist");
+            throw new EntityInstanceExistsInCollectionException("Order already exists");
         }
     }
     
     
     
-    public void removeOrder(Order order) throws EntityInstanceMissingInCollectionException
+    public void removeOrder(OrderEntity order) throws EntityInstanceMissingInCollectionException
     {
         if(this.orders.contains(order))
         {
@@ -353,7 +353,7 @@ public class Customer implements Serializable {
         }
         else
         {
-            throw new EntityInstanceMissingInCollectionException("Sale Transaction Line Item missing");
+            throw new EntityInstanceMissingInCollectionException("Order missing");
         }
     }
 

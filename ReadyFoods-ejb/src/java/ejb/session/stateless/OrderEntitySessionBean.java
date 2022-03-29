@@ -6,7 +6,7 @@
 package ejb.session.stateless;
 
 import entity.Customer;
-import entity.Order;
+import entity.OrderEntity;
 import entity.OrderLineItem;
 import java.util.List;
 import javax.ejb.EJB;
@@ -20,10 +20,10 @@ import util.exception.OrderNotFoundException;
 
 /**
  *
- * @author PYT
+ * @author ngcas
  */
 @Stateless
-public class OrderSessionBean implements OrderSessionBeanLocal {
+public class OrderEntitySessionBean implements OrderEntitySessionBeanLocal {
 
     @EJB
     private CustomerSessionBeanLocal customerSessionBeanLocal;
@@ -33,11 +33,11 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
     
     //inject customerSessionBean here
 
-    public OrderSessionBean() {
+    public OrderEntitySessionBean() {
     }
 
     @Override
-    public Order createNewOrder(Long customerId, Order newOrderEntity) throws CustomerNotFoundException, CreateNewOrderException {
+    public OrderEntity createNewOrder(Long customerId, OrderEntity newOrderEntity) throws CustomerNotFoundException, CreateNewOrderException {
         if (newOrderEntity != null) {
 
             Customer customerEntity = customerSessionBeanLocal.retrieveCustomerByCustomerId(customerId);
@@ -67,22 +67,22 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
     }
 
     @Override
-    public List<Order> retrieveAllOrders() {
+    public List<OrderEntity> retrieveAllOrders() {
         Query query = entityManager.createQuery("SELECT o FROM Order o");
 
         return query.getResultList();
     }
-    
+
     @Override
-    public List<Order> retrieveAllOrdersForACustomer(Long customerId) {
+    public List<OrderEntity> retrieveAllOrdersForACustomer(Long customerId) {
         Query query = entityManager.createQuery("SELECT o FROM Order o WHERE o.customer.customerId=:inCustomerId");
-        query.setParameter("inCsutomerId",customerId);
+        query.setParameter("inCustomerId",customerId);
         return query.getResultList();
     }
-    
+ 
     @Override
-    public Order retrieveOrderByOrderId(Long orderId) throws OrderNotFoundException {
-        Order orderEntity = entityManager.find(Order.class,orderId);
+    public OrderEntity retrieveOrderByOrderId(Long orderId) throws OrderNotFoundException {
+        OrderEntity orderEntity = entityManager.find(OrderEntity.class,orderId);
         if (orderEntity != null){
             orderEntity.getOrderLineItems().size();
             return orderEntity;
@@ -91,5 +91,4 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
         }
         
     }
-
 }

@@ -1,32 +1,32 @@
 <?xml version='1.0' encoding='UTF-8' ?> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 
     <h:head>
-        <title>Ready Foods</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <h:outputStylesheet library="css" name="default.css"/>
-        <h:outputStylesheet library="css" name="cssLayout.css"/>
         <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+        <h:outputStylesheet library="css" name="default.css" />
+        <h:outputStylesheet library="css" name="cssLayout.css" />
+        <title>ReadyFoods</title>
 
     </h:head>
     <p:layout fullPage="true">
 
-        <p:layoutUnit position="north" size="120">      
-            <h1>ReadyFoods</h1>
-            <!--<ui:insert name="header">
+        <p:layoutUnit position="north" size="130">      
+            <ui:insert name="header">
                 <ui:include src="/header.xhtml" />
-            </ui:insert>-->
+            </ui:insert>
         </p:layoutUnit>
 
         <p:layoutUnit size="240" position="west">
-            Sidebar
-            <!--<ui:insert name="mainmenu">
-                    <ui:include src="/mainmenu.xhtml" />
-                </ui:insert> -->
+
+            <ui:insert name="mainmenu">
+                <ui:include src="/mainmenu.xhtml" />
+            </ui:insert> 
         </p:layoutUnit>
 
         <p:layoutUnit position="center" >
@@ -43,4 +43,5 @@
         </p:layoutUnit>                
 
     </p:layout>
+
 </html>

@@ -23,72 +23,54 @@ import javax.servlet.http.HttpSession;
 
 @WebFilter(filterName = "SecurityFilter", urlPatterns = {"/*"})
 public class SecurityFilter implements Filter {
-    
+
     FilterConfig filterConfig;
-    
+
     private static final String CONTEXT_ROOT = "/ReadyFoods-war";
-    
-    public void init(FilterConfig filterConfig) throws ServletException
-    {
+
+    public void init(FilterConfig filterConfig) throws ServletException {
         this.filterConfig = filterConfig;
     }
 
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
-    {
-        HttpServletRequest httpServletRequest = (HttpServletRequest)request;
-        HttpServletResponse httpServletResponse = (HttpServletResponse)response;
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         HttpSession httpSession = httpServletRequest.getSession(true);
-        String requestServletPath = httpServletRequest.getServletPath();        
-        
-        
+        String requestServletPath = httpServletRequest.getServletPath();
 
-        if(httpSession.getAttribute("isLogin") == null)
-        {
+        if (httpSession.getAttribute("isLogin") == null) {
             httpSession.setAttribute("isLogin", false);
         }
 
-        Boolean isLogin = (Boolean)httpSession.getAttribute("isLogin");
-        
-        
-        
-        if(!excludeLoginCheck(requestServletPath))
-        {
-            if(isLogin == true)
-            {
-                Customer currentCustomer= (Customer)httpSession.getAttribute("currentCustomer");
+        Boolean isLogin = (Boolean) httpSession.getAttribute("isLogin");
+
+        if (!excludeLoginCheck(requestServletPath)) {
+            if (isLogin == true) {
+                Customer currentCustomer = (Customer) httpSession.getAttribute("currentCustomer");
                 chain.doFilter(request, response);
-                
-            }
-            else
-            {
+
+            } else {
                 httpServletResponse.sendRedirect(CONTEXT_ROOT + "/accessRightError.xhtml");
             }
-        }
-        else
-        {
+        } else {
             chain.doFilter(request, response);
         }
     }
 
-
-
-    public void destroy()
-    {
+    public void destroy() {
 
     }
-    
-     private Boolean excludeLoginCheck(String path)
-    {
-        if(path.equals("/index.xhtml") ||
-            path.equals("/accessRightError.xhtml") ||
-            path.startsWith("/javax.faces.resource"))
-        {
+
+    private Boolean excludeLoginCheck(String path) {
+        if (path.equals("/index.xhtml")
+                || path.equals("/accessRightError.xhtml")
+                || path.equals("/registerCustomer.xhtml")
+                || path.equals("/subscription/subscription.xhtml")
+                || path.startsWith("/javax.faces.resource")) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
-    
+
 }

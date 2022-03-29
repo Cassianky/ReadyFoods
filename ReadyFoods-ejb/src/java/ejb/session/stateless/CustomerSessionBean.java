@@ -125,8 +125,9 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         try {
             Customer customer = retrieveCustomerByEmail(email);
             String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + customer.getSalt()));
-
+            System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
             if (customer.getPassword().equals(passwordHash)) {
+                 System.out.println("###########################################################################");
                 //May not need to load the enquiries here
                 customer.getEnquiries().size();
 

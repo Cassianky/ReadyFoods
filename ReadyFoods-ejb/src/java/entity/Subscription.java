@@ -66,7 +66,7 @@ public class Subscription implements Serializable {
     private Boolean ongoing;
 
     @OneToMany
-    private List<Order> subscriptionOrders;
+    private List<OrderEntity> subscriptionOrders;
 
     public Subscription() {
         this.subscriptionOrders = new ArrayList<>();
@@ -84,7 +84,7 @@ public class Subscription implements Serializable {
     }
 
     public Subscription(Date subscriptionStartDate, Integer duration,
-            Integer numOfRecipes, Integer numOfPeople, BigDecimal weeklyPrice, Boolean ongoing, List<Order> subscriptionOrders) {
+            Integer numOfRecipes, Integer numOfPeople, BigDecimal weeklyPrice, Boolean ongoing, List<OrderEntity> subscriptionOrders) {
         this.subscriptionStartDate = subscriptionStartDate;
         this.duration = duration;
         this.numOfRecipes = numOfRecipes;
@@ -216,14 +216,14 @@ public class Subscription implements Serializable {
     /**
      * @return the subscriptionOrders
      */
-    public List<Order> getSubscriptionOrders() {
+    public List<OrderEntity> getSubscriptionOrders() {
         return subscriptionOrders;
     }
 
     /**
      * @param subscriptionOrders the subscriptionOrders to set
      */
-    public void setSubscriptionOrders(List<Order> subscriptionOrders) {
+    public void setSubscriptionOrders(List<OrderEntity> subscriptionOrders) {
         this.subscriptionOrders = subscriptionOrders;
     }
 
