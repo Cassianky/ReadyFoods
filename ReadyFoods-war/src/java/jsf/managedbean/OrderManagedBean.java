@@ -5,9 +5,9 @@
  */
 package jsf.managedbean;
 
-import ejb.session.stateless.OrderSessionBeanLocal;
+import ejb.session.stateless.OrderEntitySessionBeanLocal;
 import entity.Customer;
-import entity.Order;
+import entity.OrderEntity;
 import java.io.IOException;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
@@ -26,14 +26,14 @@ import javax.faces.context.FacesContext;
 public class OrderManagedBean implements Serializable {
 
     @EJB(name = "OrderSessionBeanLocal")
-    private OrderSessionBeanLocal orderSessionBeanLocal;
+    private OrderEntitySessionBeanLocal orderSessionBeanLocal;
     
-    ArrayList<Order> listOfOrders;
+    ArrayList<OrderEntity> listOfOrders;
     public OrderManagedBean() {
         this.listOfOrders = new ArrayList<>();
     }
     
-    public List<Order> retrieveAllOrdersForACustomer() throws IOException {
+    public List<OrderEntity> retrieveAllOrdersForACustomer() throws IOException {
         Customer customerEntity = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity");
         Long customerId = customerEntity.getCustomerId();
         return orderSessionBeanLocal.retrieveAllOrdersForACustomer(customerId);
