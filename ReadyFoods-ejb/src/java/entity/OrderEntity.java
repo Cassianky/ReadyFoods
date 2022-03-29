@@ -58,8 +58,7 @@ public class OrderEntity implements Serializable {
     private Date dateOfOrder;
     
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false)
-    @NotNull
+    @Column(nullable = true)
     private Date dateForDelivery;
     
     @Column(nullable = false)
@@ -78,6 +77,18 @@ public class OrderEntity implements Serializable {
 
     public OrderEntity() {
     }
+
+    public OrderEntity(Integer numPax, BigDecimal totalCost, Boolean paid, Date dateOfOrder, Boolean delivered, List<OrderLineItem> orderLineItems, Customer customer) {
+        this.numPax = numPax;
+        this.totalCost = totalCost;
+        this.paid = paid;
+        this.dateOfOrder = dateOfOrder;
+        this.delivered = delivered;
+        this.orderLineItems = orderLineItems;
+        this.customer = customer;
+    }
+    
+    
 
     public Long getOrderEntityId() {
         return orderEntityId;

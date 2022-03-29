@@ -80,7 +80,13 @@ public class OrderLineItem implements Serializable {
      * @return the recipeSubTotal
      */
     public BigDecimal getRecipeSubTotal() {
-        return recipeSubTotal;
+        BigDecimal subT = BigDecimal.valueOf(0);
+        for(CustomisedIngredient customisedIngredient:customisedIngredients){
+            subT = subT.add(customisedIngredient.getSubtotal());
+        }
+        setRecipeSubTotal(subT);
+        
+        return subT;
     }
 
     /**
