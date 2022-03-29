@@ -20,9 +20,12 @@
 
                 <p:menuitem value="Subscription Management" rendered="#{cc.attrs.pageName == 'newSubscription'
                                                                         || cc.attrs.pageName == 'selectRecipes'
+                                                                        || cc.attrs.pageName == 'mySubscriptions'
                                                                       }" />
                 <p:menuitem value="New Subscription" url="#{application.contextPath}/subscriptionManagement/newSubscription.xhtml" 
                             rendered="#{cc.attrs.pageName == 'newSubscription'}" />
+                <p:menuitem value="My Subscriptions" url="#{application.contextPath}/subscriptionManagement/mySubscriptions.xhtml" 
+                            rendered="#{cc.attrs.pageName == 'mySubscriptions'}" />
                 <p:menuitem value="Select Recipes" url="#{application.contextPath}/subscriptionManagement/selectRecipes.xhtml" 
                             rendered="#{cc.attrs.pageName == 'selectRecipes'}" />
 

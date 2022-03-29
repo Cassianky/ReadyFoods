@@ -85,6 +85,8 @@ public class NewSubscriptionManagedBean implements Serializable {
 
     }
 
+
+
     public void updateWeeklyPrice(AjaxBehaviorEvent event) {
         calculateWeeklyPrice();
         //System.out.println(this.newSubscription.getWeeklyPrice());

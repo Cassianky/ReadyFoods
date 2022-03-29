@@ -15,6 +15,21 @@ h1 {
     color: #94774b;
 }
 
+.h1title {
+    font-family: Arial;
+    font-size:  25px;
+    font-weight: 200;
+    text-align: justify;
+    margin: 0px;
+    padding: 20px;
+    color: #94774b;
+}
+
+.titleicon{
+    width: 5%;
+    float: left;
+}
+
 a:link, a:visited {
     color: #045491;
     font-weight : bold;
