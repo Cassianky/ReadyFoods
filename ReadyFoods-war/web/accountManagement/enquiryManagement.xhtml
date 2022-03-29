@@ -15,10 +15,10 @@
         </p:growl>
         <main style="margin: 30px">
 
-            <h:form id="registerForm" >
+            <h:form id="enquiryForm" >
                 <h1>Submit New Enquiry</h1>
 
-                <p:panelGrid class="register" styleClass="ui-noborder">
+                <p:panelGrid styleClass="ui-noborder">
 
                     <p:row>
                         <p:column>
@@ -26,7 +26,7 @@
                         </p:column>
                         <p:column>
                             <p:inputText id="title" 
-                                         value="#{registerCustomerManagedBeanRF.newCustomer.email}" 
+                                         value="#{enquiryManagedBean.newEnquiry.title}" 
                                          required="true" 
                                          requiredMessage="Title is required" />
                         </p:column>
@@ -36,8 +36,8 @@
                             <p:outputLabel for="description" value="Description: " style="font-weight: bold;" />
                         </p:column>
                         <p:column>
-                            <p:inputTextarea autoResize="false" id="description" 
-                                             value="#{registerCustomerManagedBeanRF.newCustomer.email}" 
+                            <p:inputTextarea rows="5" cols="100" autoResize="false" id="description" 
+                                             value="#{enquiryManagedBean.newEnquiry.description}" 
                                              required="true" 
                                              requiredMessage="Description is required" />
                         </p:column>
@@ -45,14 +45,64 @@
 
                     <p:row>
                         <p:column colspan="2">
-                            <p:commandButton value="Submit" type="submit" 
-
-                                             />
+                            <p:commandButton value="Submit" type="submit" actionListener="#{enquiryManagedBean.doCreateNewEnquiry}"
+                                             update="formAllEnquires:dataTableAllEnquires enquiryForm"/>
                         </p:column>
                     </p:row>
 
                 </p:panelGrid>
 
+            </h:form>
+            
+            <h:form id="formAllEnquires">
+
+            <p:dataTable id="dataTableAllEnquires" widgetVar="dataTableAllEnquires" 
+                         value="#{enquiryManagedBean.pastEnquiries}" var="enquiry" 
+                         rowKey="#{enquiry.enquiryId}" rowIndexVar="row"
+                         rows="10" paginator="true" 
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">
+
+
+
+                <p:column headerText="Enquiry ID" sortBy="#{enquiry.enquiryId}" 
+                          filterBy="#{enquiry.enquiryId}" filterMatchMode="contains">
+                    <h:outputText value="#{enquiry.enquiryId}" />
+                </p:column>
+
+                <p:column headerText="Title" sortBy="#{enquiry.title}" 
+                          filterBy="#{enquiry.title}" filterMatchMode="contains">
+                    <h:outputText value="#{enquiry.title}" />
+                </p:column>        
+                <p:column headerText="Description" sortBy="#{enquiry.description}" 
+                          filterBy="#{enquiry.dateOfEnquiry}" filterMatchMode="contains">
+                    <h:outputText value="#{enquiry.description}" />
+                </p:column>
+
+                <p:column headerText="Date" sortBy="#{enquiry.dateOfEnquiry}" 
+                          filterBy="#{enquiry.dateOfEnquiry}" filterMatchMode="contains">
+                    <h:outputText value="#{enquiry.dateOfEnquiry}" />
+                </p:column>
+
+
+                <p:column headerText="Action" >
+
+                    <p:commandButton icon="ui-icon-trash" 
+                                     update="dataTableAllEnquires">
+                        <f:attribute name="enquiryToDelete" value="#{enquiry}" />
+                        <p:confirm header="Confirmation" message="Are you sure you want to delete 
+                                   #{enquiry.enquiryId}?" 
+                                   icon="ui-icon-alert" />
+                    </p:commandButton>
+                </p:column>
+
+
+            </p:dataTable>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+            
             </h:form>
 
         </main>

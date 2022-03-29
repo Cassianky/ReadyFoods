@@ -54,7 +54,7 @@ public class EnquiryManagedBean implements Serializable {
     @PostConstruct
     public void postConstruct() {
         currentCustomerEntity = (Customer) FacesContext.getCurrentInstance().
-                getExternalContext().getSessionMap().get("currentCustomerEntity");
+                getExternalContext().getSessionMap().get("currentCustomer");
         Customer customer;
         try {
             customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomerEntity.getCustomerId());
