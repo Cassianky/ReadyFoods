@@ -54,8 +54,7 @@ public class SubscriptionSessionBean implements SubscriptionSessionBeanLocal {
 
             if (newSubscription != null) {
 
-                //Customer customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(customerId);
-                Customer customer = null; // placeholder
+                Customer customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(customerId);
                 //newSaleTransactionEntity.setSubscriptionEntity(staffEntity);
                 customer.getSubscriptions().add(newSubscription);
 

@@ -18,8 +18,11 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
+import util.exception.CreateNewSubscriptionException;
 import util.exception.CustomerNotFoundException;
+import util.exception.InputDataValidationException;
 import util.exception.NoOngoingSubscriptionException;
 
 /**
@@ -53,12 +56,10 @@ public class NewSubscriptionManagedBean implements Serializable {
 
     @PostConstruct
     public void postConstruct() {
-        System.out.println("New Subscription managed bean post construct");
         currentCustomerEntity = (Customer) FacesContext.getCurrentInstance().
                 getExternalContext().getSessionMap().get("currentCustomer");
         Customer customer;
         try {
-            System.out.println("here");
             customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomerEntity.getCustomerId());
             Subscription ongoingSubscription = subscriptionSessionBeanLocal.
                     retrieveOngoingSubscriptionForCustomer(currentCustomerEntity.getCustomerId());
@@ -75,7 +76,7 @@ public class NewSubscriptionManagedBean implements Serializable {
 
             this.newSubscription = new Subscription(new Date(),
                     1, 2, 2, BigDecimal.ZERO, true);
-          
+
             calculateWeeklyPrice();
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -83,15 +84,26 @@ public class NewSubscriptionManagedBean implements Serializable {
         }
 
     }
-    
+
     public void updateWeeklyPrice(AjaxBehaviorEvent event) {
-       calculateWeeklyPrice();
-       System.out.println(this.newSubscription.getWeeklyPrice());
+        calculateWeeklyPrice();
+        //System.out.println(this.newSubscription.getWeeklyPrice());
     }
 
     private void calculateWeeklyPrice() {
         BigDecimal price = BigDecimal.valueOf(9.99 * (this.newSubscription.getNumOfPeople() * this.newSubscription.getNumOfRecipes()));
         this.newSubscription.setWeeklyPrice(price);
+
+    }
+
+    public void doCreatenewSubscription(ActionEvent event) throws CustomerNotFoundException, CreateNewSubscriptionException, InputDataValidationException {
+        Subscription createdSubscription = subscriptionSessionBeanLocal.
+                createNewSubscription(currentCustomerEntity.getCustomerId(), newSubscription);
+
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO,
+                        "Subscription successful: "
+                        + createdSubscription.getSubscriptionId(), null));
 
     }
 

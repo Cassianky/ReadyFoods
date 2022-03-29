@@ -9,14 +9,22 @@
 
     <ui:define name="content">
 
-        <h3>Personalise your plan!</h3>
+        <h3>Subscribe to our meal kit plan!</h3>
 
         <p:messages closable="true" redisplay="false" >
             <p:autoUpdate/>
         </p:messages>
-        <h:form id="formSubscribe">
+        
+        <h:panelGroup rendered="#{newSubscriptionManagedBean.ongoing == true}">
+            <article style="padding-left: 15px">
+                You have an ongoing subscription.
+                REDIRECT THE CUSTOMER TO RECIPE SELECTION PAGE?
 
-            <p:panelGrid rendered="#{newSubscriptionManagedBean.ongoing == false}">
+            </article>
+        </h:panelGroup>
+        <h:form id="formSubscribe" rendered="#{newSubscriptionManagedBean.ongoing == false}">
+
+            <p:panelGrid >
 
                 <p:row>
                     <p:column>
@@ -28,7 +36,7 @@
                             requiredMessage="Number of People is required"
                             value="#{newSubscriptionManagedBean.newSubscription.numOfPeople}">
                             <f:selectItem itemLabel="2" itemValue="#{2}"/>
-                            <f:selectItem itemLabel="4" itemValue="#{3}"/>
+                            <f:selectItem itemLabel="4" itemValue="#{4}"/>
                             <f:ajax event="change" execute="@form" render="@form pricePanel"
                                     listener="#{newSubscriptionManagedBean.updateWeeklyPrice}"/>
                         </p:selectOneButton>
@@ -93,9 +101,10 @@
                 <p:row>
                     <p:column colspan="3">
                         <p:commandButton type="reset" value="Clear" />&nbsp;
-                        <p:commandButton  value="Subscribe">
+                        <p:commandButton  value="Subscribe"
+                                          actionListener="#{newSubscriptionManagedBean.doCreatenewSubscription}">
                             <p:confirm header="Confirmation" 
-                                       message="Confirm your details" icon="ui-icon-alert" />
+                                       message="Confirm your details:" icon="ui-icon-notice" />
                         </p:commandButton>
 
                     </p:column>
@@ -104,6 +113,13 @@
             </p:panelGrid>
 
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <div style="margin: 40px">
+                    <p>#{newSubscriptionManagedBean.newSubscription.numOfRecipes} recipes 
+                        for #{newSubscriptionManagedBean.newSubscription.numOfPeople} people per week</p>
+                    <p>#{newSubscriptionManagedBean.newSubscription.duration} month(s)</p>
+                    INSERT CREDIT CARD + DELIVERY ADDRESS HERE
+                </div>
+                <p:separator/>
                 <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                 <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
             </p:confirmDialog>
@@ -112,7 +128,7 @@
         </h:form>
 
 
-        <h:form id="pricePanel">
+        <h:form id="pricePanel" rendered="#{newSubscriptionManagedBean.ongoing == false}">
             <p:panel style="float: right; width: 40%; margin-right: 20px" >
                 <p>#{newSubscriptionManagedBean.newSubscription.numOfRecipes} recipes 
                     for #{newSubscriptionManagedBean.newSubscription.numOfPeople} people per week</p>
