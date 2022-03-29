@@ -62,7 +62,7 @@ a:link:hover, a:visited:hover  {
 }
 
 .register{
-    height: 100%;
+    height: 70%;
     margin-left: auto;
     margin-right: auto;
     width: 30%;
@@ -72,6 +72,7 @@ a:link:hover, a:visited:hover  {
 .registerBg {
     background: url("#{resource['images/register.png']}");
     background-size: cover;
+    height: 100%;
 
 }
 
