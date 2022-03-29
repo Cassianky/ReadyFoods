@@ -67,14 +67,15 @@ public class EmailManager {
 
                 // second part (the image)
                 messageBodyPart = new MimeBodyPart();
-                DataSource fds = new FileDataSource(
-                        "C:/Users/ngcas/Desktop/IS3106/ReadyFoods/ReadyFoods-war/web/resources/images/welcome.png");
+//                DataSource fds = new FileDataSource(
+//                        "C:/Users/ngcas/Desktop/IS3106/ReadyFoods/ReadyFoods-war/web/resources/images/welcome.png");
+            
 
-                messageBodyPart.setDataHandler(new DataHandler(fds));
-                messageBodyPart.setHeader("Content-ID", "<image>");
-
-                // add image to the multipart
-                multipart.addBodyPart(messageBodyPart);
+//                messageBodyPart.setDataHandler(new DataHandler(fds));
+//                messageBodyPart.setHeader("Content-ID", "<image>");
+//
+//                // add image to the multipart
+//                multipart.addBodyPart(messageBodyPart);
 
                 // put everything together
                 msg.setContent(multipart);
