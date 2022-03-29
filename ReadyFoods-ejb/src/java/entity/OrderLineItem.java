@@ -103,5 +103,19 @@ public class OrderLineItem implements Serializable {
     public void setCustomisedIngredients(List<CustomisedIngredient> customisedIngredients) {
         this.customisedIngredients = customisedIngredients;
     }
+
+    /**
+     * @return the recipe
+     */
+    public Recipe getRecipe() {
+        return recipe;
+    }
+
+    /**
+     * @param recipe the recipe to set
+     */
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+    }
     
 }
