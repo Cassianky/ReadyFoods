@@ -56,13 +56,13 @@ public class NewSubscriptionManagedBean implements Serializable {
 
     @PostConstruct
     public void postConstruct() {
-        currentCustomerEntity = (Customer) FacesContext.getCurrentInstance().
-                getExternalContext().getSessionMap().get("currentCustomer");
+        setCurrentCustomerEntity((Customer) FacesContext.getCurrentInstance().
+                getExternalContext().getSessionMap().get("currentCustomer"));
         Customer customer;
         try {
-            customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomerEntity.getCustomerId());
+            customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(getCurrentCustomerEntity().getCustomerId());
             Subscription ongoingSubscription = subscriptionSessionBeanLocal.
-                    retrieveOngoingSubscriptionForCustomer(currentCustomerEntity.getCustomerId());
+                    retrieveOngoingSubscriptionForCustomer(getCurrentCustomerEntity().getCustomerId());
 
             this.ongoing = !(ongoingSubscription == null);
 
@@ -101,7 +101,7 @@ public class NewSubscriptionManagedBean implements Serializable {
     public void doCreatenewSubscription(ActionEvent event) throws CustomerNotFoundException, CreateNewSubscriptionException, InputDataValidationException {
         this.newSubscription.setRemainingDuration(this.newSubscription.getDuration() * 4);
         Subscription createdSubscription = subscriptionSessionBeanLocal.
-                createNewSubscription(currentCustomerEntity.getCustomerId(), newSubscription);
+                createNewSubscription(getCurrentCustomerEntity().getCustomerId(), newSubscription);
 
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -150,6 +150,20 @@ public class NewSubscriptionManagedBean implements Serializable {
      */
     public void setShippingCost(BigDecimal shippingCost) {
         this.shippingCost = shippingCost;
+    }
+
+    /**
+     * @return the currentCustomerEntity
+     */
+    public Customer getCurrentCustomerEntity() {
+        return currentCustomerEntity;
+    }
+
+    /**
+     * @param currentCustomerEntity the currentCustomerEntity to set
+     */
+    public void setCurrentCustomerEntity(Customer currentCustomerEntity) {
+        this.currentCustomerEntity = currentCustomerEntity;
     }
 
 }

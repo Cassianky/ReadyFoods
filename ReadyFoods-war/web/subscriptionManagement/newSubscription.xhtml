@@ -126,7 +126,8 @@
                         <p>#{newSubscriptionManagedBean.newSubscription.numOfRecipes} recipes 
                             for #{newSubscriptionManagedBean.newSubscription.numOfPeople} people per week</p>
                         <p>#{newSubscriptionManagedBean.newSubscription.duration} month(s)</p>
-                        INSERT CREDIT CARD + DELIVERY ADDRESS HERE
+                        <p>Address: #{newSubscriptionManagedBean.currentCustomerEntity.address}</p>
+                        <p>Bill to: #{newSubscriptionManagedBean.currentCustomerEntity.creditCard.ccNumber}</p>
                     </div>
                     <p:separator/>
                     <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
