@@ -8,5 +8,6 @@
 /dist/
 
 /ReadyFoods-war/nbproject/private/
+/ReadyFoods-war/nbproject/project.properties
 /ReadyFoods-war/build/
 /ReadyFoods-war/dist/
