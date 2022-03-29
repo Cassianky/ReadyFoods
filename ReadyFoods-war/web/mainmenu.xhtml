@@ -18,6 +18,7 @@
 
                     <p:submenu label="Account Management" rendered="#{sessionScope.isLogin == true}">
                         <p:menuitem value="My Profile" icon="pi pi-user" />
+                        <p:menuitem value="Enquires" outcome="/accountManagement/enquiryManagement.xhtml" icon="pi pi-ticket" />
                     </p:submenu>
                     
                     <p:submenu label="Subscription Management" rendered="#{sessionScope.isLogin == true}">

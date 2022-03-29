@@ -27,6 +27,11 @@
                             rendered="#{cc.attrs.pageName == 'selectRecipes'}" />
 
 
+                <p:menuitem value="Account Management" rendered="#{cc.attrs.pageName == 'enquiryManagement'}" />
+                <p:menuitem value="Enquiry Management" url="#{application.contextPath}/accountManagement/enquiryManagement.xhtml" 
+                            rendered="#{cc.attrs.pageName == 'enquiryManagement'}" />
+
+
             </p:breadCrumb>
 
         </h:form>

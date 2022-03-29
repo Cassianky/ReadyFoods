@@ -9,13 +9,17 @@
                 template="./../template/defaultTemplate.xhtml">
 
     <ui:define name="content" >
-         <ez:Breadcrumb pageName="newSubscription" />
+        <ez:Breadcrumb pageName="newSubscription" />
 
 
 
-        <p:messages closable="true" redisplay="false" >
-            <p:autoUpdate/>
-        </p:messages>
+        <!--        <p:messages closable="true" redisplay="false" >
+                    <p:autoUpdate/>
+                </p:messages>-->
+
+        <p:growl>
+            <p:autoUpdate />
+        </p:growl>
 
         <h:panelGroup rendered="#{newSubscriptionManagedBean.ongoing == true}">
             <article style="padding-left: 15px">
@@ -26,7 +30,7 @@
         </h:panelGroup>
         <main style="margin: 30px">
             <h:form id="formSubscribe" rendered="#{newSubscriptionManagedBean.ongoing == false}">
-                <h3>New subscription:</h3>
+                <h1>Subscribe to our meal kit plan</h1>
 
                 <p:panelGrid styleClass="ui-noborder">
 
@@ -45,9 +49,7 @@
                                         listener="#{newSubscriptionManagedBean.updateWeeklyPrice}"/>
                             </p:selectOneButton>
                         </p:column>
-                        <p:column>
-                            <p:message for="numOfPeople" />
-                        </p:column>
+
                     </p:row>
 
                     <p:row>
@@ -71,9 +73,7 @@
                                         listener="#{newSubscriptionManagedBean.updateWeeklyPrice}"/>
                             </p:selectOneButton>
                         </p:column>
-                        <p:column>
-                            <p:message for="numOfPeople" />
-                        </p:column>
+
                     </p:row>
 
                     <p:row>
@@ -96,14 +96,12 @@
 
                             </p:selectOneButton>
                         </p:column>
-                        <p:column>
-                            <p:message for="duration" />
-                        </p:column>
+
                     </p:row> 
 
 
                     <p:row>
-                        <p:column colspan="3">
+                        <p:column colspan="2">
                             <p:commandButton type="reset" value="Clear" />&nbsp;
                             <p:commandButton  value="Subscribe"
                                               actionListener="#{newSubscriptionManagedBean.doCreatenewSubscription}">

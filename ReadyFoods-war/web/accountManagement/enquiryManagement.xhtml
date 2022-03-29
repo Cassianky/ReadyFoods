@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                template="/template/defaultTemplate.xhtml">
+
+    <ui:define name="content">
+        <ez:Breadcrumb pageName="enquiryManagement" />
+        <p:growl>
+            <p:autoUpdate />
+        </p:growl>
+        <main style="margin: 30px">
+
+            <h:form id="registerForm" >
+                <h1>Submit New Enquiry</h1>
+
+                <p:panelGrid class="register" styleClass="ui-noborder">
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="title" value="Title: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="title" 
+                                         value="#{registerCustomerManagedBeanRF.newCustomer.email}" 
+                                         required="true" 
+                                         requiredMessage="Title is required" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="description" value="Description: " style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputTextarea autoResize="false" id="description" 
+                                             value="#{registerCustomerManagedBeanRF.newCustomer.email}" 
+                                             required="true" 
+                                             requiredMessage="Description is required" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:commandButton value="Submit" type="submit" 
+
+                                             />
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+
+            </h:form>
+
+        </main>
+
+    </ui:define>
+
+</ui:composition>
