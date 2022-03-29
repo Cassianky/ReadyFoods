@@ -31,8 +31,6 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
 
     @EJB
     private CategorySessionBeanLocal categorySessionBeanLocal;
-    @EJB
-    private OrderSessionBeanLocal orderSessionBeanLocal;
 
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
@@ -93,7 +91,7 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
 
         if (retrievedRecipe != null) {
             retrievedRecipe.getCategories().size();
-            retrievedRecipe.getRecipeSteps().size();
+            retrievedRecipe.getRecipeSteps();
             retrievedRecipe.getIngredientSpecificationList().size();
             
             return retrievedRecipe;
@@ -113,7 +111,7 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
         recipes.size();
         for(Recipe r : recipes) {
             r.getCategories().size();
-            r.getRecipeSteps().size();
+            r.getRecipeSteps();
             r.getIngredientSpecificationList().size();
         }
 
@@ -161,7 +159,7 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
                 recipes.size();
                 for (Recipe r : recipes) {
                     r.getCategories().size();
-                    r.getRecipeSteps().size();
+                    r.getRecipeSteps();
                 }
 
                 Collections.sort(recipes, (Recipe r1, Recipe r2) 

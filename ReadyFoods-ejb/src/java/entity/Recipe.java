@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
@@ -47,7 +48,8 @@ public class Recipe implements Serializable {
     private Integer cookingTime;
     @Column(nullable = false)
     @NotNull
-    private List<String> recipeSteps;
+    @Lob
+    private String recipeSteps;
     @Column(nullable = false)
     @NotNull
     @Min(0)
@@ -83,12 +85,11 @@ public class Recipe implements Serializable {
 
     public Recipe() {
         this.ingredientSpecificationList = new ArrayList<>();
-        this.recipeSteps = new ArrayList<>();
         this.categories = new ArrayList<>();
         this.reviews = new ArrayList<>();
     }
 
-    public Recipe(String recipeTitle, String recipeChef, Integer cookingTime, List<String> recipeSteps,
+    public Recipe(String recipeTitle, String recipeChef, Integer cookingTime, String recipeSteps,
             Integer reorderQuantity, Integer caloriesPerServing, Integer carbsPerServing,
             Integer fatsPerServing, Integer proteinsPerServing, Integer sugarPerServing,
             String videoURL) {
@@ -154,11 +155,11 @@ public class Recipe implements Serializable {
         this.cookingTime = cookingTime;
     }
 
-    public List<String> getRecipeSteps() {
+    public String getRecipeSteps() {
         return recipeSteps;
     }
 
-    public void setRecipeSteps(List<String> recipeSteps) {
+    public void setRecipeSteps(String recipeSteps) {
         this.recipeSteps = recipeSteps;
     }
 

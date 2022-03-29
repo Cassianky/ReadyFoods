@@ -15,7 +15,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-/**
+/**x
  *
  * @author Eugene Chua
  */
@@ -37,7 +37,9 @@ public class IngredientSessionBean implements IngredientSessionBeanLocal {
     public Ingredient createNewIngredient(Ingredient newIngredient) {
 
         Set<ConstraintViolation<Ingredient>> constraintViolations = validator.validate(newIngredient);
-
+        //not yet completed
+        
+        return newIngredient;
     }
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Ingredient>> constraintViolations) {
