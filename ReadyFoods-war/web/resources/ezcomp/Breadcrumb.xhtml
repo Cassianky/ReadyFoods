@@ -19,9 +19,12 @@
 
 
                 <p:menuitem value="Subscription Management" rendered="#{cc.attrs.pageName == 'newSubscription'
+                                                                        || cc.attrs.pageName == 'selectRecipes'
                                                                       }" />
-                 <p:menuitem value="Checkout" url="#{application.contextPath}
-                             /subscriptionManagement/newSubscription.xhtml" rendered="#{cc.attrs.pageName == 'newSubscription'}" />
+                <p:menuitem value="New Subscription" url="#{application.contextPath}/subscriptionManagement/newSubscription.xhtml" 
+                            rendered="#{cc.attrs.pageName == 'newSubscription'}" />
+                <p:menuitem value="Select Recipes" url="#{application.contextPath}/subscriptionManagement/selectRecipes.xhtml" 
+                            rendered="#{cc.attrs.pageName == 'selectRecipes'}" />
 
 
             </p:breadCrumb>
