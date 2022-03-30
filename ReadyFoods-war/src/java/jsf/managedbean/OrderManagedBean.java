@@ -5,6 +5,7 @@
  */
 package jsf.managedbean;
 
+import ejb.session.stateless.CustomerSessionBeanLocal;
 import ejb.session.stateless.OrderEntitySessionBeanLocal;
 import entity.Customer;
 import entity.OrderEntity;
@@ -16,11 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
-import sun.text.normalizer.UBiDiProps;
+import util.exception.CustomerNotFoundException;
 import util.exception.OrderNotFoundException;
 
 /**
@@ -31,30 +34,60 @@ import util.exception.OrderNotFoundException;
 @ViewScoped
 public class OrderManagedBean implements Serializable {
 
+    @EJB(name = "CustomerSessionBeanLocal")
+    private CustomerSessionBeanLocal customerSessionBeanLocal;
+
     @EJB(name = "OrderSessionBeanLocal")
     private OrderEntitySessionBeanLocal orderSessionBeanLocal;
-    
-    ArrayList<OrderEntity> listOfOrders;
+
+    private Customer currentCustomerEntity;
+
+    private List<OrderEntity> listOfOrders;
+
     public OrderManagedBean() {
         this.listOfOrders = new ArrayList<>();
     }
-    
-    public List<OrderEntity> retrieveAllOrdersForACustomer() throws IOException {
-        Customer customerEntity = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity");
-        Long customerId = customerEntity.getCustomerId();
-        return orderSessionBeanLocal.retrieveAllOrdersForACustomer(customerId);
 
-    }
-    
-    public void updateStatus(AjaxBehaviorEvent event)
-    {
-        OrderEntity order = (OrderEntity)event.getComponent().getAttributes().get("orderToupdate");
+    @PostConstruct
+    public void postConstruct() {
+        currentCustomerEntity = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
+        Customer customer;
         try {
-            orderSessionBeanLocal.updateOrderStatusReceieved(order.getOrderEntityId());
-        } catch (OrderNotFoundException ex) {
-            ex.printStackTrace();
+            customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomerEntity.getCustomerId());
+            this.listOfOrders = customer.getOrders();
+        } catch (CustomerNotFoundException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Customer not found" + ex.getMessage(), null));
         }
+    }
+
+    public List<OrderEntity> retrieveAllOrdersForACustomer() throws IOException {
+        return listOfOrders;
 
     }
-    
+
+//    public void updateStatus(AjaxBehaviorEvent event)
+//    {
+//        OrderEntity order = (OrderEntity)event.getComponent().getAttributes().get("orderToupdate");
+//        try {
+//            orderSessionBeanLocal.updateOrderStatusReceieved(order.getOrderEntityId());
+//        } catch (OrderNotFoundException ex) {
+//            ex.printStackTrace();
+//        }
+//
+//    }
+
+    /**
+     * @return the listOfOrders
+     */
+    public List<OrderEntity> getListOfOrders() {
+        return listOfOrders;
+    }
+
+    /**
+     * @param listOfOrders the listOfOrders to set
+     */
+    public void setListOfOrders(ArrayList<OrderEntity> listOfOrders) {
+        this.listOfOrders = listOfOrders;
+    }
+
 }

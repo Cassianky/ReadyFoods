@@ -100,7 +100,7 @@ public class Customer implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
     private List<Enquiry> enquiries;
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customer",fetch = FetchType.LAZY)
     private List<OrderEntity> orders;
     
     @OneToMany(fetch = FetchType.LAZY)

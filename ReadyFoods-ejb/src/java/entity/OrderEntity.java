@@ -7,6 +7,7 @@ package entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
@@ -77,6 +78,7 @@ public class OrderEntity implements Serializable {
     private Customer customer;
 
     public OrderEntity() {
+        this.orderLineItems = new ArrayList<>();
     }
 
     public OrderEntity(Integer numPax, BigDecimal totalCost, Boolean paid, Date dateOfOrder, Status status, List<OrderLineItem> orderLineItems, Customer customer) {
@@ -89,8 +91,6 @@ public class OrderEntity implements Serializable {
         this.customer = customer;
     }
     
-    
-
     public Long getOrderEntityId() {
         return orderEntityId;
     }

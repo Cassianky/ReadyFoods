@@ -64,7 +64,7 @@ public class OrderEntitySessionBean implements OrderEntitySessionBeanLocal {
                 for (OrderLineItem orderLineItemEntity : newOrderEntity.getOrderLineItems()) {
                     for (CustomisedIngredient ci : orderLineItemEntity.getCustomisedIngredients()) {
                         ingredientSessionBeanLocal.debitQuantityAtHand(ci.getIngredientId(), ci.getQuantityOfIngredient());
-                    }              
+                    }
                     entityManager.persist(orderLineItemEntity);
                 }
                 entityManager.flush();
@@ -107,9 +107,9 @@ public class OrderEntitySessionBean implements OrderEntitySessionBeanLocal {
         }
 
     }
-    
+
     @Override
-    public void updateOrderStatusReceieved(Long orderId)throws OrderNotFoundException {
+    public void updateOrderStatusReceieved(Long orderId) throws OrderNotFoundException {
         OrderEntity orderEntity = entityManager.find(OrderEntity.class, orderId);
         if (orderEntity != null) {
             orderEntity.getOrderLineItems().size();
