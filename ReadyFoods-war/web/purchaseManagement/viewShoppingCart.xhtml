@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/defaultTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <div>
+            <h3>View Shopping Cart</h3>
+        </div>
+        <h:form id="formShoppingCart">
+            <p:dataTable id="dataTableShoppingCart" 
+                         value="#{shoppingCartManagedBean.orderLineItems}" 
+                         var="orderLineItem"
+                         styleClass="ui-noborder">
+                <p:headerRow>
+                    <p:row>
+                        <p:column headerText="Ingredient Name"/>
+                        <p:column headerText="Quantity"/>
+                        <p:column headerText="Unit price"/>
+                        <p:column headerText="Sub total"/>
+                        <p:column headerText="Prepared"/>
+            
+                    </p:row>
+                </p:headerRow>
+              
+                    <p:dataTable id="dataTableCustomisedIngredient" value="#{orderLineItem.customisedIngredients}" var="ci">
+                        
+                            <p:column headerText="Ingredient Name">
+                                <h:outputText value="#{ci.ingredientName}"/>
+                            </p:column>
+                            <p:column headerText="Quantity">
+                                <p:spinner id="updateQuantity" value="#{ci.quantityOfIngredient}" stepFactor="1" min="1" onchange="" >
+                                </p:spinner>
+                            </p:column>
+                            <p:column headerText="Unit Price">
+                                <h:outputText value="#{ci.unitPrice}"/>
+                            </p:column>
+
+                            <p:column headerText="Subtotal">
+                                <h:outputText value="#{ci.subtotal}"/>
+                            </p:column>
+                            <p:column headerText="Prepared?">
+                                <p:selectBooleanCheckbox id="preparedness" value="#{ci.prepared}" itemLabel="Prepared?" rendered="true" >
+
+                                </p:selectBooleanCheckbox>
+
+                            </p:column>
+
+                            <p:column headerText="Action">
+                                <p:commandButton icon="ui-icon-trash" actionListener="#{shoppingCartManagedBean.removeFromShoppingCart}" update="formShoppingCart">
+                                    <f:attribute name="orderLineItemToRemove" value="#{orderLineItem}"/>
+                                    <p:confirm header="Confirmation" message="Are you sure you want to remove #{orderLineItem.recipe.recipeTitle} from cart?" icon="ui-icon-alert" />
+                                </p:commandButton>
+                            </p:column>
+                        
+
+                    </p:dataTable>
+                    <p:row>
+                        <p:column colspan="6" styleClass="ui-widget-header">
+                            <p:spacer height="0"/>
+                        </p:column>
+                    </p:row>
+
+                
+
+
+            </p:dataTable>
+
+
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

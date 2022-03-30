@@ -19,12 +19,20 @@
                     <p:submenu label="Account Management" rendered="#{sessionScope.isLogin == true}">
                         <p:menuitem value="My Profile" icon="pi pi-user" />
                         <p:menuitem value="Enquires" outcome="/accountManagement/enquiryManagement.xhtml" icon="pi pi-ticket" />
+                        <p:menuitem value="My Orders" outcome="/accountManagement/orderManagement.xhtml" icon="pi pi-list" />
                     </p:submenu>
                     
                     <p:submenu label="Subscription Management" rendered="#{sessionScope.isLogin == true}">
                         <p:menuitem value="New Subscription" outcome="/subscriptionManagement/newSubscription.xhtml" icon="pi pi-briefcase" />
                         <p:menuitem value="My Subscriptions" outcome="/subscriptionManagement/mySubscriptions.xhtml" icon="pi pi-list" />
                         <p:menuitem value="Select Recipes" outcome="/subscriptionManagement/selectRecipes.xhtml" icon="pi pi-pencil" />
+                        
+                    </p:submenu>
+                    <p:submenu label="Purchase Management" rendered="#{sessionScope.isLogin == true}">
+                        
+                        <p:menuitem value="My Shopping Cart" outcome="/purchaseManagement/viewShoppingCart.xhtml" icon="pi pi-shopping-cart"/>
+                        <p:menuitem value="View All Recipes" icon="pi pi-list" />
+                        <p:menuitem value="View Bookmarked Recipes" icon="pi pi-bookmark" />
                         
                     </p:submenu>
                     <p:menuitem rendered="#{sessionScope.isLogin == false}" value="Home" outcome="/index" icon="pi pi-home" />

@@ -11,12 +11,13 @@
         <p:growl>
             <p:autoUpdate />
         </p:growl>
-        <h3>View All Orders</h3>
-        <h:form id="viewAllOrdersForm">
+        
+        <h:form id="viewAllOrdersForm" style="margin: 30px">
+            <h1>View My Orders</h1>
             <p:messages id="messages" redisplay="false" closable="true" />
             <p:dataTable id="dataTableAllOrders" 
                          widgetVar="dataTableAllProducts" 
-                         value="#{orderManagedBean.retrieveAllOrdersForACustomer}" 
+                         value="#{orderManagedBean.listOfOrders}" 
                          var="orderEntity" 
                          rowKey="#{orderEntity.orderEntityId}" 
                          rowIndexVar="row"
@@ -58,12 +59,13 @@
                           filterMatchMode="contains">
                     <h:outputText value="#{orderEntity.dateForDelivery}" />
                 </p:column>
-                <p:column headerText="Received?">
+                  <p:column headerText="Received?">
                     <p:selectBooleanButton onLabel="Yes" offLabel="No" onIcon="pi pi-check" offIcon="pi pi-times">
                         <f:attribute name="orderToupdate" value="#{orderEntity}"/>
                         <f:ajax event="change" execute="@form" render="@form viewAllOrdersForm" listener="#{orderManagedBean.updateStatus}" />
                     </p:selectBooleanButton>
                 </p:column>
+
             </p:dataTable>
         </h:form>
     </ui:define>
