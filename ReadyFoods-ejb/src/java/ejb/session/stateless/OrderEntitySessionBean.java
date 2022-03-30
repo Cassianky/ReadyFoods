@@ -17,6 +17,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import util.enumeration.Status;
 import util.exception.CreateNewOrderException;
 import util.exception.CustomerNotFoundException;
 import util.exception.IngredientInsufficientStockQuantityException;
@@ -105,5 +106,16 @@ public class OrderEntitySessionBean implements OrderEntitySessionBeanLocal {
             throw new OrderNotFoundException("Order " + orderId + " does not exist!");
         }
 
+    }
+    
+    @Override
+    public void updateOrderStatusReceieved(Long orderId)throws OrderNotFoundException {
+        OrderEntity orderEntity = entityManager.find(OrderEntity.class, orderId);
+        if (orderEntity != null) {
+            orderEntity.getOrderLineItems().size();
+            orderEntity.setStatus(Status.RECEIVED);
+        } else {
+            throw new OrderNotFoundException("Order " + orderId + " does not exist!");
+        }
     }
 }
