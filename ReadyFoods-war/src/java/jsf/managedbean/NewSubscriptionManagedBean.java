@@ -56,11 +56,21 @@ public class NewSubscriptionManagedBean implements Serializable {
 
     @PostConstruct
     public void postConstruct() {
+
         setCurrentCustomerEntity((Customer) FacesContext.getCurrentInstance().
                 getExternalContext().getSessionMap().get("currentCustomer"));
         Customer customer;
         try {
+
             customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(getCurrentCustomerEntity().getCustomerId());
+            if (customer.getCreditCard() == null) {
+                System.out.println("Customer does not have a credit card.");
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_WARN,
+                                "You do not have a credit card added to your account!", null));
+
+            }
+            
             Subscription ongoingSubscription = subscriptionSessionBeanLocal.
                     retrieveOngoingSubscriptionForCustomer(getCurrentCustomerEntity().getCustomerId());
 
@@ -78,14 +88,10 @@ public class NewSubscriptionManagedBean implements Serializable {
                     1, 2, 2, BigDecimal.ZERO, true);
 
             calculateWeeklyPrice();
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                            "Create new" + ex.getMessage(), null));
+
         }
 
     }
-
-
 
     public void updateWeeklyPrice(AjaxBehaviorEvent event) {
         calculateWeeklyPrice();

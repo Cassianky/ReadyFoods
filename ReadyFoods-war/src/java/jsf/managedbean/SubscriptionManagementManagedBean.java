@@ -56,6 +56,7 @@ public class SubscriptionManagementManagedBean implements Serializable {
             this.ongoingSubscription = subscriptionSessionBeanLocal.
                     retrieveOngoingSubscriptionForCustomer(currentCustomerEntity.getCustomerId());
             System.out.println("Ongoing subscription" + ongoingSubscription.getNumOfPeople());
+            
 
         } catch (CustomerNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null,

@@ -17,6 +17,8 @@
             <p:graphicImage class="titleicon"  name="/icons/subscription.png" library="images"/>
             <h1 class="h1title">Current Subscription</h1>
 
+            <!--Customer ongoing subscription information-->
+
             <h:form id="pricePanel" style="width: 50%" rendered="#{subscriptionManagementManagedBean.ongoingSubscription != null}">
 
 
@@ -59,17 +61,19 @@
 
                     <p:commandButton value="Cancel Subscription" style=" color: #AE3126">
                         <p:confirm header="Confirmation" 
-                                   message="Are you  sure you want to unsubscribe? Your subscription will end the week after next."
+                                   message="Are you  sure you want to unsubscribe? 
+                                   Your subscription will end the week after next."
                                    icon="ui-icon-alert" />
                     </p:commandButton>
                 </p:panel>
-                
+
                 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                     <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                     <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                 </p:confirmDialog>
             </h:form>
 
+            <!--Customer does not have an ongoing subscription-->
             <p:panel rendered="#{subscriptionManagementManagedBean.ongoingSubscription == null}">
                 You don't have any ongoing subscriptions. 
                 <p:button value="Join the ReadyFoods meal kit community today!" outcome="newSubscription"/>
