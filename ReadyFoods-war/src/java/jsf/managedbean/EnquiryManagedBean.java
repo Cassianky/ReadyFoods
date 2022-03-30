@@ -47,7 +47,6 @@ public class EnquiryManagedBean implements Serializable {
      * Creates a new instance of EnquiryManagedBean
      */
     public EnquiryManagedBean() {
-        this.pastEnquiries = new ArrayList<>();
         this.newEnquiry = new Enquiry();
 
     }

@@ -90,7 +90,8 @@
 
                     <p:commandButton icon="ui-icon-trash" 
                                      title="Delete"
-                                     actionListener="#{enquiryManagedBean.deleteEnquiry}">
+                                     actionListener="#{enquiryManagedBean.deleteEnquiry}"
+                                     update="@this formAllEnquires:dataTableAllEnquires">
                         <f:attribute name="enquiryToDelete" value="#{enquiry}" />
                         <p:confirm header="Confirmation" message="Are you sure you want to delete enquiry
                                    #{enquiry.enquiryId}?" 
