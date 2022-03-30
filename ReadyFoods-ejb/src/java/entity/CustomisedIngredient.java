@@ -59,6 +59,19 @@ public class CustomisedIngredient implements Serializable {
     @DecimalMin("0.00")
     @Digits(integer = 9, fraction = 2)
     private BigDecimal subtotal;
+
+    public CustomisedIngredient() {
+    }
+
+    public CustomisedIngredient(Integer quantityOfIngredient, Boolean prepared, Long ingredientId, String ingredientName, BigDecimal unitPrice, BigDecimal subtotal) {
+        this();
+        this.quantityOfIngredient = quantityOfIngredient;
+        this.prepared = prepared;
+        this.ingredientId = ingredientId;
+        this.ingredientName = ingredientName;
+        this.unitPrice = unitPrice;
+        this.subtotal = subtotal;
+    }
     
     
 
@@ -103,39 +116,16 @@ public class CustomisedIngredient implements Serializable {
     }
 
     /**
-     * @param quantityOfIngredient the quantityOfIngredient to set
-     */
-    public void setQuantityOfIngredient(Integer quantityOfIngredient) {
-        this.quantityOfIngredient = quantityOfIngredient;
-    }
-
-    /**
      * @return the prepared
      */
     public Boolean getPrepared() {
         return prepared;
     }
 
-    /**
-     * @param prepared the prepared to set
-     */
-    public void setPrepared(Boolean prepared) {
-        this.prepared = prepared;
-    }
-
-    /**
-     * @return the ingredientId
-     */
     public Long getIngredientId() {
         return ingredientId;
     }
 
-    /**
-     * @param ingredientId the ingredientId to set
-     */
-    public void setIngredientId(Long ingredientId) {
-        this.ingredientId = ingredientId;
-    }
 
     /**
      * @return the ingredientName
@@ -147,10 +137,7 @@ public class CustomisedIngredient implements Serializable {
     /**
      * @param ingredientName the ingredientName to set
      */
-    public void setIngredientName(String ingredientName) {
-        this.ingredientName = ingredientName;
-    }
-
+  
     /**
      * @return the unitPrice
      */
@@ -158,22 +145,47 @@ public class CustomisedIngredient implements Serializable {
         return unitPrice;
     }
 
-    /**
-     * @param unitPrice the unitPrice to set
-     */
-    public void setUnitPrice(BigDecimal unitPrice) {
-        this.unitPrice = unitPrice;
-    }
-
-    /**
-     * @return the subtotal
-     */
     public BigDecimal getSubtotal() {
         Integer quantity = this.getQuantityOfIngredient();
         BigDecimal uP = this.getUnitPrice();
         BigDecimal subT = uP.multiply(BigDecimal.valueOf(quantity));
         this.setSubtotal(subT);
         return subT;
+    }
+
+    /**
+     * @param quantityOfIngredient the quantityOfIngredient to set
+     */
+    public void setQuantityOfIngredient(Integer quantityOfIngredient) {
+        this.quantityOfIngredient = quantityOfIngredient;
+    }
+
+    /**
+     * @param prepared the prepared to set
+     */
+    public void setPrepared(Boolean prepared) {
+        this.prepared = prepared;
+    }
+
+    /**
+     * @param ingredientId the ingredientId to set
+     */
+    public void setIngredientId(Long ingredientId) {
+        this.ingredientId = ingredientId;
+    }
+
+    /**
+     * @param ingredientName the ingredientName to set
+     */
+    public void setIngredientName(String ingredientName) {
+        this.ingredientName = ingredientName;
+    }
+
+    /**
+     * @param unitPrice the unitPrice to set
+     */
+    public void setUnitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
     }
 
     /**

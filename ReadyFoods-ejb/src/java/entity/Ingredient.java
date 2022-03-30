@@ -50,14 +50,16 @@ public class Ingredient implements Serializable {
     public Ingredient() {
     }
 
-    public Ingredient(String name, String description, BigDecimal unitPrice, Integer stockQuantity) {
+
+    public Ingredient(String name, String description, IngredientUnit ingredientUnit, BigDecimal unitPrice, Integer reorderQuantity, Integer stockQuantity) {
         this();
         this.name = name;
         this.description = description;
+        this.ingredientUnit = ingredientUnit;
         this.unitPrice = unitPrice;
+        this.reorderQuantity = reorderQuantity;
         this.stockQuantity = stockQuantity;
     }
-    
     
     public Long getIngredientId() {
         return ingredientId;
@@ -96,48 +98,69 @@ public class Ingredient implements Serializable {
         return name;
     }
 
-    public void setName(String name) {
-        this.setName(name);
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.setDescription(description);
     }
 
     public BigDecimal getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(BigDecimal unitPrice) {
-        this.setUnitPrice(unitPrice);
-    }
 
     public Integer getStockQuantity() {
         return stockQuantity;
     }
 
-    public void setStockQuantity(Integer stockQuantity) {
-        this.setStockQuantity(stockQuantity);
-    }
 
     public IngredientUnit getIngredientUnit() {
         return ingredientUnit;
-    }
-
-    public void setIngredientUnit(IngredientUnit ingredientUnit) {
-        this.ingredientUnit = ingredientUnit;
     }
 
     public Integer getReorderQuantity() {
         return reorderQuantity;
     }
 
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * @param ingredientUnit the ingredientUnit to set
+     */
+    public void setIngredientUnit(IngredientUnit ingredientUnit) {
+        this.ingredientUnit = ingredientUnit;
+    }
+
+    /**
+     * @param unitPrice the unitPrice to set
+     */
+    public void setUnitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    /**
+     * @param reorderQuantity the reorderQuantity to set
+     */
     public void setReorderQuantity(Integer reorderQuantity) {
         this.reorderQuantity = reorderQuantity;
     }
+
+    /**
+     * @param stockQuantity the stockQuantity to set
+     */
+    public void setStockQuantity(Integer stockQuantity) {
+        this.stockQuantity = stockQuantity;
+    }
+
     
 }

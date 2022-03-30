@@ -43,6 +43,25 @@ public class OrderLineItem implements Serializable {
     @ManyToOne(optional = true)
     private Recipe recipe;
 
+    public OrderLineItem() {
+    }
+
+    public OrderLineItem(BigDecimal recipeSubTotal, List<CustomisedIngredient> customisedIngredients, Recipe recipe) {
+        this();
+        this.recipeSubTotal = recipeSubTotal;
+        this.customisedIngredients = customisedIngredients;
+        this.recipe = recipe;
+    }
+
+    public OrderLineItem(List<CustomisedIngredient> customisedIngredients, Recipe recipe) {
+        this();
+        this.customisedIngredients = customisedIngredients;
+        this.recipe = recipe;
+    }
+    
+    
+
+    
     public Long getOrderLineItemId() {
         return orderLineItemId;
     }
@@ -89,12 +108,6 @@ public class OrderLineItem implements Serializable {
         return subT;
     }
 
-    /**
-     * @param recipeSubTotal the recipeSubTotal to set
-     */
-    public void setRecipeSubTotal(BigDecimal recipeSubTotal) {
-        this.recipeSubTotal = recipeSubTotal;
-    }
 
     /**
      * @return the customisedIngredients
@@ -122,6 +135,13 @@ public class OrderLineItem implements Serializable {
      */
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
+    }
+
+    /**
+     * @param recipeSubTotal the recipeSubTotal to set
+     */
+    public void setRecipeSubTotal(BigDecimal recipeSubTotal) {
+        this.recipeSubTotal = recipeSubTotal;
     }
     
 }

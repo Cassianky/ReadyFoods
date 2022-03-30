@@ -47,6 +47,7 @@ public class IngredientSessionBean implements IngredientSessionBeanLocal {
             try {
                 entityManager.persist(newIngredient);
                 entityManager.flush();
+                System.out.println("********ejb.session.stateless.IngredientSessionBean.createNewIngredient()");
 
                 return newIngredient;
             } catch (PersistenceException ex) {
