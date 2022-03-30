@@ -26,5 +26,7 @@ public interface OrderEntitySessionBeanLocal {
     public List<OrderEntity> retrieveAllOrdersForACustomer(Long customerId);
 
     public List<OrderEntity> retrieveAllOrders();
+
+    public void updateOrderStatusReceieved(Long orderId) throws OrderNotFoundException;
     
 }
