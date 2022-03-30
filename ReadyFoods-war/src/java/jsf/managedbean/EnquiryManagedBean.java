@@ -107,6 +107,24 @@ public class EnquiryManagedBean implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
     }
+    
+    public void resolveEnquiry(ActionEvent event) {
+             try {
+            Enquiry enquiryToResolve = (Enquiry) event.getComponent().getAttributes().get("enquiryToResolve");
+            
+            enquirySessionBeanLocal.resolveEnquiry(enquiryToResolve.getEnquiryId());
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Enquiry resolved successfully", null));
+        } catch (EnquiryNotFoundException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while resolving enquiry: " + ex.getMessage(), null));
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
+        }
+        
+    }
 
     /**
      * @return the pastEnquiries

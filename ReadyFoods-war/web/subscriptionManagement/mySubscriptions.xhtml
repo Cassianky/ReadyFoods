@@ -19,23 +19,23 @@
 
             <!--Customer ongoing subscription information-->
 
-            <h:form id="pricePanel" style="width: 50%" rendered="#{subscriptionManagementManagedBean.ongoingSubscription != null}">
+            <h:form id="pricePanel" style="width: 50%" rendered="#{subscriptionManagedBean.ongoingSubscription != null}">
 
 
                 <p:panel>
 
-                    <p>#{subscriptionManagementManagedBean.ongoingSubscription.numOfRecipes} recipes 
-                        for #{subscriptionManagementManagedBean.ongoingSubscription.numOfPeople} people per week</p>
-                    <p>#{subscriptionManagementManagedBean.ongoingSubscription.numOfRecipes * 
-                         subscriptionManagementManagedBean.ongoingSubscription.numOfPeople} total servings</p>
-                    <p>#{subscriptionManagementManagedBean.ongoingSubscription.remainingDuration} weeks left</p>
+                    <p>#{subscriptionManagedBean.ongoingSubscription.numOfRecipes} recipes 
+                        for #{subscriptionManagedBean.ongoingSubscription.numOfPeople} people per week</p>
+                    <p>#{subscriptionManagedBean.ongoingSubscription.numOfRecipes * 
+                         subscriptionManagedBean.ongoingSubscription.numOfPeople} total servings</p>
+                    <p>#{subscriptionManagedBean.ongoingSubscription.remainingDuration} weeks left</p>
 
                     <p:separator></p:separator>
 
                     <h3> Weekly Box Price: 
 
                         <h:outputText style="float: right"
-                                      value="#{subscriptionManagementManagedBean.ongoingSubscription.weeklyPrice - 
+                                      value="#{subscriptionManagedBean.ongoingSubscription.weeklyPrice - 
                                                5}">
                             <f:convertNumber minFractionDigits="2" maxFractionDigits="2" type="currency" currencyCode="SGD" />
                         </h:outputText>
@@ -51,7 +51,7 @@
                     <h3> Total Weekly Price: 
 
                         <h:outputText style="color: #AE3126; float: right " 
-                                      value="#{subscriptionManagementManagedBean.ongoingSubscription.weeklyPrice}">
+                                      value="#{subscriptionManagedBean.ongoingSubscription.weeklyPrice}">
                             <f:convertNumber minFractionDigits="2" maxFractionDigits="2" type="currency" currencyCode="SGD" />
                         </h:outputText>
                     </h3>
@@ -74,7 +74,7 @@
             </h:form>
 
             <!--Customer does not have an ongoing subscription-->
-            <p:panel rendered="#{subscriptionManagementManagedBean.ongoingSubscription == null}">
+            <p:panel rendered="#{subscriptionManagedBean.ongoingSubscription == null}">
                 You don't have any ongoing subscriptions. 
                 <p:button value="Join the ReadyFoods meal kit community today!" outcome="newSubscription"/>
 
@@ -86,7 +86,7 @@
                 <h1 class="h1title">Subscription History</h1>
 
                 <p:dataTable id="dataTableOldSubscriptions" widgetVar="dataTableOldSubscriptions" 
-                             value="#{subscriptionManagementManagedBean.pastSubscriptions}" var="sub" 
+                             value="#{subscriptionManagedBean.pastSubscriptions}" var="sub" 
                              rowKey="#{sub.subscriptionId}" rowIndexVar="row"
                              styleClass="ui-noborder">
 

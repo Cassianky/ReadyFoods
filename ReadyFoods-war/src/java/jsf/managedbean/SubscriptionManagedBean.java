@@ -25,9 +25,9 @@ import util.exception.NoOngoingSubscriptionException;
  *
  * @author angler
  */
-@Named(value = "subscriptionManagementManagedBean")
+@Named(value = "subscriptionManagedBean")
 @ViewScoped
-public class SubscriptionManagementManagedBean implements Serializable {
+public class SubscriptionManagedBean implements Serializable {
 
     @EJB(name = "SubscriptionSessionBeanLocal")
     private SubscriptionSessionBeanLocal subscriptionSessionBeanLocal;
@@ -42,7 +42,7 @@ public class SubscriptionManagementManagedBean implements Serializable {
     /**
      * Creates a new instance of SubscriptionManagementSessionBean
      */
-    public SubscriptionManagementManagedBean() {
+    public SubscriptionManagedBean() {
         this.pastSubscriptions = new ArrayList<>();
     }
 
