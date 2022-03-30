@@ -28,5 +28,7 @@ public interface SubscriptionSessionBeanLocal {
     public Subscription retrieveSubscriptionBySubscriptionId(Long subId) throws SubscriptionNotFoundException;
 
     public Subscription retrieveOngoingSubscriptionForCustomer(Long customerId) throws CustomerNotFoundException, NoOngoingSubscriptionException;
+
+    public void cancelSubscription(Long subscriptionId) throws SubscriptionNotFoundException;
     
 }

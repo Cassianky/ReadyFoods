@@ -121,15 +121,14 @@ public class EnquiryManagedBean implements Serializable {
 
             enquirySessionBeanLocal.resolveEnquiry(enquiryToResolve.getEnquiryId());
             this.pastEnquiries = enquirySessionBeanLocal.retrieveAllEnquires();
-            
+
             if (filteredEnquiries.contains(enquiryToResolve)) {
                 for (int i = 0; i < filteredEnquiries.size(); i++) {
                     filteredEnquiries.set(i, enquirySessionBeanLocal.retrieveEnquiryByEnquiryId(filteredEnquiries.get(i).getEnquiryId()));
-                    
+
                 }
-                
+
             }
-       
 
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Enquiry resolved successfully", null));

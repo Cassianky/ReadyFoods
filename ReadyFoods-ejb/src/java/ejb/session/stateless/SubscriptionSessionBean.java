@@ -71,6 +71,14 @@ public class SubscriptionSessionBean implements SubscriptionSessionBeanLocal {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
+    
+    // basic cancellation w no edge case check
+    public void cancelSubscription(Long subscriptionId) throws SubscriptionNotFoundException {
+        Subscription subToCancel = retrieveSubscriptionBySubscriptionId(subscriptionId);
+        subToCancel.setOngoing(false);
+        
+    
+    }
 
     @Override
     public List<Subscription> retrieveAllSubscriptions() {

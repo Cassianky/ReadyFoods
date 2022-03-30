@@ -12,14 +12,17 @@ import entity.Subscription;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import util.exception.CustomerNotFoundException;
 import util.exception.NoOngoingSubscriptionException;
+import util.exception.SubscriptionNotFoundException;
 
 /**
  *
@@ -43,7 +46,7 @@ public class SubscriptionManagedBean implements Serializable {
      * Creates a new instance of SubscriptionManagementSessionBean
      */
     public SubscriptionManagedBean() {
-        this.pastSubscriptions = new ArrayList<>();
+
     }
 
     @PostConstruct
@@ -53,10 +56,11 @@ public class SubscriptionManagedBean implements Serializable {
         Customer customer;
         try {
             customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomerEntity.getCustomerId());
+            this.pastSubscriptions = customer.getSubscriptions();
+
+            // This line throws NoONgoingSubscriptionException
             this.ongoingSubscription = subscriptionSessionBeanLocal.
                     retrieveOngoingSubscriptionForCustomer(currentCustomerEntity.getCustomerId());
-            System.out.println("Ongoing subscription" + ongoingSubscription.getNumOfPeople());
-            
 
         } catch (CustomerNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null,
@@ -68,6 +72,29 @@ public class SubscriptionManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR,
                             "Create new" + ex.getMessage(), null));
+        }
+
+    }
+
+    public void cancelSubscription(ActionEvent event) {
+        try {
+            subscriptionSessionBeanLocal.cancelSubscription(ongoingSubscription.getSubscriptionId());
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO,
+                            "Subscription successfully cancelled: "
+                            + ongoingSubscription.getSubscriptionId(), null));
+            this.ongoingSubscription = null;
+            Customer customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomerEntity.getCustomerId());
+            this.pastSubscriptions = customer.getSubscriptions();
+
+        } catch (SubscriptionNotFoundException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Subscription not found" + ex.getMessage(), null));
+
+        } catch (CustomerNotFoundException ex) {
+            Logger.getLogger(SubscriptionManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

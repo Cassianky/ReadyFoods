@@ -10,6 +10,10 @@
 
     <ui:define name="content">
         <ez:Breadcrumb pageName="mySubscriptions" />
+        <p:growl >
+            <p:autoUpdate />
+        </p:growl>
+
 
 
         <main class="card">
@@ -19,11 +23,8 @@
 
             <!--Customer ongoing subscription information-->
 
-            <h:form id="pricePanel" style="width: 50%" rendered="#{subscriptionManagedBean.ongoingSubscription != null}">
-
-
-                <p:panel>
-
+            <h:form id="formCurrSubscription" style="width: 50%" >
+                <p:panel id="panelCurrSubscription" rendered="#{subscriptionManagedBean.ongoingSubscription != null}">
                     <p>#{subscriptionManagedBean.ongoingSubscription.numOfRecipes} recipes 
                         for #{subscriptionManagedBean.ongoingSubscription.numOfPeople} people per week</p>
                     <p>#{subscriptionManagedBean.ongoingSubscription.numOfRecipes * 
@@ -59,11 +60,15 @@
                     <p:separator></p:separator>
                     <p:button value="Recipe Selection" outcome="selectRecipes"/>
 
-                    <p:commandButton value="Cancel Subscription" style=" color: #AE3126">
+                    <p:commandButton value="Cancel Subscription"
+                                     style=" color: #AE3126"
+                                     update="@form formCurrSubscription formAllSubscriptions"
+                                     actionListener="#{subscriptionManagedBean.cancelSubscription}">
                         <p:confirm header="Confirmation" 
                                    message="Are you  sure you want to unsubscribe? 
                                    Your subscription will end the week after next."
                                    icon="ui-icon-alert" />
+
                     </p:commandButton>
                 </p:panel>
 
@@ -82,19 +87,30 @@
 
             </p:panel>
 
-            <h:form id="formOldSubscriptions">
-                <h1 class="h1title">Subscription History</h1>
+            <h:form id="formAllSubscriptions">
+                <h1 class="h1title">Your Subscriptions</h1>
 
-                <p:dataTable id="dataTableOldSubscriptions" widgetVar="dataTableOldSubscriptions" 
+                <p:dataTable id="dataTableAllSubscriptions" widgetVar="dataTableAllSubscriptions" 
                              value="#{subscriptionManagedBean.pastSubscriptions}" var="sub" 
                              rowKey="#{sub.subscriptionId}" rowIndexVar="row"
                              styleClass="ui-noborder">
 
 
 
-                    <p:column headerText="Subscription ID" sortBy="#{sub.subscriptionId}" 
-                              >
+                    <p:column headerText="Subscription ID" sortBy="#{sub.subscriptionId}">
                         <h:outputText value="#{sub.subscriptionId}" />
+                    </p:column>
+                    <p:column headerText="Duration (months)" sortBy="#{sub.duration}">
+                        <h:outputText value="#{sub.duration}" />
+                    </p:column>
+                    <p:column headerText="Num of People" sortBy="#{sub.numOfPeople}">
+                        <h:outputText value="#{sub.numOfPeople}" />
+                    </p:column>
+                    <p:column headerText="Num of Recipes" sortBy="#{sub.numOfRecipes}">
+                        <h:outputText value="#{sub.numOfRecipes}" />
+                    </p:column>
+                    <p:column headerText="Ongoing" style="text-align: center">
+                        <p:selectBooleanCheckbox value="#{sub.ongoing}" disabled="true"/>
                     </p:column>
 
 
