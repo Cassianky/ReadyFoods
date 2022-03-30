@@ -26,6 +26,8 @@
         <p:growl>
             <p:autoUpdate />
         </p:growl>
+        
+        <!--Rendered if custoemr has an ongoing sub-->
 
         <h:panelGroup rendered="#{newSubscriptionManagedBean.ongoing == true}">
             <article style="padding-left: 15px">
@@ -35,7 +37,9 @@
             </article>
         </h:panelGroup>
         
-        <main style="margin: 30px">
+        <!--subscription detail selection panel, rendered only if the customer does not have an ongoing sub-->
+
+        <main class="card">
             <h:form id="formSubscribe" rendered="#{newSubscriptionManagedBean.ongoing == false}">
                 <p:graphicImage class="titleicon"  name="meals.png" library="images"/>
                 <h1 class="h1title">Subscribe to our meal kit plan</h1>
@@ -137,9 +141,11 @@
 
             </h:form>
 
+            <!--Start of your kit panel-->
+
 
             <h:form id="pricePanel" rendered="#{newSubscriptionManagedBean.ongoing == false}">
-               
+
                 <p:panel style=" margin-left: auto; margin-right: 0; width: 40%; margin-right: 20px" >
                     <h1 class="h1title">Your Kit</h1>
                     <p>#{newSubscriptionManagedBean.newSubscription.numOfRecipes} recipes 
