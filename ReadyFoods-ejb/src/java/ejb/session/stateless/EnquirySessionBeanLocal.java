@@ -27,5 +27,7 @@ public interface EnquirySessionBeanLocal {
     public Enquiry retrieveEnquiryByEnquiryId(Long enId) throws EnquiryNotFoundException;
 
     public Enquiry createNewEnquiry(Long customerId, Enquiry newEnquiry) throws CustomerNotFoundException, CreateNewEnquiryException, InputDataValidationException, UnknownPersistenceException;
+
+    public void deleteEnquiry(Long enquiryId) throws EnquiryNotFoundException;
     
 }

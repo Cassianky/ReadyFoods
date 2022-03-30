@@ -27,17 +27,24 @@ public class Enquiry implements Serializable {
     private String title;
 
     @Column(nullable = false)
-    @Size(max = 128)
+    @Size(max = 256)
     @NotNull
     private String description;
-    
-    @Column(nullable=false)
+
+    @Column(nullable = false)
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateOfEnquiry;
-    
+
     @ManyToOne(optional = false)
     private Customer customer;
+
+    @Column(nullable = false)
+    private Boolean resolved = false; // either admin or customer can toggle this
+
+    @Column(nullable = true)
+    @Size(max = 256)
+    private String response; // admin response
 
     public Enquiry() {
     }
@@ -46,10 +53,16 @@ public class Enquiry implements Serializable {
         this.title = title;
         this.description = description;
         this.dateOfEnquiry = dateOfEnquiry;
+       
     }
-    
 
+    public Enquiry(String title, String description, Date dateOfEnquiry, Boolean resolved) {
+        this.title = title;
+        this.description = description;
+        this.dateOfEnquiry = dateOfEnquiry;
 
+        this.resolved = resolved;
+    }
 
     public Long getEnquiryId() {
         return enquiryId;
@@ -138,6 +151,34 @@ public class Enquiry implements Serializable {
      */
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    /**
+     * @return the response
+     */
+    public String getResponse() {
+        return response;
+    }
+
+    /**
+     * @param response the response to set
+     */
+    public void setResponse(String response) {
+        this.response = response;
+    }
+
+    /**
+     * @return the resolved
+     */
+    public Boolean getResolved() {
+        return resolved;
+    }
+
+    /**
+     * @param resolved the resolved to set
+     */
+    public void setResolved(Boolean resolved) {
+        this.resolved = resolved;
     }
 
 }
