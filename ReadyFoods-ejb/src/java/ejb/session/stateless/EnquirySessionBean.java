@@ -22,6 +22,7 @@ import javax.validation.ValidatorFactory;
 import util.exception.CreateNewEnquiryException;
 import util.exception.CustomerNotFoundException;
 import util.exception.EnquiryNotFoundException;
+import util.exception.EnquiryResolveException;
 import util.exception.InputDataValidationException;
 import util.exception.UnknownPersistenceException;
 
@@ -117,9 +118,12 @@ public class EnquirySessionBean implements EnquirySessionBeanLocal {
 
     }
 
-    public void resolveEnquiry(Long enquiryId) throws EnquiryNotFoundException {
+    @Override
+    public void resolveEnquiry(Long enquiryId) throws EnquiryNotFoundException, EnquiryResolveException {
         Enquiry toResolve = retrieveEnquiryByEnquiryId(enquiryId);
-        toResolve.setDescription("RESOLVED");
+        if (toResolve.getResolved()) {
+            throw new EnquiryResolveException("Enquiry is already resolved.");
+        }
         toResolve.setResolved(Boolean.TRUE);
         
 

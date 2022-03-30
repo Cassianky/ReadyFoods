@@ -47,7 +47,7 @@
                 <p:row>
                     <p:column colspan="2">
                         <p:commandButton value="Submit" type="submit" actionListener="#{enquiryManagedBean.doCreateNewEnquiry}"
-                                         update="formAllEnquires:dataTableAllEnquires enquiryForm"/>
+                                         update="formAllEnquiries:dataTableAllEnquiries enquiryForm"/>
                     </p:column>
                 </p:row>
 
@@ -55,25 +55,27 @@
 
         </h:form>
 
-        <h:form id="formAllEnquires" style="margin: 30px">
+        <h:form id="formAllEnquiries" style="margin: 30px">
             <h1>Enquiry History</h1>
 
-            <p:dataTable id="dataTableAllEnquires" widgetVar="dataTableAllEnquires" 
+            <p:dataTable id="dataTableAllEnquiries" widgetVar="dataTableAllEnquiries" 
                          value="#{enquiryManagedBean.pastEnquiries}" var="enquiry" 
-                         rowKey="#{enquiry.enquiryId}" rowIndexVar="row">
+                         rowKey="#{enquiry.enquiryId}" rowIndexVar="row"
+                         filteredValue="#{enquiryManagedBean.filteredEnquiries}"
+                         >
 
-                <p:column headerText="Enquiry ID">
+                <p:column headerText="Enquiry ID" sortBy="#{enquiry.enquiryId}">
                     <h:outputText value="#{enquiry.enquiryId}" />
                 </p:column>
 
-                <p:column headerText="Title">
+                <p:column headerText="Title" filterBy="#{enquiry.title}" filterMatchMode="contains">
                     <h:outputText value="#{enquiry.title}" />
                 </p:column>        
-                <p:column headerText="Description" >
+                <p:column headerText="Description" filterBy="#{enquiry.description}" filterMatchMode="contains">
                     <h:outputText value="#{enquiry.description}" />
                 </p:column>
 
-                <p:column headerText="Date">
+                <p:column headerText="Date" sortBy="#{enquiry.dateOfEnquiry}">
                     <h:outputText value="#{enquiry.dateOfEnquiry}" />
                 </p:column>
 
@@ -81,7 +83,7 @@
                     <h:outputText value="#{enquiry.response}" />
                 </p:column>
 
-                <p:column headerText="Resolved">
+                <p:column headerText="Resolved" style="text-align: center">
                     <p:selectBooleanCheckbox value="#{enquiry.resolved}" disabled="true"/>
                 </p:column>
 
@@ -91,7 +93,8 @@
                     <p:commandButton icon="ui-icon-trash" 
                                      title="Delete"
                                      actionListener="#{enquiryManagedBean.deleteEnquiry}"
-                                     update="@this formAllEnquires:dataTableAllEnquires">
+                                     process="@this"
+                                     update="@this formAllEnquiries:dataTableAllEnquiries">
                         <f:attribute name="enquiryToDelete" value="#{enquiry}" />
                         <p:confirm header="Confirmation" message="Are you sure you want to delete enquiry
                                    #{enquiry.enquiryId}?" 
@@ -100,7 +103,7 @@
                     
                     <p:commandButton icon="ui-icon-check" 
                                      title="Resolve"
-                                     update="@this formAllEnquires:dataTableAllEnquires"
+                                     update="@this formAllEnquiries:dataTableAllEnquiries"
                                      actionListener="#{enquiryManagedBean.resolveEnquiry}">
                         <f:attribute name="enquiryToResolve" value="#{enquiry}" />
 

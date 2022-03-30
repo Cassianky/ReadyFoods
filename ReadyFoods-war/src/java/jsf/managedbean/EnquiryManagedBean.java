@@ -12,7 +12,6 @@ import entity.Enquiry;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -22,6 +21,7 @@ import javax.faces.event.ActionEvent;
 import util.exception.CreateNewEnquiryException;
 import util.exception.CustomerNotFoundException;
 import util.exception.EnquiryNotFoundException;
+import util.exception.EnquiryResolveException;
 import util.exception.InputDataValidationException;
 import util.exception.UnknownPersistenceException;
 
@@ -42,6 +42,8 @@ public class EnquiryManagedBean implements Serializable {
     private List<Enquiry> pastEnquiries;
     private Enquiry newEnquiry;
     private Customer currentCustomerEntity;
+
+    private List<Enquiry> filteredEnquiries;
 
     /**
      * Creates a new instance of EnquiryManagedBean
@@ -71,8 +73,12 @@ public class EnquiryManagedBean implements Serializable {
 
         try {
             Enquiry enquiry = enquirySessionBeanLocal.createNewEnquiry(currentCustomerEntity.getCustomerId(), newEnquiry);
-           
+
             pastEnquiries.add(newEnquiry);
+
+            if (filteredEnquiries != null) {
+                filteredEnquiries.add(enquiry);
+            }
 
             this.newEnquiry = new Enquiry();
 
@@ -89,12 +95,14 @@ public class EnquiryManagedBean implements Serializable {
     public void deleteEnquiry(ActionEvent event) {
         try {
             Enquiry enquiryToDel = (Enquiry) event.getComponent().getAttributes().get("enquiryToDelete");
-            
+
             enquirySessionBeanLocal.deleteEnquiry(enquiryToDel.getEnquiryId());
-          
 
             this.pastEnquiries.remove(enquiryToDel);
 
+            if (filteredEnquiries != null) {
+                filteredEnquiries.remove(enquiryToDel);
+            }
 
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Enquiry removed successfully", null));
@@ -106,23 +114,33 @@ public class EnquiryManagedBean implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
     }
-    
+
     public void resolveEnquiry(ActionEvent event) {
-             try {
+        try {
             Enquiry enquiryToResolve = (Enquiry) event.getComponent().getAttributes().get("enquiryToResolve");
-            
+
             enquirySessionBeanLocal.resolveEnquiry(enquiryToResolve.getEnquiryId());
+            this.pastEnquiries = enquirySessionBeanLocal.retrieveAllEnquires();
+            
+            if (filteredEnquiries.contains(enquiryToResolve)) {
+                for (int i = 0; i < filteredEnquiries.size(); i++) {
+                    filteredEnquiries.set(i, enquirySessionBeanLocal.retrieveEnquiryByEnquiryId(filteredEnquiries.get(i).getEnquiryId()));
+                    
+                }
+                
+            }
+       
 
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Enquiry resolved successfully", null));
-        } catch (EnquiryNotFoundException ex) {
+        } catch (EnquiryNotFoundException | EnquiryResolveException ex) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while resolving enquiry: " + ex.getMessage(), null));
         } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
-        
+
     }
 
     /**
@@ -151,6 +169,20 @@ public class EnquiryManagedBean implements Serializable {
      */
     public void setNewEnquiry(Enquiry newEnquiry) {
         this.newEnquiry = newEnquiry;
+    }
+
+    /**
+     * @return the filteredEnquiries
+     */
+    public List<Enquiry> getFilteredEnquiries() {
+        return filteredEnquiries;
+    }
+
+    /**
+     * @param filteredEnquiries the filteredEnquiries to set
+     */
+    public void setFilteredEnquiries(List<Enquiry> filteredEnquiries) {
+        this.filteredEnquiries = filteredEnquiries;
     }
 
 }
