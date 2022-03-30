@@ -1,10 +1,13 @@
 package util.email;
 
+import java.io.File;
+import java.net.URL;
 import java.util.Date;
 import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
+import javax.activation.URLDataSource;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.Session;
@@ -49,7 +52,7 @@ public class EmailManager {
             if (msg != null) {
                 msg.setFrom(InternetAddress.parse(fromEmailAddress, false)[0]);
                 msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmailAddress, false));
-                msg.setSubject("Dear " + name+ ", Welcome to ReadyFoods!");
+                msg.setSubject("Dear " + name + ", Welcome to ReadyFoods!");
                 msg.setText(emailBody);
                 msg.setHeader("X-Mailer", mailer);
                 Date timeStamp = new Date();
@@ -67,15 +70,21 @@ public class EmailManager {
 
                 // second part (the image)
                 messageBodyPart = new MimeBodyPart();
-//                DataSource fds = new FileDataSource(
-//                        "C:/Users/ngcas/Desktop/IS3106/ReadyFoods/ReadyFoods-war/web/resources/images/welcome.png");
-            
+                DataSource fds = new FileDataSource(
+                       "ReadyFoods/ReadyFoods-war/web/resources/images/welcome.png");
 
-//                messageBodyPart.setDataHandler(new DataHandler(fds));
-//                messageBodyPart.setHeader("Content-ID", "<image>");
-//
-//                // add image to the multipart
-//                multipart.addBodyPart(messageBodyPart);
+                //ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+                //URL url = classLoader.getResource("/welcome.png");
+                //DataSource fds = new URLDataSource(url);
+
+                //ClassLoader classLoader = getClass().getClassLoader();
+                //FileDataSource fds = new FileDataSource(new File(classLoader.getResource("images/welcome.png").getFile()));
+                
+                messageBodyPart.setDataHandler(new DataHandler(fds));
+                messageBodyPart.setHeader("Content-ID", "<image>");
+
+                // add image to the multipart
+                multipart.addBodyPart(messageBodyPart);
 
                 // put everything together
                 msg.setContent(multipart);
