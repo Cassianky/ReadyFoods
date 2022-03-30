@@ -24,6 +24,7 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import util.enumeration.Status;
 
 /**
  *
@@ -63,7 +64,7 @@ public class OrderEntity implements Serializable {
     
     @Column(nullable = false)
     @NotNull
-    private Boolean delivered;
+    private Status status;
     
     @Size(max = 128)
     private String additionalNotes;
@@ -78,12 +79,12 @@ public class OrderEntity implements Serializable {
     public OrderEntity() {
     }
 
-    public OrderEntity(Integer numPax, BigDecimal totalCost, Boolean paid, Date dateOfOrder, Boolean delivered, List<OrderLineItem> orderLineItems, Customer customer) {
+    public OrderEntity(Integer numPax, BigDecimal totalCost, Boolean paid, Date dateOfOrder, Status status, List<OrderLineItem> orderLineItems, Customer customer) {
         this.numPax = numPax;
         this.totalCost = totalCost;
         this.paid = paid;
         this.dateOfOrder = dateOfOrder;
-        this.delivered = delivered;
+        this.status = status;
         this.orderLineItems = orderLineItems;
         this.customer = customer;
     }
@@ -193,19 +194,6 @@ public class OrderEntity implements Serializable {
         this.dateForDelivery = dateForDelivery;
     }
 
-    /**
-     * @return the delivered
-     */
-    public Boolean getDelivered() {
-        return delivered;
-    }
-
-    /**
-     * @param delivered the delivered to set
-     */
-    public void setDelivered(Boolean delivered) {
-        this.delivered = delivered;
-    }
 
     /**
      * @return the additionalNotes
@@ -247,6 +235,20 @@ public class OrderEntity implements Serializable {
      */
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    /**
+     * @return the status
+     */
+    public Status getStatus() {
+        return status;
+    }
+
+    /**
+     * @param status the status to set
+     */
+    public void setStatus(Status status) {
+        this.status = status;
     }
     
     
