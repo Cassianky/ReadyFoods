@@ -105,4 +105,24 @@ public class EnquirySessionBean implements EnquirySessionBeanLocal {
 
         return msg;
     }
+
+    @Override
+    public void deleteEnquiry(Long enquiryId) throws EnquiryNotFoundException {
+        Enquiry toDel = retrieveEnquiryByEnquiryId(enquiryId);
+
+        Customer customer = toDel.getCustomer();
+
+        customer.getEnquiries().remove(toDel);
+        em.remove(toDel);
+
+    }
+
+    public void resolveEnquiry(Long enquiryId) throws EnquiryNotFoundException {
+        Enquiry toResolve = retrieveEnquiryByEnquiryId(enquiryId);
+        toResolve.setDescription("RESOLVED");
+        toResolve.setResolved(Boolean.TRUE);
+        
+
+    }
+
 }

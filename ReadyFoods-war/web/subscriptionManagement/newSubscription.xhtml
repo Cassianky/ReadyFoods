@@ -13,30 +13,44 @@
 
 
 
-        <!--        <p:messages closable="true" redisplay="false" >
-                    <p:autoUpdate/>
-                </p:messages>-->
+
         <section class="container">
             <p:graphicImage class="banner1" style="width: 100% ;border-radius: 25px;" name="banner1.jpg" library="images"/>
-            <div class="centered" style="line-height: 0%"><p>Ready to cook.</p>
+            <section class="centered" style="line-height: 0%"><p>Ready to cook.</p>
                 <p style="font-size: 20px;">Simple. Healthy. Delicious.</p>
-            </div>
+            </section>
         </section>
 
-        <p:growl>
+
+
+
+        <!--Rendered if customer has an ongoing sub-->
+        <p:growl >
             <p:autoUpdate />
         </p:growl>
 
-        <h:panelGroup rendered="#{newSubscriptionManagedBean.ongoing == true}">
-            <article style="padding-left: 15px">
-                You have an ongoing subscription.
-                REDIRECT THE CUSTOMER TO RECIPE SELECTION PAGE?
 
-            </article>
-        </h:panelGroup>
-        
-        <main style="margin: 30px">
-            <h:form id="formSubscribe" rendered="#{newSubscriptionManagedBean.ongoing == false}">
+
+        <p:panel rendered="#{newSubscriptionManagedBean.ongoing == true}">
+            You are already subscribed.
+            <p:button value="Recipe Selection" outcome="selectRecipes"/>
+        </p:panel>
+
+        <p:messages closable="false" globalOnly="true"/>
+
+
+
+        <!--subscription detail selection panel, rendered only if the customer does not have an ongoing sub-->
+        <!--and newSubscriptionManagedBean.currentCustomerEntity.creditCard != null-->
+
+
+        <p:panel class="card" rendered="#{newSubscriptionManagedBean.ongoing == false 
+                                          }">
+
+
+            <h:form id="formSubscribe">
+
+
                 <p:graphicImage class="titleicon"  name="meals.png" library="images"/>
                 <h1 class="h1title">Subscribe to our meal kit plan</h1>
 
@@ -53,7 +67,7 @@
                                 value="#{newSubscriptionManagedBean.newSubscription.numOfPeople}">
                                 <f:selectItem itemLabel="2" itemValue="#{2}"/>
                                 <f:selectItem itemLabel="4" itemValue="#{4}"/>
-                                <f:ajax event="change" execute="@form" render="@form pricePanel"
+                                <f:ajax event="change" execute="@form" render="@form"
                                         listener="#{newSubscriptionManagedBean.updateWeeklyPrice}"/>
                             </p:selectOneButton>
                         </p:column>
@@ -77,7 +91,7 @@
                                 <f:selectItem itemLabel="4" itemValue="#{4}"/>
                                 <f:selectItem itemLabel="5" itemValue="#{5}"/>
                                 <f:selectItem itemLabel="6" itemValue="#{6}"/>
-                                <f:ajax event="change" execute="@form" render="@form pricePanel"
+                                <f:ajax event="change" execute="@form" render="@form"
                                         listener="#{newSubscriptionManagedBean.updateWeeklyPrice}"/>
                             </p:selectOneButton>
                         </p:column>
@@ -99,7 +113,7 @@
                                 <f:selectItem itemLabel="1" itemValue="#{1}"/>
                                 <f:selectItem itemLabel="6" itemValue="#{6}"/>
                                 <f:selectItem itemLabel="12" itemValue="#{12}"/>
-                                <f:ajax event="change" execute="@form" render="@form pricePanel"
+                                <f:ajax event="change" execute="@form" render="@form"
                                         listener="#{newSubscriptionManagedBean.updateWeeklyPrice}"/>
 
                             </p:selectOneButton>
@@ -135,11 +149,13 @@
                 </p:confirmDialog>
 
 
-            </h:form>
 
 
-            <h:form id="pricePanel" rendered="#{newSubscriptionManagedBean.ongoing == false}">
-               
+                <!--Start of your kit panel-->
+
+
+
+
                 <p:panel style=" margin-left: auto; margin-right: 0; width: 40%; margin-right: 20px" >
                     <h1 class="h1title">Your Kit</h1>
                     <p>#{newSubscriptionManagedBean.newSubscription.numOfRecipes} recipes 
@@ -173,7 +189,7 @@
                     </h3>
                 </p:panel>
             </h:form>
-        </main>
+        </p:panel>
 
 
 

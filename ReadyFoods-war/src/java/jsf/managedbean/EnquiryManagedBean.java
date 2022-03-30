@@ -21,6 +21,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import util.exception.CreateNewEnquiryException;
 import util.exception.CustomerNotFoundException;
+import util.exception.EnquiryNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.UnknownPersistenceException;
 
@@ -71,6 +72,7 @@ public class EnquiryManagedBean implements Serializable {
 
         try {
             Enquiry enquiry = enquirySessionBeanLocal.createNewEnquiry(currentCustomerEntity.getCustomerId(), newEnquiry);
+           
             pastEnquiries.add(newEnquiry);
 
             this.newEnquiry = new Enquiry();
@@ -85,24 +87,44 @@ public class EnquiryManagedBean implements Serializable {
         }
     }
 
-//    public void deleteProduct(ActionEvent event) {
-//        try {
-//            ProductEntity productEntityToDelete = (ProductEntity) event.getComponent().getAttributes().get("productEntityToDelete");
-//            productEntitySessionBeanLocal.deleteProduct(productEntityToDelete.getProductId());
-//
-//            productEntities.remove(productEntityToDelete);
-//
-//            if (filteredProductEntities != null) {
-//                filteredProductEntities.remove(productEntityToDelete);
-//            }
-//
-//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product deleted successfully", null));
-//        } catch (ProductNotFoundException | DeleteProductException ex) {
-//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while deleting product: " + ex.getMessage(), null));
-//        } catch (Exception ex) {
-//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
-//        }
-//    }
+    public void deleteEnquiry(ActionEvent event) {
+        try {
+            Enquiry enquiryToDel = (Enquiry) event.getComponent().getAttributes().get("enquiryToDelete");
+            
+            enquirySessionBeanLocal.deleteEnquiry(enquiryToDel.getEnquiryId());
+          
+
+            this.pastEnquiries.remove(enquiryToDel);
+
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Enquiry removed successfully", null));
+        } catch (EnquiryNotFoundException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while deleting enquiry: " + ex.getMessage(), null));
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
+        }
+    }
+    
+    public void resolveEnquiry(ActionEvent event) {
+             try {
+            Enquiry enquiryToResolve = (Enquiry) event.getComponent().getAttributes().get("enquiryToResolve");
+            
+            enquirySessionBeanLocal.resolveEnquiry(enquiryToResolve.getEnquiryId());
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Enquiry resolved successfully", null));
+        } catch (EnquiryNotFoundException ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while resolving enquiry: " + ex.getMessage(), null));
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
+        }
+        
+    }
 
     /**
      * @return the pastEnquiries

@@ -25,9 +25,9 @@ import util.exception.NoOngoingSubscriptionException;
  *
  * @author angler
  */
-@Named(value = "subscriptionManagementSessionBean")
+@Named(value = "subscriptionManagedBean")
 @ViewScoped
-public class SubscriptionManagementSessionBean implements Serializable {
+public class SubscriptionManagedBean implements Serializable {
 
     @EJB(name = "SubscriptionSessionBeanLocal")
     private SubscriptionSessionBeanLocal subscriptionSessionBeanLocal;
@@ -42,7 +42,7 @@ public class SubscriptionManagementSessionBean implements Serializable {
     /**
      * Creates a new instance of SubscriptionManagementSessionBean
      */
-    public SubscriptionManagementSessionBean() {
+    public SubscriptionManagedBean() {
         this.pastSubscriptions = new ArrayList<>();
     }
 
@@ -53,8 +53,10 @@ public class SubscriptionManagementSessionBean implements Serializable {
         Customer customer;
         try {
             customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomerEntity.getCustomerId());
-            Subscription ongoingSubscription = subscriptionSessionBeanLocal.
+            this.ongoingSubscription = subscriptionSessionBeanLocal.
                     retrieveOngoingSubscriptionForCustomer(currentCustomerEntity.getCustomerId());
+            System.out.println("Ongoing subscription" + ongoingSubscription.getNumOfPeople());
+            
 
         } catch (CustomerNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null,

@@ -6,106 +6,118 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
-                template="/template/defaultTemplate.xhtml">
+                template="/template/defaultTemplate.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:define name="content">
         <ez:Breadcrumb pageName="enquiryManagement" />
         <p:growl>
             <p:autoUpdate />
         </p:growl>
-        <main style="margin: 30px">
 
-            <h:form id="enquiryForm" >
-                <h1>Submit New Enquiry</h1>
 
-                <p:panelGrid styleClass="ui-noborder">
+        <h:form id="enquiryForm"  style="margin: 30px">
+            <h1>Submit New Enquiry</h1>
 
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="title" value="Title: " style="font-weight: bold;" />
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="title" 
-                                         value="#{enquiryManagedBean.newEnquiry.title}" 
+            <p:panelGrid styleClass="ui-noborder">
+
+                <p:row>
+                    <p:column>
+                        <p:outputLabel for="title" value="Title: " style="font-weight: bold;" />
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="title" 
+                                     value="#{enquiryManagedBean.newEnquiry.title}" 
+                                     required="true" 
+                                     requiredMessage="Title is required" />
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel for="description" value="Description: " style="font-weight: bold;" />
+                    </p:column>
+                    <p:column>
+                        <p:inputTextarea rows="5" cols="100" autoResize="false" id="description" 
+                                         value="#{enquiryManagedBean.newEnquiry.description}" 
                                          required="true" 
-                                         requiredMessage="Title is required" />
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="description" value="Description: " style="font-weight: bold;" />
-                        </p:column>
-                        <p:column>
-                            <p:inputTextarea rows="5" cols="100" autoResize="false" id="description" 
-                                             value="#{enquiryManagedBean.newEnquiry.description}" 
-                                             required="true" 
-                                             requiredMessage="Description is required" />
-                        </p:column>
-                    </p:row>
-
-                    <p:row>
-                        <p:column colspan="2">
-                            <p:commandButton value="Submit" type="submit" actionListener="#{enquiryManagedBean.doCreateNewEnquiry}"
-                                             update="formAllEnquires:dataTableAllEnquires enquiryForm"/>
-                        </p:column>
-                    </p:row>
-
-                </p:panelGrid>
-
-            </h:form>
-
-            <h:form id="formAllEnquires">
-                <h1>Enquiry History</h1>
-
-                <p:dataTable id="dataTableAllEnquires" widgetVar="dataTableAllEnquires" 
-                             value="#{enquiryManagedBean.pastEnquiries}" var="enquiry" 
-                             rowKey="#{enquiry.enquiryId}" rowIndexVar="row"
-                             styleClass="ui-noborder">
-
-
-
-                    <p:column headerText="Enquiry ID" sortBy="#{enquiry.enquiryId}" 
-                              >
-                        <h:outputText value="#{enquiry.enquiryId}" />
+                                         requiredMessage="Description is required" />
                     </p:column>
+                </p:row>
 
-                    <p:column headerText="Title" sortBy="#{enquiry.title}" 
-                              >
-                        <h:outputText value="#{enquiry.title}" />
-                    </p:column>        
-                    <p:column headerText="Description" sortBy="#{enquiry.description}" 
-                              >
-                        <h:outputText value="#{enquiry.description}" />
+                <p:row>
+                    <p:column colspan="2">
+                        <p:commandButton value="Submit" type="submit" actionListener="#{enquiryManagedBean.doCreateNewEnquiry}"
+                                         update="formAllEnquires:dataTableAllEnquires enquiryForm"/>
                     </p:column>
+                </p:row>
 
-                    <p:column headerText="Date" sortBy="#{enquiry.dateOfEnquiry}" 
-                              >
-                        <h:outputText value="#{enquiry.dateOfEnquiry}" />
-                    </p:column>
+            </p:panelGrid>
+
+        </h:form>
+
+        <h:form id="formAllEnquires" style="margin: 30px">
+            <h1>Enquiry History</h1>
+
+            <p:dataTable id="dataTableAllEnquires" widgetVar="dataTableAllEnquires" 
+                         value="#{enquiryManagedBean.pastEnquiries}" var="enquiry" 
+                         rowKey="#{enquiry.enquiryId}" rowIndexVar="row">
+
+                <p:column headerText="Enquiry ID">
+                    <h:outputText value="#{enquiry.enquiryId}" />
+                </p:column>
+
+                <p:column headerText="Title">
+                    <h:outputText value="#{enquiry.title}" />
+                </p:column>        
+                <p:column headerText="Description" >
+                    <h:outputText value="#{enquiry.description}" />
+                </p:column>
+
+                <p:column headerText="Date">
+                    <h:outputText value="#{enquiry.dateOfEnquiry}" />
+                </p:column>
+
+                <p:column headerText="Admin response">
+                    <h:outputText value="#{enquiry.response}" />
+                </p:column>
+
+                <p:column headerText="Resolved">
+                    <p:selectBooleanCheckbox value="#{enquiry.resolved}" disabled="true"/>
+                </p:column>
 
 
-                    <p:column headerText="Action" >
+                <p:column headerText="Action" >
 
-                        <p:commandButton icon="ui-icon-trash" 
-                                         update="dataTableAllEnquires">
-                            <f:attribute name="enquiryToDelete" value="#{enquiry}" />
-                            <p:confirm header="Confirmation" message="Are you sure you want to delete enquiry
-                                       #{enquiry.enquiryId}?" 
-                                       icon="ui-icon-alert" />
-                        </p:commandButton>
-                    </p:column>
+                    <p:commandButton icon="ui-icon-trash" 
+                                     title="Delete"
+                                     actionListener="#{enquiryManagedBean.deleteEnquiry}">
+                        <f:attribute name="enquiryToDelete" value="#{enquiry}" />
+                        <p:confirm header="Confirmation" message="Are you sure you want to delete enquiry
+                                   #{enquiry.enquiryId}?" 
+                                   icon="ui-icon-alert" />
+                    </p:commandButton>
+                    
+                    <p:commandButton icon="ui-icon-check" 
+                                     title="Resolve"
+                                     update="@this formAllEnquires:dataTableAllEnquires"
+                                     actionListener="#{enquiryManagedBean.resolveEnquiry}">
+                        <f:attribute name="enquiryToResolve" value="#{enquiry}" />
+
+                    </p:commandButton>
+                </p:column>
 
 
-                </p:dataTable>
+            </p:dataTable>
+           
 
-                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                </p:confirmDialog>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
 
-            </h:form>
+        </h:form>
+       
 
-        </main>
 
     </ui:define>
 

@@ -12,5 +12,6 @@ package util.enumeration;
 public enum Status {
     PENDING,
     ONTHEWAY,
-    DELIVERED
+    DELIVERED,
+    RECEIVED
 }

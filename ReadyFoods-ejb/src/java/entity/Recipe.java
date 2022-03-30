@@ -90,7 +90,7 @@ public class Recipe implements Serializable {
     }
 
     public Recipe(String recipeTitle, String recipeChef, Integer cookingTime, String recipeSteps,
-            Integer reorderQuantity, Integer caloriesPerServing, Integer carbsPerServing,
+            Integer caloriesPerServing, Integer carbsPerServing,
             Integer fatsPerServing, Integer proteinsPerServing, Integer sugarPerServing,
             String videoURL) {
         this();
@@ -143,72 +143,38 @@ public class Recipe implements Serializable {
         return recipeTitle;
     }
 
-    public void setRecipeTitle(String recipeTitle) {
-        this.recipeTitle = recipeTitle;
-    }
 
     public Integer getCookingTime() {
         return cookingTime;
-    }
-
-    public void setCookingTime(Integer cookingTime) {
-        this.cookingTime = cookingTime;
     }
 
     public String getRecipeSteps() {
         return recipeSteps;
     }
 
-    public void setRecipeSteps(String recipeSteps) {
-        this.recipeSteps = recipeSteps;
-    }
-
     public Integer getCaloriesPerServing() {
         return caloriesPerServing;
-    }
-
-    public void setCaloriesPerServing(Integer caloriesPerServing) {
-        this.caloriesPerServing = caloriesPerServing;
     }
 
     public Integer getCarbsPerServing() {
         return carbsPerServing;
     }
 
-    public void setCarbsPerServing(Integer carbsPerServing) {
-        this.carbsPerServing = carbsPerServing;
-    }
-
     public Integer getFatsPerServing() {
         return fatsPerServing;
     }
 
-    public void setFatsPerServing(Integer fatsPerServing) {
-        this.fatsPerServing = fatsPerServing;
-    }
 
     public Integer getProteinsPerServing() {
         return proteinsPerServing;
-    }
-
-    public void setProteinsPerServing(Integer proteinsPerServing) {
-        this.proteinsPerServing = proteinsPerServing;
     }
 
     public Integer getSugarPerServing() {
         return sugarPerServing;
     }
 
-    public void setSugarPerServing(Integer sugarPerServing) {
-        this.sugarPerServing = sugarPerServing;
-    }
-
     public String getVideoURL() {
         return videoURL;
-    }
-
-    public void setVideoURL(String videoURL) {
-        this.videoURL = videoURL;
     }
 
     public List<Category> getCategories() {
@@ -223,8 +189,82 @@ public class Recipe implements Serializable {
         return recipeChef;
     }
 
+
+    /**
+     * @param reviews the reviews to set
+     */
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    /**
+     * @param recipeTitle the recipeTitle to set
+     */
+    public void setRecipeTitle(String recipeTitle) {
+        this.recipeTitle = recipeTitle;
+    }
+
+    /**
+     * @param recipeChef the recipeChef to set
+     */
     public void setRecipeChef(String recipeChef) {
         this.recipeChef = recipeChef;
+    }
+
+    /**
+     * @param cookingTime the cookingTime to set
+     */
+    public void setCookingTime(Integer cookingTime) {
+        this.cookingTime = cookingTime;
+    }
+
+    /**
+     * @param recipeSteps the recipeSteps to set
+     */
+    public void setRecipeSteps(String recipeSteps) {
+        this.recipeSteps = recipeSteps;
+    }
+
+    /**
+     * @param caloriesPerServing the caloriesPerServing to set
+     */
+    public void setCaloriesPerServing(Integer caloriesPerServing) {
+        this.caloriesPerServing = caloriesPerServing;
+    }
+
+    /**
+     * @param carbsPerServing the carbsPerServing to set
+     */
+    public void setCarbsPerServing(Integer carbsPerServing) {
+        this.carbsPerServing = carbsPerServing;
+    }
+
+    /**
+     * @param fatsPerServing the fatsPerServing to set
+     */
+    public void setFatsPerServing(Integer fatsPerServing) {
+        this.fatsPerServing = fatsPerServing;
+    }
+
+    /**
+     * @param proteinsPerServing the proteinsPerServing to set
+     */
+    public void setProteinsPerServing(Integer proteinsPerServing) {
+        this.proteinsPerServing = proteinsPerServing;
+    }
+
+    /**
+     * @param sugarPerServing the sugarPerServing to set
+     */
+    public void setSugarPerServing(Integer sugarPerServing) {
+        this.sugarPerServing = sugarPerServing;
+    }
+
+    /**
+     * @param videoURL the videoURL to set
+     */
+    public void setVideoURL(String videoURL) {
+        this.videoURL = videoURL;
     }
 
 }

@@ -100,3 +100,12 @@ a:link:hover, a:visited:hover  {
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+.card{
+    margin: 30px;
+}
+
+/*comment this out if you want table borders back*/
+.ui-datatable * {
+     border : 0px !important;
+}
