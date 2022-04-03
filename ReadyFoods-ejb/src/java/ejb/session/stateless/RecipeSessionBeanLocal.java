@@ -22,8 +22,7 @@ import util.exception.UnknownPersistenceException;
 @Local
 public interface RecipeSessionBeanLocal {
 
-    public Recipe createNewRecipe(Recipe newRecipe, List<Long> categoriesId)
-            throws CategoryNotFoundException, CreateRecipeException,
+    public Recipe createNewRecipe(Recipe newRecipe, List<Long> categoriesId, List<Long>recipeSpecificationId)throws CategoryNotFoundException, CreateRecipeException,
             RecipeTitleExistException, UnknownPersistenceException,
             InputDataValidationException;
 

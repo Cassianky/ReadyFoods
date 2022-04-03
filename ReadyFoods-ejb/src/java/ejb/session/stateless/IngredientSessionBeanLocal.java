@@ -26,6 +26,6 @@ public interface IngredientSessionBeanLocal {
 
     public void creditQuantityOnHand(Long ingredientId, Integer quantityToCredit) throws IngredientNotFoundException;
 
-    public Ingredient createNewIngredient(Ingredient newIngredient) throws IngredientExistsException, UnknownPersistenceException, InputDataValidationException;
+    public Long createNewIngredient(Ingredient newIngredient) throws IngredientExistsException, UnknownPersistenceException, InputDataValidationException;
     
 }

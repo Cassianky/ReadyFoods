@@ -40,7 +40,7 @@ public class IngredientSessionBean implements IngredientSessionBeanLocal {
     }
 
     @Override
-    public Ingredient createNewIngredient(Ingredient newIngredient) throws IngredientExistsException, UnknownPersistenceException, InputDataValidationException {
+    public Long createNewIngredient(Ingredient newIngredient) throws IngredientExistsException, UnknownPersistenceException, InputDataValidationException {
 
         Set<ConstraintViolation<Ingredient>> constraintViolations = validator.validate(newIngredient);
         if (constraintViolations.isEmpty()) {
@@ -49,7 +49,7 @@ public class IngredientSessionBean implements IngredientSessionBeanLocal {
                 entityManager.flush();
                 System.out.println("********ejb.session.stateless.IngredientSessionBean.createNewIngredient()");
 
-                return newIngredient;
+                return newIngredient.getIngredientId();
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
                     if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {

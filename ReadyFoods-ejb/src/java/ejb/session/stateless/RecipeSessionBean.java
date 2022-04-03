@@ -2,11 +2,13 @@ package ejb.session.stateless;
 
 import entity.Category;
 import entity.Recipe;
-import entity.IngredientSpecifcation;
+import entity.IngredientSpecification;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -19,6 +21,7 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import util.exception.CategoryNotFoundException;
 import util.exception.CreateRecipeException;
+import util.exception.IngredientSpecificationNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.RecipeNotFoundException;
 import util.exception.RecipeTitleExistException;
@@ -26,6 +29,9 @@ import util.exception.UnknownPersistenceException;
 
 @Stateless
 public class RecipeSessionBean implements RecipeSessionBeanLocal {
+
+    @EJB(name = "IngredientSpecificationSessionBeanLocal")
+    private IngredientSpecificaitonSessionBeanLocal ingredientSpecificationSessionBeanLocal;
 
     @PersistenceContext(unitName = "ReadyFoods-ejbPU")
     private EntityManager em;
@@ -35,6 +41,8 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
 
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
+    
+    
 
     public RecipeSessionBean() {
         this.validatorFactory = Validation.buildDefaultValidatorFactory();
@@ -42,7 +50,7 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
     }
 
     @Override
-    public Recipe createNewRecipe(Recipe newRecipe, List<Long> categoriesId)
+    public Recipe createNewRecipe(Recipe newRecipe, List<Long> categoriesId, List<Long>ingredientSpecificationId)
             throws CategoryNotFoundException, CreateRecipeException,
             RecipeTitleExistException, UnknownPersistenceException,
             InputDataValidationException {
@@ -57,9 +65,11 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
                     throw new CreateRecipeException("A category must be selected for the recipe");
                 }
 
-                for(IngredientSpecifcation is : newRecipe.getIngredientSpecificationList()) {
-                    em.persist(is);
-                    em.flush();
+                for(Long isId : ingredientSpecificationId) {
+                    IngredientSpecification is = ingredientSpecificationSessionBeanLocal.retrieveIngredientSpecificationById(isId);
+                    newRecipe.getIngredientSpecificationList().add(is);
+                    System.out.println("ejb.session.stateless.RecipeSessionBean.createNewRecipe()" + is.getIngredientSpecificationId());
+                    
                 }
                 
                 List<Category> categoriesList = new ArrayList<>();
@@ -83,6 +93,8 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
                 } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
+            } catch (IngredientSpecificationNotFoundException ex) {
+                Logger.getLogger(RecipeSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));

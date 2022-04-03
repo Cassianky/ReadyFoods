@@ -19,11 +19,11 @@ import javax.validation.constraints.Size;
 @Entity
 public class Recipe implements Serializable {
 
-    public List<IngredientSpecifcation> getIngredientSpecificationList() {
+    public List<IngredientSpecification> getIngredientSpecificationList() {
         return ingredientSpecificationList;
     }
 
-    public void setIngredientSpecificationList(List<IngredientSpecifcation> ingredientSpecificationList) {
+    public void setIngredientSpecificationList(List<IngredientSpecification> ingredientSpecificationList) {
         this.ingredientSpecificationList = ingredientSpecificationList;
     }
 
@@ -78,7 +78,7 @@ public class Recipe implements Serializable {
     private List<Review> reviews;
 
     @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)
-    private List<IngredientSpecifcation> ingredientSpecificationList;
+    private List<IngredientSpecification> ingredientSpecificationList;
     @ManyToMany
     private List<Category> categories;//seperate or combine categories?
     //5 parent category - cuisine, diet, mealType, prepTime,cookMethod;
@@ -87,7 +87,8 @@ public class Recipe implements Serializable {
         this.ingredientSpecificationList = new ArrayList<>();
         this.categories = new ArrayList<>();
         this.reviews = new ArrayList<>();
-    }
+    } 
+    
 
     public Recipe(String recipeTitle, String recipeChef, Integer cookingTime, String recipeSteps,
             Integer caloriesPerServing, Integer carbsPerServing,

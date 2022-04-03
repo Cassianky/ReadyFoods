@@ -12,7 +12,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class IngredientSpecifcation implements Serializable {
+public class IngredientSpecification implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -25,18 +25,20 @@ public class IngredientSpecifcation implements Serializable {
     @JoinColumn(nullable = false)
     @NotNull
     private Ingredient ingredient;
-    
-    @ManyToOne(optional = false)
-    private Recipe recipe;
 
-    
-    public IngredientSpecifcation() {
+    public IngredientSpecification() {
     }
     
-    public IngredientSpecifcation(Integer quantity, Ingredient ingredient) {
+    public IngredientSpecification(Integer quantity, Ingredient ingredient) {
         this.quantityPerServing = quantity;
         this.ingredient = ingredient;
     }
+
+    public IngredientSpecification(Integer quantityPerServing) {
+        this.quantityPerServing = quantityPerServing;
+    }
+    
+    
     
     
     public Long getIngredientSpecificationId() {
@@ -57,10 +59,10 @@ public class IngredientSpecifcation implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the ingredientSpecificationId fields are not set
-        if (!(object instanceof IngredientSpecifcation)) {
+        if (!(object instanceof IngredientSpecification)) {
             return false;
         }
-        IngredientSpecifcation other = (IngredientSpecifcation) object;
+        IngredientSpecification other = (IngredientSpecification) object;
         if ((this.ingredientSpecificationId == null && other.ingredientSpecificationId != null) || (this.ingredientSpecificationId != null && !this.ingredientSpecificationId.equals(other.ingredientSpecificationId))) {
             return false;
         }
@@ -88,12 +90,5 @@ public class IngredientSpecifcation implements Serializable {
         this.ingredient = ingredient;
     }
 
-    public Recipe getRecipe() {
-        return recipe;
-    }
-
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
-    }
     
 }
