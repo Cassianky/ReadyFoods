@@ -25,7 +25,11 @@ public class IngredientSpecification implements Serializable {
     @JoinColumn(nullable = false)
     @NotNull
     private Ingredient ingredient;
+    
+    @ManyToOne(optional = true)
+    private Recipe recipe;
 
+    
     public IngredientSpecification() {
     }
     
@@ -90,5 +94,12 @@ public class IngredientSpecification implements Serializable {
         this.ingredient = ingredient;
     }
 
+    public Recipe getRecipe() {
+        return recipe;
+    }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+    }
     
 }
