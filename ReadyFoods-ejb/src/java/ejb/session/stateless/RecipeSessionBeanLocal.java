@@ -33,4 +33,6 @@ public interface RecipeSessionBeanLocal {
 
     public List<Recipe> filterRecipesByCategory(List<Long> categoryIds, String condition);
 
+    public List<Recipe> retrieveAllRecipes();
+
 }

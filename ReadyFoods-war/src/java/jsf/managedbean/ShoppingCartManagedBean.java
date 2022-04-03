@@ -24,6 +24,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import util.enumeration.Status;
 import util.exception.CheckOutShoppingCartException;
 import util.exception.CreateNewOrderException;
 import util.exception.CustomerNotFoundException;
@@ -70,7 +71,7 @@ public class ShoppingCartManagedBean implements Serializable {
         if (!orderLineItems.isEmpty()) {
             try {
                 
-                OrderEntity newOrderEntity = new OrderEntity(1,totalPrice,false,new Date(),false,orderLineItems,customer);
+                OrderEntity newOrderEntity = new OrderEntity(1,totalPrice,false,new Date(),Status.PENDING,orderLineItems,customer);
                 
                 orderEntitySessionBeanLocal.createNewOrder(customer.getCustomerId(), newOrderEntity);
                 

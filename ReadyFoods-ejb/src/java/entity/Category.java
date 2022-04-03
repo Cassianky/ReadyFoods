@@ -54,7 +54,6 @@ public class Category implements Serializable {
         this.name = name;
         this.description = description;
     }
-    
    
     public String getName() {
         return name;
@@ -77,7 +76,23 @@ public class Category implements Serializable {
     }
 
     public void setParentCategory(Category parentCategory) {
+        if(this.parentCategory != null)
+        {
+            if(this.parentCategory.getSubCategories().contains(this))
+            {
+                this.parentCategory.getSubCategories().remove(this);
+            }
+        }
+        
         this.parentCategory = parentCategory;
+        
+        if(this.parentCategory != null)
+        {
+            if(!this.parentCategory.getSubCategories().contains(this))
+            {
+                this.parentCategory.getSubCategories().add(this);
+            }
+        }
     }
 
     public List<Category> getSubCategories() {

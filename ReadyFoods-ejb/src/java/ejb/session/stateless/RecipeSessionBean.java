@@ -2,6 +2,7 @@ package ejb.session.stateless;
 
 import entity.Category;
 import entity.Recipe;
+import entity.IngredientSpecifcation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -56,6 +57,11 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
                     throw new CreateRecipeException("A category must be selected for the recipe");
                 }
 
+                for(IngredientSpecifcation is : newRecipe.getIngredientSpecificationList()) {
+                    em.persist(is);
+                    em.flush();
+                }
+                
                 List<Category> categoriesList = new ArrayList<>();
 
                 for (Long categoryId : categoriesId) {
@@ -84,6 +90,21 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
         return newRecipe;
     }
 
+    @Override
+    public List<Recipe> retrieveAllRecipes() {
+        
+        Query query = em.createQuery("SELECT r FROM Recipe ORDER ORDER BY r.recipeTitle");
+        
+        List<Recipe> recipes = query.getResultList();
+        
+        for(Recipe r : recipes) {
+            r.getIngredientSpecificationList().size();
+            r.getCategories().size();
+        }
+        
+        return recipes;
+    }
+    
     @Override
     public Recipe retrieveRecipeByRecipeId(Long recipeId) throws RecipeNotFoundException {
 

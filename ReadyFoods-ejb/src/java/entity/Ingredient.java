@@ -30,7 +30,7 @@ public class Ingredient implements Serializable {
     private String description;
     @Column(nullable = false)
     @NotNull
-    private IngredientUnit ingredientUnit; //ml, pcs, etc.
+    IngredientUnit ingredientUnit; //ml, pcs, etc.
     @NotNull
     @DecimalMin("0.00")
     @Digits(integer = 9, fraction = 2) // 11 - 2 digits to the left of the decimal point

@@ -10,5 +10,6 @@ public enum IngredientUnit {
     Cup,
     Spoon,
     Tablespoon,
-    Teaspoon
+    Teaspoon,
+    Whole
 }
