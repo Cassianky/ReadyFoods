@@ -77,7 +77,7 @@ public class Recipe implements Serializable {
     @OneToMany
     private List<Review> reviews;
 
-    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
     private List<IngredientSpecification> ingredientSpecificationList;
     @ManyToMany
     private List<Category> categories;//seperate or combine categories?
