@@ -43,6 +43,8 @@ public class OrderManagedBean implements Serializable {
     private Customer currentCustomerEntity;
 
     private List<OrderEntity> listOfOrders;
+    
+
 
     public OrderManagedBean() {
         this.listOfOrders = new ArrayList<>();
@@ -50,11 +52,11 @@ public class OrderManagedBean implements Serializable {
 
     @PostConstruct
     public void postConstruct() {
-        currentCustomerEntity = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
+        setCurrentCustomerEntity((Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer"));
         Customer customer;
         try {
-            customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomerEntity.getCustomerId());
-            this.listOfOrders = customer.getOrders();
+            customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(getCurrentCustomerEntity().getCustomerId());
+            this.setListOfOrders(customer.getOrders());
         } catch (CustomerNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Customer not found" + ex.getMessage(), null));
         }
@@ -87,7 +89,43 @@ public class OrderManagedBean implements Serializable {
      * @param listOfOrders the listOfOrders to set
      */
     public void setListOfOrders(ArrayList<OrderEntity> listOfOrders) {
+        this.setListOfOrders(listOfOrders);
+    }
+    
+    public void updateStatus(ActionEvent event) {
+        
+           OrderEntity orderEntity = (OrderEntity)event.getComponent().getAttributes().get("orderToupdate");
+            try {
+                orderSessionBeanLocal.updateOrderStatusReceieved(orderEntity.getOrderEntityId());
+                
+            } catch (OrderNotFoundException ex) {
+                FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Order not found" + ex.getMessage(), null));
+            }
+        
+        
+        
+    }
+
+    /**
+     * @return the currentCustomerEntity
+     */
+    public Customer getCurrentCustomerEntity() {
+        return currentCustomerEntity;
+    }
+
+    /**
+     * @param currentCustomerEntity the currentCustomerEntity to set
+     */
+    public void setCurrentCustomerEntity(Customer currentCustomerEntity) {
+        this.currentCustomerEntity = currentCustomerEntity;
+    }
+
+    /**
+     * @param listOfOrders the listOfOrders to set
+     */
+    public void setListOfOrders(List<OrderEntity> listOfOrders) {
         this.listOfOrders = listOfOrders;
     }
+
 
 }

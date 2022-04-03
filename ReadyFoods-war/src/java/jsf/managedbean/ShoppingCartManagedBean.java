@@ -18,12 +18,14 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import util.enumeration.Status;
 import util.exception.CheckOutShoppingCartException;
 import util.exception.CreateNewOrderException;
 import util.exception.CustomerNotFoundException;
@@ -47,11 +49,18 @@ public class ShoppingCartManagedBean implements Serializable {
     
     private BigDecimal totalPrice;
     
+    private OrderEntity newOrderEntity;
+    
     
 
     
     public ShoppingCartManagedBean() {
+        newOrderEntity = new OrderEntity();
         this.orderLineItems = new ArrayList<>();
+    }
+    
+    public void addToShoppingCart(ActionEvent event)throws IOException {
+        
     }
     
     public void removeFromShoppingCart(ActionEvent event) throws IOException {
@@ -63,16 +72,13 @@ public class ShoppingCartManagedBean implements Serializable {
     
     public void checkoutShoppingCart(ActionEvent event)throws IOException, CheckOutShoppingCartException, ShoppingCartIsEmptyException {
         Customer customer = (Customer) event.getComponent().getAttributes().get("customerToCheckOut");
-        Integer serialNo = 1;
-        Integer totalQuantity = 0;
-        BigDecimal totalAmt = BigDecimal.valueOf(0);
         
         if (!orderLineItems.isEmpty()) {
             try {
                 
-                OrderEntity newOrderEntity = new OrderEntity(1,totalPrice,false,new Date(),false,orderLineItems,customer);
+                OrderEntity newOrderEntity = new OrderEntity(1,totalPrice,false,new Date(),Status.PENDING,orderLineItems,customer);
                 
-                orderEntitySessionBeanLocal.createNewOrder(customer.getCustomerId(), newOrderEntity);
+                getOrderEntitySessionBeanLocal().createNewOrder(customer.getCustomerId(), newOrderEntity);
                 
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Shopping cart checked out successfully!", null));
             
@@ -121,6 +127,34 @@ public class ShoppingCartManagedBean implements Serializable {
     public void setTotalPrice(BigDecimal totalPrice) {
         
         this.totalPrice = totalPrice;
+    }
+
+    /**
+     * @return the newOrderEntity
+     */
+    public OrderEntity getNewOrderEntity() {
+        return newOrderEntity;
+    }
+
+    /**
+     * @param newOrderEntity the newOrderEntity to set
+     */
+    public void setNewOrderEntity(OrderEntity newOrderEntity) {
+        this.newOrderEntity = newOrderEntity;
+    }
+
+    /**
+     * @return the orderEntitySessionBeanLocal
+     */
+    public OrderEntitySessionBeanLocal getOrderEntitySessionBeanLocal() {
+        return orderEntitySessionBeanLocal;
+    }
+
+    /**
+     * @param orderEntitySessionBeanLocal the orderEntitySessionBeanLocal to set
+     */
+    public void setOrderEntitySessionBeanLocal(OrderEntitySessionBeanLocal orderEntitySessionBeanLocal) {
+        this.orderEntitySessionBeanLocal = orderEntitySessionBeanLocal;
     }
    
     
