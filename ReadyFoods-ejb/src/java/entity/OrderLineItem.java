@@ -113,6 +113,14 @@ public class OrderLineItem implements Serializable {
      * @return the customisedIngredients
      */
     public List<CustomisedIngredient> getCustomisedIngredients() {
+        for(CustomisedIngredient ci:customisedIngredients){
+            if(customisedIngredients.isEmpty()){
+                break;
+            }
+            if(ci.getQuantityOfIngredient() == 0){
+                customisedIngredients.remove(ci);
+            }
+        }
         return customisedIngredients;
     }
 

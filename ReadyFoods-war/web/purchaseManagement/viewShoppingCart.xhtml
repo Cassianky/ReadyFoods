@@ -6,74 +6,92 @@
                 template="./../template/defaultTemplate.xhtml"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:define name="content">
+        <ez:Breadcrumb pageName="viewShoppingCart" />
         <div>
             <h3>View Shopping Cart</h3>
         </div>
         <h:form id="formShoppingCart">
-            <p:dataTable id="dataTableShoppingCart" 
-                         value="#{shoppingCartManagedBean.orderLineItems}" 
-                         var="orderLineItem"
-                         styleClass="ui-noborder">
-                <p:headerRow>
-                    <p:row>
-                        <p:column headerText="Ingredient Name"/>
-                        <p:column headerText="Quantity"/>
-                        <p:column headerText="Unit price"/>
-                        <p:column headerText="Sub total"/>
-                        <p:column headerText="Prepared"/>
-            
-                    </p:row>
-                </p:headerRow>
-              
-                    <p:dataTable id="dataTableCustomisedIngredient" value="#{orderLineItem.customisedIngredients}" var="ci">
-                        
-                            <p:column headerText="Ingredient Name">
-                                <h:outputText value="#{ci.ingredientName}"/>
-                            </p:column>
-                            <p:column headerText="Quantity">
-                                <p:spinner id="updateQuantity" value="#{ci.quantityOfIngredient}" stepFactor="1" min="1" onchange="" >
-                                </p:spinner>
-                            </p:column>
-                            <p:column headerText="Unit Price">
-                                <h:outputText value="#{ci.unitPrice}"/>
-                            </p:column>
 
-                            <p:column headerText="Subtotal">
-                                <h:outputText value="#{ci.subtotal}"/>
-                            </p:column>
-                            <p:column headerText="Prepared?">
-                                <p:selectBooleanCheckbox id="preparedness" value="#{ci.prepared}" itemLabel="Prepared?" rendered="true" >
+            <p:dataView value="#{shoppingCartManagedBean.orderLineItems}"
+                        var="orderLineItem"
+                        styleClass="ui-noborder"
+                        gridIcon="pi pi-th-large" listIcon="pi pi-bars">
+                <p:dataViewListItem>
+                    <h:panelGrid columns="3" style="width:100%" columnClasses="logo,detail">
+                        <p:graphicImage name="resources/images/300x300.png" /> 
 
-                                </p:selectBooleanCheckbox>
+                        <p:outputPanel>
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <h:outputText value="Recipe Name:" />
+                                <h:outputText value="#{orderLineItem.recipe.recipeTitle}" style="font-weight: bold"/>
 
-                            </p:column>
+                                <h:outputText value="Recipe Subtotal:" />
+                                <h:outputText value="#{orderLineItem.recipeSubTotal}" style="font-weight: bold"/>
 
-                            <p:column headerText="Action">
-                                <p:commandButton icon="ui-icon-trash" actionListener="#{shoppingCartManagedBean.removeFromShoppingCart}" update="formShoppingCart">
-                                    <f:attribute name="orderLineItemToRemove" value="#{orderLineItem}"/>
-                                    <p:confirm header="Confirmation" message="Are you sure you want to remove #{orderLineItem.recipe.recipeTitle} from cart?" icon="ui-icon-alert" />
-                                </p:commandButton>
-                            </p:column>
-                        
+                            </h:panelGrid>
+                        </p:outputPanel>
 
-                    </p:dataTable>
-                    <p:row>
-                        <p:column colspan="6" styleClass="ui-widget-header">
-                            <p:spacer height="0"/>
-                        </p:column>
-                    </p:row>
+                        <p:commandButton actionListener="#{shoppingCartManagedBean.doUpdateOrderLineItem}"
+                                         update="formUpdateOrderLineItem" 
+                                         oncomplete="PF('dialogUpdateOrderLineItem').show()" 
+                                         icon="ui-icon-pencil"
+                                         title="Update Detail">
+                            <f:attribute name="orderLineItemToUpdate" value="#{orderLineItem}"/>
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-trash" 
+                                         actionListener="#{shoppingCartManagedBean.removeFromShoppingCart}" 
+                                         update="formShoppingCart:orderLineItemDetail">
+                            <f:attribute name="orderLineItemToDelete" value="#{orderLineItem}" />
+                            <p:confirm header="Confirmation" message="Are you sure you want to delete #{orderLineItem} (#{orderLineItem.recipe.recipeTitle})?" icon="ui-icon-alert" />
+                        </p:commandButton>
 
-                
-
-
-            </p:dataTable>
-
-
-
+                    </h:panelGrid>
+                </p:dataViewListItem>
+            </p:dataView>
         </h:form>
+        <h:form id="formUpdateOrderLineItem">
+            <p:dialog id="dialogUpdateOrderLineItem" widgetVar="dialogUpdateOrderLineItem" header="Update Order Line Item" closable="true">
+                <p:messages id="messages" redisplay="false" closable="true" />
+                <p:dataTable id="dataTableCustomisedIngredients" value="#{shoppingCartManagedBean.orderLineItemToUpdate.customisedIngredients}" var="ci">
+                    <f:facet name="header">
+                        List Of Ingredients for recipe
+                    </f:facet>
+
+                    <p:column headerText="Number">
+                        <h:outputText value="#{ci.lineItemNumber}"/>
+                    </p:column>
+
+                    <p:column headerText="Ingredient Name">
+                        <h:outputText value="#{ci.ingredientName}"/>
+                    </p:column>
+                    <p:column headerText="Quantity">
+                        <p:spinner id="updateQuantity" value="#{ci.quantityOfIngredient}" stepFactor="1" min="1"/>
+                    </p:column>
+                    <p:column headerText="Unit Price">
+                        <h:outputText value="#{ci.unitPrice}"/>
+                    </p:column>
+                    <p:column headerText="Subtotal">
+                        <h:outputText value="#{ci.subtotal}"/>
+                    </p:column>
+                    <p:column headerText="Prepared?">
+                        <p:selectBooleanCheckbox id="preparedness" value="#{ci.prepared}" itemLabel="Prepared?"/>
+                    </p:column>
+
+                    <p:column headerText="Action">
+                        <p:commandButton icon="ui-icon-trash" actionListener="#{shoppingCartManagedBean.removeCustomisedIngredientFromOrderLineItem}" update="formUpdateOrderLineItem">
+                            <f:attribute name="orderLineItemToRemove" value="#{orderLineItem}"/>
+                            <p:confirm header="Confirmation" message="Are you sure you want to remove #{orderLineItem.recipe.recipeTitle} from cart?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+
+            </p:dialog>
+        </h:form>
+
     </ui:define>
 
 </ui:composition>

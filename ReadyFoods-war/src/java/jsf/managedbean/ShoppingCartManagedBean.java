@@ -48,15 +48,17 @@ public class ShoppingCartManagedBean implements Serializable {
     
     private BigDecimal totalPrice;
     
+    private OrderLineItem orderLineItemToUpdate;
+    
     public ShoppingCartManagedBean() {
         this.orderLineItems = new ArrayList<>();
     }
     
     public void removeFromShoppingCart(ActionEvent event) throws IOException {
-        OrderLineItem recipe = (OrderLineItem) event.getComponent().getAttributes().get("orderLineItemToRemove");
-        orderLineItems.remove(recipe);
-        System.err.println("******* Recipe: " + recipe.getRecipe().getRecipeId() + " removed from cart!");
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product: " + recipe.getRecipe().getRecipeTitle() + " removed from cart!", null));
+        OrderLineItem oli = (OrderLineItem) event.getComponent().getAttributes().get("orderLineItemToRemove");
+        orderLineItems.remove(oli);
+        System.err.println("******* Recipe: " + oli.getRecipe().getRecipeId() + " removed from cart!");
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product: " + oli.getRecipe().getRecipeTitle() + " removed from cart!", null));
     }
     
     public void checkoutShoppingCart(ActionEvent event)throws IOException, CheckOutShoppingCartException, ShoppingCartIsEmptyException {
@@ -82,6 +84,15 @@ public class ShoppingCartManagedBean implements Serializable {
         } else {
             throw new ShoppingCartIsEmptyException("Shopping cart is empty, cannot checkout.");
         }
+    }
+    
+    public void doUpdateOrderLineItem(ActionEvent event)throws IOException{
+        OrderLineItem oli = (OrderLineItem)event.getComponent().getAttributes().get("orderLineItemToUpdate");
+        setOrderLineItemToUpdate(oli);
+    }
+    
+    public void removeCustomisedIngredientFromOrderLineItem(ActionEvent event)throws IOException{
+        CustomisedIngredient ci = (CustomisedIngredient)event.getComponent().getAttributes().get("customisedIngredientToRemove");
     }
 
 
@@ -119,6 +130,20 @@ public class ShoppingCartManagedBean implements Serializable {
     public void setTotalPrice(BigDecimal totalPrice) {
         
         this.totalPrice = totalPrice;
+    }
+
+    /**
+     * @return the orderLineItemToUpdate
+     */
+    public OrderLineItem getOrderLineItemToUpdate() {
+        return orderLineItemToUpdate;
+    }
+
+    /**
+     * @param orderLineItemToUpdate the orderLineItemToUpdate to set
+     */
+    public void setOrderLineItemToUpdate(OrderLineItem orderLineItemToUpdate) {
+        this.orderLineItemToUpdate = orderLineItemToUpdate;
     }
    
     
