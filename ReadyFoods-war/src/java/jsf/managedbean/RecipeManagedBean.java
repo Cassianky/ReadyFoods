@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
@@ -19,6 +21,7 @@ import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import util.exception.RecipeNotFoundException;
 
 @Named(value = "recipeManagedBean")
 @ViewScoped
@@ -34,6 +37,10 @@ public class RecipeManagedBean implements Serializable {
     
     private List<Recipe> allRecipesToView;
     private Recipe recipeToView;
+    
+    
+    private Recipe recipe;
+    
 
     public RecipeManagedBean() {
         recipeToView = new Recipe();
@@ -47,10 +54,13 @@ public class RecipeManagedBean implements Serializable {
     }
 
     public void viewRecipeDetails(ActionEvent event) throws IOException {
-        recipeToView = (Recipe) event.getComponent().getAttributes().get("recipeToView");
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().replace("recipeToView", recipeToView);
+        Long recipeId = (Long)event.getComponent().getAttributes().get("recipeToView");
+
+//        recipeToView = (Recipe) event.getComponent().getAttributes().get("recipeToView");
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().replace("recipeToView", recipeId);
         FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getApplicationContextPath() + "/recipeManagement/viewSingleRecipe.xhtml");
     }
+    
 
     public List<Recipe> getAllRecipesToView() {
         return allRecipesToView;
@@ -66,6 +76,22 @@ public class RecipeManagedBean implements Serializable {
 
     public void setRecipeViewManagedBean(RecipeViewManagedBean recipeViewManagedBean) {
         this.recipeViewManagedBean = recipeViewManagedBean;
+    }
+
+  
+
+    /**
+     * @return the recipe
+     */
+    public Recipe getRecipe() {
+        return recipe;
+    }
+
+    /**
+     * @param recipe the recipe to set
+     */
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
     }
 
 }

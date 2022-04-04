@@ -5,12 +5,17 @@
  */
 package jsf.managedbean;
 
+import ejb.session.stateless.RecipeSessionBeanLocal;
 import entity.Recipe;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
+import util.exception.RecipeNotFoundException;
 
 /**
  *
@@ -20,15 +25,25 @@ import javax.faces.context.FacesContext;
 @ViewScoped
 public class RecipeViewManagedBean implements Serializable {
 
+    @EJB(name = "RecipeSessionBeanLocal")
+    private RecipeSessionBeanLocal recipeSessionBeanLocal;
+
+    
     private Recipe recipe;
     private String formattedRecipeSteps;
+    private Long recipeId;
 
     public RecipeViewManagedBean() {
-        recipe = (Recipe) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("recipeToView");
+        recipeId = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("recipeToView");
     }
 
     @PostConstruct
     public void postConstruct() {
+        try {  
+            recipe = recipeSessionBeanLocal.retrieveRecipeByRecipeId(getRecipeId());
+        } catch (RecipeNotFoundException ex) {
+            ex.printStackTrace();
+        }
         System.out.println("Test recipe: " + recipe.getRecipeTitle());
         System.out.println(recipe.getRecipeSteps());
         System.out.println(formattedRecipeSteps);
@@ -49,6 +64,20 @@ public class RecipeViewManagedBean implements Serializable {
 
     public void setFormattedRecipeSteps(String formattedRecipeSteps) {
         this.formattedRecipeSteps = formattedRecipeSteps;
+    }
+
+    /**
+     * @return the recipeId
+     */
+    public Long getRecipeId() {
+        return recipeId;
+    }
+
+    /**
+     * @param recipeId the recipeId to set
+     */
+    public void setRecipeId(Long recipeId) {
+        this.recipeId = recipeId;
     }
 
 }
