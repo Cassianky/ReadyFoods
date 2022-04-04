@@ -1,0 +1,43 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 2 Apr, 2022, 4:24:49 AM
+    Author     : ngcas
+*/
+
+.customer-img {
+    width: 50%;
+    height: auto;
+    border-radius: 20%;
+    border-style: solid;
+
+}
+
+.content {
+    position: relative;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.noBorders tr, .noBorders td {
+    background: none !important;
+    border: none !important;
+}
+
+.details-output-label {
+    font-size: 20 !important;
+}
+
+.details-output-label-2 {
+    float: right;
+}
+
+.header-text {
+    text-align: center;
+    background-color: white;
+}
+

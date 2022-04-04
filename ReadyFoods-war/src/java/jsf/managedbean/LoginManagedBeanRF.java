@@ -31,14 +31,14 @@ public class LoginManagedBeanRF implements Serializable {
     {
         try
         {
-            System.out.println("****************************1111111111111111111111111");
+
             Customer currentCustomer = customerSessionBeanLocal.customerLogin(this.getEmail(), this.getPassword());
             FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("isLogin", true);
-            System.out.println("****************************222222222222222222222");
+            
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentCustomer", currentCustomer);
             FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.xhtml");
-            System.out.println("****************************3333333333333333333");
+
         
         }
         catch(InvalidLoginCredentialException ex)

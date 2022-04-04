@@ -1,8 +1,7 @@
 package ejb.session.stateless;
 
 import entity.Customer;
-import entity.Food;
-import java.util.List;
+import entity.FoodDiaryRecord;
 import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -14,41 +13,42 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import util.exception.CustomerNotFoundException;
-import util.exception.DeleteFoodException;
-import util.exception.FoodNotFoundException;
+import util.exception.DeleteFoodDiaryRecordException;
+import util.exception.FoodDiaryRecordNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.UnknownPersistenceException;
 
 @Stateless
-public class FoodSessionBean implements FoodSessionBeanLocal {
+public class FoodDiaryRecordSessionBean implements FoodDiaryRecordSessionBeanLocal {
 
-    @EJB
+    @EJB(name = "CustomerSessionBeanLocal")
     private CustomerSessionBeanLocal customerSessionBeanLocal;
-    
+
     @PersistenceContext(unitName = "ReadyFoods-ejbPU")
     private EntityManager em;
 
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
 
-    public FoodSessionBean() {
+    
+    public FoodDiaryRecordSessionBean() {
         validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
     }
-
+    
     @Override
-    public Long createNewFood(Food newFood, Long customerId) throws CustomerNotFoundException, UnknownPersistenceException, InputDataValidationException {
-        Set<ConstraintViolation<Food>> constraintViolations = validator.validate(newFood);
+    public Long createNewFoodDiaryRecord (FoodDiaryRecord newFoodDiaryRecord, Long customerId) throws CustomerNotFoundException, UnknownPersistenceException, InputDataValidationException {
+        Set<ConstraintViolation<FoodDiaryRecord>> constraintViolations = validator.validate(newFoodDiaryRecord);
         Customer customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(customerId);
         
         if (constraintViolations.isEmpty()) {
             try {
                 //Association
-                customer.addFood(newFood);
-                em.persist(newFood);
+                customer.addFoodDiaryRecord(newFoodDiaryRecord);
+                em.persist(newFoodDiaryRecord);
                 em.flush();
 
-                return newFood.getFoodId();
+                return newFoodDiaryRecord.getFoodDiaryRecordId();
             } catch (PersistenceException ex) {
                 throw new UnknownPersistenceException(ex.getMessage());
             }
@@ -57,39 +57,32 @@ public class FoodSessionBean implements FoodSessionBeanLocal {
         }
     }
     
-    @Override
-    public Food retrieveFoodByFoodId(Long foodId) throws FoodNotFoundException 
+     @Override
+    public FoodDiaryRecord retrieveFoodDiaryRecordByFoodDiaryRecordId(Long foodDiaryRecordId) throws FoodDiaryRecordNotFoundException 
     {
-        Food food = em.find(Food.class, foodId);
+        FoodDiaryRecord foodDiaryRecord = em.find(FoodDiaryRecord.class, foodDiaryRecordId);
 
-        if (food != null) {
+        if (foodDiaryRecord != null) {
 
-            return food;
+            return foodDiaryRecord;
         } else {
-            throw new FoodNotFoundException("Food ID " + foodId + " does not exist!");
+            throw new FoodDiaryRecordNotFoundException("Food Diary Record ID " + foodDiaryRecordId + " does not exist!");
         }
     }
     
     @Override
-    public void deleteFoodByFoodId(Long foodId, Long customerId) throws FoodNotFoundException, DeleteFoodException, CustomerNotFoundException
+    public void deleteFoodDiaryRecordByFoodDiaryRecordId(Long foodDiaryRecordId, Long customerId) throws FoodDiaryRecordNotFoundException, DeleteFoodDiaryRecordException, CustomerNotFoundException
     {
-        Food foodToDelete = retrieveFoodByFoodId(foodId);
+        FoodDiaryRecord foodDiaryRecord = retrieveFoodDiaryRecordByFoodDiaryRecordId(foodDiaryRecordId);
         Customer customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(customerId);
         
         //Disassociation
-        customer.removeFood(foodToDelete);
+        customer.removeFoodDiaryRecord(foodDiaryRecord);
         
-        em.remove(foodToDelete);
-    } 
-    
-    @Override
-    public List<Food> retrieveAllFoodsByCustomerId(Long customerId) throws CustomerNotFoundException
-    {
-        Customer customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(customerId);
-        return customer.getFoods();
+        em.remove(foodDiaryRecord);
     }
-
-    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Food>> constraintViolations) {
+    
+    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<FoodDiaryRecord>> constraintViolations) {
         String msg = "Input data validation error!:";
 
         for (ConstraintViolation constraintViolation : constraintViolations) {

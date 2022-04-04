@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -25,35 +26,35 @@ public class Food implements Serializable {
     private String name;
     @Column(nullable = false, length = 32)
     @NotNull
-    private Double calories;
+    @Min(0)
+    private Integer calories;
     @Column(nullable = false, length = 32)
     @NotNull
-    private Double carbs;
+    @Min(0)
+    private Integer carbs;
     @Column(nullable = false, length = 32)
     @NotNull
-    private Double protein;
+    @Min(0)
+    private Integer protein;
     @Column(nullable = false, length = 32)
     @NotNull
-    private Double fats;
+    @Min(0)
+    private Integer fats;
     @Column(nullable = false, length = 32)
     @NotNull
-    private Double sugar;
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false)
-    @NotNull
-    private Date foodCreatedDate;
+    @Min(0)
+    private Integer sugar;
 
     public Food() {
     }
 
-    public Food(String name, Double calories, Double carbs, Double protein, Double fats, Double sugar, Date foodCreatedDate) {
+    public Food(String name, Integer calories, Integer carbs, Integer protein, Integer fats, Integer sugar) {
         this.name = name;
         this.calories = calories;
         this.carbs = carbs;
         this.protein = protein;
         this.fats = fats;
         this.sugar = sugar;
-        this.foodCreatedDate = foodCreatedDate;
     }
 
     public Long getFoodId() {
@@ -97,52 +98,43 @@ public class Food implements Serializable {
         this.name = name;
     }
 
-    public Double getCalories() {
+    public Integer getCalories() {
         return calories;
     }
 
-    public void setCalories(Double calories) {
+    public void setCalories(Integer calories) {
         this.calories = calories;
     }
 
-    public Double getCarbs() {
+    public Integer getCarbs() {
         return carbs;
     }
 
-    public void setCarbs(Double carbs) {
+    public void setCarbs(Integer carbs) {
         this.carbs = carbs;
     }
 
-    public Double getProtein() {
+    public Integer getProtein() {
         return protein;
     }
 
-    public void setProtein(Double protein) {
+    public void setProtein(Integer protein) {
         this.protein = protein;
     }
 
-    public Double getFats() {
+    public Integer getFats() {
         return fats;
     }
 
-    public void setFats(Double fats) {
+    public void setFats(Integer fats) {
         this.fats = fats;
     }
 
-    public Double getSugar() {
+    public Integer getSugar() {
         return sugar;
     }
 
-    public void setSugar(Double sugar) {
+    public void setSugar(Integer sugar) {
         this.sugar = sugar;
     }
-
-    public Date getFoodCreatedDate() {
-        return foodCreatedDate;
-    }
-
-    public void setFoodCreatedDate(Date foodCreatedDate) {
-        this.foodCreatedDate = foodCreatedDate;
-    }
-    
 }

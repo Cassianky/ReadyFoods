@@ -94,6 +94,8 @@ public class Customer implements Serializable {
     @NotNull
     private ActivityLevel activityLevel;
     
+    private String profilePicture;
+    
     @OneToMany(fetch = FetchType.LAZY)
     private List<Subscription> subscriptions;
     
@@ -111,6 +113,9 @@ public class Customer implements Serializable {
     
     @OneToOne(fetch = FetchType.LAZY)
     private CreditCard creditCard;
+    
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<FoodDiaryRecord> foodDiaryRecords;
 
     public Customer() {
         bookmarkedRecipes = new ArrayList<>();
@@ -121,6 +126,7 @@ public class Customer implements Serializable {
         amountSpent = new BigDecimal(0);
         isBanned = false;
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);
+        profilePicture = "";
     }
 
     public Customer(String userName, String firstName, String lastName, String contactNumber, String password, String email, String address, Integer age, DietType dietType, Gender gender, ActivityLevel activityLevel) {
@@ -399,6 +405,41 @@ public class Customer implements Serializable {
 
     public void setCreditCard(CreditCard creditCard) {
         this.creditCard = creditCard;
+    }
+
+    /**
+     * @return the foodDiaryItem
+     */
+    public List<FoodDiaryRecord> getFoodDiaryRecords() {
+        return this.foodDiaryRecords;
+    }
+
+    public void addFoodDiaryRecord(FoodDiaryRecord foodDiaryRecord) {
+        if(!this.foodDiaryRecords.contains(foodDiaryRecord))
+        {
+            this.getFoodDiaryRecords().add(foodDiaryRecord);
+        }
+    }
+    
+    public void removeFoodDiaryRecord(FoodDiaryRecord foodDiaryRecord) {
+        if(this.getFoodDiaryRecords().contains(foodDiaryRecord))
+        {
+            this.getFoodDiaryRecords().remove(foodDiaryRecord);
+        }
+    }
+
+    /**
+     * @return the profilePicture
+     */
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    /**
+     * @param profilePicture the profilePicture to set
+     */
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
     }
     
 }

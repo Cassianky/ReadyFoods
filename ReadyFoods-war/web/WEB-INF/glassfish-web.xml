@@ -3,7 +3,7 @@
 <glassfish-web-app error-url="">
   <context-root>/ReadyFoods-war</context-root>
   <resource-ref>
-    <res-ref-name>readyFoods</res-ref-name>
+    <res-ref-name>readyFoodsDataSource</res-ref-name>
     <jndi-name>jdbc/readyFoods</jndi-name>
   </resource-ref>
   <class-loader delegate="true"/>
@@ -12,4 +12,5 @@
       <description>Keep a copy of the generated servlet class' java code.</description>
     </property>
   </jsp-config>
+  <property name="alternatedocroot_1" value="from=/uploadedFiles/* dir=C:/glassfish-5.1.0-uploadedfiles"/>
 </glassfish-web-app>

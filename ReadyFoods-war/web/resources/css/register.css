@@ -1,0 +1,40 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 2 Apr, 2022, 7:37:31 AM
+    Author     : ngcas
+*/
+
+.register{
+    width: 100%;
+    background-color: #FFFFFF !important;
+}
+
+.registerBg {
+    background: url("#{resource['images/register.png']}");
+    background-size: cover;
+    height: auto;
+    padding-top: 12%;
+    padding-bottom: 20%;
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+.ui-panelgrid td {
+    background-color: white !important;
+}
+
+.header-register {
+    font-weight: bold;
+    text-align: center;
+    
+}
+
+.register-button {
+    font-size: 18 !important;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
