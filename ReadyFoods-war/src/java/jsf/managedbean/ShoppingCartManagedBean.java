@@ -48,9 +48,6 @@ public class ShoppingCartManagedBean implements Serializable {
     
     private BigDecimal totalPrice;
     
-    
-
-    
     public ShoppingCartManagedBean() {
         this.orderLineItems = new ArrayList<>();
     }

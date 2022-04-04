@@ -105,7 +105,7 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
     @Override
     public List<Recipe> retrieveAllRecipes() {
         
-        Query query = em.createQuery("SELECT r FROM Recipe ORDER ORDER BY r.recipeTitle");
+        Query query = em.createQuery("SELECT r FROM Recipe r ORDER BY r.recipeTitle");
         
         List<Recipe> recipes = query.getResultList();
         

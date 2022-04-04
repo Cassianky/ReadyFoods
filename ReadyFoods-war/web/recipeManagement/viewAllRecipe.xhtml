@@ -11,7 +11,7 @@
     <ui:define name="content">
         <ez:Breadcrumb pageName="viewAllRecipe" />
 
-        <h:form id >
+        <h:form id="formViewAllRecipes" >
             <p:dataGrid value="#{recipeManagedBean.allRecipesToView}" var="recipe" columns="3" layout="grid"
                         rows="10" paginator="true" id="recipe"
                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -19,7 +19,7 @@
             </p:dataGrid>
 
             <f:facet name="header">
-                Ready Food Recipes
+                Ready Foods Recipes
             </f:facet>
 
             <p:panel header="#{recipe.recipeTitle}" style="text-align:center">
@@ -27,7 +27,7 @@
                     <p:graphicImage name="resources/images/300x300.png"/> 
 
                     <h:outputText value="Cooking Time: #{recipe.cookingTime}" />
-                    <<h:outputText value="Chef: #{recipe.recipeChef}" />
+                    <h:outputText value="Chef: #{recipe.recipeChef}" />
 
                     <p:commandLink actionListener="#{recipeManagedBean.viewRecipeDetails}" title="View Detail">
                         <h:outputText styleClass="pi pi-search" style="margin:0 auto;"/>
