@@ -37,42 +37,39 @@ public class FoodDiaryManagedBean implements Serializable {
     private FoodDiaryRecordSessionBeanLocal foodDiaryRecordSessionBeanLocal;
     @EJB
     private FoodSessionBeanLocal foodSessionBeanLocal;
-    
+
     private ScheduleModel scheduleModel;
-    private DefaultScheduleEvent scheduleEvent;
+    private DefaultScheduleEvent<FoodCopy> scheduleEvent;
     private List<Food> foods;
     private List<FoodCopy> foodCopies;
     private Customer currentCustomer;
-    
-    
-    public FoodDiaryManagedBean() 
-    {
+
+    public FoodDiaryManagedBean() {
         scheduleModel = new DefaultScheduleModel();
-        scheduleEvent = new DefaultScheduleEvent();
-        scheduleEvent.setData(new FoodCopy());
+        scheduleEvent = new DefaultScheduleEvent<FoodCopy>();
+        
         foods = new ArrayList<>();
         foodCopies = new ArrayList<>();
     }
 
     @PostConstruct
-    public void postConstruct()
-    {
+    public void postConstruct() {
+        scheduleEvent.setData(new FoodCopy());
         scheduleModel.addEvent(new DefaultScheduleEvent("Champions League Match", previousDay8Pm(), previousDay11Pm()));
-          try {
+        try {
             setCurrentCustomer((Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer"));
             this.foods = foodSessionBeanLocal.retrieveAllFoodsByCustomerId(getCurrentCustomer().getCustomerId());
-            
-            for(int i = 0; i < this.foods.size(); i++) 
-            {
+
+            for (int i = 0; i < this.foods.size(); i++) {
                 getFoodCopies().add(new FoodCopy(foods.get(i).getName()));
             }
-        
+
         } catch (CustomerNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Customer Not Found: " + ex.getMessage(), null));
         }
 
     }
-    
+
     public ScheduleModel getScheduleModel() {
         return scheduleModel;
     }
@@ -80,7 +77,7 @@ public class FoodDiaryManagedBean implements Serializable {
     public void setScheduleModel(ScheduleModel scheduleModel) {
         this.scheduleModel = scheduleModel;
     }
-    
+
     public ScheduleEvent getScheduleEvent() {
         return scheduleEvent;
     }
@@ -88,23 +85,24 @@ public class FoodDiaryManagedBean implements Serializable {
     public void setScheduleEvent(DefaultScheduleEvent scheduleEvent) {
         this.scheduleEvent = scheduleEvent;
     }
-    
-    public void addEvent(ActionEvent actionEvent) throws CustomerNotFoundException, UnknownPersistenceException 
-    {
+
+    public void addEvent(ActionEvent actionEvent) throws CustomerNotFoundException, UnknownPersistenceException {
         try {
-        if(scheduleEvent.getId() == null) {
-            scheduleModel.addEvent(scheduleEvent);
-            FoodDiaryRecord newFoodDiaryRecord = new FoodDiaryRecord();
-            newFoodDiaryRecord.setTitle(scheduleEvent.getTitle());
-            newFoodDiaryRecord.setDescription(scheduleEvent.getDescription());
-            newFoodDiaryRecord.setStartDate(scheduleEvent.getStartDate());
-            newFoodDiaryRecord.setEndDate(scheduleEvent.getEndDate());
-            newFoodDiaryRecord.setFoodCopy((FoodCopy) scheduleEvent.getData());
-            foodDiaryRecordSessionBeanLocal.createNewFoodDiaryRecord(newFoodDiaryRecord, currentCustomer.getCustomerId());
-        }
-        scheduleEvent = new DefaultScheduleEvent();
-        
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New Diary Record Added Successfully!", null));
+            if (scheduleEvent.getId() == null) {
+
+                scheduleEvent.setData(new FoodCopy());
+                scheduleModel.addEvent(scheduleEvent);
+                FoodDiaryRecord newFoodDiaryRecord = new FoodDiaryRecord();
+                newFoodDiaryRecord.setTitle(scheduleEvent.getTitle());
+                newFoodDiaryRecord.setDescription(scheduleEvent.getDescription());
+                newFoodDiaryRecord.setStartDate(scheduleEvent.getStartDate());
+                newFoodDiaryRecord.setEndDate(scheduleEvent.getEndDate());
+                newFoodDiaryRecord.setFoodCopy((FoodCopy) scheduleEvent.getData());
+                foodDiaryRecordSessionBeanLocal.createNewFoodDiaryRecord(newFoodDiaryRecord, currentCustomer.getCustomerId());
+            }
+            scheduleEvent = new DefaultScheduleEvent<FoodCopy>();
+
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New Diary Record Added Successfully!", null));
         } catch (CustomerNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Customer Not Found: " + ex.getMessage(), null));
         } catch (InputDataValidationException ex) {
@@ -113,66 +111,48 @@ public class FoodDiaryManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while creating the new diary record: " + ex.getMessage(), null));
         }
     }
-    
-    public void deleteEvent(ActionEvent actionEvent)
-    {
-        if(scheduleEvent.getId() != null) {
+
+    public void deleteEvent(ActionEvent actionEvent) {
+        if (scheduleEvent.getId() != null) {
             scheduleModel.deleteEvent(scheduleEvent);
         }
-        scheduleEvent = new DefaultScheduleEvent();
-        scheduleEvent.setData(new Food());
+        scheduleEvent = new DefaultScheduleEvent<FoodCopy>();
+        scheduleEvent.setData(new FoodCopy());
     }
-    
-    public void onEventSelect(SelectEvent selectEvent) 
-    {
+
+    public void onEventSelect(SelectEvent selectEvent) {
         scheduleEvent = (DefaultScheduleEvent) selectEvent.getObject();
         scheduleEvent.getData();
     }
-    
-    
-    
-    public void onDateSelect(SelectEvent selectEvent) 
-    {
+
+    public void onDateSelect(SelectEvent selectEvent) {
         scheduleEvent = new DefaultScheduleEvent("", (LocalDateTime) selectEvent.getObject(), (LocalDateTime) selectEvent.getObject());
     }
-    
-    
-    
-    public void onEventMove(ScheduleEntryMoveEvent scheduleEvent) 
-    {
+
+    public void onEventMove(ScheduleEntryMoveEvent scheduleEvent) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Day delta:" + scheduleEvent.getDayDelta() + ", Minute delta:" + scheduleEvent.getMinuteDelta());
-         
+
         addMessage(message);
     }
-    
-    
-    
-    public void onEventResize(ScheduleEntryResizeEvent scheduleEvent) 
-    {
+
+    public void onEventResize(ScheduleEntryResizeEvent scheduleEvent) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event resized", "Day delta:" + scheduleEvent.getDayDeltaStart() + " to " + scheduleEvent.getDayDeltaEnd() + ", Minute delta:" + scheduleEvent.getMinuteDeltaStart() + " to " + scheduleEvent.getMinuteDeltaEnd());
-         
+
         addMessage(message);
     }
-     
-    
-    
-    private void addMessage(FacesMessage message) 
-    {
+
+    private void addMessage(FacesMessage message) {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
-    
-    
-    private Calendar today() 
-    {
+    private Calendar today() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 0, 0, 0);
- 
+
         return calendar;
     }
-    
-    private LocalDateTime previousDay8Pm() 
-    {
+
+    private LocalDateTime previousDay8Pm() {
         Calendar t = (Calendar) today().clone();
         t.set(Calendar.AM_PM, Calendar.PM);
         t.set(Calendar.DATE, t.get(Calendar.DATE) - 1);
@@ -181,8 +161,7 @@ public class FoodDiaryManagedBean implements Serializable {
         return LocalDateTime.ofInstant(t.toInstant(), t.getTimeZone().toZoneId());
     }
 
-    private LocalDateTime previousDay11Pm() 
-    {
+    private LocalDateTime previousDay11Pm() {
         Calendar t = (Calendar) today().clone();
         t.set(Calendar.AM_PM, Calendar.PM);
         t.set(Calendar.DATE, t.get(Calendar.DATE) - 1);
@@ -221,3 +200,4 @@ public class FoodDiaryManagedBean implements Serializable {
         this.foodCopies = foodCopies;
     }
 }
+

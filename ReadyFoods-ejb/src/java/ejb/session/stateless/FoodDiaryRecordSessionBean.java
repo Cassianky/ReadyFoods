@@ -38,6 +38,7 @@ public class FoodDiaryRecordSessionBean implements FoodDiaryRecordSessionBeanLoc
     
     @Override
     public Long createNewFoodDiaryRecord (FoodDiaryRecord newFoodDiaryRecord, Long customerId) throws CustomerNotFoundException, UnknownPersistenceException, InputDataValidationException {
+        System.out.println("Called createNewFoodDiaryRecord");
         Set<ConstraintViolation<FoodDiaryRecord>> constraintViolations = validator.validate(newFoodDiaryRecord);
         Customer customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(customerId);
         
