@@ -10,6 +10,7 @@ import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -20,22 +21,34 @@ import javax.annotation.PostConstruct;
 public class RecipeViewManagedBean implements Serializable {
 
     private Recipe recipe;
+    private String formattedRecipeSteps;
 
     public RecipeViewManagedBean() {
-        recipe = new Recipe();
+        recipe = (Recipe) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("recipeToView");
     }
 
     @PostConstruct
     public void postConstruct() {
+        System.out.println("Test recipe: " + recipe.getRecipeTitle());
+        System.out.println(recipe.getRecipeSteps());
+        System.out.println(formattedRecipeSteps);
     }
 
     public Recipe getRecipe() {
+        System.out.println("Recipe: " + recipe.getRecipeTitle());
         return recipe;
     }
 
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
     }
-    
+
+    public String getFormattedRecipeSteps() {
+        return formattedRecipeSteps;
+    }
+
+    public void setFormattedRecipeSteps(String formattedRecipeSteps) {
+        this.formattedRecipeSteps = formattedRecipeSteps;
+    }
 
 }

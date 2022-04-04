@@ -16,25 +16,25 @@
                         rows="10" paginator="true" id="recipe"
                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                         rowsPerPageTemplate="5,10,25">
+
+                <f:facet name="header">
+                    Ready Foods Recipes
+                </f:facet>
+
+                <p:panel header="#{recipe.recipeTitle}" style="text-align:center">
+                    <h:panelGrid columns="1" style="width:100%">
+                        <p:graphicImage class="recipePic" style="object-fit: scale-down; overflow: hidden" name="300x300.png" library="images" /> 
+                        <h:outputText value="Cooking Time: #{recipe.cookingTime}" />
+                        <h:outputText value="Chef: #{recipe.recipeChef}" />
+
+                        <p:commandLink actionListener="#{recipeManagedBean.viewRecipeDetails}" title="View Detail">
+                            <h:outputText styleClass="pi pi-search" style="margin:0 auto;"/>
+                            <f:attribute value="#{recipe}" name="recipeToView"/>
+                        </p:commandLink>
+                    </h:panelGrid>
+                </p:panel>
+
             </p:dataGrid>
-
-            <f:facet name="header">
-                Ready Foods Recipes
-            </f:facet>
-
-            <p:panel header="#{recipe.recipeTitle}" style="text-align:center">
-                <h:panelGrid columns="1" style="width:100%">
-                    <p:graphicImage name="resources/images/300x300.png"/> 
-
-                    <h:outputText value="Cooking Time: #{recipe.cookingTime}" />
-                    <h:outputText value="Chef: #{recipe.recipeChef}" />
-
-                    <p:commandLink actionListener="#{recipeManagedBean.viewRecipeDetails}" title="View Detail">
-                        <h:outputText styleClass="pi pi-search" style="margin:0 auto;"/>
-                        <f:setPropertyActionListener value="#{recipe}" target="#{recipeViewManagedBean.recipe}" />
-                    </p:commandLink>
-                </h:panelGrid>
-            </p:panel>
 
         </h:form>
 

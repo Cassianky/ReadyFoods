@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import util.enumeration.PreparationMethod;
 
 @Entity
 public class IngredientSpecification implements Serializable {
@@ -22,6 +23,7 @@ public class IngredientSpecification implements Serializable {
     @NotNull
     @Min(1)
     private Integer quantityPerServing;
+    private PreparationMethod preparationMethod;
     @JoinColumn(nullable = false)
     @NotNull
     private Ingredient ingredient;
@@ -29,16 +31,21 @@ public class IngredientSpecification implements Serializable {
     public IngredientSpecification() {
     }
     
-    public IngredientSpecification(Integer quantity, Ingredient ingredient) {
+        public IngredientSpecification(Integer quantityPerServing) {
+        this.quantityPerServing = quantityPerServing;
+        this.preparationMethod = null;
+    }
+    
+    public IngredientSpecification(Integer quantity, PreparationMethod preparationMethod) {
+        this.quantityPerServing = quantity;
+        this.preparationMethod = preparationMethod;
+    }
+        
+    public IngredientSpecification(Integer quantity, Ingredient ingredient, PreparationMethod preparationMethod) {
         this.quantityPerServing = quantity;
         this.ingredient = ingredient;
+        this.preparationMethod = preparationMethod;
     }
-
-    public IngredientSpecification(Integer quantityPerServing) {
-        this.quantityPerServing = quantityPerServing;
-    }
-    
-    
     
     
     public Long getIngredientSpecificationId() {
@@ -88,6 +95,14 @@ public class IngredientSpecification implements Serializable {
 
     public void setIngredient(Ingredient ingredient) {
         this.ingredient = ingredient;
+    }
+
+    public PreparationMethod getPreparationMethod() {
+        return preparationMethod;
+    }
+
+    public void setPreparationMethod(PreparationMethod preparationMethod) {
+        this.preparationMethod = preparationMethod;
     }
 
     
