@@ -10,49 +10,109 @@
 
     <ui:define name="content">
         <ez:Breadcrumb pageName="viewSingleRecipe" />
+        <h:form>
 
-        <p:panel id="panelRecipeDetail" header="#{recipeViewManagedBean.recipe.recipeTitle}" footer="Add to Cart (to implement action listner later" style="margin-bottom:20px">
-            <h:panelGrid columns="1" cellpadding="10">
 
-                <iframe width="923" height="519" src="#{recipeViewManagedBean.recipe.videoURL}" title="YouTube video player" 
-                        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen="true" />
+            <p:panel id="panelRecipeDetail" header="#{recipeViewManagedBean.recipe.recipeTitle}" style="margin-bottom:20px">
+                <h:panelGrid columns="1" cellpadding="10">
 
-                <p:graphicImage name="300x300.png" library="images"/>
-                <!--image to be acquired from object source later-->
+                    <iframe width="923" height="519" src="#{recipeViewManagedBean.recipe.videoURL}" title="YouTube video player" 
+                            frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen="true" />
 
-                <p:panelGrid columns="2">
-                    <h:outputText value="Recipe Chef: #{recipeViewManagedBean.recipe.recipeChef}" />
-                    <h:outputText value="Coking Time: #{recipeViewManagedBean.recipe.cookingTime}" />
-                </p:panelGrid>
+                    <p:graphicImage name="300x300.png" library="images"/>
+                    <!--image to be acquired from object source later-->
 
-                <p:panelGrid columns="4">
-                    <h:outputText value="Calories per serving: #{recipeViewManagedBean.recipe.caloriesPerServing}" />
-                    <h:outputText value="Carbohydrates per serving: #{recipeViewManagedBean.recipe.carbsPerServing}" />
-                    <h:outputText value="Protein per serving: #{recipeViewManagedBean.recipe.proteinsPerServing}" />
-                    <h:outputText value="Sugar per serving: #{recipeViewManagedBean.recipe.sugarPerServing}" />
-                </p:panelGrid>
-
-                <p:dataList value="#{recipeViewManagedBean.recipe.ingredientSpecificationList}" var="ispecs" type="ordered">
-                    <f:facet name="ingredientList">
-                        List of Ingredients and Quantity for 1 serving
-                    </f:facet>
-                    #{ispecs.ingredient.name}: #{ispecs.quantityPerServing}#{ispecs.ingredient.ingredientUnit}
-                    <br/>
-                </p:dataList>
-
-                <p:panelGrid columns="1">
-                    <h:outputText value="Steps: #{recipeViewManagedBean.recipe.recipeSteps.replace('/n', '&lt;br/&gt;')}" />
-                </p:panelGrid>
-
-                <p:carousel value="#{recipeViewManagedBean.recipe.categories}" var="cat" headerText="Categories" itemStyle="height:25px;text-align:center" numVisible="1" style="width:300px" circular="true">
-                    <p:panelGrid columns="1" style="width:100%" layout="grid" styleClass="ui-panelgrid-blank">
-                        <h:commandLink value="#{cat.name}"/>
+                    <p:panelGrid columns="2">
+                        <h:outputText value="Recipe Chef: #{recipeViewManagedBean.recipe.recipeChef}" />
+                        <h:outputText value="Cooking Time: #{recipeViewManagedBean.recipe.cookingTime}" />
                     </p:panelGrid>
-                </p:carousel>
+
+                    <p:panelGrid columns="4">
+                        <h:outputText value="Calories per serving: #{recipeViewManagedBean.recipe.caloriesPerServing}" />
+                        <h:outputText value="Carbohydrates per serving: #{recipeViewManagedBean.recipe.carbsPerServing}" />
+                        <h:outputText value="Protein per serving: #{recipeViewManagedBean.recipe.proteinsPerServing}" />
+                        <h:outputText value="Sugar per serving: #{recipeViewManagedBean.recipe.sugarPerServing}" />
+                    </p:panelGrid>
+
+                    <p:dataList value="#{recipeViewManagedBean.recipe.ingredientSpecificationList}" var="ispecs" type="ordered">
+                        <f:facet name="ingredientList">
+                            List of Ingredients and Quantity for 1 serving
+                        </f:facet>
+                        #{ispecs.ingredient.name}: #{ispecs.quantityPerServing}#{ispecs.ingredient.ingredientUnit}
+                        <br/>
+                    </p:dataList>
+
+                    <p:panelGrid columns="1">
+                        <h:outputText value="Steps: #{recipeViewManagedBean.recipe.recipeSteps.replace('/n', '&lt;br/&gt;')}" />
+                    </p:panelGrid>
+
+                    <p:carousel value="#{recipeViewManagedBean.recipe.categories}" var="cat" headerText="Categories" itemStyle="height:25px;text-align:center" numVisible="1" style="width:300px" circular="true">
+                        <p:panelGrid columns="1" style="width:100%" layout="grid" styleClass="ui-panelgrid-blank">
+                            <h:commandLink value="#{cat.name}"/>
+                        </p:panelGrid>
+                    </p:carousel>
+
+                    <p:commandButton value="Add Recipe to Cart!" 
+                                     icon="pi pi-shopping-cart"
+                                     oncomplete="PF('dialogAddRecipeToCart').show()" 
+                                     title="Select Ingredients"
+                                     update="formAddRecipeToCart"
+                                     actionListener="#{shoppingCartManagedBean.addRecipeToCart}">
+                        <f:attribute name="recipeToAdd" value="#{recipeViewManagedBean.recipe}"/>
+                    </p:commandButton>
+
+                </h:panelGrid>
+
+            </p:panel>
+
+        </h:form>
+
+        <h:form id="formAddRecipeToCart">
+            <p:dialog id="dialogAddRecipeToCart" widgetVar="dialogAddRecipeToCart" header="Add Recipe To Cart" closable="true">
+                <p:dataTable id="dataTableRecipeIngredients"
+                             value="#{shoppingCartViewManagedBean.currentRecipe.ingredientSpecificationList}"
+                             var="ingredSpec">
+                    <p:column headerText="Ingredient Name">
+                        <h:outputText value="#{ingredSpec.ingredient.name}" />
+                    </p:column>
+                    <p:column headerText="Quantity">
+                        <p:spinner id="updateQuantity" value="#{ingredSpec.quantityPerServing}" stepFactor="1" min="1"/>
+                    </p:column>
+                    <p:column headerText="Unit Price">
+                        <h:outputText value="#{ingredSpec.ingredient.unitPrice}"/>
+                    </p:column>
+                    <p:column headerText="Prepared?">
+                        <p:selectOneMenu id="preparedness" value="#{ingredSpec.preparationMethod}">
+                            <f:selectItem itemValue="#{null}" itemLabel="[Select One]" noSelectionOption="true" />
+                            <f:selectItems value="#{shoppingCartViewManagedBean.prepEnums}" var="prepMethod" itemValue="#{prepMethod}" itemLabel="#{prepMethod}" />
+                        </p:selectOneMenu>
+                    </p:column>
+
+                    <p:column headerText="Action">
+                        <p:commandButton icon="ui-icon-trash" 
+                                         actionListener="#{shoppingCartViewManagedBean.removeIngredSpecFromRecipe}" 
+                                         update="formAddRecipeToCart">
+                            <f:attribute name="ingredSpecToRemove" value="#{ingredSpec}"/>   
+                        </p:commandButton>
+
+                        <p:commandButton value="Reset" 
+                                         icon="pi pi-undo"
+                                         actionListener="#{shoppingCartViewManagedBean.reset}"
+                                         update="formAddRecipeToCart">
+                            <f:attribute name="ingredSpecToRemove" value="#{ingredSpec}"/>   
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+
+                <div></div>
+
+                <p:commandButton value="Confirm Add To Cart"
+                                 icon="pi pi-check"
+                                 actionListener="#{shoppingCartViewManagedBean.confirmAddToCart}"/>
                 
-            </h:panelGrid>
-        </p:panel>
+            </p:dialog>
+        </h:form>
 
     </ui:define>
 </ui:composition>
