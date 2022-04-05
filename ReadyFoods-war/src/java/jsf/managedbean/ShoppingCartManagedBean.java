@@ -91,8 +91,9 @@ public class ShoppingCartManagedBean implements Serializable {
 
     public void removeFromShoppingCart(ActionEvent event) throws IOException {
         OrderLineItem oli = (OrderLineItem) event.getComponent().getAttributes().get("orderLineItemToRemove");
+         System.out.println("******* Recipe: " + oli.getRecipe().getRecipeId() + " removed from cart!");
         orderLineItems.remove(oli);
-        System.err.println("******* Recipe: " + oli.getRecipe().getRecipeId() + " removed from cart!");
+//       
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product: " + oli.getRecipe().getRecipeTitle() + " removed from cart!", null));
     }
 

@@ -9,12 +9,15 @@ import ejb.session.stateless.IngredientSessionBeanLocal;
 import ejb.session.stateless.IngredientSpecificaitonSessionBeanLocal;
 import ejb.session.stateless.RecipeSessionBeanLocal;
 import entity.IngredientSpecification;
+import entity.OrderLineItem;
 import entity.Recipe;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import util.enumeration.PreparationMethod;
@@ -45,7 +48,7 @@ public class ShoppingCartViewManagedBean implements Serializable {
     private PreparationMethod[] prepEnums = PreparationMethod.values();
 
     public ShoppingCartViewManagedBean() {
-        
+
     }
 
     @PostConstruct
@@ -56,17 +59,29 @@ public class ShoppingCartViewManagedBean implements Serializable {
     public void addRecipeToCart(ActionEvent event) {
 
         Recipe recipe = (Recipe) event.getComponent().getAttributes().get("recipeToAdd");
+        Boolean done = false;
 
-        if (currentRecipe != null && currentRecipe.getRecipeId() == null) {
-            setCurrentRecipe(recipe);
-            System.out.println("addRecipeToCart()********:" + getCurrentRecipe().getRecipeTitle());
-        } else {
-            System.out.println("addRecipeToCart()********:" + " you have already added this recipe to cart");
+        for (OrderLineItem oli : shoppingCartManagedBean.getOrderLineItems()) {
+            System.out.println(oli.getRecipe().getRecipeId());
+            if (oli.getRecipe().getRecipeId() == recipe.getRecipeId()) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Recipe has already been added to cart! Go to 'my shopping cart' to edit it!", null));
+                done = true;
+                break;
+            }
+        }
+        if (done == false) {
+            if (currentRecipe != null && currentRecipe.getRecipeId() == null) {
+                setCurrentRecipe(recipe);
+                System.out.println("addRecipeToCart()********:" + getCurrentRecipe().getRecipeTitle());
+            } else {
+                System.out.println("addRecipeToCart()********:" + " you have already added this recipe to cart");
+            }
+
+            for (IngredientSpecification is : getCurrentRecipe().getIngredientSpecificationList()) {
+                System.out.println("Ingredient Spec********:" + is.getIngredient().getName() + ", " + is.getQuantityPerServing());
+            }
         }
 
-        for (IngredientSpecification is : getCurrentRecipe().getIngredientSpecificationList()) {
-            System.out.println("Ingredient Spec********:" + is.getIngredient().getName() + ", " + is.getQuantityPerServing());
-        }
     }
 
     public void removeIngredSpecFromRecipe(ActionEvent event) {

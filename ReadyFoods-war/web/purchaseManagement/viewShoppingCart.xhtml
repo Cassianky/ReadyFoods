@@ -14,23 +14,6 @@
         <div>
             <h3>View Shopping Cart</h3>
         </div>
-        <style type="text/css"> 
-
-            .ui-dataview-list .ui-dataview-row {
-                border-bottom: 1px solid #A8A8A8;
-                padding: 25px 10px;
-                /* with the exported variables from Nova and Luna Themes*/
-                border-bottom-color: var(--input-border-color, #A8A8A8);
-            }
-
-            .logo {
-                width: 1%;
-            }
-            .detail {
-                width: 85%;
-                padding-left: 50px;
-            }
-        </style>
 
         <h:form id="formShoppingCart">
 
@@ -39,8 +22,8 @@
                         styleClass="ui-noborder"
                         gridIcon="pi pi-th-large" listIcon="pi pi-bars">
                 <p:dataViewListItem>
-                    <h:panelGrid columns="3" style="width:100%" columnClasses="logo,detail">
-                        <p:graphicImage height="100" width="100" style="border-bottom-style: dashed" name="300x300.png" library="images"/>
+                    <h:panelGrid columns="4" style="width:100%" columnClasses="logo,detail">
+                        <p:graphicImage styleClass="viewRecipeImageInCart" height="100" width="100" name="300x300.png" library="images"/>
 
                         <p:outputPanel>
                             <h:panelGrid columns="2" cellpadding="5">
@@ -48,27 +31,37 @@
                                 <h:outputText value="#{orderLineItem.recipe.recipeTitle}" style="font-weight: bold"/>
 
                                 <h:outputText value="Recipe Subtotal:" />
-                                <h:outputText value="#{orderLineItem.recipeSubTotal}" style="font-weight: bold"/>
+                                <h:outputText value="#{orderLineItem.recipeSubTotal}" style="font-weight: bold">
+                                    <f:convertNumber type="currency" currencySymbol="$" maxIntegerDigits="5" maxFractionDigits="2"/>
+                                </h:outputText>
 
                             </h:panelGrid>
                         </p:outputPanel>
 
-                        <p:commandButton actionListener="#{shoppingCartManagedBean.doUpdateOrderLineItem}"
-                                         update="formUpdateOrderLineItem" 
-                                         oncomplete="PF('dialogUpdateOrderLineItem').show()" 
-                                         icon="ui-icon-pencil"
-                                         title="Update Detail">
-                            <f:attribute name="orderLineItemToUpdate" value="#{orderLineItem}"/>
-                        </p:commandButton>
-                        <p:commandButton icon="ui-icon-trash" 
-                                         actionListener="#{shoppingCartManagedBean.removeFromShoppingCart}" 
-                                         update="formShoppingCart">
-                            <f:attribute name="orderLineItemToDelete" value="#{orderLineItem}" />
-                            <p:confirm header="Confirmation" message="Are you sure you want to delete #{orderLineItem} (#{orderLineItem.recipe.recipeTitle})?" icon="ui-icon-alert" />
-                        </p:commandButton>
+                        <p:column>
+                            <p:commandButton actionListener="#{shoppingCartManagedBean.doUpdateOrderLineItem}"
+                                             update="formUpdateOrderLineItem" 
+                                             oncomplete="PF('dialogUpdateOrderLineItem').show()" 
+                                             icon="ui-icon-pencil"
+                                             title="Update Detail">
+                                <f:attribute name="orderLineItemToUpdate" value="#{orderLineItem}"/>
+                            </p:commandButton>
+                            <p:commandButton icon="ui-icon-trash" 
+                                             actionListener="#{shoppingCartManagedBean.removeFromShoppingCart}" 
+                                             update="formShoppingCart">
+                                <f:attribute name="orderLineItemToRemove" value="#{orderLineItem}" />
+                                <p:confirm header="Confirmation" message="Are you sure you want to delete #{orderLineItem} (#{orderLineItem.recipe.recipeTitle})?" icon="ui-icon-alert" />
+                            </p:commandButton>
+                        </p:column>
+
+
                     </h:panelGrid>
                 </p:dataViewListItem>
             </p:dataView>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
         </h:form>
         <h:form id="formUpdateOrderLineItem">
             <p:dialog id="dialogUpdateOrderLineItem" widgetVar="dialogUpdateOrderLineItem" header="Update Order Line Item" closable="true">
@@ -92,7 +85,9 @@
                         <h:outputText value="#{ci.unitPrice}"/>
                     </p:column>
                     <p:column headerText="Subtotal">
-                        <h:outputText value="#{ci.subtotal}"/>
+                        <h:outputText value="#{ci.subtotal}">
+                            <f:convertNumber type="currency" currencySymbol="$" maxIntegerDigits="5" maxFractionDigits="2"/>
+                        </h:outputText>
                     </p:column>
                     <p:column headerText="Prepared?">
                         <p:selectOneMenu id="preparedness" value="#{ci.preparationMethod}">
@@ -113,7 +108,8 @@
 
                 <p:commandButton value="OK!"
                                  icon="pi pi-check"
-                                 update="formUpdateOrderLineItem"/>
+                                 onclick="PF('dialogUpdateOrderLineItem').close()"
+                                 update="formShoppingCart"/>
 
             </p:dialog>
         </h:form>

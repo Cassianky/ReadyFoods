@@ -70,7 +70,7 @@
 
         <h:form id="formAddRecipeToCart">
             <p:dialog id="dialogAddRecipeToCart" widgetVar="dialogAddRecipeToCart" header="Add Recipe To Cart" closable="true">
-                
+                 <p:messages id="messagesAddRecipeToCart" redisplay="false" />
                     <p:dataTable id="dataTableRecipeIngredients"
                                  value="#{shoppingCartViewManagedBean.currentRecipe.ingredientSpecificationList}"
                                  var="ingredSpec">
@@ -112,10 +112,11 @@
    
                 <div></div>
 
-                <p:commandButton value="Confirm Add To Cart"
+                <p:commandButton onclick="PF('dialogAddRecipeToCart').close()"
+                                 value="Confirm Add To Cart"
                                  icon="pi pi-check"
                                  actionListener="#{shoppingCartViewManagedBean.confirmAddToCart}"
-                                 oncomplete="PF('dialogAddRecipeToCart').close()"/>
+                                 />
                 
                 <p:commandButton value="OK!"
                                  icon="pi pi-check"
