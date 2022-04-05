@@ -77,7 +77,6 @@ public class ShoppingCartManagedBean implements Serializable {
     private PreparationMethod[] prepEnums = PreparationMethod.values();
 
     public ShoppingCartManagedBean() {
-        newOrderEntity = new OrderEntity();
         this.orderLineItems = new ArrayList<>();
         this.currentOrderLineItem = new OrderLineItem();
         this.currentRecipe = new Recipe();
@@ -118,6 +117,25 @@ public class ShoppingCartManagedBean implements Serializable {
         } else {
             throw new ShoppingCartIsEmptyException("Shopping cart is empty, cannot checkout.");
         }
+    }
+    
+    public void addRecipeFromRecipeView(Recipe recipeFromView){
+        
+        System.out.println("**********Cart managed bean called");
+        List<CustomisedIngredient>cis = new ArrayList<>();
+        Integer x = 1;
+        for(IngredientSpecification is: recipeFromView.getIngredientSpecificationList()){
+            BigDecimal subT = is.getIngredient().getUnitPrice().multiply(BigDecimal.valueOf(is.getQuantityPerServing()));
+            CustomisedIngredient newCi = new CustomisedIngredient(x,is.getQuantityPerServing(),is.getPreparationMethod(),is.getIngredient().getIngredientId(),is.getIngredient().getName(),is.getIngredient().getUnitPrice(),subT);
+            cis.add(newCi);
+            x++;
+        }
+        
+        OrderLineItem newOli = new OrderLineItem(cis, recipeFromView);
+        newOli.getRecipeSubTotal();
+        
+        orderLineItems.add(newOli);
+       
     }
 
     public void addRecipeToCart(ActionEvent event) {
@@ -211,19 +229,8 @@ public class ShoppingCartManagedBean implements Serializable {
      */
     public void setOrderLineItemToUpdate(OrderLineItem orderLineItemToUpdate) {
         this.orderLineItemToUpdate = orderLineItemToUpdate;
-     * @return the newOrderEntity
-     */
-    public OrderEntity getNewOrderEntity() {
-        return newOrderEntity;
     }
-
-    /**
-     * @param newOrderEntity the newOrderEntity to set
-     */
-    public void setNewOrderEntity(OrderEntity newOrderEntity) {
-        this.newOrderEntity = newOrderEntity;
-    }
-
+    
     /**
      * @return the orderEntitySessionBeanLocal
      */

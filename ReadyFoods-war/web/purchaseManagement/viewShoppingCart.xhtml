@@ -14,6 +14,24 @@
         <div>
             <h3>View Shopping Cart</h3>
         </div>
+        <style type="text/css"> 
+
+            .ui-dataview-list .ui-dataview-row {
+                border-bottom: 1px solid #A8A8A8;
+                padding: 25px 10px;
+                /* with the exported variables from Nova and Luna Themes*/
+                border-bottom-color: var(--input-border-color, #A8A8A8);
+            }
+
+            .logo {
+                width: 1%;
+            }
+            .detail {
+                width: 85%;
+                padding-left: 50px;
+            }
+        </style>
+
         <h:form id="formShoppingCart">
 
             <p:dataView value="#{shoppingCartManagedBean.orderLineItems}"
@@ -22,7 +40,7 @@
                         gridIcon="pi pi-th-large" listIcon="pi pi-bars">
                 <p:dataViewListItem>
                     <h:panelGrid columns="3" style="width:100%" columnClasses="logo,detail">
-                        <p:graphicImage name="resources/images/300x300.png" /> 
+                        <p:graphicImage height="100" width="100" style="border-bottom-style: dashed" name="300x300.png" library="images"/>
 
                         <p:outputPanel>
                             <h:panelGrid columns="2" cellpadding="5">
@@ -44,56 +62,10 @@
                         </p:commandButton>
                         <p:commandButton icon="ui-icon-trash" 
                                          actionListener="#{shoppingCartManagedBean.removeFromShoppingCart}" 
-                                         update="formShoppingCart:orderLineItemDetail">
+                                         update="formShoppingCart">
                             <f:attribute name="orderLineItemToDelete" value="#{orderLineItem}" />
                             <p:confirm header="Confirmation" message="Are you sure you want to delete #{orderLineItem} (#{orderLineItem.recipe.recipeTitle})?" icon="ui-icon-alert" />
                         </p:commandButton>
-
-        <h:form id="formShoppingCart" style="margin: 30px">
-            <h1>My Shopping Cart</h1>
-            <p:dataTable id="dataTableShoppingCart" 
-                         value="#{shoppingCartManagedBean.orderLineItems}" 
-                         var="orderLineItem"
-                         styleClass="ui-noborder">
-
-                <p:headerRow>
-                    <p:column colspan="4">
-                        <h:outputText value="#{orderLineItem.recipe.recipeTitle}" />
-                    </p:column>
-                </p:headerRow>
- 
-                <c:forEach items="#{orderLineItem.customisedIngredients}" var="ci" >
-                    <p:column headerText="Ingredient Name">
-                        <h:outputText value="#{ci.ingredientName}"/>
-                    </p:column>
-                    <p:column headerText="Quantity">
-                        <p:spinner id="updateQuantity" value="#{ci.quantityOfIngredient}" stepFactor="1" min="1" onchange="" >
-                        </p:spinner>
-                    </p:column>
-                    <p:column headerText="Unit Price">
-                        <h:outputText value="#{ci.unitPrice}"/>
-                    </p:column>
-
-                    <p:column headerText="Subtotal">
-                        <h:outputText value="#{ci.subtotal}"/>
-                    </p:column>
-                </c:forEach>
-
-
-                <!--                    <p:column headerText="Prepared?">
-                                        <p:selectBooleanCheckbox id="preparedness" value="#{ci.prepared}" itemLabel="Prepared?" rendered="true" >
-                
-                                        </p:selectBooleanCheckbox>
-                
-                                    </p:column>
-                
-                                    <p:column headerText="Action">
-                                        <p:commandButton icon="ui-icon-trash" actionListener="#{shoppingCartManagedBean.removeFromShoppingCart}" update="formShoppingCart">
-                                            <f:attribute name="orderLineItemToRemove" value="#{orderLineItem}"/>
-                                            <p:confirm header="Confirmation" message="Are you sure you want to remove #{orderLineItem.recipe.recipeTitle} from cart?" icon="ui-icon-alert" />
-                                        </p:commandButton>
-                                    </p:column>-->
-
                     </h:panelGrid>
                 </p:dataViewListItem>
             </p:dataView>
@@ -109,7 +81,6 @@
                     <p:column headerText="Number">
                         <h:outputText value="#{ci.lineItemNumber}"/>
                     </p:column>
-            </p:dataTable>   
 
                     <p:column headerText="Ingredient Name">
                         <h:outputText value="#{ci.ingredientName}"/>
@@ -124,7 +95,10 @@
                         <h:outputText value="#{ci.subtotal}"/>
                     </p:column>
                     <p:column headerText="Prepared?">
-                        <p:selectBooleanCheckbox id="preparedness" value="#{ci.prepared}" itemLabel="Prepared?"/>
+                        <p:selectOneMenu id="preparedness" value="#{ci.preparationMethod}">
+                            <f:selectItem itemValue="#{null}" itemLabel="[Select One]" noSelectionOption="true" />
+                            <f:selectItems value="#{shoppingCartViewManagedBean.prepEnums}" var="prepMethod" itemValue="#{prepMethod}" itemLabel="#{prepMethod}" />
+                        </p:selectOneMenu>
                     </p:column>
 
                     <p:column headerText="Action">
@@ -134,6 +108,12 @@
                         </p:commandButton>
                     </p:column>
                 </p:dataTable>
+
+                <div></div>
+
+                <p:commandButton value="OK!"
+                                 icon="pi pi-check"
+                                 update="formUpdateOrderLineItem"/>
 
             </p:dialog>
         </h:form>

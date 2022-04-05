@@ -17,6 +17,7 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import util.enumeration.PreparationMethod;
 
 /**
  *
@@ -35,9 +36,8 @@ public class CustomisedIngredient implements Serializable {
     @Min(1)
     private Integer quantityOfIngredient;
     
-    @Column(nullable = false)
-    @NotNull
-    private Boolean prepared;
+     
+    private PreparationMethod preparationMethod;
     
     @Column(nullable = false)
     @NotNull
@@ -66,11 +66,11 @@ public class CustomisedIngredient implements Serializable {
     public CustomisedIngredient() {
     }
 
-    public CustomisedIngredient(Integer lineItemNumber,Integer quantityOfIngredient, Boolean prepared, Long ingredientId, String ingredientName, BigDecimal unitPrice, BigDecimal subtotal) {
+    public CustomisedIngredient(Integer lineItemNumber,Integer quantityOfIngredient, PreparationMethod preparationMethod, Long ingredientId, String ingredientName, BigDecimal unitPrice, BigDecimal subtotal) {
         this();
         this.lineItemNumber = lineItemNumber;
+        this.preparationMethod = preparationMethod;
         this.quantityOfIngredient = quantityOfIngredient;
-        this.prepared = prepared;
         this.ingredientId = ingredientId;
         this.ingredientName = ingredientName;
         this.unitPrice = unitPrice;
@@ -119,12 +119,6 @@ public class CustomisedIngredient implements Serializable {
         return quantityOfIngredient;
     }
 
-    /**
-     * @return the prepared
-     */
-    public Boolean getPrepared() {
-        return prepared;
-    }
 
     public Long getIngredientId() {
         return ingredientId;
@@ -138,13 +132,6 @@ public class CustomisedIngredient implements Serializable {
         return ingredientName;
     }
 
-    /**
-     * @param ingredientName the ingredientName to set
-     */
-  
-    /**
-     * @return the unitPrice
-     */
     public BigDecimal getUnitPrice() {
         return unitPrice;
     }
@@ -164,14 +151,7 @@ public class CustomisedIngredient implements Serializable {
         this.quantityOfIngredient = quantityOfIngredient;
     }
 
-    /**
-     * @param prepared the prepared to set
-     */
-    public void setPrepared(Boolean prepared) {
-        this.prepared = prepared;
-    }
-
-    /**
+      /**
      * @param ingredientId the ingredientId to set
      */
     public void setIngredientId(Long ingredientId) {
@@ -211,6 +191,20 @@ public class CustomisedIngredient implements Serializable {
      */
     public void setLineItemNumber(Integer lineItemNumber) {
         this.lineItemNumber = lineItemNumber;
+    }
+
+    /**
+     * @return the preparationMethod
+     */
+    public PreparationMethod getPreparationMethod() {
+        return preparationMethod;
+    }
+
+    /**
+     * @param preparationMethod the preparationMethod to set
+     */
+    public void setPreparationMethod(PreparationMethod preparationMethod) {
+        this.preparationMethod = preparationMethod;
     }
     
 }

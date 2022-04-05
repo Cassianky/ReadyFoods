@@ -36,41 +36,37 @@ public class ShoppingCartViewManagedBean implements Serializable {
 
     @EJB(name = "RecipeSessionBeanLocal")
     private RecipeSessionBeanLocal recipeSessionBeanLocal;
-    
-    
-    
-    private Recipe currentRecipe;
-    
-    private PreparationMethod[] prepEnums = PreparationMethod.values();
-    
-    public ShoppingCartViewManagedBean() {
-        this.currentRecipe = new Recipe();
-    }
+
     @Inject
     private ShoppingCartManagedBean shoppingCartManagedBean;
-    
-    @PostConstruct
-    public void postConstruct() {
+
+    private Recipe currentRecipe;
+
+    private PreparationMethod[] prepEnums = PreparationMethod.values();
+
+    public ShoppingCartViewManagedBean() {
         
     }
-    
+
+    @PostConstruct
+    public void postConstruct() {
+        this.currentRecipe = new Recipe();
+    }
+
     public void addRecipeToCart(ActionEvent event) {
 
         Recipe recipe = (Recipe) event.getComponent().getAttributes().get("recipeToAdd");
-        if (currentRecipe != null){
-            if(recipe.getRecipeId() == currentRecipe.getRecipeId()){
-                System.out.println("addRecipeToCart()********:" + " you have already added this recipe to cart");
-            }
-        }
-        
-        
-        setCurrentRecipe(recipe);
-        System.out.println("addRecipeToCart()********:" + getCurrentRecipe().getRecipeTitle());
-        for(IngredientSpecification is:getCurrentRecipe().getIngredientSpecificationList()){
-            System.out.println("Ingredient Spec********:" + is.getIngredient().getName()+", " + is.getQuantityPerServing());
+
+        if (currentRecipe != null && currentRecipe.getRecipeId() == null) {
+            setCurrentRecipe(recipe);
+            System.out.println("addRecipeToCart()********:" + getCurrentRecipe().getRecipeTitle());
+        } else {
+            System.out.println("addRecipeToCart()********:" + " you have already added this recipe to cart");
         }
 
-
+        for (IngredientSpecification is : getCurrentRecipe().getIngredientSpecificationList()) {
+            System.out.println("Ingredient Spec********:" + is.getIngredient().getName() + ", " + is.getQuantityPerServing());
+        }
     }
 
     public void removeIngredSpecFromRecipe(ActionEvent event) {
@@ -83,8 +79,8 @@ public class ShoppingCartViewManagedBean implements Serializable {
             }
         }
     }
-    
-    public void reset(ActionEvent event){
+
+    public void reset(ActionEvent event) {
         try {
             IngredientSpecification ingredSpecToReset = (IngredientSpecification) event.getComponent().getAttributes().get("ingredSpecToReset");
             Long ingredSpecId = ingredSpecToReset.getIngredientSpecificationId();
@@ -96,13 +92,11 @@ public class ShoppingCartViewManagedBean implements Serializable {
             ex.printStackTrace();
         }
     }
-       
-    
-    
+
     public void confirmAddToCart() {
-        
+        shoppingCartManagedBean.addRecipeFromRecipeView(currentRecipe);
+        System.out.println("**********Add To Cart");
     }
-   
 
     /**
      * @return the currentRecipe
@@ -131,5 +125,19 @@ public class ShoppingCartViewManagedBean implements Serializable {
     public void setPrepEnums(PreparationMethod[] prepEnums) {
         this.prepEnums = prepEnums;
     }
-    
+
+    /**
+     * @return the shoppingCartManagedBean
+     */
+    public ShoppingCartManagedBean getShoppingCartManagedBean() {
+        return shoppingCartManagedBean;
+    }
+
+    /**
+     * @param shoppingCartManagedBean the shoppingCartManagedBean to set
+     */
+    public void setShoppingCartManagedBean(ShoppingCartManagedBean shoppingCartManagedBean) {
+        this.shoppingCartManagedBean = shoppingCartManagedBean;
+    }
+
 }
