@@ -44,7 +44,7 @@
                     </p:dataList>
 
                     <p:panelGrid columns="1">
-                        <h:outputText value="Steps: #{recipeViewManagedBean.recipe.recipeSteps.replace('/n', '&lt;br/&gt;')}" />
+                        <h:outputText value="Steps: #{recipeViewManagedBean.recipe.recipeSteps}" escape="false" />
                     </p:panelGrid>
 
                     <p:carousel value="#{recipeViewManagedBean.recipe.categories}" var="cat" headerText="Categories" itemStyle="height:25px;text-align:center" numVisible="1" style="width:300px" circular="true">

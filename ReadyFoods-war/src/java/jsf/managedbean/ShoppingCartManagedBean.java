@@ -75,6 +75,8 @@ public class ShoppingCartManagedBean implements Serializable {
     private OrderLineItem currentOrderLineItem;
 
     private PreparationMethod[] prepEnums = PreparationMethod.values();
+    
+    private OrderEntity newOrderEntity;
 
     public ShoppingCartManagedBean() {
         this.orderLineItems = new ArrayList<>();
