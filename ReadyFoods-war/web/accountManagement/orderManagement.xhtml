@@ -13,7 +13,7 @@
         <p:growl>
             <p:autoUpdate />
         </p:growl>
-        
+
         <h:form id="viewAllOrdersForm" style="margin: 30px">
             <h1>View My Orders</h1>
             <p:messages id="messages" redisplay="false" closable="true" />
@@ -60,16 +60,36 @@
                           filterBy="#{orderEntity.dateForDelivery}" 
                           filterMatchMode="contains">
                     <h:outputText value="#{orderEntity.dateForDelivery}" />
-                </p:column>
-                  <p:column headerText="Received?">
-                    <p:selectBooleanButton onLabel="Yes" offLabel="No" onIcon="pi pi-check" offIcon="pi pi-times">
+                </p:column>      
+                <p:column headerText="Action">
+                    <p:commandButton title="Received" 
+                                     update="@this viewAllOrdersForm:dataTableAllOrders"
+                                     actionListener="#{orderManagedBean.updateStatus()}">
                         <f:attribute name="orderToupdate" value="#{orderEntity}"/>
-                        <f:ajax event="change" execute="@form" render="@form viewAllOrdersForm" listener="#{orderManagedBean.updateStatus}" />
-                    </p:selectBooleanButton>
+                    </p:commandButton>
+                    <p:commandButton update="formViewOrderDetails" 
+                                     oncomplete="PF('dialogViewOrder').show()" 
+                                     icon="ui-icon-document" 
+                                     title="View">
+
+
+                    </p:commandButton>
+
                 </p:column>
 
             </p:dataTable>
         </h:form>
-    </ui:define>
 
-</ui:composition>
+        <h:form id="formViewOrderDetails">
+            <p:dialog id="dialogViewOrder"
+                      widgetVar="dialogViewOrder"
+                      header="Order Details"
+                      closable="true">
+                <p:dataTable id="dataTableOrderDetails"
+                             value=""
+                             </p:dialog>
+
+                    </h:form>
+                    </ui:define>
+
+                    </ui:composition>
