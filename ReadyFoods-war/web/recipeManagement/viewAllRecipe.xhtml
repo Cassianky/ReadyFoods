@@ -29,7 +29,7 @@
 
                         <p:commandLink actionListener="#{recipeManagedBean.viewRecipeDetails}" title="View Detail">
                             <h:outputText styleClass="pi pi-search" style="margin:0 auto;"/>
-                            <f:attribute value="#{recipe.recipeId}" name="recipeToView"/>
+                            <f:attribute value="#{recipe}" name="recipeToView"/>
                         </p:commandLink>
                     </h:panelGrid>
                 </p:panel>
