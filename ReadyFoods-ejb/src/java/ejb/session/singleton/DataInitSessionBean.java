@@ -150,31 +150,31 @@ public class DataInitSessionBean {
             recipe2IngredientSpecicationsId.add(ingredientSpecification12Id);
             recipe2IngredientSpecicationsId.add(ingredientSpecification13Id);
 
-            //purpose used /n for replacement
-            String recipe1Steps = "Preparation" + "/n"
-                    + "To clean the chicken, rub all over with a handful of kosher salt, getting rid of any loose skin. Rinse the chicken well inside and out. Pat dry with paper towels." + "/n"
-                    + "Remove any excess fat from the chicken and set aside for later." + "/n"
-                    + "Season the chicken generously with salt. Stuff the chicken cavity with the ginger slices and scallions." + "/n"
-                    + "Place the chicken in a large stock pot, cover with cold water by 1 inch (2 cm), and season with salt to taste." + "/n"
-                    + "Bring to a boil over high heat, then immediately reduce the heat to low to maintain a simmer. Cover and cook for about 30 minutes, or until the internal temperature of the chicken reaches 165°F (75°C). Remove the pot from the heat." + "/n"
-                    + "Remove the chicken from the pot, reserving the poaching liquid for later, and transfer to an ice bath for 5 minutes to stop the cooking process and to keep the chicken skin springy. Discard the ginger and green onion." + "/n"
-                    + "After it’s cooled, pat the chicken dry with paper towels and rub all over with sesame oil. This will help prevent the chicken from drying out." + "/n"
-                    + "In a large wok or skillet, heat ¼ cup (60 ml) of sesame oil over medium-high heat. Add 2 tablespoons of reserved chopped chicken fat, the garlic, ginger, and salt, and fry until aromatic, about 10 minutes." + "/n"
-                    + "Reserve ¼ of the fried garlic mixture, then add the rice to the remaining fried garlic and stir to coat. Cook for 3 minutes." + "/n"
-                    + "Transfer the rice to a rice cooker and add 2 cups (480 ml) of reserved poaching broth. Steam the rice for 60 minutes, or until tender." + "/n"
-                    + "While the rice is cooking, carve the chicken for serving." + "/n"
-                    + "Make the chili sauce: combine the sambal, Sriracha, sugar, garlic, ginger, lime juice, and chicken broth in a small bowl and stir to incorporate." + "/n"
-                    + "Make the ginger garlic sauce: in a small bowl, combine the ginger, garlic, salt, peanut oil, and rice vinegar, and stir to incorporate." + "/n"
-                    + "Make the soy sauce: in a small bowl, combine the reserved fried garlic and ginger with the oyster sauce, dark soy sauce, light soy sauce, and chicken broth, and stir to incorporate." + "/n"
-                    + "Serve the sliced chicken with the rice, dipping sauces, sliced cucumbers, and fresh cilantro." + "/n"
+            //purpose used <br /><br /> for replacement
+            String recipe1Steps = "Preparation" + "<br /><br />"
+                    + "To clean the chicken, rub all over with a handful of kosher salt, getting rid of any loose skin. Rinse the chicken well inside and out. Pat dry with paper towels." + "<br /><br />"
+                    + "Remove any excess fat from the chicken and set aside for later." + "<br /><br />"
+                    + "Season the chicken generously with salt. Stuff the chicken cavity with the ginger slices and scallions." + "<br /><br />"
+                    + "Place the chicken in a large stock pot, cover with cold water by 1 inch (2 cm), and season with salt to taste." + "<br /><br />"
+                    + "Bring to a boil over high heat, then immediately reduce the heat to low to maintain a simmer. Cover and cook for about 30 minutes, or until the internal temperature of the chicken reaches 165°F (75°C). Remove the pot from the heat." + "<br /><br />"
+                    + "Remove the chicken from the pot, reserving the poaching liquid for later, and transfer to an ice bath for 5 minutes to stop the cooking process and to keep the chicken skin springy. Discard the ginger and green onion." + "<br /><br />"
+                    + "After it’s cooled, pat the chicken dry with paper towels and rub all over with sesame oil. This will help prevent the chicken from drying out." + "<br /><br />"
+                    + "In a large wok or skillet, heat ¼ cup (60 ml) of sesame oil over medium-high heat. Add 2 tablespoons of reserved chopped chicken fat, the garlic, ginger, and salt, and fry until aromatic, about 10 minutes." + "<br /><br />"
+                    + "Reserve ¼ of the fried garlic mixture, then add the rice to the remaining fried garlic and stir to coat. Cook for 3 minutes." + "<br /><br />"
+                    + "Transfer the rice to a rice cooker and add 2 cups (480 ml) of reserved poaching broth. Steam the rice for 60 minutes, or until tender." + "<br /><br />"
+                    + "While the rice is cooking, carve the chicken for serving." + "<br /><br />"
+                    + "Make the chili sauce: combine the sambal, Sriracha, sugar, garlic, ginger, lime juice, and chicken broth in a small bowl and stir to incorporate." + "<br /><br />"
+                    + "Make the ginger garlic sauce: in a small bowl, combine the ginger, garlic, salt, peanut oil, and rice vinegar, and stir to incorporate." + "<br /><br />"
+                    + "Make the soy sauce: in a small bowl, combine the reserved fried garlic and ginger with the oyster sauce, dark soy sauce, light soy sauce, and chicken broth, and stir to incorporate." + "<br /><br />"
+                    + "Serve the sliced chicken with the rice, dipping sauces, sliced cucumbers, and fresh cilantro." + "<br /><br />"
                     + "Enjoy!";
 
             //different formatting to test
-            String recipe2Steps = "Heat oil in a large pot or deep skillet over medium high heat. Add onion and garlic, cook for 3 minutes or until light golden and softened.\n"
-                    + "Turn heat up to high and add beef. Cook, breaking it up as your go, until browned.\n"
-                    + "Add red wine. Bring to simmer and cook for 1 minute, scraping the bottom of the pot, until the alcohol smell is gone.\n"
-                    + "Add remaining ingredients except salt and pepper. Stir, bring to a simmer then turn down to medium so it bubbles gently. Cook for 20 – 30 minutes (no lid), adding water if the sauce gets too thick for your taste. Stir occasionally.\n"
-                    + "Slow simmer option: really takes this to another level, if you have the time! Add 3/4 cup of water, cover with lid and simmer on very low for 2 – 2.5 hours, stirring every 30 minutes or so. (Note 5) Uncover, simmer 20 minutes to thicken sauce. (Note 6 for slow cooker)\n"
+            String recipe2Steps = "Heat oil in a large pot or deep skillet over medium high heat. Add onion and garlic, cook for 3 minutes or until light golden and softened.<br/><br />"
+                    + "Turn heat up to high and add beef. Cook, breaking it up as your go, until browned.<br /><br />"
+                    + "Add red wine. Bring to simmer and cook for 1 minute, scraping the bottom of the pot, until the alcohol smell is gone.<br /><br />"
+                    + "Add remaining ingredients except salt and pepper. Stir, bring to a simmer then turn down to medium so it bubbles gently. Cook for 20 – 30 minutes (no lid), adding water if the sauce gets too thick for your taste. Stir occasionally.<br /><br />"
+                    + "Slow simmer option: really takes this to another level, if you have the time! Add 3/4 cup of water, cover with lid and simmer on very low for 2 – 2.5 hours, stirring every 30 minutes or so. (Note 5) Uncover, simmer 20 minutes to thicken sauce. (Note 6 for slow cooker)<br /><br />"
                     + "Adjust salt and pepper to taste right at the end. Serve over spaghetti – though if you have the time, I recommend tossing the sauce and pasta per steps below.";
 
             Recipe recipe1 = new Recipe("Hainanese Chicken Rice", "Chicken Rice King", 45, recipe1Steps, 1248, 87, 76, 47, 9, "https://www.youtube.com/embed/XPA3rn1XImY");

@@ -59,6 +59,8 @@ public class ShoppingCartManagedBean implements Serializable {
 
     @EJB(name = "CustomerSessionBeanLocal")
     private CustomerSessionBeanLocal customerSessionBeanLocal;
+    
+    
 
     private ArrayList<OrderLineItem> orderLineItems;
 
@@ -82,10 +84,10 @@ public class ShoppingCartManagedBean implements Serializable {
         this.currentOrderLineItem = new OrderLineItem();
         this.currentRecipe = new Recipe();
     }
-
+    
     @PostConstruct
     public void postConstruct() {
-
+        
     }
 
     public void removeFromShoppingCart(ActionEvent event) throws IOException {
@@ -123,10 +125,10 @@ public class ShoppingCartManagedBean implements Serializable {
     public void addRecipeToCart(ActionEvent event) {
 
         Recipe recipe = (Recipe) event.getComponent().getAttributes().get("recipeToAdd");
-
+        
         setCurrentRecipe(recipe);
         System.out.println("addRecipeToCart()********:" + currentRecipe.getRecipeTitle());
-        for (IngredientSpecification is : currentRecipe.getIngredientSpecificationList()) {
+        for(IngredientSpecification is:currentRecipe.getIngredientSpecificationList()){
             System.out.println("Ingredient Spec********:" + is.getIngredient().getName());
         }
 //        currentOrderLineItem.setRecipe(currentRecipe);
@@ -144,8 +146,8 @@ public class ShoppingCartManagedBean implements Serializable {
             }
         }
     }
-
-    public void reset(ActionEvent event) {
+    
+    public void reset(ActionEvent event){
         try {
             IngredientSpecification ingredSpecToReset = (IngredientSpecification) event.getComponent().getAttributes().get("ingredSpecToReset");
             Long ingredSpecId = ingredSpecToReset.getIngredientSpecificationId();
@@ -157,7 +159,8 @@ public class ShoppingCartManagedBean implements Serializable {
             ex.printStackTrace();
         }
     }
-
+    
+    
     public void doUpdateOrderLineItem(ActionEvent event) throws IOException {
         OrderLineItem oli = (OrderLineItem) event.getComponent().getAttributes().get("orderLineItemToUpdate");
         setOrderLineItemToUpdate(oli);
@@ -210,31 +213,6 @@ public class ShoppingCartManagedBean implements Serializable {
      */
     public void setOrderLineItemToUpdate(OrderLineItem orderLineItemToUpdate) {
         this.orderLineItemToUpdate = orderLineItemToUpdate;
-    }
-
-    public OrderEntity getNewOrderEntity() {
-        return newOrderEntity;
-    }
-
-    /**
-     * @param newOrderEntity the newOrderEntity to set
-     */
-    public void setNewOrderEntity(OrderEntity newOrderEntity) {
-        this.newOrderEntity = newOrderEntity;
-    }
-
-    /**
-     * @return the orderEntitySessionBeanLocal
-     */
-    public OrderEntitySessionBeanLocal getOrderEntitySessionBeanLocal() {
-        return orderEntitySessionBeanLocal;
-    }
-
-    /**
-     * @param orderEntitySessionBeanLocal the orderEntitySessionBeanLocal to set
-     */
-    public void setOrderEntitySessionBeanLocal(OrderEntitySessionBeanLocal orderEntitySessionBeanLocal) {
-        this.orderEntitySessionBeanLocal = orderEntitySessionBeanLocal;
     }
 
     /**

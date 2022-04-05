@@ -86,7 +86,7 @@ public class IngredientSpecification implements Serializable {
     }
 
     public void setQuantityPerServing(Integer quantityPerServing) {
-        this.setQuantityPerServing(quantityPerServing);
+        this.quantityPerServing = quantityPerServing;
     }
 
     public Ingredient getIngredient() {
