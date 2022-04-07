@@ -40,9 +40,7 @@ and open the template in the editor.
     border-bottom-color: var(--input-border-color, #A8A8A8);
 }
 
-.logo {
-    width: 1%;
-}
+
 .detail {
     width: 85%;
     padding-left: 50px;

@@ -10,27 +10,7 @@
 
 
     <ui:define name="content">
-        <style type="text/css"> 
-            /*demo*/
-            .ui-dataview-list .ui-dataview-row {
-                border-bottom: 1px solid #A8A8A8;
-                padding: 25px 100px;
-                /* with the exported variables from Nova and Luna Themes*/
-                border-bottom-color: var(--input-border-color, #A8A8A8);
-            }
 
-            .logo {
-                width: 5%;
-            }
-            .detail {
-                width: 85%;
-                padding-left: 50px;
-            }
-            .action {
-                width: 85%;
-                padding-left: 50px;
-            }
-        </style>
         <ez:Breadcrumb pageName="selectRecipes" />
         <main class="card">
 
@@ -49,7 +29,7 @@
             <h:form id="form">
                 <p:growl><p:autoUpdate/></p:growl>
                 <p:panel >
-                    TODO: Check for 0 remaining recipes b4 persisiting, select day of delivery, show which week this selection is for, category formatting, view details.
+                    TODO: Check for 0 remaining recipes b4 persisting, select day of delivery, show which week this selection is for, category formatting, view details.
                     <br/>
                     <p:outputLabel style="font-weight: bold;" value="Remaining recipes: "/> 
                     <h:outputText style="color: #AE3126;" value="#{subscriptionSelectRecipesManagedBean.remaining}"/>
