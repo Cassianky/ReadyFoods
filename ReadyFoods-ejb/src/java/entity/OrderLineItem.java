@@ -37,6 +37,9 @@ public class OrderLineItem implements Serializable {
     @Digits(integer = 9, fraction = 2)
     private BigDecimal recipeSubTotal;
     
+    @Column(nullable = true)
+    private Integer quantity; // only used in subscription orders
+    
     @OneToMany
     private List<CustomisedIngredient> customisedIngredients;
     
@@ -150,6 +153,20 @@ public class OrderLineItem implements Serializable {
      */
     public void setRecipeSubTotal(BigDecimal recipeSubTotal) {
         this.recipeSubTotal = recipeSubTotal;
+    }
+
+    /**
+     * @return the quantity
+     */
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    /**
+     * @param quantity the quantity to set
+     */
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
     
 }

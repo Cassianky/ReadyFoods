@@ -21,13 +21,12 @@ and open the template in the editor.
     padding: 5px;
 }
 
-.card {
-    background: var(--surface-e);
-    padding: 2rem;
-    box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
-    border-radius: 10px;
-    margin-bottom: 1rem; 
+.viewRecipeSingleImageList {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
 }
+
 
 .list-stuff {
     display: flex;
