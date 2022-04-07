@@ -38,43 +38,43 @@ public class OrderEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderEntityId;
-    
+
     @Column(nullable = false)
     @NotNull
     @Min(1)
     private Integer numPax;
-    
+
     @Column(nullable = false, precision = 11, scale = 2)
     @NotNull
     @DecimalMin("0.00")
     @Digits(integer = 9, fraction = 2) // 11 - 2 digits to the left of the decimal point
     private BigDecimal totalCost;
-    
+
     @Column(nullable = false)
     @NotNull
     private Boolean paid;
-    
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     @NotNull
     private Date dateOfOrder;
-    
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = true)
     private Date dateForDelivery;
-    
+
     @Column(nullable = false)
     @NotNull
     private Status status;
-    
+
     @Size(max = 128)
     private String additionalNotes;
-    
+
     @OneToMany
     private List<OrderLineItem> orderLineItems;
-    
-    @ManyToOne(optional = false)
-    @JoinColumn(nullable = false)
+
+    @ManyToOne(optional = true)
+
     private Customer customer;
 
     public OrderEntity() {
@@ -90,7 +90,16 @@ public class OrderEntity implements Serializable {
         this.orderLineItems = orderLineItems;
         this.customer = customer;
     }
-    
+
+    public OrderEntity(Integer numPax, BigDecimal totalCost, Boolean paid, Date dateOfOrder, Status status, List<OrderLineItem> orderLineItems) {
+        this.numPax = numPax;
+        this.totalCost = totalCost;
+        this.paid = paid;
+        this.dateOfOrder = dateOfOrder;
+        this.status = status;
+        this.orderLineItems = orderLineItems;
+    }
+
     public Long getOrderEntityId() {
         return orderEntityId;
     }
@@ -194,7 +203,6 @@ public class OrderEntity implements Serializable {
         this.dateForDelivery = dateForDelivery;
     }
 
-
     /**
      * @return the additionalNotes
      */
@@ -250,6 +258,5 @@ public class OrderEntity implements Serializable {
     public void setStatus(Status status) {
         this.status = status;
     }
-    
-    
+
 }

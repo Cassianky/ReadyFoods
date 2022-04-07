@@ -47,8 +47,14 @@
 
         <main class="card">
             <h:form id="form">
-                <p:panel>
-                    <p:outputLabel value="Remaining recipes: #{subscriptionSelectRecipesManagedBean.remaining}"/>
+                <p:growl><p:autoUpdate/></p:growl>
+                <p:panel >
+                    TODO: Check for 0 remaining recipes b4 persisiting, select day of delivery, show which week this selection is for, category formatting, view details.
+                    <br/>
+                    <p:outputLabel style="font-weight: bold;" value="Remaining recipes: "/> 
+                    <h:outputText style="color: #AE3126;" value="#{subscriptionSelectRecipesManagedBean.remaining}"/>
+                    <p:separator/>
+                    <p:commandButton value="Save Selection" actionListener="#{subscriptionSelectRecipesManagedBean.updateSelection}"/>
 
 
                 </p:panel>
