@@ -5,10 +5,12 @@
  */
 package jsf.managedbean;
 
+import ejb.session.stateless.CreditCardSessionBeanLocal;
 import ejb.session.stateless.CustomerSessionBeanLocal;
 import ejb.session.stateless.IngredientSpecificaitonSessionBeanLocal;
 import ejb.session.stateless.OrderEntitySessionBeanLocal;
 import ejb.session.stateless.RecipeSessionBeanLocal;
+import entity.CreditCard;
 import entity.Customer;
 import entity.CustomisedIngredient;
 import entity.IngredientSpecification;
@@ -20,6 +22,7 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +33,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import util.enumeration.PreparationMethod;
 import util.enumeration.Status;
@@ -47,6 +51,9 @@ import util.exception.ShoppingCartIsEmptyException;
 @Named(value = "shoppingCartManagedBean")
 @SessionScoped
 public class ShoppingCartManagedBean implements Serializable {
+
+    @EJB(name = "CreditCardSessionBeanLocal")
+    private CreditCardSessionBeanLocal creditCardSessionBeanLocal;
 
     @EJB(name = "IngredientSpecificationSessionBeanLocal")
     private IngredientSpecificaitonSessionBeanLocal ingredientSpecificationSessionBeanLocal;
@@ -77,15 +84,22 @@ public class ShoppingCartManagedBean implements Serializable {
     private PreparationMethod[] prepEnums = PreparationMethod.values();
     
     private OrderEntity newOrderEntity;
+   
+    private Integer numPax;
+    
+    private Boolean hasNoCC;
 
     public ShoppingCartManagedBean() {
         this.orderLineItems = new ArrayList<>();
         this.currentOrderLineItem = new OrderLineItem();
         this.currentRecipe = new Recipe();
+        numPax = 1;
+        hasNoCC = true;
     }
     
     @PostConstruct
     public void postConstruct() {
+        
         
     }
 
@@ -98,40 +112,73 @@ public class ShoppingCartManagedBean implements Serializable {
     }
 
     public void checkoutShoppingCart(ActionEvent event) throws IOException, CheckOutShoppingCartException, ShoppingCartIsEmptyException {
-        Customer customer = (Customer) event.getComponent().getAttributes().get("customerToCheckOut");
-        Integer serialNo = 1;
-        Integer totalQuantity = 0;
-        BigDecimal totalAmt = BigDecimal.valueOf(0);
-
+        
+        Customer customer = (Customer)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
+        
         if (!orderLineItems.isEmpty()) {
-            try {
-
-                OrderEntity newOrderEntity = new OrderEntity(1, totalPrice, false, new Date(), Status.PENDING, orderLineItems, customer);
-
-                orderEntitySessionBeanLocal.createNewOrder(customer.getCustomerId(), newOrderEntity);
-
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Shopping cart checked out successfully!", null));
-
-            } catch (CustomerNotFoundException ex) {
-                throw new CheckOutShoppingCartException(ex.getMessage());
-            } catch (CreateNewOrderException ex) {
-                Logger.getLogger(ShoppingCartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+            newOrderEntity = new OrderEntity(numPax, totalPrice, false, new Date(), Status.PENDING, orderLineItems, customer);
+            if(customer.getCreditCard() != null){
+                System.out.println("Customer has credit card!");
+                //
+                FacesContext.getCurrentInstance().getExternalContext().redirect("orderPayment.xhtml");
+                hasNoCC = false;
+            } else {
+                System.out.println("Customer has no credit card!");
             }
+            
+            
+//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Shopping cart checked out successfully!", null));
         } else {
             throw new ShoppingCartIsEmptyException("Shopping cart is empty, cannot checkout.");
         }
+
+    }
+    
+    public void confirmOrder(ActionEvent event) throws IOException{
+        Customer customer = (Customer)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
+        try {
+            orderEntitySessionBeanLocal.createNewOrder(customer.getCustomerId(), newOrderEntity);
+        } catch (CustomerNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (CreateNewOrderException ex) {
+           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error occured while creating new order: " + ex.getMessage(), null));
+        }
+    }
+    
+    public String getCustomerAddress() {
+        Customer customer = (Customer)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
+        return customer.getAddress();
+    }
+    
+    public String getCustomerCC() {
+        Customer customer = (Customer)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
+        try {
+            Customer retrievedCustomer = customerSessionBeanLocal.retrieveCustomerByCustomerId(customer.getCustomerId());
+            CreditCard retrievedCard = retrievedCustomer.getCreditCard();
+            return retrievedCard.getCcNumber();
+        } catch (CustomerNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+        
+    }
+    
+    public void redirectToAddCC() throws IOException{
+         FacesContext.getCurrentInstance().getExternalContext().redirect("addCC.xhtml");
+    }
+    
+    public void updateNumPax(ValueChangeEvent event){
+        numPax = (Integer) event.getNewValue();
     }
     
     public void addRecipeFromRecipeView(Recipe recipeFromView){
         
         System.out.println("**********Cart managed bean called");
         List<CustomisedIngredient>cis = new ArrayList<>();
-        Integer x = 1;
         for(IngredientSpecification is: recipeFromView.getIngredientSpecificationList()){
             BigDecimal subT = is.getIngredient().getUnitPrice().multiply(BigDecimal.valueOf(is.getQuantityPerServing()));
-            CustomisedIngredient newCi = new CustomisedIngredient(x,is.getQuantityPerServing(),is.getPreparationMethod(),is.getIngredient().getIngredientId(),is.getIngredient().getName(),is.getIngredient().getUnitPrice(),subT);
+            CustomisedIngredient newCi = new CustomisedIngredient(is.getQuantityPerServing(),is.getPreparationMethod(),is.getIngredient().getIngredientId(),is.getIngredient().getName(),is.getIngredient().getUnitPrice(),subT);
             cis.add(newCi);
-            x++;
         }
         
         OrderLineItem newOli = new OrderLineItem(cis, recipeFromView);
@@ -168,14 +215,18 @@ public class ShoppingCartManagedBean implements Serializable {
     
     public void reset(ActionEvent event){
         try {
-            IngredientSpecification ingredSpecToReset = (IngredientSpecification) event.getComponent().getAttributes().get("ingredSpecToReset");
-            Long ingredSpecId = ingredSpecToReset.getIngredientSpecificationId();
-            System.out.println("resetIngredSpecFromRecipe*******" + ingredSpecId);
-            IngredientSpecification retrievedIs = ingredientSpecificationSessionBeanLocal.retrieveIngredientSpecificationById(ingredSpecId);
-            currentRecipe.getIngredientSpecificationList().remove(ingredSpecToReset);
-            currentRecipe.getIngredientSpecificationList().add(retrievedIs);
-        } catch (IngredientSpecificationNotFoundException ex) {
-            ex.printStackTrace();
+            CustomisedIngredient cIToReset = (CustomisedIngredient) event.getComponent().getAttributes().get("cIToReset");
+            Long recipeId = orderLineItemToUpdate.getRecipe().getRecipeId();
+            Recipe retrievedRecipe = recipeSessionBeanLocal.retrieveRecipeByRecipeId(recipeId);
+            IngredientSpecification is = ingredientSpecificationSessionBeanLocal.retrieveIngredientSpecificationByIngredientId(cIToReset.getIngredientId());
+            Integer realQuantity = is.getQuantityPerServing();
+            System.out.println("resetCustomisedIngredFromCart*******" + cIToReset.getCustomisedIngredientId());
+            cIToReset.setQuantityOfIngredient(realQuantity);
+            orderLineItemToUpdate.getCustomisedIngredients().remove(cIToReset);
+            orderLineItemToUpdate.getCustomisedIngredients().add(cIToReset);
+        
+        } catch (RecipeNotFoundException ex) {
+            Logger.getLogger(ShoppingCartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -187,6 +238,8 @@ public class ShoppingCartManagedBean implements Serializable {
 
     public void removeCustomisedIngredientFromOrderLineItem(ActionEvent event) throws IOException {
         CustomisedIngredient ci = (CustomisedIngredient) event.getComponent().getAttributes().get("customisedIngredientToRemove");
+        orderLineItemToUpdate.getCustomisedIngredients().remove(ci);
+        
     }
 
     public CustomerSessionBeanLocal getCustomerSessionBeanLocal() {
@@ -210,6 +263,8 @@ public class ShoppingCartManagedBean implements Serializable {
         for (OrderLineItem orderLineItem : orderLineItems) {
             totalP = totalP.add(orderLineItem.getRecipeSubTotal());
         }
+        
+        totalP = totalP.multiply(BigDecimal.valueOf(numPax));
 
         setTotalPrice(totalP);
         return totalP;
@@ -302,6 +357,48 @@ public class ShoppingCartManagedBean implements Serializable {
      */
     public void setPrepEnums(PreparationMethod[] prepEnums) {
         this.prepEnums = prepEnums;
+    }
+
+    /**
+     * @return the newOrderEntity
+     */
+    public OrderEntity getNewOrderEntity() {
+        return newOrderEntity;
+    }
+
+    /**
+     * @param newOrderEntity the newOrderEntity to set
+     */
+    public void setNewOrderEntity(OrderEntity newOrderEntity) {
+        this.newOrderEntity = newOrderEntity;
+    }
+
+    /**
+     * @return the numPax
+     */
+    public Integer getNumPax() {
+        return numPax;
+    }
+
+    /**
+     * @param numPax the numPax to set
+     */
+    public void setNumPax(Integer numPax) {
+        this.numPax = numPax;
+    }
+
+    /**
+     * @return the hasCC
+     */
+    public Boolean getHasNoCC() {
+        return hasNoCC;
+    }
+
+    /**
+     * @param hasCC the hasCC to set
+     */
+    public void setHasNoCC(Boolean hasCC) {
+        this.hasNoCC = hasCC;
     }
 
 }

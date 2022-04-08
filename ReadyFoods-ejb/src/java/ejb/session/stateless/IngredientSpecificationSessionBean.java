@@ -15,6 +15,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -61,6 +62,13 @@ public class IngredientSpecificationSessionBean implements IngredientSpecificait
             throw new UnknownPersistenceException(ex.getMessage());
 
         }
+    }
+    
+    @Override
+    public IngredientSpecification retrieveIngredientSpecificationByIngredientId(Long ingredientId){
+        Query query = entityManager.createQuery("SELECT i FROM IngredientSpecification i WHERE i.ingredient.ingredientId =:inIngredientId");
+        query.setParameter("inIngredientId", ingredientId);
+        return (IngredientSpecification)query.getSingleResult();
     }
 
     @Override

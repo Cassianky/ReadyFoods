@@ -8,6 +8,7 @@ package entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,7 +38,7 @@ public class OrderLineItem implements Serializable {
     @Digits(integer = 9, fraction = 2)
     private BigDecimal recipeSubTotal;
     
-    @OneToMany
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<CustomisedIngredient> customisedIngredients;
     
     @ManyToOne(optional = true)

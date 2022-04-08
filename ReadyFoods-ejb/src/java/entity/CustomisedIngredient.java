@@ -59,16 +59,12 @@ public class CustomisedIngredient implements Serializable {
     @DecimalMin("0.00")
     @Digits(integer = 9, fraction = 2)
     private BigDecimal subtotal;
-    
-    @Min(1)
-    private Integer lineItemNumber;
-
+  
     public CustomisedIngredient() {
     }
 
-    public CustomisedIngredient(Integer lineItemNumber,Integer quantityOfIngredient, PreparationMethod preparationMethod, Long ingredientId, String ingredientName, BigDecimal unitPrice, BigDecimal subtotal) {
+    public CustomisedIngredient(Integer quantityOfIngredient, PreparationMethod preparationMethod, Long ingredientId, String ingredientName, BigDecimal unitPrice, BigDecimal subtotal) {
         this();
-        this.lineItemNumber = lineItemNumber;
         this.preparationMethod = preparationMethod;
         this.quantityOfIngredient = quantityOfIngredient;
         this.ingredientId = ingredientId;
@@ -179,23 +175,6 @@ public class CustomisedIngredient implements Serializable {
         this.subtotal = subtotal;
     }
 
-    /**
-     * @return the lineItemNumber
-     */
-    public Integer getLineItemNumber() {
-        return lineItemNumber;
-    }
-
-    /**
-     * @param lineItemNumber the lineItemNumber to set
-     */
-    public void setLineItemNumber(Integer lineItemNumber) {
-        this.lineItemNumber = lineItemNumber;
-    }
-
-    /**
-     * @return the preparationMethod
-     */
     public PreparationMethod getPreparationMethod() {
         return preparationMethod;
     }

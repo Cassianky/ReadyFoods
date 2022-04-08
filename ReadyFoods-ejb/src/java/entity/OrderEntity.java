@@ -73,8 +73,7 @@ public class OrderEntity implements Serializable {
     @OneToMany
     private List<OrderLineItem> orderLineItems;
     
-    @ManyToOne(optional = false)
-    @JoinColumn(nullable = false)
+    @ManyToOne(optional = true)
     private Customer customer;
 
     public OrderEntity() {
