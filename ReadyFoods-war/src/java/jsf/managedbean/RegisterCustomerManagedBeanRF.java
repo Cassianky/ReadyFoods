@@ -3,6 +3,8 @@ package jsf.managedbean;
 import ejb.session.stateless.CustomerSessionBeanLocal;
 import entity.Customer;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -36,9 +38,15 @@ public class RegisterCustomerManagedBeanRF implements Serializable {
     private ActivityLevel[] activityLevels;
     private DietType[] dietTypes;
     private String path;
+    private LocalDate maxDate;
 
     public RegisterCustomerManagedBeanRF() {
         newCustomer = new Customer();
+        LocalDate today = LocalDate.now();
+        int yearToday = today.getYear();
+        int monthToday = today.getMonthValue();
+        int dateToday = today.getDayOfMonth();
+        maxDate = LocalDate.of(yearToday-18, monthToday, dateToday);
     }
 
     @PostConstruct
@@ -143,5 +151,21 @@ public class RegisterCustomerManagedBeanRF implements Serializable {
     public void setDietTypes(DietType[] dietTypes) {
         this.dietTypes = dietTypes;
     }
+
+    /**
+     * @return the maxDate
+     */
+    public LocalDate getMaxDate() {
+        return maxDate;
+    }
+
+    /**
+     * @param maxDate the maxDate to set
+     */
+    public void setMaxDate(LocalDate maxDate) {
+        this.maxDate = maxDate;
+    }
+
+    
 
 }

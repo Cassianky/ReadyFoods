@@ -97,10 +97,10 @@
 
                         <p:row>
                             <p:column>
-                                <p:outputLabel for="age" value="Age:  "/>
+                                <p:outputLabel for="dob" value="Date Of Birth:  "/>
                             </p:column>
                             <p:column>
-                                <p:spinner id="age" value="#{registerCustomerManagedBeanRF.newCustomer.age}" placeholder="18" min="18" max="100" required="true" requiredMessage="Age is required" />
+                                <p:calendar pattern="yyyy-MMM-dd" id="dob" required="true" maxdate="#{registerCustomerManagedBeanRF.maxDate}" value="#{registerCustomerManagedBeanRF.newCustomer.dob}" showOn="button" />
                             </p:column>
                         </p:row>
                         <p:row>

@@ -14,11 +14,15 @@ import java.io.InputStream;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
+import java.time.LocalDate;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import org.primefaces.event.FileUploadEvent;
+import util.enumeration.ActivityLevel;
+import util.enumeration.DietType;
 import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.UpdateCustomerException;
@@ -41,9 +45,17 @@ public class ProfileManagedBean implements Serializable {
     private Customer currentCustomer;
     private String uploadedFilePath;
     private Boolean showUploadedFile; 
+    private ActivityLevel[] activityLevels;
+    private DietType[] dietTypes;
+    private LocalDate maxDate;
     
     public ProfileManagedBean() {
         showUploadedFile = false;
+        LocalDate today = LocalDate.now();
+        int yearToday = today.getYear();
+        int monthToday = today.getMonthValue();
+        int dateToday = today.getDayOfMonth();
+        maxDate = LocalDate.of(yearToday-18, monthToday, dateToday);
     }
     
     @PostConstruct
@@ -99,6 +111,21 @@ public class ProfileManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,  "File upload error: " + ex.getMessage(), ""));
         }
     }
+    
+    public void updateCustomer(ActionEvent event) 
+    {
+        try {
+            customerSessionBeanLocal.updateCustomer(currentCustomer);
+            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Profile updated successfully", null));
+        } catch (CustomerNotFoundException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Customer ID is not found! : " + ex.getMessage(), null));
+        } catch (InputDataValidationException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while updating profile: " + ex.getMessage(), null));
+        } catch (UpdateCustomerException ex) {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while updating product: " + ex.getMessage(), null));
+        }
+    }
 
     /**
      * @return the currentCustomer
@@ -140,6 +167,48 @@ public class ProfileManagedBean implements Serializable {
      */
     public void setShowUploadedFile(Boolean showUploadedFile) {
         this.showUploadedFile = showUploadedFile;
+    }
+
+    /**
+     * @return the activityLevels
+     */
+    public ActivityLevel[] getActivityLevels() {
+        return ActivityLevel.values();
+    }
+
+    /**
+     * @param activityLevels the activityLevels to set
+     */
+    public void setActivityLevels(ActivityLevel[] activityLevels) {
+        this.activityLevels = activityLevels;
+    }
+
+    /**
+     * @return the dietTypes
+     */
+    public DietType[] getDietTypes() {
+        return DietType.values();
+    }
+
+    /**
+     * @param dietTypes the dietTypes to set
+     */
+    public void setDietTypes(DietType[] dietTypes) {
+        this.dietTypes = dietTypes;
+    }
+
+    /**
+     * @return the maxDate
+     */
+    public LocalDate getMaxDate() {
+        return maxDate;
+    }
+
+    /**
+     * @param maxDate the maxDate to set
+     */
+    public void setMaxDate(LocalDate maxDate) {
+        this.maxDate = maxDate;
     }
     
     

@@ -12,7 +12,11 @@ import entity.Ingredient;
 import entity.IngredientSpecification;
 import entity.Recipe;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -73,7 +77,9 @@ public class DataInitSessionBean {
 
     private void initializeData() {
         try {
-            Customer customer1 = new Customer("customer1", "customer1", "customer1", "99999999", "password", "customer1@gmail.com", "123 Street", 20, DietType.VEGAN, Gender.FEMALE, ActivityLevel.HIGH);
+            LocalDate dob = LocalDate.of(1990, 10, 20);
+            Customer customer1 = new Customer("customer1", "customer1", "customer1", "99999999", "password", "customer1@gmail.com", "123 Street", DietType.VEGAN, Gender.FEMALE, ActivityLevel.HIGH);
+            customer1.setDob(dob);
             customerSessionBeanLocal.createNewCustomer(customer1);
 
             Ingredient ingredient1 = new Ingredient("Chicken", "Whole Chicken between 1kg to 1.5kg", IngredientUnit.Whole, new BigDecimal("10.00"), 50, 150);

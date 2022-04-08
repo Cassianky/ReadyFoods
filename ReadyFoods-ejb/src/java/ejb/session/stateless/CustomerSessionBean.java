@@ -167,7 +167,11 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
                    //Cannot update email
                    //customerToUpdate.setEmail(customer.getEmail());
                    customerToUpdate.setContactNumber(customer.getContactNumber());
+                   customerToUpdate.setAddress(customer.getAddress());
                    customerToUpdate.setProfilePicture(customer.getProfilePicture());
+                   customerToUpdate.setDob(customer.getDob());
+                   customerToUpdate.setActivityLevel(customer.getActivityLevel());
+                   customerToUpdate.setDietType(customer.getDietType());
                 }
                 else
                 {

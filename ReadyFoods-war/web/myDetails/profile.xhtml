@@ -19,75 +19,75 @@
 
 
             <div class="details-all">
-            <p:graphicImage class="customer-img" url="/uploadedFiles/profile/#{profileManagedBean.currentCustomer.profilePicture}" rendered="#{profileManagedBean.currentCustomer.profilePicture.length() != 0}"/>
-            <p:graphicImage  class="customer-img" name="defaultProfilePic.png" library="images" rendered="#{profileManagedBean.currentCustomer.profilePicture.length() == 0}"/>
-            <p:panelGrid styleClass="noBorders content">
-                <p:row>
-                    <p:column>
-                        <p:outputLabel class="details-output-label" value="Name: "/>
-                        <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.lastName} #{profileManagedBean.currentCustomer.lastName}"/>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel class="details-output-label" value="User Name: "/>
-                        <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.userName}"/>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel class="details-output-label" value="Email: "/>
-                        <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.email}"/>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel class="details-output-label" value="Contact Number: "/>
-                        <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.contactNumber}"/>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel class="details-output-label" value="Age: "/>
-                        <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.age}"/>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel class="details-output-label" value="Address: "/>
-                        <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.address}"/>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel class="details-output-label" value="Total Amount Spent: "/>
-                        <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.amountSpent} SGD"/>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel class="details-output-label" value="Diet Type: "/>
-                        <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.dietType}"/>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel class="details-output-label" value="Gender: "/>
-                        <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.gender}"/>
-                    </p:column>
-                </p:row>
-                <p:row>
-                    <p:column>
-                        <p:outputLabel class="details-output-label" value="Activity Level: "/>
-                        <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.activityLevel}"/>
-                    </p:column>
-                </p:row>
-            </p:panelGrid>
+                <p:graphicImage class="customer-img" url="/uploadedFiles/profile/#{profileManagedBean.currentCustomer.profilePicture}" rendered="#{profileManagedBean.currentCustomer.profilePicture.length() != 0}"/>
+                <p:graphicImage  class="customer-img" name="defaultProfilePic.png" library="images" rendered="#{profileManagedBean.currentCustomer.profilePicture.length() == 0}"/>
+                <p:panelGrid styleClass="noBorders content">
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel class="details-output-label" value="Name: "/>
+                            <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.lastName} #{profileManagedBean.currentCustomer.lastName}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel class="details-output-label" value="User Name: "/>
+                            <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.userName}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel class="details-output-label" value="Email: "/>
+                            <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.email}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel class="details-output-label" value="Contact Number: "/>
+                            <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.contactNumber}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel class="details-output-label" value="Date Of Birth: "/>
+                            <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.dob}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel class="details-output-label" value="Address: "/>
+                            <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.address}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel class="details-output-label" value="Total Amount Spent: "/>
+                            <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.amountSpent} SGD"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel class="details-output-label" value="Diet Type: "/>
+                            <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.dietType}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel class="details-output-label" value="Gender: "/>
+                            <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.gender}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel class="details-output-label" value="Activity Level: "/>
+                            <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.activityLevel}"/>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
             </div>
             <p:separator/>
             <div align="right">
                 <p:commandButton class="buttons-profile" value="Update My Profile Picture" update="formFileUpload" oncomplete="PF('dialogFormFileUpload').show()"/>
-                <p:commandButton class="buttons-profile" value="Edit"/>
+                <p:commandButton class="buttons-profile" value="Edit" update="formUpdateProfile" oncomplete="PF('dialogUpdateProfile').show()"/>
             </div>
         </h:form>
         <p:separator/>
@@ -111,7 +111,120 @@
                 </p:panel>
             </p:dialog>
         </h:form>
-
+        <h:form id="formUpdateProfile">
+            <p:dialog id="dialogUpdateProfile" widgetVar="dialogUpdateProfile" header="Edit Profile Details" closable="true">
+                <p:messages id="messagesUpdateProfile" redisplay="false" />
+                <p:panelGrid>
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Email: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{profileManagedBean.currentCustomer.email}" />
+                        </p:column>
+                        <p:column>
+                            &nbsp;
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Gender: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{profileManagedBean.currentCustomer.gender}" />
+                        </p:column>
+                        <p:column>
+                            &nbsp;
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="userName" value="UserName: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="userName" value="#{profileManagedBean.currentCustomer.userName}" required="true" requiredMessage="User Name is required" >
+                                <f:validateLength minimum="5" />
+                            </p:inputText>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="firstName" value="First Name: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="firstName" value="#{profileManagedBean.currentCustomer.firstName}" required="true" requiredMessage="First Name is required" >
+                                <f:validateLength minimum="2" />
+                            </p:inputText>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="lastName" value="Last Name: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="lastName" value="#{profileManagedBean.currentCustomer.lastName}" required="true" requiredMessage="Last Name is required">
+                                <f:validateLength minimum="2" />
+                            </p:inputText>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="contactNumber" value="Contact Number: "/>
+                        </p:column>
+                        <p:column>
+                            <p:inputMask  mask="99999999" id="contactNumber" value="#{profileManagedBean.currentCustomer.contactNumber}" required="true" requiredMessage="Contact Number is required" >
+                                <f:validateLength minimum="8" maximum="8"/>
+                            </p:inputMask>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="address" value="Address: "/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="address" value="#{profileManagedBean.currentCustomer.address}" required="true" requiredMessage="Address is required">
+                                <f:validateLength minimum="5" />
+                            </p:inputText>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="dob" value="Date Of Birth:  "/>
+                        </p:column>
+                        <p:column>
+                            <p:calendar pattern="yyyy-MMM-dd" id="dob" required="true" maxdate="#{profileManagedBean.maxDate}" value="#{profileManagedBean.currentCustomer.dob}" showOn="button" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="selActivityLevel" value="Activity Level "/>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="selActivityLevel" value="#{profileManagedBean.currentCustomer.activityLevel}">
+                                <f:selectItems value="#{profileManagedBean.activityLevels}" var="activityLevel"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="selDietType" value="Diet Type "/>
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu id="selDietType" value="#{profileManagedBean.currentCustomer.dietType}">
+                                <f:selectItems value="#{profileManagedBean.dietTypes}" var="dietType"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2">
+                            <div align="center">
+                                <p:commandButton value="Update" type="submit" update="@form formProfileDetails" process="@form" actionListener="#{profileManagedBean.updateCustomer}" oncomplete="PF('dialogUpdateProfile').show();"/>
+                            </div>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
     </ui:define>
 
 </ui:composition>
