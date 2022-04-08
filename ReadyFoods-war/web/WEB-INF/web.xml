@@ -29,4 +29,8 @@
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
+    <context-param>
+        <param-name>WELCOME_IMAGE_PATH</param-name>
+         <param-value>C:/Users/ngcas/Desktop/IS3106/ReadyFoods/ReadyFoods-war/web/resources/images/welcome.png</param-value>
+    </context-param>
 </web-app>
