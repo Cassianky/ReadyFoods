@@ -41,7 +41,7 @@ public class OrderLineItem implements Serializable {
     @Column(nullable = true)
     private Integer quantity; // only used in subscription orders
     
-    @OneToMany
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<CustomisedIngredient> customisedIngredients;
     
     @ManyToOne(optional = true)
