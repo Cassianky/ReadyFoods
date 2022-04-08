@@ -54,7 +54,7 @@ public class RegisterCustomerManagedBeanRF implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Customer Registered Successfully! (Email: " + ce.getEmail() + ")", null));
             
             Future<Boolean> asyncResult = sendWelcomeEmail(ce.getFirstName(), ce.getEmail());
-
+            
             //Email sending is slow, please be patient!
             Thread thread = new Thread() {
                 public void run() {
@@ -74,7 +74,6 @@ public class RegisterCustomerManagedBeanRF implements Serializable {
 
             newCustomer = new Customer();
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Customer Registered Successfully! (Email: " + ce.getEmail() + ")", null));
         } catch (CustomerEmailExistsException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Customer Email already has Account! ", null));
         } catch (InterruptedException | CustomerNotFoundException | InputDataValidationException | UnknownPersistenceException ex) {

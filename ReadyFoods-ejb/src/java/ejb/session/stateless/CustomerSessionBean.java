@@ -161,7 +161,13 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 
                 if(customerToUpdate.getEmail().equals(customer.getEmail()))
                 {
-                                 
+                   customerToUpdate.setFirstName(customer.getFirstName());
+                   customerToUpdate.setLastName(customer.getLastName());
+                   customerToUpdate.setUserName(customer.getUserName());
+                   //Cannot update email
+                   //customerToUpdate.setEmail(customer.getEmail());
+                   customerToUpdate.setContactNumber(customer.getContactNumber());
+                   customerToUpdate.setProfilePicture(customer.getProfilePicture());
                 }
                 else
                 {

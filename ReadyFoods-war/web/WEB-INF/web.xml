@@ -33,4 +33,12 @@
         <param-name>WELCOME_IMAGE_PATH</param-name>
          <param-value>C:/Users/ngcas/Desktop/IS3106/ReadyFoods/ReadyFoods-war/web/resources/images/welcome.png</param-value>
     </context-param>
+    <context-param>
+        <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>alternatedocroot_1</param-name>
+        <param-value>C:/glassfish-5.1.0-uploadedfiles/uploadedFiles</param-value>
+    </context-param>
 </web-app>

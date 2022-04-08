@@ -136,7 +136,7 @@
                         <p:row>
                             <p:column colspan="2">
                                 <div align="center">
-                                    <p:commandButton class="register-button" value="Register" type="submit" actionListener="#{registerCustomerManagedBeanRF.registerNewCustomer}"/>
+                                    <p:commandButton class="register-button" value="Register" type="submit" update="@form" process="@form" actionListener="#{registerCustomerManagedBeanRF.registerNewCustomer}"/>
                                 </div>
                             </p:column>
                         </p:row>

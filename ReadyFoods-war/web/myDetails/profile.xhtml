@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                template="/template/defaultTemplate.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+
+    <ui:define name="content">
+        <h:outputStylesheet name="profile.css" library="css"/>
+        <br/>
+        <h1 class="header-text">My Profile</h1>
+        <p:separator/>
+        <h:form id="formProfileDetails">
+
+
+            <div class="details-all">
+            <p:graphicImage class="customer-img" url="/uploadedFiles/profile/#{profileManagedBean.currentCustomer.profilePicture}" rendered="#{profileManagedBean.currentCustomer.profilePicture.length() != 0}"/>
+            <p:graphicImage  class="customer-img" name="defaultProfilePic.png" library="images" rendered="#{profileManagedBean.currentCustomer.profilePicture.length() == 0}"/>
+            <p:panelGrid styleClass="noBorders content">
+                <p:row>
+                    <p:column>
+                        <p:outputLabel class="details-output-label" value="Name: "/>
+                        <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.lastName} #{profileManagedBean.currentCustomer.lastName}"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel class="details-output-label" value="User Name: "/>
+                        <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.userName}"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel class="details-output-label" value="Email: "/>
+                        <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.email}"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel class="details-output-label" value="Contact Number: "/>
+                        <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.contactNumber}"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel class="details-output-label" value="Age: "/>
+                        <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.age}"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel class="details-output-label" value="Address: "/>
+                        <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.address}"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel class="details-output-label" value="Total Amount Spent: "/>
+                        <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.amountSpent} SGD"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel class="details-output-label" value="Diet Type: "/>
+                        <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.dietType}"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel class="details-output-label" value="Gender: "/>
+                        <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.gender}"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column>
+                        <p:outputLabel class="details-output-label" value="Activity Level: "/>
+                        <p:outputLabel class="details-output-label-2" value="#{profileManagedBean.currentCustomer.activityLevel}"/>
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+            </div>
+            <p:separator/>
+            <div align="right">
+                <p:commandButton class="buttons-profile" value="Update My Profile Picture" update="formFileUpload" oncomplete="PF('dialogFormFileUpload').show()"/>
+                <p:commandButton class="buttons-profile" value="Edit"/>
+            </div>
+        </h:form>
+        <p:separator/>
+        <h:form id="formFileUpload" enctype="multipart/form-data">
+
+            <p:dialog id="dialogFormFileUpload" widgetVar="dialogFormFileUpload" header="Update Profile Picture" closable="true">
+                <p:messages id="messagesFormFileUpload" redisplay="false" />
+                <p:panel header="New Profile Picture Upload">
+                    <div class="description">
+                        <h:outputText class="description" value="File Size: maximum 1 MB"/>
+                        <h:outputText class="description" value="File extension: .jpg"/>
+                    </div>
+                    <p:fileUpload mode="advanced" sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" oncomplete="PF('dialogFormFileUpload').show();" listener="#{profileManagedBean.handleFileUpload}" multiple="true" update="@form formProfileDetails" />
+
+                </p:panel>
+
+                <br/>
+
+                <p:panel header="Uploaded File" visible="#{profileManagedBean.showUploadedFile}">
+                    <p:graphicImage url="/uploadedFiles/profile/#{profileManagedBean.uploadedFilePath}" height="80px" />
+                </p:panel>
+            </p:dialog>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>
+
