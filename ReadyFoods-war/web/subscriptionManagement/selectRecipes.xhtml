@@ -9,7 +9,9 @@
                 template="./../template/defaultTemplate.xhtml">
 
 
+
     <ui:define name="content">
+        <script type="text/javascript"/>
 
         <ez:Breadcrumb pageName="selectRecipes" />
         <main class="card">
@@ -27,14 +29,27 @@
 
         <main class="card">
             <h:form id="form">
-                <p:growl><p:autoUpdate/></p:growl>
-                <p:panel >
-                    TODO: Check for 0 remaining recipes b4 persisting, select day of delivery, show which week this selection is for, category formatting, view details.
+                <p:growl id="growl"><p:autoUpdate/></p:growl>
+                <p:panel id="display">
+                    TODO: Check for 0 remaining recipes b4 persisting, restrict day of delivery, category formatting, view details, DIET TYPE RECC
                     <br/>
-                    <p:outputLabel style="font-weight: bold;" value="Remaining recipes: "/> 
-                    <h:outputText style="color: #AE3126;" value="#{subscriptionSelectRecipesManagedBean.remaining}"/>
+                    <h3>
+                        <!-- Number of remaining recipes -->
+                        <p:outputLabel style="font-weight: bold;" value="Remaining recipes: "/> 
+                        <h:outputText style="color: #AE3126;" value="#{subscriptionSelectRecipesManagedBean.remaining}"/>
+                    </h3>
+                    <h4>
+                        <!--Selecting for which week-->
+                        <p:outputLabel style="font-weight: bold;" value="Selection for week: #{subscriptionSelectRecipesManagedBean.nextWk}"/> 
+                    </h4>
+                    <p:datePicker id="event" value="#{subscriptionSelectRecipesManagedBean.dateForDelivery}" appendTo="@(body)" inline="true">
+                        <p:ajax event="dateSelect" process="@this" listener="#{subscriptionSelectRecipesManagedBean.onDateSelect}" update="growl"/>
+                    </p:datePicker>
+                
+                    <!-- Create new subscription order OR upadte order -->
                     <p:separator/>
-                    <p:commandButton value="Save Selection" actionListener="#{subscriptionSelectRecipesManagedBean.updateSelection}"/>
+                    <p:commandButton 
+                                     value="Save Selection" actionListener="#{subscriptionSelectRecipesManagedBean.updateSelection}"/>
 
 
                 </p:panel>
@@ -61,7 +76,7 @@
 
                                 <div>
                                     <i class="pi pi-tag product-category-icon"/>
-                                    <!--                            TODO: properly format tags-->
+
                                     <span class="product-category">#{orderLineItem.recipe.categories}</span> 
                                 </div>
                                 <br/>

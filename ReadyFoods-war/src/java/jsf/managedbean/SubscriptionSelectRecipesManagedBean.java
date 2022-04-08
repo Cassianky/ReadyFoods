@@ -17,9 +17,18 @@ import entity.Subscription;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -29,6 +38,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.view.ViewScoped;
+import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
 import util.enumeration.Status;
 import util.exception.CreateNewOrderException;
 import util.exception.CustomerNotFoundException;
@@ -53,8 +64,6 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
 
     @EJB(name = "RecipeSessionBeanLocal")
     private RecipeSessionBeanLocal recipeSessionBeanLocal;
-    
-    
 
     private List<Recipe> allRecipes;
 
@@ -66,6 +75,8 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
     private OrderEntity currentOrder;
 
     private Integer remaining;
+    private String nextWk;
+    private Date dateForDelivery;
 
     // Need to find a way to 1. Save the customer's current recipe selection 2. Session restarts, need to retrieve the current recipe selection and show to customer
     /**
@@ -73,6 +84,7 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
      */
     public SubscriptionSelectRecipesManagedBean() {
         this.setOrderLineItems(new ArrayList<>());
+        nextWk = getNextWeek();
 
     }
 
@@ -94,7 +106,6 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
             this.setRemaining(ongoingSubscription.getNumOfRecipes());
 
             currentOrder = ongoingSubscription.getCurrentOrder();
-            
 
             List<Long> usedRecipeIds = new ArrayList<Long>();
 
@@ -119,7 +130,6 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
             }
 
             System.out.println(orderLineItems);
-            
 
         } catch (CustomerNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null,
@@ -147,6 +157,7 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
     }
 
     public void updateSelection(ActionEvent event) {
+        System.out.println("Date for delivery" + dateForDelivery);
         try {
             if (currentOrder == null) {
 
@@ -157,22 +168,20 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
                         lineItemsToBuy.add(oli);
                     }
                 }
-                
+
                 OrderEntity newOrder = new OrderEntity(ongoingSubscription.getNumOfPeople(), ongoingSubscription.getWeeklyPrice(), false,
                         new Date(), Status.PENDING, lineItemsToBuy);
-                
-                orderEntitySessionBeanLocal.createNewSubscriptionOrder(currentCustomerEntity.getCustomerId(), newOrder); 
+
+                orderEntitySessionBeanLocal.createNewSubscriptionOrder(currentCustomerEntity.getCustomerId(), newOrder);
                 FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO,
-                            "Recipe selection has been saved!  ID: " + newOrder.getOrderEntityId(), null));
-                
-              
+                        new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                "Recipe selection has been saved!  ID: " + newOrder.getOrderEntityId(), null));
 
             } else {
-                 FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO,
-                            "Updating of recipe selection not implemented yet :(" , null));
-                
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                "Updating of recipe selection not implemented yet :(", null));
+
             }
         } catch (CustomerNotFoundException ex) {
             Logger.getLogger(SubscriptionSelectRecipesManagedBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -182,6 +191,43 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
             Logger.getLogger(SubscriptionSelectRecipesManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    public String getCurrentWeek() {
+        ZoneId TZ = ZoneId.of("Asia/Singapore");
+        final DayOfWeek firstDayOfWeek = WeekFields.of(Locale.FRANCE).getFirstDayOfWeek();
+        final DayOfWeek lastDayOfWeek = DayOfWeek.of(((firstDayOfWeek.getValue() + 5) % DayOfWeek.values().length) + 1);
+        LocalDate start = LocalDate.now(TZ).with(TemporalAdjusters.previousOrSame(firstDayOfWeek)); // first day
+        LocalDate end = LocalDate.now(TZ).with(TemporalAdjusters.nextOrSame(lastDayOfWeek));      // last day
+
+        return start + "-" + end;
+    }
+
+    public String getNextWeek() {
+        ZoneId TZ = ZoneId.of("Asia/Singapore");
+        final DayOfWeek firstDayOfWeek = WeekFields.of(Locale.FRANCE).getFirstDayOfWeek();
+        final DayOfWeek lastDayOfWeek = DayOfWeek.of(((firstDayOfWeek.getValue() + 5) % DayOfWeek.values().length) + 1);
+        LocalDate start = LocalDate.now(TZ).with(TemporalAdjusters.previousOrSame(firstDayOfWeek)).plusDays(7); // first day
+        LocalDate end = LocalDate.now(TZ).with(TemporalAdjusters.nextOrSame(lastDayOfWeek)).plusDays(7);      // last day
+
+        return start.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)) + " - " + end.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+
+        // return start + " TO " + end;
+    }
+
+    public void onDateSelect(SelectEvent<Date> event) {
+        System.out.println("Date select");
+    
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, format.format(dateForDelivery) +  " selected. Remember to save your changes!"
+                , format.format(event.getObject())));
+    }
+
+    public void click() {
+           System.out.println("Click");
+        PrimeFaces.current().ajax().update("form");
+        PrimeFaces.current().executeScript("PF('dlg').show()");
     }
 
     /**
@@ -266,6 +312,34 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
      */
     public void setRemaining(Integer remaining) {
         this.remaining = remaining;
+    }
+
+    /**
+     * @return the nextWk
+     */
+    public String getNextWk() {
+        return nextWk;
+    }
+
+    /**
+     * @param nextWk the nextWk to set
+     */
+    public void setNextWk(String nextWk) {
+        this.nextWk = nextWk;
+    }
+
+    /**
+     * @return the dateForDelivery
+     */
+    public Date getDateForDelivery() {
+        return dateForDelivery;
+    }
+
+    /**
+     * @param dateForDelivery the dateForDelivery to set
+     */
+    public void setDateForDelivery(Date dateForDelivery) {
+        this.dateForDelivery = dateForDelivery;
     }
 
 }
