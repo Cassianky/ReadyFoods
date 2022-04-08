@@ -146,6 +146,9 @@
                                 <f:validateLength minimum="5" />
                             </p:inputText>
                         </p:column>
+                        <p:column>
+                            <p:message for="userName" />
+                        </p:column>
                     </p:row>
                     <p:row>
                         <p:column>
@@ -155,6 +158,9 @@
                             <p:inputText id="firstName" value="#{profileManagedBean.currentCustomer.firstName}" required="true" requiredMessage="First Name is required" >
                                 <f:validateLength minimum="2" />
                             </p:inputText>
+                        </p:column>
+                        <p:column>
+                            <p:message for="firstName" />
                         </p:column>
                     </p:row>
                     <p:row>
@@ -166,6 +172,9 @@
                                 <f:validateLength minimum="2" />
                             </p:inputText>
                         </p:column>
+                        <p:column>
+                            <p:message for="lastName" />
+                        </p:column>
                     </p:row>
                     <p:row>
                         <p:column>
@@ -175,6 +184,9 @@
                             <p:inputMask  mask="99999999" id="contactNumber" value="#{profileManagedBean.currentCustomer.contactNumber}" required="true" requiredMessage="Contact Number is required" >
                                 <f:validateLength minimum="8" maximum="8"/>
                             </p:inputMask>
+                        </p:column>
+                        <p:column>
+                            <p:message for="contactNumber" />
                         </p:column>
                     </p:row>
                     <p:row>
@@ -186,6 +198,9 @@
                                 <f:validateLength minimum="5" />
                             </p:inputText>
                         </p:column>
+                        <p:column>
+                            <p:message for="address" />
+                        </p:column>
                     </p:row>
                     <p:row>
                         <p:column>
@@ -193,6 +208,9 @@
                         </p:column>
                         <p:column>
                             <p:calendar pattern="yyyy-MMM-dd" id="dob" required="true" maxdate="#{profileManagedBean.maxDate}" value="#{profileManagedBean.currentCustomer.dob}" showOn="button" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="dob" />
                         </p:column>
                     </p:row>
                     <p:row>
@@ -204,6 +222,9 @@
                                 <f:selectItems value="#{profileManagedBean.activityLevels}" var="activityLevel"/>
                             </p:selectOneMenu>
                         </p:column>
+                        <p:column>
+                            <p:message for="selActivityLevel" />
+                        </p:column>
                     </p:row>
                     <p:row>
                         <p:column>
@@ -213,6 +234,9 @@
                             <p:selectOneMenu id="selDietType" value="#{profileManagedBean.currentCustomer.dietType}">
                                 <f:selectItems value="#{profileManagedBean.dietTypes}" var="dietType"/>
                             </p:selectOneMenu>
+                        </p:column>
+                        <p:column>
+                            <p:message for="selDietType" />
                         </p:column>
                     </p:row>
                     <p:row>

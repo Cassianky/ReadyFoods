@@ -24,7 +24,7 @@
                     <p:submenu label="My Details" rendered="#{sessionScope.isLogin == true}">
                         <p:menuitem value="Profile" outcome="/myDetails/profile.xhtml" icon="pi pi-user" />
                         <p:menuitem value="Credit Card" outcome="/myDetails/creditCard.xhtml" icon="pi pi-user" />
-                        <p:menuitem value="Change Password" icon="pi pi-ticket" />
+                        <p:menuitem value="Change Password" icon="pi pi-ticket" outcome="/myDetails/changePassword.xhtml"/>
                     </p:submenu>
                     
                     <p:submenu label="Account Management" rendered="#{sessionScope.isLogin == true}">

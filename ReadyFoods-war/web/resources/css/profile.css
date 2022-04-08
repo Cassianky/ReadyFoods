@@ -58,3 +58,12 @@ and open the template in the editor.
     flex-direction: row; 
     padding: 20px;
 }
+
+.password-panel{
+    font-size: 18;
+    width: 1000px;
+}
+
+.password-description {
+   font-size: 15;
+}

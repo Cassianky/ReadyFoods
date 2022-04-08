@@ -25,7 +25,9 @@ import util.enumeration.ActivityLevel;
 import util.enumeration.DietType;
 import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
+import util.exception.InvalidLoginCredentialException;
 import util.exception.UpdateCustomerException;
+import util.security.CryptographicHelper;
 
 /**
  *
@@ -41,34 +43,35 @@ public class ProfileManagedBean implements Serializable {
 
     @EJB
     private CustomerSessionBeanLocal customerSessionBeanLocal;
-    
+
     private Customer currentCustomer;
     private String uploadedFilePath;
-    private Boolean showUploadedFile; 
+    private Boolean showUploadedFile;
     private ActivityLevel[] activityLevels;
     private DietType[] dietTypes;
     private LocalDate maxDate;
-    
+    private String newPassword;
+    private String oldPassword;
+    private String confirmPassword;
+
     public ProfileManagedBean() {
         showUploadedFile = false;
         LocalDate today = LocalDate.now();
         int yearToday = today.getYear();
         int monthToday = today.getMonthValue();
         int dateToday = today.getDayOfMonth();
-        maxDate = LocalDate.of(yearToday-18, monthToday, dateToday);
+        maxDate = LocalDate.of(yearToday - 18, monthToday, dateToday);
     }
-    
+
     @PostConstruct
     public void postConstruct() {
         currentCustomer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
     }
-    
-    public void handleFileUpload(FileUploadEvent event)
-    {
-        try
-        {
+
+    public void handleFileUpload(FileUploadEvent event) {
+        try {
             System.err.println("********** Demo03ManagedBean.handleFileUpload(): alternatedocroot_1: " + (String) FacesContext.getCurrentInstance().getExternalContext().getInitParameter("alternatedocroot_1"));
-            String newFilePath = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("alternatedocroot_1") + System.getProperty("file.separator") +"profile"  + System.getProperty("file.separator") + event.getFile().getFileName();
+            String newFilePath = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("alternatedocroot_1") + System.getProperty("file.separator") + "profile" + System.getProperty("file.separator") + event.getFile().getFileName();
 
             System.err.println("********** Demo03ManagedBean.handleFileUpload(): File name: " + event.getFile().getFileName());
             System.err.println("********** Demo03ManagedBean.handleFileUpload(): newFilePath: " + newFilePath);
@@ -82,12 +85,10 @@ public class ProfileManagedBean implements Serializable {
 
             InputStream inputStream = event.getFile().getInputStream();
 
-            while (true)
-            {
+            while (true) {
                 a = inputStream.read(buffer);
 
-                if (a < 0)
-                {
+                if (a < 0) {
                     break;
                 }
 
@@ -97,33 +98,52 @@ public class ProfileManagedBean implements Serializable {
 
             fileOutputStream.close();
             inputStream.close();
-            
+
             String newFile = event.getFile().getFileName();
             currentCustomer.setProfilePicture(newFile);
             customerSessionBeanLocal.updateCustomer(currentCustomer);
             setUploadedFilePath(newFile);
             setShowUploadedFile((Boolean) true);
-            
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,  "File uploaded successfully", ""));
-        }
-        catch(InputDataValidationException | UpdateCustomerException| CustomerNotFoundException | IOException ex)
-        {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,  "File upload error: " + ex.getMessage(), ""));
+
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "File uploaded successfully", ""));
+        } catch (InputDataValidationException | UpdateCustomerException | CustomerNotFoundException | IOException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "File upload error: " + ex.getMessage(), ""));
         }
     }
-    
-    public void updateCustomer(ActionEvent event) 
-    {
+
+    public void updateCustomer(ActionEvent event) {
         try {
             customerSessionBeanLocal.updateCustomer(currentCustomer);
-            
+            Customer newCurrentCustomer = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomer.getCustomerId());
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentCustomer", newCurrentCustomer);
+
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Profile updated successfully", null));
         } catch (CustomerNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Customer ID is not found! : " + ex.getMessage(), null));
         } catch (InputDataValidationException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while updating profile: " + ex.getMessage(), null));
         } catch (UpdateCustomerException ex) {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while updating product: " + ex.getMessage(), null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while updating product: " + ex.getMessage(), null));
+        }
+    }
+
+    public void changePassword(ActionEvent event) {
+        try {
+            String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(oldPassword + currentCustomer.getSalt()));
+            if (passwordHash.equals(currentCustomer.getPassword())) {
+
+                customerSessionBeanLocal.updatePassword(currentCustomer, oldPassword, newPassword);
+                Customer newCurrentCustomer = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomer.getCustomerId());
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentCustomer", newCurrentCustomer);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Password changed successfully", null));
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Old password is incorrect", null));
+            }
+
+        } catch (InvalidLoginCredentialException | CustomerNotFoundException | InputDataValidationException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while updating password: " + ex.getMessage(), null));
+        } catch (Exception ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
     }
 
@@ -210,6 +230,47 @@ public class ProfileManagedBean implements Serializable {
     public void setMaxDate(LocalDate maxDate) {
         this.maxDate = maxDate;
     }
-    
-    
+
+    /**
+     * @return the newPassword
+     */
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    /**
+     * @param newPassword the newPassword to set
+     */
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    /**
+     * @return the oldPassword
+     */
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    /**
+     * @param oldPassword the oldPassword to set
+     */
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+
+    /**
+     * @return the confirmPassword
+     */
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    /**
+     * @param confirmPassword the confirmPassword to set
+     */
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
 }
