@@ -44,6 +44,7 @@ import util.enumeration.Status;
 import util.exception.CreateNewOrderException;
 import util.exception.CustomerNotFoundException;
 import util.exception.NoOngoingSubscriptionException;
+import util.exception.OrderNotFoundException;
 
 /**
  *
@@ -146,11 +147,10 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
     }
 
     public void updateRemaningRecipes(ValueChangeEvent event) {
-        System.out.println("Update");
+        //System.out.println("Update");
         Integer selected = 0;
         for (OrderLineItem oli : orderLineItems) {
             selected += oli.getQuantity();
-
         }
 
         setRemaining((Integer) ongoingSubscription.getNumOfRecipes() - selected);
@@ -172,15 +172,35 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
                 OrderEntity newOrder = new OrderEntity(ongoingSubscription.getNumOfPeople(), ongoingSubscription.getWeeklyPrice(), false,
                         new Date(), Status.PENDING, lineItemsToBuy);
 
-                orderEntitySessionBeanLocal.createNewSubscriptionOrder(currentCustomerEntity.getCustomerId(), newOrder);
+                newOrder = orderEntitySessionBeanLocal.createNewSubscriptionOrder(currentCustomerEntity.getCustomerId(), newOrder);
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_INFO,
-                                "Recipe selection has been saved!  ID: " + newOrder.getOrderEntityId(), null));
+                                "Recipe selection has been saved!", null));
+                currentOrder = newOrder;
 
             } else {
+                List<OrderLineItem> lineItemsToBuy = new ArrayList<>();
+
+                for (OrderLineItem oli : orderLineItems) {
+                    if (oli.getQuantity() != 0) {
+                        lineItemsToBuy.add(oli);
+                    }
+                }
+
+                OrderEntity newOrder = new OrderEntity(ongoingSubscription.getNumOfPeople(), ongoingSubscription.getWeeklyPrice(), false,
+                        new Date(), Status.PENDING, lineItemsToBuy);
+                
+                System.out.println("currentOrder" + currentOrder.getOrderEntityId());
+                
+                OrderEntity oldOrder = orderEntitySessionBeanLocal.deleteSubscriptionOrder(currentCustomerEntity.getCustomerId(), currentOrder.getOrderEntityId());
+                
+                newOrder = orderEntitySessionBeanLocal.createNewSubscriptionOrder(currentCustomerEntity.getCustomerId(), newOrder);
+                
+                currentOrder = newOrder;
+                
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_INFO,
-                                "Updating of recipe selection not implemented yet :(", null));
+                                "Recipe selection has been updated!", null));
 
             }
         } catch (CustomerNotFoundException ex) {
@@ -188,6 +208,8 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
         } catch (CreateNewOrderException ex) {
             Logger.getLogger(SubscriptionSelectRecipesManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NoOngoingSubscriptionException ex) {
+            Logger.getLogger(SubscriptionSelectRecipesManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (OrderNotFoundException ex) {
             Logger.getLogger(SubscriptionSelectRecipesManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
 

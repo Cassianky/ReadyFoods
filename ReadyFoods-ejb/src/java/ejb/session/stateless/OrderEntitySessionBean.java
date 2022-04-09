@@ -125,6 +125,47 @@ public class OrderEntitySessionBean implements OrderEntitySessionBeanLocal {
         }
 
     }
+   
+    public OrderEntity deleteSubscriptionOrder(Long customerId, Long oldOrderEntityId) throws CustomerNotFoundException,
+             NoOngoingSubscriptionException, OrderNotFoundException {
+        if (oldOrderEntityId != null) {
+      
+            OrderEntity oldOrderEntity = retrieveOrderByOrderId(oldOrderEntityId);
+
+            Customer customerEntity = customerSessionBeanLocal.retrieveCustomerByCustomerId(customerId);
+
+            Subscription customerSubscription = subscriptionSessionBean.retrieveOngoingSubscriptionForCustomer(customerId);
+
+            
+            customerSubscription.getSubscriptionOrders().remove(oldOrderEntity);
+            for (OrderLineItem orderLineItemEntity : oldOrderEntity.getOrderLineItems()) {
+
+                entityManager.remove(orderLineItemEntity);
+            }
+            
+            customerSubscription.setCurrentOrder(null);
+            entityManager.remove(oldOrderEntity);
+
+//                for (OrderLineItem orderLineItemEntity : newOrderEntity.getOrderLineItems()) {
+//                    for (CustomisedIngredient ci : orderLineItemEntity.getCustomisedIngredients()) {
+//                        ingredientSessionBeanLocal.debitQuantityAtHand(ci.getIngredientId(), ci.getQuantityOfIngredient());
+//                    }
+//                    entityManager.persist(orderLineItemEntity);
+//                }
+            entityManager.flush();
+            return oldOrderEntity;
+
+//            } catch (IngredientNotFoundException | IngredientInsufficientStockQuantityException ex) {
+//                // The line below rolls back all changes made to the database.
+//                eJBContext.setRollbackOnly();
+//
+//                throw new CreateNewOrderException(ex.getMessage());
+//            }
+        } else {
+            throw new OrderNotFoundException("Order information not provided");
+        }
+
+    }
 
     @Override
     public List<OrderEntity> retrieveAllOrders() {
