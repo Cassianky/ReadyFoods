@@ -6,10 +6,10 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <section id="mainmenu" class="mainmenu">
-        <h3 style="text-align: center">Main Menu</h3>
+        <h3 style="text-align: center; color: #4D2913;">Main Menu</h3>
         <nav>
             <h:form>      
-                <p:menu style="width:90%;" toggleable="true">
+                <p:menu style="width:auto;" toggleable="true">
 
                     <p:submenu label="System" rendered="#{sessionScope.isLogin == true}">
                         <p:menuitem value="Home" outcome="/index" icon="pi pi-home" />
@@ -44,6 +44,11 @@
                         <p:menuitem value="View All Recipes" outcome="/recipeManagement/viewAllRecipe.xhtml" icon="pi pi-list" />
                         <p:menuitem value="View Bookmarked Recipes" icon="pi pi-bookmark" />
                         
+                    </p:submenu>
+                    
+                    <p:submenu label="Food Diary" rendered="#{sessionScope.isLogin == true}">
+                        
+                        <p:menuitem value="My Food Diary" outcome="/foodDiary/myFoodDiary.xhtml"/>
                     </p:submenu>
                     <p:menuitem rendered="#{sessionScope.isLogin == false}" value="Home" outcome="/index" icon="pi pi-home" />
                     <p:menuitem rendered="#{sessionScope.isLogin == false}" value="Register" outcome="/registerCustomer" />

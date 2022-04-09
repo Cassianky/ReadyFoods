@@ -9,31 +9,12 @@
         <p:graphicImage class="logo" name="logo.png" library="images"/>
         <div class="header">
             <h:panelGroup rendered="#{sessionScope.isLogin == false}">
-                <h:form id="loginForm">
-
-                    <p:outputLabel for="email" value="Email" />&nbsp;
-                    <p:inputText id="email" size="32" value="#{loginManagedBeanRF.email}" required="true" requiredMessage="Email is required" maxlength="50">
-                        <f:validateLength minimum="4" />
-                    </p:inputText>
-                    &nbsp;
-                    <p:outputLabel for="password" value="Password" />&nbsp;
-                    <p:password toggleMask="true" redisplay="true" id="password" size="16" value="#{loginManagedBeanRF.password}" required="true" requiredMessage="Password is required" maxlength="32">
-                        <f:validateLength minimum="4" />
-                    </p:password>
-                    &nbsp;
-                    <p:commandButton type="reset" value="Clear" icon="pi pi-undo" />&nbsp;
-                    <p:commandButton type="submit" actionListener="#{loginManagedBeanRF.login}" value="Login" icon="pi pi-sign-in" />
-                    
-                    <p:growl>
-                        <p:autoUpdate />
-                    </p:growl>
-
-                </h:form>
+                <p:commandButton class="header-content" value="Login" oncomplete="PF('dialogLogin').show()"/>
             </h:panelGroup>
             <h:panelGroup rendered="#{sessionScope.isLogin == true}">
                 <h:form id="logoutForm">
-                    <h:outputText value="You are login as #{sessionScope.currentCustomer.userName}" />&nbsp;
-                    <p:commandButton value="Logout" actionListener="#{loginManagedBeanRF.logout}" icon="pi pi-sign-out" />
+                    <h:outputText class="header-welcome" value="Welcome, #{sessionScope.currentCustomer.userName}" />&nbsp;
+                    <p:commandButton class="header-content" value="Logout" actionListener="#{loginManagedBeanRF.logout}" icon="pi pi-sign-out"/>
                 </h:form>
             </h:panelGroup>
         </div>

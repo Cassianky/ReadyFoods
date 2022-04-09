@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.Food;
+import java.util.List;
 import javax.ejb.Local;
 import util.exception.CustomerNotFoundException;
 import util.exception.DeleteFoodException;
@@ -25,4 +26,6 @@ public interface FoodSessionBeanLocal {
     public Food retrieveFoodByFoodId(Long foodId) throws FoodNotFoundException;
 
     public void deleteFoodByFoodId(Long foodId, Long customerId) throws FoodNotFoundException, DeleteFoodException, CustomerNotFoundException;
+
+    public List<Food> retrieveAllFoodsByCustomerId(Long customerId) throws CustomerNotFoundException;
 }

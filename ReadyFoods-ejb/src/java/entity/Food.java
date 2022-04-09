@@ -38,22 +38,17 @@ public class Food implements Serializable {
     @Column(nullable = false, length = 32)
     @NotNull
     private Double sugar;
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false)
-    @NotNull
-    private Date foodCreatedDate;
 
     public Food() {
     }
 
-    public Food(String name, Double calories, Double carbs, Double protein, Double fats, Double sugar, Date foodCreatedDate) {
+    public Food(String name, Double calories, Double carbs, Double protein, Double fats, Double sugar) {
         this.name = name;
         this.calories = calories;
         this.carbs = carbs;
         this.protein = protein;
         this.fats = fats;
         this.sugar = sugar;
-        this.foodCreatedDate = foodCreatedDate;
     }
 
     public Long getFoodId() {
@@ -135,14 +130,6 @@ public class Food implements Serializable {
 
     public void setSugar(Double sugar) {
         this.sugar = sugar;
-    }
-
-    public Date getFoodCreatedDate() {
-        return foodCreatedDate;
-    }
-
-    public void setFoodCreatedDate(Date foodCreatedDate) {
-        this.foodCreatedDate = foodCreatedDate;
     }
     
 }
