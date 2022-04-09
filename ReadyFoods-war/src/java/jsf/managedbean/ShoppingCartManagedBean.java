@@ -66,8 +66,6 @@ public class ShoppingCartManagedBean implements Serializable {
 
     @EJB(name = "CustomerSessionBeanLocal")
     private CustomerSessionBeanLocal customerSessionBeanLocal;
-    
-    
 
     private ArrayList<OrderLineItem> orderLineItems;
 
@@ -75,130 +73,121 @@ public class ShoppingCartManagedBean implements Serializable {
 
     private OrderLineItem orderLineItemToUpdate;
 
-    private ArrayList<Recipe> recipes;
-
     private Recipe currentRecipe;
 
     private OrderLineItem currentOrderLineItem;
 
     private PreparationMethod[] prepEnums = PreparationMethod.values();
-    
+
     private OrderEntity newOrderEntity;
-   
+
     private Integer numPax;
-    
-    private Boolean hasNoCC;
+
+    private CreditCard creditCard;
 
     public ShoppingCartManagedBean() {
         this.orderLineItems = new ArrayList<>();
         this.currentOrderLineItem = new OrderLineItem();
         this.currentRecipe = new Recipe();
+        newOrderEntity = null;
         numPax = 1;
-        hasNoCC = true;
+        creditCard = null;
     }
-    
+
     @PostConstruct
     public void postConstruct() {
-        
-        
+
     }
 
     public void removeFromShoppingCart(ActionEvent event) throws IOException {
         OrderLineItem oli = (OrderLineItem) event.getComponent().getAttributes().get("orderLineItemToRemove");
-         System.out.println("******* Recipe: " + oli.getRecipe().getRecipeId() + " removed from cart!");
+        System.out.println("******* Recipe: " + oli.getRecipe().getRecipeId() + " removed from cart!");
         orderLineItems.remove(oli);
-//       
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product: " + oli.getRecipe().getRecipeTitle() + " removed from cart!", null));
     }
 
     public void checkoutShoppingCart(ActionEvent event) throws IOException, CheckOutShoppingCartException, ShoppingCartIsEmptyException {
-        
-        Customer customer = (Customer)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
-        
-        if (!orderLineItems.isEmpty()) {
-            newOrderEntity = new OrderEntity(numPax, totalPrice, false, new Date(), Status.PENDING, orderLineItems, customer);
-            if(customer.getCreditCard() != null){
-                System.out.println("Customer has credit card!");
-                //
-                FacesContext.getCurrentInstance().getExternalContext().redirect("orderPayment.xhtml");
-                hasNoCC = false;
+
+        Customer customer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
+        try {
+            Customer retrievedCustomer = customerSessionBeanLocal.retrieveCustomerByCustomerId(customer.getCustomerId());
+            if (!orderLineItems.isEmpty()) {
+                newOrderEntity = new OrderEntity(numPax, totalPrice, false, new Date(), Status.PENDING, orderLineItems, customer);
+                if (creditCard != null) {
+                    System.out.println("Customer has credit card!");
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("orderPayment.xhtml");
+                } else if (retrievedCustomer.getCreditCard() != null) {
+                    System.out.println("Customer has credit card!");
+                    setCreditCard(retrievedCustomer.getCreditCard());
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("orderPayment.xhtml");
+                } else {
+                    System.out.println("Customer has no credit card!");
+                }
             } else {
-                System.out.println("Customer has no credit card!");
+                throw new ShoppingCartIsEmptyException("Shopping cart is empty, cannot checkout.");
             }
-            
-            
-//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Shopping cart checked out successfully!", null));
-        } else {
-            throw new ShoppingCartIsEmptyException("Shopping cart is empty, cannot checkout.");
+        } catch (CustomerNotFoundException ex) {
+            ex.printStackTrace();
         }
 
     }
-    
-    public void confirmOrder(ActionEvent event) throws IOException{
-        Customer customer = (Customer)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
+
+    public void confirmOrder(ActionEvent event) throws IOException {
+        Customer customer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
         try {
-            orderEntitySessionBeanLocal.createNewOrder(customer.getCustomerId(), newOrderEntity);
+            OrderEntity orderEntity = orderEntitySessionBeanLocal.createNewOrder(customer.getCustomerId(), newOrderEntity);
+            Long orderCreatedId = orderEntity.getOrderEntityId();
+            orderLineItems.clear();
+            newOrderEntity = null;
+            numPax = 1;
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Succesfuly created order! (Order ID: " + orderCreatedId + ")", null));
         } catch (CustomerNotFoundException ex) {
             ex.printStackTrace();
         } catch (CreateNewOrderException ex) {
-           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error occured while creating new order: " + ex.getMessage(), null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error occured while creating new order: " + ex.getMessage(), null));
         }
     }
-    
+
     public String getCustomerAddress() {
-        Customer customer = (Customer)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
+        Customer customer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
         return customer.getAddress();
     }
-    
-    public String getCustomerCC() {
-        Customer customer = (Customer)FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
-        try {
-            Customer retrievedCustomer = customerSessionBeanLocal.retrieveCustomerByCustomerId(customer.getCustomerId());
-            CreditCard retrievedCard = retrievedCustomer.getCreditCard();
-            return retrievedCard.getCcNumber();
-        } catch (CustomerNotFoundException ex) {
-            ex.printStackTrace();
-        }
-        return null;
-        
+
+
+    public void redirectToAddCC() throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect("addCC.xhtml");
     }
-    
-    public void redirectToAddCC() throws IOException{
-         FacesContext.getCurrentInstance().getExternalContext().redirect("addCC.xhtml");
-    }
-    
-    public void updateNumPax(ValueChangeEvent event){
+
+    public void updateNumPax(ValueChangeEvent event) {
         numPax = (Integer) event.getNewValue();
     }
-    
-    public void addRecipeFromRecipeView(Recipe recipeFromView){
-        
+
+    public void addRecipeFromRecipeView(Recipe recipeFromView) {
+
         System.out.println("**********Cart managed bean called");
-        List<CustomisedIngredient>cis = new ArrayList<>();
-        for(IngredientSpecification is: recipeFromView.getIngredientSpecificationList()){
+        List<CustomisedIngredient> cis = new ArrayList<>();
+        for (IngredientSpecification is : recipeFromView.getIngredientSpecificationList()) {
             BigDecimal subT = is.getIngredient().getUnitPrice().multiply(BigDecimal.valueOf(is.getQuantityPerServing()));
-            CustomisedIngredient newCi = new CustomisedIngredient(is.getQuantityPerServing(),is.getPreparationMethod(),is.getIngredient().getIngredientId(),is.getIngredient().getName(),is.getIngredient().getUnitPrice(),subT);
+            CustomisedIngredient newCi = new CustomisedIngredient(is.getQuantityPerServing(), is.getPreparationMethod(), is.getIngredient().getIngredientId(), is.getIngredient().getName(), is.getIngredient().getUnitPrice(), subT);
             cis.add(newCi);
         }
-        
+
         OrderLineItem newOli = new OrderLineItem(cis, recipeFromView);
         newOli.getRecipeSubTotal();
-        
+
         orderLineItems.add(newOli);
-       
+
     }
 
     public void addRecipeToCart(ActionEvent event) {
 
         Recipe recipe = (Recipe) event.getComponent().getAttributes().get("recipeToAdd");
-        
+
         setCurrentRecipe(recipe);
         System.out.println("addRecipeToCart()********:" + currentRecipe.getRecipeTitle());
-        for(IngredientSpecification is:currentRecipe.getIngredientSpecificationList()){
+        for (IngredientSpecification is : currentRecipe.getIngredientSpecificationList()) {
             System.out.println("Ingredient Spec********:" + is.getIngredient().getName());
         }
-//        currentOrderLineItem.setRecipe(currentRecipe);
-//        orderLineItems.add(currentOrderLineItem);
 
     }
 
@@ -212,8 +201,8 @@ public class ShoppingCartManagedBean implements Serializable {
             }
         }
     }
-    
-    public void reset(ActionEvent event){
+
+    public void reset(ActionEvent event) {
         try {
             CustomisedIngredient cIToReset = (CustomisedIngredient) event.getComponent().getAttributes().get("cIToReset");
             Long recipeId = orderLineItemToUpdate.getRecipe().getRecipeId();
@@ -224,13 +213,12 @@ public class ShoppingCartManagedBean implements Serializable {
             cIToReset.setQuantityOfIngredient(realQuantity);
             orderLineItemToUpdate.getCustomisedIngredients().remove(cIToReset);
             orderLineItemToUpdate.getCustomisedIngredients().add(cIToReset);
-        
+
         } catch (RecipeNotFoundException ex) {
             Logger.getLogger(ShoppingCartManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
+
     public void doUpdateOrderLineItem(ActionEvent event) throws IOException {
         OrderLineItem oli = (OrderLineItem) event.getComponent().getAttributes().get("orderLineItemToUpdate");
         setOrderLineItemToUpdate(oli);
@@ -239,7 +227,7 @@ public class ShoppingCartManagedBean implements Serializable {
     public void removeCustomisedIngredientFromOrderLineItem(ActionEvent event) throws IOException {
         CustomisedIngredient ci = (CustomisedIngredient) event.getComponent().getAttributes().get("customisedIngredientToRemove");
         orderLineItemToUpdate.getCustomisedIngredients().remove(ci);
-        
+
     }
 
     public CustomerSessionBeanLocal getCustomerSessionBeanLocal() {
@@ -263,7 +251,7 @@ public class ShoppingCartManagedBean implements Serializable {
         for (OrderLineItem orderLineItem : orderLineItems) {
             totalP = totalP.add(orderLineItem.getRecipeSubTotal());
         }
-        
+
         totalP = totalP.multiply(BigDecimal.valueOf(numPax));
 
         setTotalPrice(totalP);
@@ -288,7 +276,7 @@ public class ShoppingCartManagedBean implements Serializable {
     public void setOrderLineItemToUpdate(OrderLineItem orderLineItemToUpdate) {
         this.orderLineItemToUpdate = orderLineItemToUpdate;
     }
-    
+
     /**
      * @return the orderEntitySessionBeanLocal
      */
@@ -301,20 +289,6 @@ public class ShoppingCartManagedBean implements Serializable {
      */
     public void setOrderEntitySessionBeanLocal(OrderEntitySessionBeanLocal orderEntitySessionBeanLocal) {
         this.orderEntitySessionBeanLocal = orderEntitySessionBeanLocal;
-    }
-
-    /**
-     * @return the recipes
-     */
-    public ArrayList<Recipe> getRecipes() {
-        return recipes;
-    }
-
-    /**
-     * @param recipes the recipes to set
-     */
-    public void setRecipes(ArrayList<Recipe> recipes) {
-        this.recipes = recipes;
     }
 
     /**
@@ -387,18 +361,19 @@ public class ShoppingCartManagedBean implements Serializable {
         this.numPax = numPax;
     }
 
+
     /**
-     * @return the hasCC
+     * @return the creditCard
      */
-    public Boolean getHasNoCC() {
-        return hasNoCC;
+    public CreditCard getCreditCard() {
+        return creditCard;
     }
 
     /**
-     * @param hasCC the hasCC to set
+     * @param creditCard the creditCard to set
      */
-    public void setHasNoCC(Boolean hasCC) {
-        this.hasNoCC = hasCC;
+    public void setCreditCard(CreditCard creditCard) {
+        this.creditCard = creditCard;
     }
 
 }

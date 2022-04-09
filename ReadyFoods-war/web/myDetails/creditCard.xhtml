@@ -9,20 +9,61 @@
                 xmlns:pe="http://primefaces.org/ui/extensions" >
 
     <ui:define name="content">
-        <h:form prependId="false">
-            <p:growl id="growl" showDetail="true" showSummary="true">
-                <p:autoUpdate />
-            </p:growl>
-            <p:panelGrid id="pnlCreditCard" columns="4">
+        <ez:Breadcrumb pageName="updateCreditCard" />
+   
+        <h:form id="formAddCreditCard" prependId="false">
+            <p:growl id="growl" showDetail="true" sticky="true">
+                <p:autoUpdate/>
+            </p:growl> 
+
+            <p:panelGrid id="pnlCreditCard" columns="2" styleClass="ui-noborder" layout="grid">
                 <f:facet name="header">
-                    <pe:creditCard id="creditCard" labelMonthYear="MM/YY" placeholderExpiry="**/**" placeholderName="Optimus Prime"/>
+                    <pe:creditCard id="creditCard" labelMonthYear="MM/YY" placeholderExpiry="**/**" placeholderName="Ready Foods"/>
                 </f:facet>
-                <p:inputText id="number" placeholder="Card number" required="true"/>
-                <p:inputText id="name" placeholder="Full name"  required="true"/>
-                <p:inputText id="expiry" placeholder="MM/YY"  required="true"/>
-                <p:inputText id="cvc" placeholder="CVC"  required="true"/>
+                <p:inputMask id="number" 
+                             placeholder="XXXX-XXXX-XXXX-XXXX" 
+                             value="#{paymentManagedBean.ccNumber}" 
+                             mask="9999-9999-9999-9999">
+                </p:inputMask>
+
+
+                <p:message for="number" style="color:red"/>
+
+                <p:inputText id="name" placeholder="Full name" 
+                             value="#{paymentManagedBean.nameOnCard}" />
+                <p:message for="name" style="color:red"/>
+
+                <p:datePicker id="month" 
+                              view="month" 
+                              placeholder="MM/YYYY"
+                              value="#{paymentManagedBean.expiryDate}" 
+                              pattern="MM/yyyy" 
+                              yearNavigator="true" 
+                              yearRange="2022:2040" >
+
+                </p:datePicker>
+
+                <p:message for="month" style="color:red"/>
+
+
+                <p:inputMask id="cvv" 
+                             placeholder="XXX" 
+                             value="#{paymentManagedBean.CVV}" 
+                             mask="999">
+                    <f:convertNumber type="number"/> 
+                </p:inputMask>
+                <p:message for="cvv" style="color:red"/>
+
+                <p:commandButton value="Update"
+                                 actionListener="#{paymentManagedBean.saveCC}"
+                                 update="@form">
+
+                </p:commandButton>
             </p:panelGrid>
-            <p:commandButton value="Update" update="@form" process="@form" />
+
+
+            <br></br>
+
         </h:form>
     </ui:define>
 

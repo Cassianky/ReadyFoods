@@ -26,6 +26,9 @@
                                                                    || cc.attrs.pageName == 'orderManagement'}" />
                 
                 <p:menuitem value="Purchase Management" rendered="#{cc.attrs.pageName == 'viewShoppingCart'}"/>
+                
+                <p:menuitem value="My Details" rendered="#{cc.attrs.pageName == 'updateCreditCard'}"/>
+                
                 <p:menuitem value="New Subscription" url="#{application.contextPath}/subscriptionManagement/newSubscription.xhtml" 
                             rendered="#{cc.attrs.pageName == 'newSubscription'}" />
                 <p:menuitem value="My Subscriptions" url="#{application.contextPath}/subscriptionManagement/mySubscriptions.xhtml" 
@@ -35,6 +38,9 @@
                 
                 <p:menuitem value="View Shopping Cart" url="#{application.contextPath}/purchaseManagement/viewShoppingCart.xhtml" 
                             rendered="#{cc.attrs.pageName == 'viewShoppingCart'}" />
+                
+                <p:menuitem value="Credit Card" url="#{application.contextPath}/myDetails/creditCard.xhtml" 
+                            rendered="#{cc.attrs.pageName == 'updateCreditCard'}" />
                 
                 <p:menuitem value="View My Orders" url="#{application.contextPath}/accountManagement/orderManagement.xhtml" 
                             rendered="#{cc.attrs.pageName == 'orderManagement'}" />
