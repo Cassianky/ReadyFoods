@@ -148,6 +148,28 @@
                 </h:form>
             </h:panelGroup>
         </div>
+        <h:form  id="loginForm">
+            <p:dialog id="dialogLogin" widgetVar="dialogLogin" header="Login" closable="true">
+                <p:messages id="messagesLogin" redisplay="false" />
+                <div style="display: flex; flex-direction: column;">
+                    <p:outputLabel for="email" value="Email" />&nbsp;
+                    <p:inputText id="email" size="32" value="#{loginManagedBeanRF.email}" required="true" requiredMessage="Email is required" maxlength="50">
+                        <f:validateLength minimum="4" />
+                    </p:inputText>
+                    <br/>
+                    <p:outputLabel for="password" value="Password" />&nbsp;
+                    <p:password id="password" size="16" value="#{loginManagedBeanRF.password}" required="true" requiredMessage="Password is required" maxlength="32">
+                        <f:validateLength minimum="4" />
+                    </p:password>
+                    &nbsp;
+                    <p:commandButton type="reset" value="Clear" icon="pi pi-undo" />&nbsp;
+                    <p:commandButton type="submit" actionListener="#{loginManagedBeanRF.login}" value="Login" icon="pi pi-sign-in" />
+                </div>
+                <p:growl>
+                    <p:autoUpdate />
+                </p:growl>
+            </p:dialog>
+        </h:form>
     </ui:define>
 
 </ui:composition>
