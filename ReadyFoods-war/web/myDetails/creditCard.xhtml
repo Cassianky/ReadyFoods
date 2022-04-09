@@ -5,27 +5,25 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
                 template="/template/defaultTemplate.xhtml"
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 xmlns:pe="http://primefaces.org/ui/extensions" >
 
     <ui:define name="content">
         <h:form prependId="false">
-	<p:growl id="growl" showDetail="true" showSummary="true">
-		<p:autoUpdate />
-	</p:growl>
-	<p:panelGrid id="pnlCreditCard" columns="4">
-		<f:facet name="header">
-			<pe:creditCard id="creditCard" labelMonthYear="MM/YY" placeholderExpiry="**/**" placeholderName="Optimus Prime"/>
-		</f:facet>
-		<p:inputText id="number" placeholder="Card number" required="true"/>
-		<p:inputText id="name" placeholder="Full name"  required="true"/>
-		<p:inputText id="expiry" placeholder="MM/YY"  required="true"/>
-		<p:inputText id="cvc" placeholder="CVC"  required="true"/>
-	</p:panelGrid>
-	<p:commandButton value="Update" update="@form" process="@form" />
-</h:form>
+            <p:growl id="growl" showDetail="true" showSummary="true">
+                <p:autoUpdate />
+            </p:growl>
+            <p:panelGrid id="pnlCreditCard" columns="4">
+                <f:facet name="header">
+                    <pe:creditCard id="creditCard" labelMonthYear="MM/YY" placeholderExpiry="**/**" placeholderName="Optimus Prime"/>
+                </f:facet>
+                <p:inputText id="number" placeholder="Card number" required="true"/>
+                <p:inputText id="name" placeholder="Full name"  required="true"/>
+                <p:inputText id="expiry" placeholder="MM/YY"  required="true"/>
+                <p:inputText id="cvc" placeholder="CVC"  required="true"/>
+            </p:panelGrid>
+            <p:commandButton value="Update" update="@form" process="@form" />
+        </h:form>
     </ui:define>
 
 </ui:composition>

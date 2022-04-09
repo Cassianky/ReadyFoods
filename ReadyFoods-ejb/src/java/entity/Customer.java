@@ -116,7 +116,11 @@ public class Customer implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     private CreditCard creditCard;
 
+    @Column(nullable = false)
     private String profilePicture;
+    
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<FoodDiaryRecord> foodDiaryRecords;
     
     public Customer() {
         bookmarkedRecipes = new ArrayList<>();
@@ -127,6 +131,7 @@ public class Customer implements Serializable {
         amountSpent = new BigDecimal(0);
         isBanned = false;
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);
+        profilePicture = "";
     }
 
     public Customer(String userName, String firstName, String lastName, String contactNumber, String password, String email, String address, DietType dietType, Gender gender, ActivityLevel activityLevel) {
@@ -142,7 +147,6 @@ public class Customer implements Serializable {
         this.gender = gender;
         this.activityLevel = activityLevel;
         setPassword(password);
-        profilePicture = "";
     }
 
     
@@ -434,5 +438,23 @@ public class Customer implements Serializable {
      */
     public void setDob(LocalDate dob) {
         this.dob = dob;
+    }
+    
+    public List<FoodDiaryRecord> getFoodDiaryRecords() {
+        return this.foodDiaryRecords;
+    }
+
+    public void addFoodDiaryRecord(FoodDiaryRecord foodDiaryRecord) {
+        if(!this.foodDiaryRecords.contains(foodDiaryRecord))
+        {
+            this.getFoodDiaryRecords().add(foodDiaryRecord);
+        }
+    }
+    
+    public void removeFoodDiaryRecord(FoodDiaryRecord foodDiaryRecord) {
+        if(this.getFoodDiaryRecords().contains(foodDiaryRecord))
+        {
+            this.getFoodDiaryRecords().remove(foodDiaryRecord);
+        }
     }
 }

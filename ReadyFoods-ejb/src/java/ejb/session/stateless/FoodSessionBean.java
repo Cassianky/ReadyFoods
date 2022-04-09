@@ -2,6 +2,7 @@ package ejb.session.stateless;
 
 import entity.Customer;
 import entity.Food;
+import java.util.List;
 import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -81,6 +82,12 @@ public class FoodSessionBean implements FoodSessionBeanLocal {
         em.remove(foodToDelete);
     }
     
+    @Override
+    public List<Food> retrieveAllFoodsByCustomerId(Long customerId) throws CustomerNotFoundException
+    {
+        Customer customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(customerId);
+        return customer.getFoods();
+    }
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Food>> constraintViolations) {
         String msg = "Input data validation error!:";
