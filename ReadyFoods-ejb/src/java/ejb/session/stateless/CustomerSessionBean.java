@@ -96,6 +96,33 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     }
 
     @Override
+    public void updatePassword(Customer customer, String oldPassword, String newPassword) throws InputDataValidationException, CustomerNotFoundException, InvalidLoginCredentialException
+    {
+        if(customer != null && customer.getCustomerId() != null)
+        {
+            Set<ConstraintViolation<Customer>>constraintViolations = validator.validate(customer);
+        
+            if(constraintViolations.isEmpty())
+            {
+                Customer customerToUpdate = retrieveCustomerByCustomerId(customer.getCustomerId());
+                String oldPasswordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(oldPassword + customer.getSalt()));
+            
+                if (customer.getPassword().equals(oldPasswordHash)) {
+                customerToUpdate.setSalt(CryptographicHelper.getInstance().generateRandomString(32));
+                customerToUpdate.setPassword(newPassword);
+            } else 
+            {
+                throw new InvalidLoginCredentialException("Customer does not exist or invalid password!");
+            }
+            } else {
+                throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+            }
+        } else {
+            throw new CustomerNotFoundException("Customer ID not provided for customer to be updated");
+        }
+    }
+            
+    @Override
     public List<Customer> retrieveAllCustomers()
     {
         Query query = em.createQuery("SELECT c FROM Customer c");
@@ -167,7 +194,11 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
                    //Cannot update email
                    //customerToUpdate.setEmail(customer.getEmail());
                    customerToUpdate.setContactNumber(customer.getContactNumber());
+                   customerToUpdate.setAddress(customer.getAddress());
                    customerToUpdate.setProfilePicture(customer.getProfilePicture());
+                   customerToUpdate.setDob(customer.getDob());
+                   customerToUpdate.setActivityLevel(customer.getActivityLevel());
+                   customerToUpdate.setDietType(customer.getDietType());
                 }
                 else
                 {

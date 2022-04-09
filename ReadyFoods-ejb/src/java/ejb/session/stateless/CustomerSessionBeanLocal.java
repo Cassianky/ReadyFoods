@@ -24,4 +24,6 @@ public interface CustomerSessionBeanLocal {
     public void updateCustomer(Customer customer) throws CustomerNotFoundException, UpdateCustomerException, InputDataValidationException;
 
     public List<Customer> retrieveAllCustomers();
+
+    public void updatePassword(Customer customer, String oldPassword, String newPassword) throws InputDataValidationException, CustomerNotFoundException, InvalidLoginCredentialException;
 }
