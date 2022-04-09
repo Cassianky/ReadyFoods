@@ -171,6 +171,7 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
 
                 OrderEntity newOrder = new OrderEntity(ongoingSubscription.getNumOfPeople(), ongoingSubscription.getWeeklyPrice(), false,
                         new Date(), Status.PENDING, lineItemsToBuy);
+                newOrder.setDateForDelivery(dateForDelivery);
 
                 newOrder = orderEntitySessionBeanLocal.createNewSubscriptionOrder(currentCustomerEntity.getCustomerId(), newOrder);
                 FacesContext.getCurrentInstance().addMessage(null,
@@ -189,15 +190,16 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
 
                 OrderEntity newOrder = new OrderEntity(ongoingSubscription.getNumOfPeople(), ongoingSubscription.getWeeklyPrice(), false,
                         new Date(), Status.PENDING, lineItemsToBuy);
-                
+                newOrder.setDateForDelivery(dateForDelivery);
+
                 System.out.println("currentOrder" + currentOrder.getOrderEntityId());
-                
+
                 OrderEntity oldOrder = orderEntitySessionBeanLocal.deleteSubscriptionOrder(currentCustomerEntity.getCustomerId(), currentOrder.getOrderEntityId());
-                
+
                 newOrder = orderEntitySessionBeanLocal.createNewSubscriptionOrder(currentCustomerEntity.getCustomerId(), newOrder);
-                
+
                 currentOrder = newOrder;
-                
+
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_INFO,
                                 "Recipe selection has been updated!", null));
@@ -237,17 +239,48 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
         // return start + " TO " + end;
     }
 
+    public Date getMinDate() {
+        ZoneId TZ = ZoneId.of("Asia/Singapore");
+        final DayOfWeek firstDayOfWeek = WeekFields.of(Locale.FRANCE).getFirstDayOfWeek();
+
+        LocalDate start = LocalDate.now(TZ).with(TemporalAdjusters.previousOrSame(firstDayOfWeek)).plusDays(7); // first day
+
+        return Date.from(start.atStartOfDay(TZ).toInstant());
+
+    }
+
+    public Date getMaxDate() {
+        ZoneId TZ = ZoneId.of("Asia/Singapore");
+        final DayOfWeek firstDayOfWeek = WeekFields.of(Locale.FRANCE).getFirstDayOfWeek();
+        final DayOfWeek lastDayOfWeek = DayOfWeek.of(((firstDayOfWeek.getValue() + 5) % DayOfWeek.values().length) + 1);
+        LocalDate start = LocalDate.now(TZ).with(TemporalAdjusters.previousOrSame(firstDayOfWeek)).plusDays(7); // first day
+        LocalDate end = LocalDate.now(TZ).with(TemporalAdjusters.nextOrSame(lastDayOfWeek)).plusDays(7);      // last day
+
+        return Date.from(end.atStartOfDay(TZ).toInstant());
+
+        // return start + " TO " + end;
+    }
+
+    public String getCurrentOrderDeliveryDate() {
+        ZoneId TZ = ZoneId.of("Asia/Singapore");
+        if (currentOrder.getDateForDelivery() == null) return "Not selected.";
+        
+        LocalDate date = currentOrder.getDateForDelivery().toInstant().atZone(TZ).toLocalDate();
+        return date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+
+    }
+
     public void onDateSelect(SelectEvent<Date> event) {
         System.out.println("Date select");
-    
+
         FacesContext facesContext = FacesContext.getCurrentInstance();
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, format.format(dateForDelivery) +  " selected. Remember to save your changes!"
-                , format.format(event.getObject())));
+        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, format.format(dateForDelivery) + " selected. Remember to save your changes!",
+                format.format(event.getObject())));
     }
 
     public void click() {
-           System.out.println("Click");
+        System.out.println("Click");
         PrimeFaces.current().ajax().update("form");
         PrimeFaces.current().executeScript("PF('dlg').show()");
     }
