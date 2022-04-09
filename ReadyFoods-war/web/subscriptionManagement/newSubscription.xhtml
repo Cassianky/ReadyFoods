@@ -12,16 +12,14 @@
         <ez:Breadcrumb pageName="newSubscription" />
 
 
-
-
-        <section class="container">
-            <p:graphicImage class="banner1" style="width: 100% ;border-radius: 25px;" name="banner1.jpg" library="images"/>
-            <section class="centered" style="line-height: 0%"><p>Ready to cook.</p>
-                <p style="font-size: 30px;">Simple. Healthy. Delicious.</p>
-            </section>
-        </section>
-
-
+        <p:panel rendered="#{newSubscriptionManagedBean.ongoing == true}">
+            You are already subscribed.
+            <p:button value="Recipe Selection" outcome="selectRecipes"/>
+        </p:panel>
+        <p:panel rendered="#{not newSubscriptionManagedBean.hasCreditCard()}">
+            You do not have a credit card.
+            <p:button value="Add credit card" outcome="/myDetails/creditCard"/>
+        </p:panel>
 
 
         <!--Rendered if customer has an ongoing sub-->
@@ -31,21 +29,25 @@
 
 
 
-        <p:panel rendered="#{newSubscriptionManagedBean.ongoing == true}">
-            You are already subscribed.
-            <p:button value="Recipe Selection" outcome="selectRecipes"/>
-        </p:panel>
 
-        <p:messages closable="false" globalOnly="true"/>
+        <!--subscription detail selection panel, rendered only if the customer does not have an ongoing sub
+         and newSubscriptionManagedBean.currentCustomerEntity.creditCard != null}
+        -->
 
-
-
-        <!--subscription detail selection panel, rendered only if the customer does not have an ongoing sub-->
-        <!--and newSubscriptionManagedBean.currentCustomerEntity.creditCard != null-->
 
 
         <p:panel class="card" rendered="#{newSubscriptionManagedBean.ongoing == false 
-                                          }">
+                                          and newSubscriptionManagedBean.hasCreditCard()}">
+
+
+
+            <section class="container">
+                <p:graphicImage class="banner1" style="width: 100% ;border-radius: 25px; margin-bottom: 20" name="banner1.jpg" library="images"/>
+                <section class="centered" style="line-height: 0%"><p>Ready to cook.</p>
+                    <p style="font-size: 30px;">Simple. Healthy. Delicious.</p>
+                </section>
+            </section>
+
 
 
             <h:form id="formSubscribe">
@@ -145,6 +147,8 @@
                     <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                     <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                 </p:confirmDialog>
+                
+                
 
 
 
