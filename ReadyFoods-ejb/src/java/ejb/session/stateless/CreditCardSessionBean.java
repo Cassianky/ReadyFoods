@@ -88,6 +88,13 @@ public class CreditCardSessionBean implements CreditCardSessionBeanLocal {
         }
     }
     
+    @Override
+    public CreditCard retrieveCreditCardByCustomerId(Long customerId){
+        Customer customer = em.find(Customer.class, customerId);
+        
+        return customer.getCreditCard();
+    }
+    
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<CreditCard>> constraintViolations) {
         String msg = "Input data validation error!:";

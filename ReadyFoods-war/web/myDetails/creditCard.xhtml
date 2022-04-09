@@ -1,16 +1,18 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./../template/defaultTemplate.xhtml"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:pe="http://primefaces.org/ui/extensions">
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                template="/template/defaultTemplate.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:pe="http://primefaces.org/ui/extensions" >
 
     <ui:define name="content">
-        <h1>Add Credit Card</h1>
-        <h:outputText value="#{paymentManagedBean.foo()}"/>
+        <ez:Breadcrumb pageName="updateCreditCard" />
+   
         <h:form id="formAddCreditCard" prependId="false">
             <p:growl id="growl" showDetail="true" sticky="true">
                 <p:autoUpdate/>
@@ -33,7 +35,8 @@
                              value="#{paymentManagedBean.nameOnCard}" />
                 <p:message for="name" style="color:red"/>
 
-                <p:datePicker id="month" view="month" 
+                <p:datePicker id="month" 
+                              view="month" 
                               placeholder="MM/YYYY"
                               value="#{paymentManagedBean.expiryDate}" 
                               pattern="MM/yyyy" 
@@ -53,10 +56,9 @@
                 </p:inputMask>
                 <p:message for="cvv" style="color:red"/>
 
-                <p:commandButton value="Save"
+                <p:commandButton value="Update"
                                  actionListener="#{paymentManagedBean.saveCC}"
-                                 update="@form"
-                                 oncomplete="PF('dialogRedirectToCart').show()">
+                                 update="@form">
 
                 </p:commandButton>
             </p:panelGrid>
@@ -64,17 +66,6 @@
 
             <br></br>
 
-        </h:form>
-
-        <h:form id="formDialogRedirectToCart">
-            <p:dialog id="dialogRedirectToCart" widgetVar="dialogRedirectToCart" header="Would you like to resume checkout?" closable="true">
-                <p:commandButton value="OK!"
-                                 icon="pi pi-check"
-                                 actionListener="#{paymentManagedBean.redirectToOrderPayment}"/>
-                <p:commandButton value="No, continue to edit shopping cart"
-                                 actionListener="#{paymentManagedBean.redirectToShoppingCart}"
-                                 icon="pi pi-times"/>
-            </p:dialog>
         </h:form>
     </ui:define>
 

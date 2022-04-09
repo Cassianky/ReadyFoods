@@ -21,9 +21,14 @@
                         <p:menuitem value="Search by Categories" outcome="/recipeManagement/searchRecipeByCategory.xhtml" icon="pi pi-filter" />
                     </p:submenu>
                     
+                    <p:submenu label="My Details" rendered="#{sessionScope.isLogin == true}">
+                        <p:menuitem value="Profile" outcome="/myDetails/profile.xhtml" icon="pi pi-user" />
+                        <p:menuitem value="Credit Card" outcome="/myDetails/creditCard.xhtml" icon="pi pi-user" />
+                        <p:menuitem value="Change Password" icon="pi pi-ticket" />
+                    </p:submenu>
+                    
                     <p:submenu label="Account Management" rendered="#{sessionScope.isLogin == true}">
-                        <p:menuitem value="My Profile" icon="pi pi-user" />
-                        <p:menuitem value="Enquires" outcome="/accountManagement/enquiryManagement.xhtml" icon="pi pi-ticket" />
+                        <p:menuitem value="Enquiries" outcome="/accountManagement/enquiryManagement.xhtml" icon="pi pi-ticket" />
                         <p:menuitem value="My Orders" outcome="/accountManagement/orderManagement.xhtml" icon="pi pi-list" />
                     </p:submenu>
                     

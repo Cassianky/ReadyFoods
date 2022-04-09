@@ -112,6 +112,8 @@ public class Customer implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     private CreditCard creditCard;
 
+    private String profilePicture;
+    
     public Customer() {
         bookmarkedRecipes = new ArrayList<>();
         foods = new ArrayList<>();
@@ -136,6 +138,7 @@ public class Customer implements Serializable {
         this.gender = gender;
         this.activityLevel = activityLevel;
         setPassword(password);
+        profilePicture = "";
     }
 
     
@@ -401,4 +404,17 @@ public class Customer implements Serializable {
         this.creditCard = creditCard;
     }
     
+    /**
+     * @return the profilePicture
+     */
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    /**
+     * @param profilePicture the profilePicture to set
+     */
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
 }

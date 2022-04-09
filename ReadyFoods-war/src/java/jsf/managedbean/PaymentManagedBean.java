@@ -20,11 +20,13 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.inject.Inject;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import util.exception.CreditCardNotFoundException;
 import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.UnknownPersistenceException;
@@ -56,6 +58,9 @@ public class PaymentManagedBean implements Serializable {
     @NotNull(message = "Expiry date is required")
     private Date expiryDate;
 
+    @Inject
+    private ShoppingCartManagedBean shoppingCartManagedBean;
+    
     public PaymentManagedBean() {
     }
 
@@ -74,7 +79,9 @@ public class PaymentManagedBean implements Serializable {
         CreditCard newCreditCard = new CreditCard(ccNumber, CVV, nameOnCard, expiryDate);
         try {
             Long ccId = creditCardSessionBeanLocal.createNewCreditCard(newCreditCard, currentCustomer.getCustomerId());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Credit Card successfully created!", "" + ccId));
+            CreditCard createdCard = creditCardSessionBeanLocal.retrieveCreditCardByCreditCardId(ccId);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Credit Card successfully created!", "Credit Card Number: " + createdCard.getCcNumber()));
+            shoppingCartManagedBean.setCreditCard(createdCard);
 
         } catch (UnknownPersistenceException ex) {
             ex.printStackTrace();
@@ -82,6 +89,8 @@ public class PaymentManagedBean implements Serializable {
             ex.printStackTrace();
         } catch (InputDataValidationException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error occured while adding new CC: " + ex.getMessage(), null));
+        } catch (CreditCardNotFoundException ex) {
+            Logger.getLogger(PaymentManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -8,131 +8,145 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
+        <h:outputStylesheet library="css" name="register.css" />
+        
         <div class="registerBg">
-        <h:panelGroup>
-            <h:form id="registerForm">
-                
-                <p:panelGrid class="register">
+            <h:panelGroup>
+                <h:form id="registerForm">
 
-                    <p:row>
-                        <p:column colspan="2">
-                          <h1 style="text-align: center;">Register with ReadyFoods Today!</h1>
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="email" value="Email: "/>
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="email" value="#{registerCustomerManagedBeanRF.newCustomer.email}" required="true" requiredMessage="Email is required" />
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="userName" value="UserName: " />
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="userName" value="#{registerCustomerManagedBeanRF.newCustomer.userName}" required="true" requiredMessage="User Name is required" />
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="firstName" value="First Name: " />
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="firstName" value="#{registerCustomerManagedBeanRF.newCustomer.firstName}" required="true" requiredMessage="First Name is required" />
-                        </p:column>
-                    </p:row>
+                    <p:panelGrid class="register">
+                        <p:row>
+                            <p:column colspan="2">
+                                <h1 class="header-register">Sign Up with ReadyFoods Today!</h1>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="email" value="Email: "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="email" value="#{registerCustomerManagedBeanRF.newCustomer.email}" required="true" requiredMessage="Email is required" >
+                                    <f:validateLength minimum="5" />
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="userName" value="UserName: " />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="userName" value="#{registerCustomerManagedBeanRF.newCustomer.userName}" required="true" requiredMessage="User Name is required" >
+                                    <f:validateLength minimum="5" />
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="firstName" value="First Name: " />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="firstName" value="#{registerCustomerManagedBeanRF.newCustomer.firstName}" required="true" requiredMessage="First Name is required" >
+                                    <f:validateLength minimum="2" />
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
 
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="lastName" value="Last Name: " />
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="lastName" value="#{registerCustomerManagedBeanRF.newCustomer.lastName}" required="true" requiredMessage="Last Name is required" />
-                        </p:column>
-                    </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="lastName" value="Last Name: " />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="lastName" value="#{registerCustomerManagedBeanRF.newCustomer.lastName}" required="true" requiredMessage="Last Name is required">
+                                    <f:validateLength minimum="2" />
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
 
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="contactNumber" value="Contact Number: "/>
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="contactNumber" value="#{registerCustomerManagedBeanRF.newCustomer.contactNumber}" required="true" requiredMessage="Contact Number is required" />
-                        </p:column>
-                    </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="contactNumber" value="Contact Number: "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputMask  mask="99999999" id="contactNumber" value="#{registerCustomerManagedBeanRF.newCustomer.contactNumber}" required="true" requiredMessage="Contact Number is required" >
+                                    <f:validateLength minimum="8" maximum="8"/>
+                                </p:inputMask>
+                            </p:column>
+                        </p:row>
 
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="password" value="Password: "/>
-                        </p:column>
-                        <p:column>
-                            <p:password toggleMask="true" redisplay="true" id="password" value="#{registerCustomerManagedBeanRF.newCustomer.password}" required="true" requiredMessage="Password is required">
-                                <f:validateLength minimum="8" />
-                            </p:password>
-                        </p:column>
-                    </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="password" value="Password: "/>
+                            </p:column>
+                            <p:column>
+                                <p:password feedback="true" inline="true" id="password" value="#{registerCustomerManagedBeanRF.newCustomer.password}" required="true" requiredMessage="Password is required">
+                                    <f:validateLength minimum="8" />
+                                </p:password>
+                            </p:column>
+                        </p:row>
 
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="address" value="Address: "/>
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="address" value="#{registerCustomerManagedBeanRF.newCustomer.address}" required="true" requiredMessage="Address is required">
-                            </p:inputText>
-                        </p:column>
-                    </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="address" value="Address: "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="address" value="#{registerCustomerManagedBeanRF.newCustomer.address}" required="true" requiredMessage="Address is required">
+                                    <f:validateLength minimum="5" />
+                                </p:inputText>
+                            </p:column>
+                        </p:row>
 
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="age" value="Age:  "/>
-                        </p:column>
-                        <p:column>
-                            <p:spinner id="age" value="#{registerCustomerManagedBeanRF.newCustomer.age}" placeholder="18" min="18" max="100" required="true" requiredMessage="Age is required" />
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="selGender" value="Gender "/>
-                        </p:column>
-                        <p:column>
-                            <p:selectOneMenu id="selGender" value="#{registerCustomerManagedBeanRF.newCustomer.gender}">
-                                <f:selectItems value="#{registerCustomerManagedBeanRF.genders}" var="gender"/>
-                            </p:selectOneMenu>
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="selActivityLevel" value="Activity Level "/>
-                        </p:column>
-                        <p:column>
-                            <p:selectOneMenu id="selActivityLevel" value="#{registerCustomerManagedBeanRF.newCustomer.activityLevel}">
-                                <f:selectItems value="#{registerCustomerManagedBeanRF.activityLevels}" var="activityLevel"/>
-                            </p:selectOneMenu>
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="selDietType" value="Diet Type "/>
-                        </p:column>
-                        <p:column>
-                            <p:selectOneMenu id="selDietType" value="#{registerCustomerManagedBeanRF.newCustomer.dietType}">
-                                <f:selectItems value="#{registerCustomerManagedBeanRF.dietTypes}" var="dietType"/>
-                            </p:selectOneMenu>
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column colspan="2">
-                            <p:commandButton style="float:right;" value="Register" type="submit" actionListener="#{registerCustomerManagedBeanRF.registerNewCustomer}"/>
-                        </p:column>
-                    </p:row>
-                    <p:growl>
-                        <p:autoUpdate />
-                    </p:growl>
-                </p:panelGrid>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="age" value="Age:  "/>
+                            </p:column>
+                            <p:column>
+                                <p:spinner id="age" value="#{registerCustomerManagedBeanRF.newCustomer.age}" placeholder="18" min="18" max="100" required="true" requiredMessage="Age is required" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="selGender" value="Gender "/>
+                            </p:column>
+                            <p:column>
+                                <p:selectOneMenu id="selGender" value="#{registerCustomerManagedBeanRF.newCustomer.gender}">
+                                    <f:selectItems value="#{registerCustomerManagedBeanRF.genders}" var="gender"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="selActivityLevel" value="Activity Level "/>
+                            </p:column>
+                            <p:column>
+                                <p:selectOneMenu id="selActivityLevel" value="#{registerCustomerManagedBeanRF.newCustomer.activityLevel}">
+                                    <f:selectItems value="#{registerCustomerManagedBeanRF.activityLevels}" var="activityLevel"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="selDietType" value="Diet Type "/>
+                            </p:column>
+                            <p:column>
+                                <p:selectOneMenu id="selDietType" value="#{registerCustomerManagedBeanRF.newCustomer.dietType}">
+                                    <f:selectItems value="#{registerCustomerManagedBeanRF.dietTypes}" var="dietType"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="2">
+                                <div align="center">
+                                    <p:commandButton class="register-button" value="Register" type="submit" update="@form" process="@form" actionListener="#{registerCustomerManagedBeanRF.registerNewCustomer}"/>
+                                </div>
+                            </p:column>
+                        </p:row>
+                        <p:growl>
+                            <p:autoUpdate />
+                        </p:growl>
+                    </p:panelGrid>
 
-            </h:form>
-        </h:panelGroup>
+                </h:form>
+            </h:panelGroup>
         </div>
     </ui:define>
 

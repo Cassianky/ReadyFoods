@@ -74,7 +74,9 @@
                         <p:ajax event="change" update="@form"/>
                     </p:spinner>
                     <p:outputLabel value="Total Amount" for="totalAmount"/>
-                    <h:outputText id="totalAmount" value="#{shoppingCartManagedBean.totalPrice}"/>
+                    <h:outputText id="totalAmount" value="#{shoppingCartManagedBean.totalPrice}">
+                        <f:convertNumber type="currency" currencySymbol="$" maxIntegerDigits="5" maxFractionDigits="2" minFractionDigits="2"/>
+                    </h:outputText>
                 </p:panelGrid>
 
                 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
@@ -87,7 +89,7 @@
                 <p:commandButton value="Checkout!"
                                  icon="pi pi-dollar"
                                  actionListener="#{shoppingCartManagedBean.checkoutShoppingCart}"
-                                 oncomplete="if (#{shoppingCartManagedBean.hasNoCC}) { PF('dialogAddCC').show() }">
+                                 oncomplete="if (#{shoppingCartManagedBean.creditCard == null}) { PF('dialogAddCC').show() }">
 
                 </p:commandButton>
 
@@ -108,11 +110,13 @@
                         <p:spinner id="updateQuantity" value="#{ci.quantityOfIngredient}" stepFactor="1" min="1"/>
                     </p:column>
                     <p:column headerText="Unit Price">
-                        <h:outputText value="#{ci.unitPrice}"/>
+                        <h:outputText value="#{ci.unitPrice}">
+                            <f:convertNumber type="currency" currencySymbol="$" maxIntegerDigits="5" maxFractionDigits="2" minFractionDigits="2"/>
+                        </h:outputText>
                     </p:column>
                     <p:column headerText="Subtotal">
                         <h:outputText value="#{ci.subtotal}">
-                            <f:convertNumber type="currency" currencySymbol="$" maxIntegerDigits="5" maxFractionDigits="2"/>
+                            <f:convertNumber type="currency" currencySymbol="$" maxIntegerDigits="5" maxFractionDigits="2" minFractionDigits="2"/>
                         </h:outputText>
                     </p:column>
                     <p:column headerText="Prepared?">
