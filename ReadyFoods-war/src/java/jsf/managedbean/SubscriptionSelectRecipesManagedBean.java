@@ -158,6 +158,15 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
 
     public void updateSelection(ActionEvent event) {
         System.out.println("Date for delivery" + dateForDelivery);
+        
+        if (remaining != 0) {
+            
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "You have " + remaining + " recipe(s) remaining!", null));
+            return;
+            
+        }
         try {
             if (currentOrder == null) {
 
@@ -205,14 +214,11 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
                                 "Recipe selection has been updated!", null));
 
             }
-        } catch (CustomerNotFoundException ex) {
-            Logger.getLogger(SubscriptionSelectRecipesManagedBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (CreateNewOrderException ex) {
-            Logger.getLogger(SubscriptionSelectRecipesManagedBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoOngoingSubscriptionException ex) {
-            Logger.getLogger(SubscriptionSelectRecipesManagedBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (OrderNotFoundException ex) {
-            Logger.getLogger(SubscriptionSelectRecipesManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CustomerNotFoundException | CreateNewOrderException | NoOngoingSubscriptionException | OrderNotFoundException ex) {
+           
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Error when updating recipe selection: " + ex.getMessage(), null));
         }
 
     }
