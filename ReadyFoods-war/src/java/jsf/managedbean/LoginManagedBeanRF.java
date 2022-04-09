@@ -40,7 +40,6 @@ public class LoginManagedBeanRF implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.xhtml");
             System.out.println("****************************3333333333333333333");
         
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Customer Login Successful! (Email: " + currentCustomer.getEmail() + ")", null));
         }
         catch(InvalidLoginCredentialException ex)
         {
