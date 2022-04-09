@@ -112,6 +112,7 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
 
             if (currentOrder != null) {
                 System.out.println("Current order not null");
+                dateForDelivery = currentOrder.getDateForDelivery();
                 for (OrderLineItem orderLineItem : currentOrder.getOrderLineItems()) {
                     orderLineItems.add(orderLineItem);
                     orderLineItem.getRecipe().getCategories().size();

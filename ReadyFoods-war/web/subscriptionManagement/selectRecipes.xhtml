@@ -11,6 +11,7 @@
 
 
     <ui:define name="content">
+        <h:outputStylesheet name="profile.css" library="css"/>
         <script type="text/javascript"/>
 
         <ez:Breadcrumb pageName="selectRecipes" />
@@ -30,37 +31,45 @@
         <main class="card">
             <h:form id="form">
                 <p:growl id="growl"><p:autoUpdate/></p:growl>
-                <p:panel id="display">
-                    TODO: category formatting, view details, DIET TYPE RECC
-                    <br/>
-                    <h3>
-                        <!-- Number of remaining recipes -->
-                        <p:outputLabel style="font-weight: bold;" value="Remaining recipes: "/> 
-                        <h:outputText style="color: #AE3126;" value="#{subscriptionSelectRecipesManagedBean.remaining}"/>
+                TODO: category formatting, view details, DIET TYPE RECC
+                <p:panelGrid  columns="2" styleClass="noBorders">
+                    <p:column>
+
                         <br/>
-                        <p:outputLabel style="font-weight: bold;" value="Delivery Date: "/> 
-                        <h:outputText style="color: #AE3126;" value="#{subscriptionSelectRecipesManagedBean.getCurrentOrderDeliveryDate()}">
-                       
-                        </h:outputText>
-                    </h3>
-                    <h4>
-                        <!--Selecting for which week-->
-                        <p:outputLabel style="font-weight: bold;" value="Selection for week: #{subscriptionSelectRecipesManagedBean.nextWk}"/> 
-                    </h4>
-                    <p:datePicker id="event" mindate="#{subscriptionSelectRecipesManagedBean.getMinDate()}" 
-                                  maxdate="#{subscriptionSelectRecipesManagedBean.getMaxDate()}"
-                                  value="#{subscriptionSelectRecipesManagedBean.dateForDelivery}" appendTo="@(body)" inline="true">
-                        <p:ajax event="dateSelect" process="@this" listener="#{subscriptionSelectRecipesManagedBean.onDateSelect}" update="growl"/>
-                    </p:datePicker>
-                
+                        <h3>
+                            <!-- Number of remaining recipes -->
+                            <p:outputLabel style="font-weight: bold;" value="Remaining recipes: "/> 
+                            <h:outputText style="color: #AE3126;" value="#{subscriptionSelectRecipesManagedBean.remaining}"/>
+                            <br/>
+                            <p:outputLabel style="font-weight: bold;" value="Delivery Date: "/> 
+                            <h:outputText style="color: #AE3126;" value="#{subscriptionSelectRecipesManagedBean.getCurrentOrderDeliveryDate()}">
+
+                            </h:outputText>
+                        </h3>
+                        
+                    </p:column>
+                    <p:column>
+                      
+                        <p:datePicker id="event" mindate="#{subscriptionSelectRecipesManagedBean.getMinDate()}" 
+                                      maxdate="#{subscriptionSelectRecipesManagedBean.getMaxDate()}"
+                                      value="#{subscriptionSelectRecipesManagedBean.dateForDelivery}" appendTo="@(body)" inline="true">
+                            <p:ajax event="dateSelect" process="@this" listener="#{subscriptionSelectRecipesManagedBean.onDateSelect}" update="growl"/>
+                        </p:datePicker>
+                          <h4>
+                            <!--Selecting for which week-->
+                            <p:outputLabel style="font-weight: bold;" value="Selection for week: #{subscriptionSelectRecipesManagedBean.nextWk}"/> 
+                        </h4>
+                    </p:column>
+
                     <!-- Create new subscription order OR update order -->
-                    <p:separator/>
+
+
                     <p:commandButton 
                         value="Save Selection" process="@this"
                         update="@form" actionListener="#{subscriptionSelectRecipesManagedBean.updateSelection}"/>
 
 
-                </p:panel>
+                </p:panelGrid>
 
                 <p:dataView id="dataViewRecipe" var="orderLineItem" value="#{subscriptionSelectRecipesManagedBean.orderLineItems}" paginator="true"
                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
@@ -105,7 +114,7 @@
                             </div>
                         </div>
                     </p:dataViewGridItem>
-                  
+
                 </p:dataView>
             </h:form>
         </main>
