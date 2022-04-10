@@ -5,6 +5,7 @@
  */
 package ejb.session.stateless;
 
+import entity.CommentEntity;
 import entity.Recipe;
 import java.util.List;
 import javax.ejb.Local;
@@ -33,5 +34,7 @@ public interface RecipeSessionBeanLocal {
     public List<Recipe> filterRecipesByCategory(List<Long> categoryIds, String condition);
 
     public List<Recipe> retrieveAllRecipes();
+
+    public List<CommentEntity> getAllComments(Recipe recipe);
 
 }

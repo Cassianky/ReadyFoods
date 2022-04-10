@@ -30,6 +30,19 @@ public class CommentEntity implements Serializable {
     
     private String customerName;
 
+    public CommentEntity() {
+    }
+
+    public CommentEntity(Date commentDate, String description, String customerName) {
+        this.commentDate = commentDate;
+        this.description = description;
+        this.customerName = customerName;
+    }
+
+    
+    
+    
+    
     public Long getCommentEntityId() {
         return commentEntityId;
     }
