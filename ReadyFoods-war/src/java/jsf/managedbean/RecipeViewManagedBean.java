@@ -9,9 +9,11 @@ import ejb.session.stateless.CustomerSessionBeanLocal;
 import ejb.session.stateless.RecipeSessionBeanLocal;
 import entity.Customer;
 import entity.Recipe;
+import entity.Review;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -34,9 +36,8 @@ public class RecipeViewManagedBean implements Serializable {
     @EJB(name = "RecipeSessionBeanLocal")
     private RecipeSessionBeanLocal recipeSessionBeanLocal;
     
-    
+    private List<Review> reviews;
 
-    
     private Recipe recipe;
     private String formattedRecipeSteps;
     private Long recipeId;
@@ -63,6 +64,10 @@ public class RecipeViewManagedBean implements Serializable {
         System.out.println("Test recipe: " + recipe.getRecipeTitle());
         System.out.println(recipe.getRecipeSteps());
         System.out.println(formattedRecipeSteps);
+    }
+    
+    public void addReview(){
+        
     }
 
     public Recipe getRecipe() {
@@ -108,6 +113,20 @@ public class RecipeViewManagedBean implements Serializable {
      */
     public void setIsBookmarked(Boolean isBookmarked) {
         this.isBookmarked = isBookmarked;
+    }
+
+    /**
+     * @return the reviews
+     */
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    /**
+     * @param reviews the reviews to set
+     */
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 
 }
