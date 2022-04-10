@@ -37,4 +37,7 @@ public interface RecipeSessionBeanLocal {
 
     public List<CommentEntity> getAllComments(Recipe recipe);
 
+    public List<Recipe> filterRecipesBySingleCategory(Long categoryId);
+
+
 }
