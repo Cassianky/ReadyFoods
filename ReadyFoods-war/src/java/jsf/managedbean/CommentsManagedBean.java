@@ -48,6 +48,9 @@ public class CommentsManagedBean implements Serializable {
         try {
             Long commentId = commentSessionBeanLocal.createNewCommentForRecipe(recipe.getRecipeId(), newComment);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Comment added succesfully!", "Comment ID: " + commentId));
+            commentDate = null;
+            description = null;
+            customerName = null;
         } catch (CreateCommentException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error occured: " + ex.getMessage(), null));
         }

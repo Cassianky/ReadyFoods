@@ -6,6 +6,7 @@
 package jsf.managedbean;
 
 import ejb.session.stateless.CustomerSessionBeanLocal;
+import entity.CreditCard;
 import entity.Customer;
 import entity.Recipe;
 import java.io.File;
@@ -61,6 +62,8 @@ public class ProfileManagedBean implements Serializable {
     private String newPassword;
     private String oldPassword;
     private String confirmPassword;
+    
+    private CreditCard creditCard;
     
     private List<Recipe>bookmarkedRecipes;
 
@@ -316,6 +319,26 @@ public class ProfileManagedBean implements Serializable {
      */
     public void setBookmarkedRecipes(List<Recipe> bookmarkedRecipes) {
         this.bookmarkedRecipes = bookmarkedRecipes;
+    }
+
+    /**
+     * @return the creditCard
+     */
+    public CreditCard getCreditCard() {
+        try {
+            Customer customerRetrieved = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomer.getCustomerId());
+            setCreditCard(customerRetrieved.getCreditCard());
+        } catch (CustomerNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        return creditCard;
+    }
+
+    /**
+     * @param creditCard the creditCard to set
+     */
+    public void setCreditCard(CreditCard creditCard) {
+        this.creditCard = creditCard;
     }
 
 }
