@@ -28,5 +28,7 @@ public interface CustomerSessionBeanLocal {
 
     public void updatePassword(Customer customer, String oldPassword, String newPassword) throws InputDataValidationException, CustomerNotFoundException, InvalidLoginCredentialException;
 
-    public void updateBookmarkedRecipe(Recipe recipeToAdd, Long customerId);
+    public void addBookmarkedRecipe(Recipe recipeToAdd, Long customerId);
+
+    public void removeBookmarkedRecipe(Recipe recipeToRemove, Long customerId);
 }

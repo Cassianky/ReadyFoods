@@ -10,7 +10,7 @@
 
     <ui:define name="content">
         <ez:Breadcrumb pageName="viewSingleRecipe" />
-        <p:growl>
+        <p:growl id="growlId" showDetail="true">
             <p:autoUpdate />
         </p:growl>
         <h:form id="formViewSingleRecipe">
@@ -66,13 +66,14 @@
                     </p:commandButton>
                     
                     <p:commandButton title="Bookmark"
-                                     update="formViewSingleRecipe"
+                                     process="@this formViewSingleRecipe"
+                                     update="@this formViewSingleRecipe"
                                      value="#{recipeViewManagedBean.isBookmarked ? 'Bookmarked' : 'Add to bookmarks'}"
                                      actionListener="#{profileManagedBean.addRecipeToBookMarks}"
                                      icon="#{recipeViewManagedBean.isBookmarked ? 'pi pi-star' : 'pi pi-star-o'}"
                                      disabled="#{recipeViewManagedBean.isBookmarked}">
                         <f:attribute name="recipeToAdd" value="#{recipeViewManagedBean.recipe}"/>
-                        <p:ajax update="@this formViewSingleRecipe" event="click" />
+                        <p:ajax update="@this formViewSingleRecipe" />
                     </p:commandButton>
 
                 </h:panelGrid>

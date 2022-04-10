@@ -119,9 +119,15 @@ public class ProfileManagedBean implements Serializable {
     
     public void addRecipeToBookMarks(ActionEvent event){
         Recipe recipeToAdd = (Recipe)event.getComponent().getAttributes().get("recipeToAdd");
-        customerSessionBeanLocal.updateBookmarkedRecipe(recipeToAdd, currentCustomer.getCustomerId());
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Bookmarked recipe successfully!", "" + recipeToAdd.getRecipeId()));
+        customerSessionBeanLocal.addBookmarkedRecipe(recipeToAdd, currentCustomer.getCustomerId());
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Bookmarked recipe successfully!", "" + recipeToAdd.getRecipeTitle()));
         
+    }
+    
+    public void removeRecipeFromBookmarks(ActionEvent event){
+        Recipe recipeToRemove = (Recipe)event.getComponent().getAttributes().get("recipeToRemove");
+        customerSessionBeanLocal.removeBookmarkedRecipe(recipeToRemove, currentCustomer.getCustomerId());
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Removed recipe from bookmarks successfully!", "" + recipeToRemove.getRecipeTitle()));
     }
 
 

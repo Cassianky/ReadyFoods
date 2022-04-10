@@ -111,6 +111,7 @@ public class ShoppingCartViewManagedBean implements Serializable {
 
     public void confirmAddToCart() {
         shoppingCartManagedBean.addRecipeFromRecipeView(currentRecipe);
+        FacesContext.getCurrentInstance().addMessage("growlId", new FacesMessage(FacesMessage.SEVERITY_INFO, "Recipe added to cart! ", currentRecipe.getRecipeTitle()));
         System.out.println("**********Add To Cart");
     }
 

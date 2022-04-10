@@ -10,8 +10,11 @@
 
     <ui:define name="content">
         <ez:Breadcrumb pageName="viewBookmarkedRecipes" />
+        <p:growl showDetail="true">
+            <p:autoUpdate />
+        </p:growl>
         
-        <h:form id="formViewAllRecipes" >
+        <h:form id="formViewAllBookmarkedRecipes" >
             
             <p:dataGrid value="#{profileManagedBean.bookmarkedRecipes}" var="recipe" columns="3" layout="grid"
                         rows="10" paginator="true" id="recipe"
@@ -22,7 +25,7 @@
                     <h1>Bookmarked recipes</h1>
                 </f:facet>
 
-                <p:panel header="#{recipe.recipeTitle}">
+                <p:panel header="#{recipe.recipeTitle}" style="text-align: center">
                     <h:panelGrid columns="1" style="width:100%;margin: 0 auto;text-align: center">
                         <p:graphicImage class="recipePic" style="object-fit: scale-down; overflow: hidden" name="300x300.png" library="images" /> 
                         <h:outputText value="Cooking Time: #{recipe.cookingTime}" />
@@ -32,6 +35,14 @@
                             <h:outputText styleClass="pi pi-search" style="margin:0 auto;"/>
                             <f:attribute value="#{recipe.recipeId}" name="recipeToView"/>
                         </p:commandLink>
+                        
+                        <p:commandButton 
+                            icon="ui-icon-trash"
+                            title="Remove Recipe from bookmarks"
+                            actionListener="#{profileManagedBean.removeRecipeFromBookmarks}"
+                            update="formViewAllBookmarkedRecipes">
+                            <f:attribute name="recipeToRemove" value="#{recipe}"/>    
+                        </p:commandButton>
                     </h:panelGrid>
                 </p:panel>
 

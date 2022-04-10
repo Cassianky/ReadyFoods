@@ -176,9 +176,15 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     }
     
     @Override
-    public void updateBookmarkedRecipe(Recipe recipeToAdd, Long customerId){
+    public void addBookmarkedRecipe(Recipe recipeToAdd, Long customerId){
         Customer customerToUpdate = em.find(Customer.class,customerId);
         customerToUpdate.getBookedmarkedRecipes().add(recipeToAdd);
+    }
+    
+    @Override
+    public void removeBookmarkedRecipe(Recipe recipeToRemove, Long customerId){
+        Customer customerToUpdate = em.find(Customer.class,customerId);
+        customerToUpdate.getBookedmarkedRecipes().remove(recipeToRemove);
     }
     
     //Ask angely do we need to stop when customer can update some profile stuff?
