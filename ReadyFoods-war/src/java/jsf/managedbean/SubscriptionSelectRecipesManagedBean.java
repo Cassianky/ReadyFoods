@@ -7,6 +7,7 @@ package jsf.managedbean;
 
 import ejb.session.stateless.CustomerSessionBeanLocal;
 import ejb.session.stateless.OrderEntitySessionBeanLocal;
+import ejb.session.stateless.ProcessRecipeSelectionManagedBeanLocal;
 import ejb.session.stateless.RecipeSessionBeanLocal;
 import ejb.session.stateless.SubscriptionSessionBeanLocal;
 import entity.Customer;
@@ -53,6 +54,9 @@ import util.exception.OrderNotFoundException;
 @ViewScoped
 public class SubscriptionSelectRecipesManagedBean implements Serializable {
 
+    @EJB
+    private ProcessRecipeSelectionManagedBeanLocal processRecipeSelectionManagedBeanLocal;
+
     @EJB(name = "OrderEntitySessionBeanLocal")
     private OrderEntitySessionBeanLocal orderEntitySessionBeanLocal;
 
@@ -64,6 +68,8 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
 
     @EJB(name = "RecipeSessionBeanLocal")
     private RecipeSessionBeanLocal recipeSessionBeanLocal;
+    
+    
     
     @Inject
     private RecipeViewSummarisedManagedBean recipeViewSummarisedManagedBean;
@@ -167,6 +173,12 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR,
                             "You have " + remaining + " recipe(s) remaining!", null));
+            return;
+            
+        } else if (dateForDelivery == null) {
+             FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Please select a delivery date!", null));
             return;
             
         }
@@ -293,6 +305,13 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
         System.out.println("Click");
         PrimeFaces.current().ajax().update("form");
         PrimeFaces.current().executeScript("PF('dlg').show()");
+    }
+    
+    public void process() {
+        processRecipeSelectionManagedBeanLocal.process();
+          FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                "Processed for every customer!", null));
     }
 
     /**
