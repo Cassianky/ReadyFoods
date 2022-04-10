@@ -80,11 +80,69 @@
 
             </p:panel>
 
-            <p:panel class="card" id="panelCommentReview" header="#{recipeViewManagedBean.recipe.recipeTitle}" style="margin-bottom:20px">
-            
-                
-            </p:panel>
+                <p:tabView id="panelCommentReview">
+                    <p:tab title="Reviews">
+                        <p:dataScroller value="#{recipeViewManagedBean.reviews}" var="review" chunkSize="5">
+                            <f:facet name="header">
+                                Scroll Down to Load More Reviews
+                            </f:facet>
+                            <h:panelGrid columns="1" style="width:100%;" >
 
+                                <p:rating value="#{review.rating}" readonly="true" />
+                                <h:outputText value="#{review.reviewDate}" style="vertical-align: top; text-align: right"/>
+                                <h:outputText value="#{review.title}" style="font-weight: bold;font-size: 15px"/>
+                                <h:outputText value="#{review.description}"/>
+
+                            </h:panelGrid>
+                        </p:dataScroller>  
+                    </p:tab>
+                    <p:tab title="Comments">
+                        <p:commandButton value="Add Comment"
+                                         icon="pi pi-comment"
+                                         onclick="PF('dialogAddComment').show()" 
+                                         title="Add Comment"
+                                         />
+                        <p:dataScroller value="#{recipeViewManagedBean.comments}" var="comment" chunkSize="5">
+                            <f:facet name="header">
+                                Scroll Down to Load More Comments
+                            </f:facet>
+                            <h:panelGrid columns="1" style="width:100%;" >
+
+                                <h:outputText value="#{comment.commentDate}" style="float: right; text-align: right"/>
+                                <h:outputText value="#{comment.customerName}"/>
+                                <h:outputText value="#{comment.description}"/>
+
+                            </h:panelGrid>
+                        </p:dataScroller>  
+
+                    </p:tab>
+                </p:tabView>
+
+        </h:form>
+        
+        <h:form id="formAddComment">
+            <p:dialog id="dialogAddComment" 
+                      widgetVar="dialogAddComment" 
+                      header="Add A Comment!" 
+                      closable="true">
+                <p:panelGrid id="panelGridAddComment" columns="1">
+                    <p:inputText value="#{commentsManagedBean.customerName}" placeholder="Nickname..."/> 
+                    <p:inputTextarea value="#{commentsManagedBean.description}" 
+                                     placeholder="Write your comment..."
+                                     rows="3"
+                                     cols="30"/> 
+                    <p:commandButton value="Submit!"
+                                     icon="pi pi-reply"
+                                     actionListener="#{commentsManagedBean.createNewComment}"
+                                     update="formViewSingleRecipe:panelCommentReview"
+                                     oncomplete="PF('dialogCreateCommentForm').close()" >
+                        <f:attribute name="recipeToComment" value="#{recipeViewManagedBean.recipe}"/>
+                    </p:commandButton>
+  
+                </p:panelGrid>
+              
+            </p:dialog>
+            
         </h:form>
 
         <h:form id="formAddRecipeToCart">

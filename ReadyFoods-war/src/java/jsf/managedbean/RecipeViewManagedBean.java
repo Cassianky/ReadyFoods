@@ -7,6 +7,7 @@ package jsf.managedbean;
 
 import ejb.session.stateless.CustomerSessionBeanLocal;
 import ejb.session.stateless.RecipeSessionBeanLocal;
+import entity.CommentEntity;
 import entity.Customer;
 import entity.Recipe;
 import entity.Review;
@@ -19,6 +20,7 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
+import javax.xml.stream.events.Comment;
 import util.exception.CustomerNotFoundException;
 import util.exception.RecipeNotFoundException;
 
@@ -37,6 +39,7 @@ public class RecipeViewManagedBean implements Serializable {
     private RecipeSessionBeanLocal recipeSessionBeanLocal;
     
     private List<Review> reviews;
+    private List<CommentEntity> comments;
 
     private Recipe recipe;
     private String formattedRecipeSteps;
@@ -51,6 +54,7 @@ public class RecipeViewManagedBean implements Serializable {
     public void postConstruct() {
         try {  
             recipe = recipeSessionBeanLocal.retrieveRecipeByRecipeId(getRecipeId());
+            comments = recipe.getComments();
             Customer currentCustomer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
             Customer customerRetrieved = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomer.getCustomerId());
             for(Recipe bookmarkedRecipe:customerRetrieved.getBookedmarkedRecipes()){
@@ -129,4 +133,19 @@ public class RecipeViewManagedBean implements Serializable {
         this.reviews = reviews;
     }
 
+    /**
+     * @return the comments
+     */
+    public List<CommentEntity> getComments() { 
+        return recipeSessionBeanLocal.getAllComments(recipe);
+    }
+
+    /**
+     * @param comments the comments to set
+     */
+    public void setComments(List<CommentEntity> comments) {
+        this.comments = comments;
+    }
+
+  
 }
