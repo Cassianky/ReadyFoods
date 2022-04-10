@@ -112,7 +112,7 @@ public class ShoppingCartManagedBean implements Serializable {
         try {
             Customer retrievedCustomer = customerSessionBeanLocal.retrieveCustomerByCustomerId(customer.getCustomerId());
             if (!orderLineItems.isEmpty()) {
-                newOrderEntity = new OrderEntity(numPax, totalPrice, false, new Date(), Status.PENDING, orderLineItems, customer);
+                newOrderEntity = new OrderEntity(numPax, totalPrice, true, new Date(), Status.PENDING, orderLineItems, customer);
                 if (creditCard != null) {
                     System.out.println("Customer has credit card!");
                     FacesContext.getCurrentInstance().getExternalContext().redirect("orderPayment.xhtml");

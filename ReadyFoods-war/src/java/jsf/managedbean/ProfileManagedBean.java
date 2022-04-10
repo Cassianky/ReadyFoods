@@ -7,6 +7,7 @@ package jsf.managedbean;
 
 import ejb.session.stateless.CustomerSessionBeanLocal;
 import entity.Customer;
+import entity.Recipe;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,6 +16,9 @@ import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -53,6 +57,8 @@ public class ProfileManagedBean implements Serializable {
     private String newPassword;
     private String oldPassword;
     private String confirmPassword;
+    
+    private List<Recipe>bookmarkedRecipes;
 
     public ProfileManagedBean() {
         showUploadedFile = false;
@@ -110,6 +116,14 @@ public class ProfileManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "File upload error: " + ex.getMessage(), ""));
         }
     }
+    
+    public void addRecipeToBookMarks(ActionEvent event){
+        Recipe recipeToAdd = (Recipe)event.getComponent().getAttributes().get("recipeToAdd");
+        customerSessionBeanLocal.updateBookmarkedRecipe(recipeToAdd, currentCustomer.getCustomerId());
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Bookmarked recipe successfully!", "" + recipeToAdd.getRecipeId()));
+        
+    }
+
 
     public void updateCustomer(ActionEvent event) {
         try {
@@ -271,6 +285,26 @@ public class ProfileManagedBean implements Serializable {
      */
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    /**
+     * @return the bookmarkedRecipes
+     */
+    public List<Recipe> getBookmarkedRecipes() {
+        try {
+            Customer customerRetrieved = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomer.getCustomerId());
+            return customerRetrieved.getBookedmarkedRecipes();
+        } catch (CustomerNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        return bookmarkedRecipes;
+    }
+
+    /**
+     * @param bookmarkedRecipes the bookmarkedRecipes to set
+     */
+    public void setBookmarkedRecipes(List<Recipe> bookmarkedRecipes) {
+        this.bookmarkedRecipes = bookmarkedRecipes;
     }
 
 }

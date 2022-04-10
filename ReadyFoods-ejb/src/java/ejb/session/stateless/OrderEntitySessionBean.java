@@ -102,7 +102,7 @@ public class OrderEntitySessionBean implements OrderEntitySessionBeanLocal {
 
                 entityManager.persist(orderLineItemEntity);
             }
-            
+
             customerSubscription.setCurrentOrder(newOrderEntity);
 
 //                for (OrderLineItem orderLineItemEntity : newOrderEntity.getOrderLineItems()) {
@@ -125,24 +125,23 @@ public class OrderEntitySessionBean implements OrderEntitySessionBeanLocal {
         }
 
     }
-   
+
     public OrderEntity deleteSubscriptionOrder(Long customerId, Long oldOrderEntityId) throws CustomerNotFoundException,
-             NoOngoingSubscriptionException, OrderNotFoundException {
+            NoOngoingSubscriptionException, OrderNotFoundException {
         if (oldOrderEntityId != null) {
-      
+
             OrderEntity oldOrderEntity = retrieveOrderByOrderId(oldOrderEntityId);
 
             Customer customerEntity = customerSessionBeanLocal.retrieveCustomerByCustomerId(customerId);
 
             Subscription customerSubscription = subscriptionSessionBean.retrieveOngoingSubscriptionForCustomer(customerId);
 
-            
             customerSubscription.getSubscriptionOrders().remove(oldOrderEntity);
             for (OrderLineItem orderLineItemEntity : oldOrderEntity.getOrderLineItems()) {
 
                 entityManager.remove(orderLineItemEntity);
             }
-            
+
             customerSubscription.setCurrentOrder(null);
             entityManager.remove(oldOrderEntity);
 
@@ -197,8 +196,7 @@ public class OrderEntitySessionBean implements OrderEntitySessionBeanLocal {
 
     @Override
     public void updateOrderStatusReceieved(Long orderId) throws OrderNotFoundException {
-        OrderEntity orderEntity = entityManager.find(OrderEntity.class,
-                orderId);
+        OrderEntity orderEntity = entityManager.find(OrderEntity.class,orderId);
         if (orderEntity != null) {
             orderEntity.getOrderLineItems().size();
             orderEntity.setStatus(Status.RECEIVED);

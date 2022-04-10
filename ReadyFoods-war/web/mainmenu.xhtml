@@ -42,13 +42,13 @@
 
                         <p:menuitem value="My Shopping Cart" outcome="/purchaseManagement/viewShoppingCart.xhtml" icon="pi pi-shopping-cart"/>
                         <p:menuitem value="View All Recipes" outcome="/recipeManagement/viewAllRecipe.xhtml" icon="pi pi-list" />
-                        <p:menuitem value="View Bookmarked Recipes" icon="pi pi-bookmark" />
+                        <p:menuitem value="View Bookmarked Recipes"  outcome="/recipeManagement/viewBookmarkedRecipes.xhtml" icon="pi pi-bookmark"/>
 
                     </p:submenu>
 
                     <p:submenu label="Food Diary" rendered="#{sessionScope.isLogin == true}">
 
-                        <p:menuitem value="My Food Diary" outcome="/foodDiary/myFoodDiary.xhtml"/>
+<!--                        <p:menuitem value="My Food Diary" outcome="/foodDiary/myFoodDiary.xhtml"/>-->
                     </p:submenu>
                     <p:menuitem rendered="#{sessionScope.isLogin == false}" value="Home" outcome="/index" icon="pi pi-home" />
                     <p:menuitem rendered="#{sessionScope.isLogin == false}" value="Register" outcome="/registerCustomer" />

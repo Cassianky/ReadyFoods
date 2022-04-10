@@ -9,25 +9,26 @@
                 template="./../template/defaultTemplate.xhtml">
 
     <ui:define name="content">
-        <ez:Breadcrumb pageName="viewAllRecipe" />
-
+        <ez:Breadcrumb pageName="viewBookmarkedRecipes" />
+        
         <h:form id="formViewAllRecipes" >
-            <p:dataGrid value="#{recipeManagedBean.allRecipesToView}" var="recipe" columns="3" layout="grid"
+            
+            <p:dataGrid value="#{profileManagedBean.bookmarkedRecipes}" var="recipe" columns="3" layout="grid"
                         rows="10" paginator="true" id="recipe"
                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                         rowsPerPageTemplate="5,10,25">
 
                 <f:facet name="header">
-                    Ready Foods Recipes
+                    <h1>Bookmarked recipes</h1>
                 </f:facet>
 
-                <p:panel header="#{recipe.recipeTitle}" style="text-align:center">
+                <p:panel header="#{recipe.recipeTitle}">
                     <h:panelGrid columns="1" style="width:100%;margin: 0 auto;text-align: center">
                         <p:graphicImage class="recipePic" style="object-fit: scale-down; overflow: hidden" name="300x300.png" library="images" /> 
                         <h:outputText value="Cooking Time: #{recipe.cookingTime}" />
                         <h:outputText value="Chef: #{recipe.recipeChef}" />
 
-                        <p:commandLink actionListener="#{recipeManagedBean.viewRecipeDetails}" title="View Detail">
+                        <p:commandLink style="align-items: center" actionListener="#{recipeManagedBean.viewRecipeDetails}" title="View Detail">
                             <h:outputText styleClass="pi pi-search" style="margin:0 auto;"/>
                             <f:attribute value="#{recipe.recipeId}" name="recipeToView"/>
                         </p:commandLink>
@@ -37,6 +38,6 @@
             </p:dataGrid>
 
         </h:form>
-
     </ui:define>
+
 </ui:composition>
