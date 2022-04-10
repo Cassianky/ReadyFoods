@@ -14,6 +14,13 @@ and open the template in the editor.
     padding: 5px;
 
 }
+.viewProfileInComment {
+    border: 1px solid #ddd;
+    border-radius: 100px;
+
+    padding: 5px;
+
+}
 
 .viewBentoSingleImageList {
     border: 1px solid #ddd;

@@ -14,7 +14,7 @@
             <p:autoUpdate />
         </p:growl>
         <style type="text/css">
- 
+
             .detail td {
                 font-size: 24px;
             }
@@ -111,7 +111,7 @@
                 </p:tab>
                 <p:tab title="Comments">
                     <p:commandButton value="Add Comment"
-                                     icon="pi pi-comment"
+                                     icon="pi pi-comments"
                                      onclick="PF('dialogAddComment').show()" 
                                      title="Add Comment"
                                      />
@@ -119,10 +119,11 @@
                         <f:facet name="header">
                             Scroll Down to Load More Comments
                         </f:facet>
-                        <h:panelGrid columns="1" style="width:100%;">
-
-                            <h:outputText value="#{comment.commentDate}" style="float: right; text-align: right"/>
-                            <h:outputText value="#{comment.customerName}"/>
+                        <h:panelGrid columns="1" style="width:100%;overflow: scroll;">
+                            <h:outputText value="#{comment.commentDate}" style="float: right; text-align: right; font-size: 11px; color: grey; font-style: italic"/>
+                            <p:graphicImage height="80" width="80" name="300x300.png" library="images" style="float: left;border-radius: 100px;border: 2px solid #ddd; padding: 3px;" />
+                            
+                            <h:outputText value="#{comment.customerName}" style="font-weight: bold; font-size: 17px;color: #4D2913; text-decoration : underline;"/>
                             <h:outputText value="#{comment.description}"/>
 
                         </h:panelGrid>
