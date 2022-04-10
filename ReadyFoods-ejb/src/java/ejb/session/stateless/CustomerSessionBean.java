@@ -1,6 +1,7 @@
 package ejb.session.stateless;
 
 import entity.Customer;
+import entity.Recipe;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.Stateless;
@@ -173,6 +174,18 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         {
             throw new InvalidLoginCredentialException("Customer does not exist or invalid password!");
         }
+    }
+    
+    @Override
+    public void addBookmarkedRecipe(Recipe recipeToAdd, Long customerId){
+        Customer customerToUpdate = em.find(Customer.class,customerId);
+        customerToUpdate.getBookedmarkedRecipes().add(recipeToAdd);
+    }
+    
+    @Override
+    public void removeBookmarkedRecipe(Recipe recipeToRemove, Long customerId){
+        Customer customerToUpdate = em.find(Customer.class,customerId);
+        customerToUpdate.getBookedmarkedRecipes().remove(recipeToRemove);
     }
     
     //Ask angely do we need to stop when customer can update some profile stuff?

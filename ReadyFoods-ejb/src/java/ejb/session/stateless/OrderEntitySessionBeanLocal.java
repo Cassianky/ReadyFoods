@@ -31,5 +31,7 @@ public interface OrderEntitySessionBeanLocal {
     public void updateOrderStatusReceieved(Long orderId) throws OrderNotFoundException;
 
     public OrderEntity createNewSubscriptionOrder(Long customerId, OrderEntity newOrderEntity) throws CustomerNotFoundException, CreateNewOrderException, NoOngoingSubscriptionException;
-    
+
+    public OrderEntity deleteSubscriptionOrder(Long customerId, Long oldOrderEntityId) throws CustomerNotFoundException, NoOngoingSubscriptionException, OrderNotFoundException;
+
 }

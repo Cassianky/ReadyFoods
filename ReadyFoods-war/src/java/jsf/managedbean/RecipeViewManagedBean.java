@@ -5,7 +5,9 @@
  */
 package jsf.managedbean;
 
+import ejb.session.stateless.CustomerSessionBeanLocal;
 import ejb.session.stateless.RecipeSessionBeanLocal;
+import entity.Customer;
 import entity.Recipe;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
@@ -15,6 +17,7 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
+import util.exception.CustomerNotFoundException;
 import util.exception.RecipeNotFoundException;
 
 /**
@@ -25,13 +28,19 @@ import util.exception.RecipeNotFoundException;
 @ViewScoped
 public class RecipeViewManagedBean implements Serializable {
 
+    @EJB(name = "CustomerSessionBeanLocal")
+    private CustomerSessionBeanLocal customerSessionBeanLocal;
+
     @EJB(name = "RecipeSessionBeanLocal")
     private RecipeSessionBeanLocal recipeSessionBeanLocal;
+    
+    
 
     
     private Recipe recipe;
     private String formattedRecipeSteps;
     private Long recipeId;
+    private Boolean isBookmarked;
 
     public RecipeViewManagedBean() {
         recipeId = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("recipeToView");
@@ -41,7 +50,14 @@ public class RecipeViewManagedBean implements Serializable {
     public void postConstruct() {
         try {  
             recipe = recipeSessionBeanLocal.retrieveRecipeByRecipeId(getRecipeId());
-        } catch (RecipeNotFoundException ex) {
+            Customer currentCustomer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
+            Customer customerRetrieved = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomer.getCustomerId());
+            for(Recipe bookmarkedRecipe:customerRetrieved.getBookedmarkedRecipes()){
+                if(bookmarkedRecipe.getRecipeId() == recipe.getRecipeId()){
+                    setIsBookmarked(true);
+                }
+            }
+        } catch (RecipeNotFoundException | CustomerNotFoundException ex) {
             ex.printStackTrace();
         }
         System.out.println("Test recipe: " + recipe.getRecipeTitle());
@@ -53,7 +69,7 @@ public class RecipeViewManagedBean implements Serializable {
         System.out.println("Recipe: " + recipe.getRecipeTitle());
         return recipe;
     }
-
+    
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
     }
@@ -78,6 +94,20 @@ public class RecipeViewManagedBean implements Serializable {
      */
     public void setRecipeId(Long recipeId) {
         this.recipeId = recipeId;
+    }
+
+    /**
+     * @return the isBookmarked
+     */
+    public Boolean getIsBookmarked() {
+        return isBookmarked;
+    }
+
+    /**
+     * @param isBookmarked the isBookmarked to set
+     */
+    public void setIsBookmarked(Boolean isBookmarked) {
+        this.isBookmarked = isBookmarked;
     }
 
 }

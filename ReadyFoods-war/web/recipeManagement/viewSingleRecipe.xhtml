@@ -10,10 +10,13 @@
 
     <ui:define name="content">
         <ez:Breadcrumb pageName="viewSingleRecipe" />
-        <h:form>
+        <p:growl id="growlId" showDetail="true">
+            <p:autoUpdate />
+        </p:growl>
+        <h:form id="formViewSingleRecipe">
 
 
-            <p:panel id="panelRecipeDetail" header="#{recipeViewManagedBean.recipe.recipeTitle}" style="margin-bottom:20px">
+            <p:panel class="card" id="panelRecipeDetail" header="#{recipeViewManagedBean.recipe.recipeTitle}" style="margin-bottom:20px">
                 <h:panelGrid columns="1" cellpadding="10">
 
                     <iframe width="923" height="519" src="#{recipeViewManagedBean.recipe.videoURL}" title="YouTube video player" 
@@ -61,10 +64,23 @@
                                      actionListener="#{shoppingCartViewManagedBean.addRecipeToCart}">
                         <f:attribute name="recipeToAdd" value="#{recipeViewManagedBean.recipe}"/>
                     </p:commandButton>
+                    
+                    <p:commandButton title="Bookmark"
+                                     process="@this formViewSingleRecipe"
+                                     update="@this formViewSingleRecipe"
+                                     value="#{recipeViewManagedBean.isBookmarked ? 'Bookmarked' : 'Add to bookmarks'}"
+                                     actionListener="#{profileManagedBean.addRecipeToBookMarks}"
+                                     icon="#{recipeViewManagedBean.isBookmarked ? 'pi pi-star' : 'pi pi-star-o'}"
+                                     disabled="#{recipeViewManagedBean.isBookmarked}">
+                        <f:attribute name="recipeToAdd" value="#{recipeViewManagedBean.recipe}"/>
+                        <p:ajax update="@this formViewSingleRecipe" />
+                    </p:commandButton>
 
                 </h:panelGrid>
 
             </p:panel>
+            
+            
 
         </h:form>
 
