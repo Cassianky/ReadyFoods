@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <cc:interface>
+    </cc:interface>
+
+    <cc:implementation>
+
+        <h:form id="formViewRecipe">
+
+            <p:dialog id="dialogViewRecipe" widgetVar="dialogViewRecipe" header="#{recipeViewSummarisedManagedBean.recipeToView.recipeTitle}" closable="true">
+
+                <p:panelGrid>
+
+              
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Chef: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{recipeViewSummarisedManagedBean.recipeToView.recipeChef}" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Calories per serving: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{recipeViewSummarisedManagedBean.recipeToView.caloriesPerServing}" />
+                        </p:column>
+
+                    </p:row>
+
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Carbs per serving: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{recipeViewSummarisedManagedBean.recipeToView.carbsPerServing}" />
+                        </p:column>
+
+
+                    </p:row>
+
+
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Fats per serving: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{recipeViewSummarisedManagedBean.recipeToView.fatsPerServing}" />
+                        </p:column>
+
+
+                    </p:row>
+
+
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Proteins per serving: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{recipeViewSummarisedManagedBean.recipeToView.proteinsPerServing}" />
+                        </p:column>
+
+
+                    </p:row>
+
+
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Sugar per serving: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{recipeViewSummarisedManagedBean.recipeToView.sugarPerServing}" />
+                        </p:column>
+
+
+                    </p:row>
+                    
+                        <p:row>
+                        <p:column>
+                            <h:outputLabel value="Cooking time (mins): " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{recipeViewSummarisedManagedBean.recipeToView.cookingTime}" />
+                        </p:column>
+
+
+                    </p:row>
+
+                </p:panelGrid>
+
+            </p:dialog>
+
+        </h:form>
+
+    </cc:implementation>
+</html>

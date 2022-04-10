@@ -48,7 +48,7 @@
 
                     <p:submenu label="Food Diary" rendered="#{sessionScope.isLogin == true}">
 
-<!--                        <p:menuitem value="My Food Diary" outcome="/foodDiary/myFoodDiary.xhtml"/>-->
+                        <p:menuitem value="My Food Diary" outcome="/foodDiary/myFoodDiary.xhtml"/>
                     </p:submenu>
                     <p:menuitem rendered="#{sessionScope.isLogin == false}" value="Home" outcome="/index" icon="pi pi-home" />
                     <p:menuitem rendered="#{sessionScope.isLogin == false}" value="Register" outcome="/registerCustomer" />

@@ -128,6 +128,7 @@ public class Customer implements Serializable {
         orders = new ArrayList<>();
         enquiries = new ArrayList<>();
         subscriptions = new ArrayList<>();
+        foodDiaryRecords = new ArrayList<>();
         amountSpent = new BigDecimal(0);
         isBanned = false;
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);

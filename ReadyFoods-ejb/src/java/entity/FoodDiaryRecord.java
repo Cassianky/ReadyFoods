@@ -61,6 +61,13 @@ public class FoodDiaryRecord implements Serializable {
     public FoodDiaryRecord() {
     }
 
+    public FoodDiaryRecord(String title, String description, LocalDateTime startDate, LocalDateTime endDate) {
+        this.title = title;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
     public FoodDiaryRecord(String title, String description, LocalDateTime startDate, LocalDateTime endDate, String name, Double calories, Double carbs, Double protein, Double fats, Double sugar) {
         this.title = title;
         this.description = description;
