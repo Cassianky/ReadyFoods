@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./../template/defaultTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:define name="content">
+        <h:form>
+            <p:growl id="messages" showDetail="true" />
+
+            <h:panelGrid columnClasses="value">
+                <h1 style="background-color: white; height: auto; font-weight: bold; text-align: center">My Food Diary</h1>
+                <p:schedule resizable="false" draggable="false" style="background-color: white;" id="schedule" value="#{foodDiaryManagedBean.scheduleModel}" widgetVar="myschedule" timeZone="GMT+8">
+
+                    <p:ajax event="dateSelect" listener="#{foodDiaryManagedBean.onDateSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+                    <p:ajax event="eventSelect" listener="#{foodDiaryManagedBean.onEventSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+
+                </p:schedule>
+
+            </h:panelGrid>
+
+            <p:dialog widgetVar="eventDialog" header="New Food Diary Record" showEffect="clip" hideEffect="clip">
+                <p:panelGrid id="eventDetails">
+                    <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id == null}">
+                        <p:column>
+                            <p:outputLabel for="title" value="Title:" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="title" value="#{foodDiaryManagedBean.scheduleEvent.title}" required="true" />
+                        </p:column>
+                        <p:column>
+                            <p:message for="title" />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id == null}">
+                        <p:column>
+                            <p:outputLabel for="description" value="Description:" />
+                        </p:column>
+                        <p:column>
+                            <p:inputTextarea id="description" rows="5" cols="40" value="#{foodDiaryManagedBean.scheduleEvent.description}" required="true">
+                            </p:inputTextarea>
+                        </p:column>
+                        <p:column>
+                            <p:message for="description" />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id == null}">
+                        <p:column>
+                            <p:outputLabel for="from" value="From:" />
+                        </p:column>
+                        <p:column>
+                            <p:calendar id="from" value="#{foodDiaryManagedBean.scheduleEvent.startDate}" timeZone="GMT+8" pattern="dd/MM/yyyy HH:mm"/>
+                        </p:column>
+                        <p:column>
+                            <p:message for="from" />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id == null}">
+                        <p:column>
+                            <p:outputLabel for="to" value="To:" />
+                        </p:column>
+                        <p:column>
+                            <p:calendar id="to" value="#{foodDiaryManagedBean.scheduleEvent.endDate}" timeZone="GMT+8" pattern="dd/MM/yyyy HH:mm"/>
+                        </p:column>
+                        <p:column>
+                            <p:message for="to" />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id == null}">
+                        <p:column>
+                            <p:outputLabel value="Select Food: "/>                    
+                        </p:column>
+                        <p:column>
+                            <p:selectOneMenu required="true" id="selFood" value="#{foodDiaryManagedBean.currentFoodId}">
+                                <f:selectItems value="#{foodDiaryManagedBean.foods}" var="food" itemValue="#{food.foodId}"  itemLabel="Food: #{food.name}, Calories: #{food.calories}cal, Carbs: #{food.carbs}g, Protein: #{food.protein}g, Fats: #{food.fats}g, Sugar: #{food.sugar}g" />
+                            </p:selectOneMenu>
+                        </p:column>
+                        <p:column>
+                            <p:message for="selFood" />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id == null}">
+                        <p:column colspan="3">
+                            <p:commandButton type="reset" value="Reset" />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id == null}">
+                        <p:column colspan="3">
+                            <p:commandButton id="addButton" value="Save" actionListener="#{foodDiaryManagedBean.addEvent}" oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+                        </p:column>
+                    </p:row>
+
+                    <!-- View upon creation of schedule event --> 
+                    <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id != null}">
+                        <p:column colspan="3">
+                        <p:outputLabel value="Title: #{foodDiaryManagedBean.scheduleEvent.title}" />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id != null}">
+                        <p:column colspan="3">
+                        <p:outputLabel value="Description: #{foodDiaryManagedBean.scheduleEvent.description}" />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id != null}">
+                        <p:column colspan="3">
+                        <p:outputLabel value="From: #{foodDiaryManagedBean.scheduleEvent.startDate}" /> 
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id != null}">
+                        <p:column colspan="3">
+                        <p:outputLabel value="To: #{foodDiaryManagedBean.scheduleEvent.endDate}" /> 
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id != null}">
+                        <p:column colspan="3">
+                        <p:outputLabel value="Selected Food: #{foodDiaryManagedBean.scheduleEvent.data.name}" />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id != null}">
+                        <p:column colspan="3">
+                        <p:outputLabel value="Calories: #{foodDiaryManagedBean.scheduleEvent.data.calories} cal" />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id != null}">
+                        <p:column colspan="3">
+                        <p:outputLabel value="Carbs: #{foodDiaryManagedBean.scheduleEvent.data.carbs} g" />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id != null}">
+                        <p:column colspan="3">
+                        <p:outputLabel value="Protein: #{foodDiaryManagedBean.scheduleEvent.data.protein} g" />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id != null}">
+                        <p:column colspan="3">
+                        <p:outputLabel value="Fats: #{foodDiaryManagedBean.scheduleEvent.data.fats} g" />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id != null}">
+                        <p:column colspan="3">
+                        <p:outputLabel value="Sugar: #{foodDiaryManagedBean.scheduleEvent.data.sugar} g" />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id != null}">
+                        <p:column colspan="3">
+                        <p:commandButton id="deleteButton" actionListener="#{foodDiaryManagedBean.deleteEvent}" value="Delete" oncomplete="PF('myschedule').update();PF('eventDialog').hide();"/>
+                        </p:column>
+                    </p:row> 
+                </p:panelGrid>
+
+
+            </p:dialog>    
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

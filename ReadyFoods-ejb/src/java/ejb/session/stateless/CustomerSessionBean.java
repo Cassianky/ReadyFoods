@@ -49,6 +49,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
             customer.getBookedmarkedRecipes().size();
             customer.getFoods().size();
             customer.getCreditCard();
+            customer.getFoodDiaryRecords().size();
 
             return customer;
         } else {
