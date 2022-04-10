@@ -31,8 +31,17 @@
         <main class="card">
             <h:form id="form">
                 <p:growl id="growl"><p:autoUpdate/></p:growl>
-                TODO: category formatting, view details, DIET TYPE RECC
+                TODO: category formatting, DIET TYPE RECC
                 <p:panelGrid  columns="2" styleClass="noBorders" rendered = "#{subscriptionSelectRecipesManagedBean.ongoingSubscription != null}">
+                    <p:column>
+
+                        <p:datePicker id="event" mindate="#{subscriptionSelectRecipesManagedBean.getMinDate()}" 
+                                      maxdate="#{subscriptionSelectRecipesManagedBean.getMaxDate()}"
+                                      value="#{subscriptionSelectRecipesManagedBean.dateForDelivery}" appendTo="@(body)" inline="true">
+                            <p:ajax event="dateSelect" process="@this" listener="#{subscriptionSelectRecipesManagedBean.onDateSelect}" update="growl"/>
+                        </p:datePicker>
+
+                    </p:column>
                     <p:column>
 
                         <br/>
@@ -41,25 +50,21 @@
                             <p:outputLabel style="font-weight: bold;" value="Remaining recipes: "/> 
                             <h:outputText style="color: #AE3126;" value="#{subscriptionSelectRecipesManagedBean.remaining}"/>
                             <br/>
-                            <p:outputLabel style="font-weight: bold;" value="Delivery Date: "/> 
-                            <h:outputText style="color: #AE3126;" value="#{subscriptionSelectRecipesManagedBean.getCurrentOrderDeliveryDate()}">
-
-                            </h:outputText>
+                             <p:outputLabel style="font-weight: bold;" value="For #{subscriptionSelectRecipesManagedBean.nextWk}"/> 
+                         
                         </h3>
 
-                    </p:column>
-                    <p:column>
-
-                        <p:datePicker id="event" mindate="#{subscriptionSelectRecipesManagedBean.getMinDate()}" 
-                                      maxdate="#{subscriptionSelectRecipesManagedBean.getMaxDate()}"
-                                      value="#{subscriptionSelectRecipesManagedBean.dateForDelivery}" appendTo="@(body)" inline="true">
-                            <p:ajax event="dateSelect" process="@this" listener="#{subscriptionSelectRecipesManagedBean.onDateSelect}" update="growl"/>
-                        </p:datePicker>
                         <h4>
+                               <p:outputLabel style="font-weight: bold;" value="Delivery Date: "/> 
+                            <h:outputText style="color: #AE3126;" value="#{subscriptionSelectRecipesManagedBean.getCurrentOrderDeliveryDate()}">
+                            </h:outputText>
+                                 <br/>
                             <!--Selecting for which week-->
-                            <p:outputLabel style="font-weight: bold;" value="Selection for week: #{subscriptionSelectRecipesManagedBean.nextWk}"/> 
+                           
                         </h4>
+
                     </p:column>
+
 
                     <!-- Create new subscription order OR update order -->
 
@@ -99,15 +104,19 @@
                                     <span class="product-category">#{orderLineItem.recipe.categories}</span> 
                                 </div>
                                 <br/>
-                                <br/>
 
+                                <p:commandButton 
+                                    icon="ui-icon pi pi-search"
+                                    update="ccViewRecipeSummary:formViewRecipe" 
+                                    oncomplete="PF('dialogViewRecipe').show()" 
+                                    title="View Recipe Summary">
+                                    <f:setPropertyActionListener value="#{orderLineItem.recipe}" 
+                                                                 target="#{subscriptionSelectRecipesManagedBean.recipeViewSummarisedManagedBean.recipeToView}" />
+                                </p:commandButton>
 
-
-                                &nbsp;
-                                <p:commandButton value="View Details" icon="ui-icon pi pi-search"></p:commandButton>
-                                &nbsp;
                                 <p:spinner id ="inputNewQty" value="#{orderLineItem.quantity}"
-                                           stepFactor="1" min="0" max="#{orderLineItem.quantity + subscriptionSelectRecipesManagedBean.remaining}" > 
+                                           stepFactor="1" min="0" max="#{orderLineItem.quantity + subscriptionSelectRecipesManagedBean.remaining}"
+                                           style="width: 20%"> 
 
 
                                     <f:ajax event="change" listener="#{subscriptionSelectRecipesManagedBean.updateRemaningRecipes(event)}" 
@@ -120,6 +129,8 @@
                 </p:dataView>
             </h:form>
         </main>
+
+        <ez:ViewRecipeSummary id="ccViewRecipeSummary" />
 
     </ui:define>
 

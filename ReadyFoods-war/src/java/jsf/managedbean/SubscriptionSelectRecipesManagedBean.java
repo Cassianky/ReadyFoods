@@ -29,8 +29,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -38,6 +36,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import util.enumeration.Status;
@@ -65,6 +64,9 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
 
     @EJB(name = "RecipeSessionBeanLocal")
     private RecipeSessionBeanLocal recipeSessionBeanLocal;
+    
+    @Inject
+    private RecipeViewSummarisedManagedBean recipeViewSummarisedManagedBean;
 
     private List<Recipe> allRecipes;
 
@@ -403,6 +405,20 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
      */
     public void setDateForDelivery(Date dateForDelivery) {
         this.dateForDelivery = dateForDelivery;
+    }
+
+    /**
+     * @return the recipeViewSummarisedManagedBean
+     */
+    public RecipeViewSummarisedManagedBean getRecipeViewSummarisedManagedBean() {
+        return recipeViewSummarisedManagedBean;
+    }
+
+    /**
+     * @param recipeViewSummarisedManagedBean the recipeViewSummarisedManagedBean to set
+     */
+    public void setRecipeViewSummarisedManagedBean(RecipeViewSummarisedManagedBean recipeViewSummarisedManagedBean) {
+        this.recipeViewSummarisedManagedBean = recipeViewSummarisedManagedBean;
     }
 
 }
