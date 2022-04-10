@@ -13,6 +13,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -61,7 +62,7 @@ public class CreditCardSessionBean implements CreditCardSessionBeanLocal {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
-    
+  
     @Override
     public void deleteCreditCardByCreditCardId(Long creditCardId, Long customerId) throws CreditCardNotFoundException, DeleteCreditCardException, CustomerNotFoundException
     {
@@ -85,6 +86,13 @@ public class CreditCardSessionBean implements CreditCardSessionBeanLocal {
         } else {
             throw new CreditCardNotFoundException("Credit Card ID " + creditCardId + " does not exist!");
         }
+    }
+    
+    @Override
+    public CreditCard retrieveCreditCardByCustomerId(Long customerId){
+        Customer customer = em.find(Customer.class, customerId);
+        
+        return customer.getCreditCard();
     }
     
 

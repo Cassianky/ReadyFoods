@@ -1,6 +1,7 @@
 package ejb.session.stateless;
 
 import entity.Customer;
+import entity.Recipe;
 import java.util.List;
 import javax.ejb.Local;
 import util.exception.CustomerEmailExistsException;
@@ -24,4 +25,10 @@ public interface CustomerSessionBeanLocal {
     public void updateCustomer(Customer customer) throws CustomerNotFoundException, UpdateCustomerException, InputDataValidationException;
 
     public List<Customer> retrieveAllCustomers();
+
+    public void updatePassword(Customer customer, String oldPassword, String newPassword) throws InputDataValidationException, CustomerNotFoundException, InvalidLoginCredentialException;
+
+    public void addBookmarkedRecipe(Recipe recipeToAdd, Long customerId);
+
+    public void removeBookmarkedRecipe(Recipe recipeToRemove, Long customerId);
 }

@@ -53,6 +53,15 @@ a:link:hover, a:visited:hover  {
     text-align: right;
 }
 
+.header-content {
+    font-size: 15 !important; 
+    margin-right: 20px !important;
+}
+
+.header-welcome {
+    font-size: 15 !important; 
+    margin-right: 5px !important;
+}
 .home {
     width: 100%;
     height: auto;
@@ -104,8 +113,15 @@ a:link:hover, a:visited:hover  {
 .card{
     margin: 30px;
 }
-
 /*comment this out if you want table borders back
 .ui-datatable * {
      border : 0px !important;
 }*/
+
+a:link, a:visited, a:link:hover, a:visited:hover {
+   color: #4D2913;
+}
+
+a:link:hover, a:visited:hover {
+    color: #FFFFFF;
+}

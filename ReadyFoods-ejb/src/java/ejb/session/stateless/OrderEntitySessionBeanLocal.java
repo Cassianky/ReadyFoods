@@ -10,6 +10,7 @@ import java.util.List;
 import javax.ejb.Local;
 import util.exception.CreateNewOrderException;
 import util.exception.CustomerNotFoundException;
+import util.exception.NoOngoingSubscriptionException;
 import util.exception.OrderNotFoundException;
 
 /**
@@ -28,5 +29,9 @@ public interface OrderEntitySessionBeanLocal {
     public List<OrderEntity> retrieveAllOrders();
 
     public void updateOrderStatusReceieved(Long orderId) throws OrderNotFoundException;
-    
+
+    public OrderEntity createNewSubscriptionOrder(Long customerId, OrderEntity newOrderEntity) throws CustomerNotFoundException, CreateNewOrderException, NoOngoingSubscriptionException;
+
+    public OrderEntity deleteSubscriptionOrder(Long customerId, Long oldOrderEntityId) throws CustomerNotFoundException, NoOngoingSubscriptionException, OrderNotFoundException;
+
 }

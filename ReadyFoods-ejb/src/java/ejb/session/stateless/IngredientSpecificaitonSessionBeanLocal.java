@@ -23,5 +23,7 @@ public interface IngredientSpecificaitonSessionBeanLocal {
     public Long createNewIngredientSpecification(IngredientSpecification newIngredientSpecifcation, Long ingredientId) throws IngredientExistsException, UnknownPersistenceException, InputDataValidationException, IngredientNotFoundException;
 
     public IngredientSpecification retrieveIngredientSpecificationById(Long id) throws IngredientSpecificationNotFoundException;
+
+    public IngredientSpecification retrieveIngredientSpecificationByIngredientId(Long ingredientId);
     
 }

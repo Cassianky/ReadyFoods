@@ -3,6 +3,8 @@ package jsf.managedbean;
 import ejb.session.stateless.CustomerSessionBeanLocal;
 import entity.Customer;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -35,14 +37,21 @@ public class RegisterCustomerManagedBeanRF implements Serializable {
     private Gender[] genders;
     private ActivityLevel[] activityLevels;
     private DietType[] dietTypes;
+    private String path;
+    private LocalDate maxDate;
 
     public RegisterCustomerManagedBeanRF() {
         newCustomer = new Customer();
+        LocalDate today = LocalDate.now();
+        int yearToday = today.getYear();
+        int monthToday = today.getMonthValue();
+        int dateToday = today.getDayOfMonth();
+        maxDate = LocalDate.of(yearToday-18, monthToday, dateToday);
     }
 
     @PostConstruct
     public void postConstruct() {
-
+        path = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("WELCOME_IMAGE_PATH");
     }
 
     public void registerNewCustomer(ActionEvent event) {
@@ -50,9 +59,11 @@ public class RegisterCustomerManagedBeanRF implements Serializable {
         try {
             Long newCustomerId = customerSessionBeanLocal.createNewCustomer(newCustomer);
             Customer ce = customerSessionBeanLocal.retrieveCustomerByCustomerId(newCustomerId);
-
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Customer Registered Successfully! (Email: " + ce.getEmail() + ")", null));
+            
             Future<Boolean> asyncResult = sendWelcomeEmail(ce.getFirstName(), ce.getEmail());
-
+            
+            //Email sending is slow, please be patient!
             Thread thread = new Thread() {
                 public void run() {
                     try {
@@ -71,8 +82,9 @@ public class RegisterCustomerManagedBeanRF implements Serializable {
 
             newCustomer = new Customer();
 
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Customer Registered Successfully! (Email: " + ce.getEmail() + ")", null));
-        } catch (InterruptedException | CustomerNotFoundException | InputDataValidationException | UnknownPersistenceException | CustomerEmailExistsException ex) {
+        } catch (CustomerEmailExistsException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Customer Email already has Account! ", null));
+        } catch (InterruptedException | CustomerNotFoundException | InputDataValidationException | UnknownPersistenceException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while registering: " + ex.getMessage(), null));
         }
     }
@@ -80,7 +92,7 @@ public class RegisterCustomerManagedBeanRF implements Serializable {
     @Asynchronous
     public Future<Boolean> sendWelcomeEmail(String name, String email) throws InterruptedException {
         EmailManager emailManager = new EmailManager("readyfoodscorporation@gmail.com", "fgdlhkfsl4648795");
-        Boolean result = emailManager.email(name, "readyfoodscorporation@gmail.com", email);
+        Boolean result = emailManager.email(name, "readyfoodscorporation@gmail.com", email, path);
         return new AsyncResult<>(result);
     }
 
@@ -139,5 +151,21 @@ public class RegisterCustomerManagedBeanRF implements Serializable {
     public void setDietTypes(DietType[] dietTypes) {
         this.dietTypes = dietTypes;
     }
+
+    /**
+     * @return the maxDate
+     */
+    public LocalDate getMaxDate() {
+        return maxDate;
+    }
+
+    /**
+     * @param maxDate the maxDate to set
+     */
+    public void setMaxDate(LocalDate maxDate) {
+        this.maxDate = maxDate;
+    }
+
+    
 
 }

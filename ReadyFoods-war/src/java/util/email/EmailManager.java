@@ -23,7 +23,7 @@ public class EmailManager {
     private final String mailer = "JavaMailer";
     private String smtpAuthUser;
     private String smtpAuthPassword;
-
+     
     public EmailManager() {
     }
 
@@ -32,7 +32,7 @@ public class EmailManager {
         this.smtpAuthPassword = smtpAuthPassword;
     }
 
-    public Boolean email(String name, String fromEmailAddress, String toEmailAddress) {
+    public Boolean email(String name, String fromEmailAddress, String toEmailAddress, String path) {
         String emailBody = "Dear " + name + ", we are excited to welcome you to ReadyFoods! Do check out ReadyFoods' features from recipes, mealkits to a personal food diary!";
 
         try {
@@ -70,15 +70,7 @@ public class EmailManager {
 
                 // second part (the image)
                 messageBodyPart = new MimeBodyPart();
-                DataSource fds = new FileDataSource(
-                       "ReadyFoods/ReadyFoods-war/web/resources/images/welcome.png");
-
-                //ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-                //URL url = classLoader.getResource("/welcome.png");
-                //DataSource fds = new URLDataSource(url);
-
-                //ClassLoader classLoader = getClass().getClassLoader();
-                //FileDataSource fds = new FileDataSource(new File(classLoader.getResource("images/welcome.png").getFile()));
+                DataSource fds = new FileDataSource(path);
                 
                 messageBodyPart.setDataHandler(new DataHandler(fds));
                 messageBodyPart.setHeader("Content-ID", "<image>");

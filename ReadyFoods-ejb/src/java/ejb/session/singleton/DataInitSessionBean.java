@@ -2,17 +2,23 @@ package ejb.session.singleton;
 
 import ejb.session.stateless.CategorySessionBeanLocal;
 import ejb.session.stateless.CustomerSessionBeanLocal;
+import ejb.session.stateless.FoodSessionBeanLocal;
 import ejb.session.stateless.IngredientSessionBean;
 import ejb.session.stateless.IngredientSessionBeanLocal;
 import ejb.session.stateless.IngredientSpecificaitonSessionBeanLocal;
 import ejb.session.stateless.RecipeSessionBeanLocal;
 import entity.Category;
 import entity.Customer;
+import entity.Food;
 import entity.Ingredient;
 import entity.IngredientSpecification;
 import entity.Recipe;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,8 +53,11 @@ import util.exception.UnknownPersistenceException;
 public class DataInitSessionBean {
 
     @EJB
-    private IngredientSpecificaitonSessionBeanLocal ingredientSpecificationSessionBeanLocal;
+    private FoodSessionBeanLocal foodSessionBeanLocal;
 
+    @EJB
+    private IngredientSpecificaitonSessionBeanLocal ingredientSpecificationSessionBeanLocal;
+    
     @EJB
     private CustomerSessionBeanLocal customerSessionBeanLocal;
     @EJB
@@ -73,7 +82,9 @@ public class DataInitSessionBean {
 
     private void initializeData() {
         try {
-            Customer customer1 = new Customer("customer1", "customer1", "customer1", "99999999", "password", "customer1@gmail.com", "123 Street", 20, DietType.VEGAN, Gender.FEMALE, ActivityLevel.HIGH);
+            LocalDate dob = LocalDate.of(1990, 10, 20);
+            Customer customer1 = new Customer("customer1", "customer1", "customer1", "99999999", "password", "customer1@gmail.com", "123 Street", DietType.VEGAN, Gender.FEMALE, ActivityLevel.HIGH);
+            customer1.setDob(dob);
             customerSessionBeanLocal.createNewCustomer(customer1);
 
             Ingredient ingredient1 = new Ingredient("Chicken", "Whole Chicken between 1kg to 1.5kg", IngredientUnit.Whole, new BigDecimal("10.00"), 50, 150);
@@ -216,7 +227,13 @@ public class DataInitSessionBean {
             recipeSessionBeanLocal.createNewRecipe(recipe1, recipe1Categories, recipe1IngredientSpecicationsId);
             recipeSessionBeanLocal.createNewRecipe(recipe2, recipe2Categories, recipe2IngredientSpecicationsId);
 
-        } catch (InputDataValidationException | UnknownPersistenceException | CustomerEmailExistsException | CategoryNotFoundException
+            Food food1 = new Food("french fries", 100.0, 100.0, 100.0, 100.0, 100.0);
+            Food food2 = new Food("Sphaghetti", 100.0, 100.0, 100.0, 100.0, 100.0);
+            foodSessionBeanLocal.createNewFood(food1, customer1.getCustomerId());
+            foodSessionBeanLocal.createNewFood(food2, customer1.getCustomerId());
+            
+            
+        } catch (CustomerNotFoundException| InputDataValidationException | UnknownPersistenceException | CustomerEmailExistsException | CategoryNotFoundException
                 | CreateCategoryException | CreateRecipeException | RecipeTitleExistException | IngredientExistsException ex) {
             ex.printStackTrace();
         } catch (IngredientNotFoundException ex) {

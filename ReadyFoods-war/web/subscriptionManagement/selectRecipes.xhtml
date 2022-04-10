@@ -8,8 +8,130 @@
                 xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
                 template="./../template/defaultTemplate.xhtml">
 
+
+
     <ui:define name="content">
+        <h:outputStylesheet name="profile.css" library="css"/>
+        <script type="text/javascript"/>
+
         <ez:Breadcrumb pageName="selectRecipes" />
+        <main class="card">
+
+
+
+            <p:panel rendered="#{subscriptionSelectRecipesManagedBean.ongoingSubscription == null}">
+                You don't have any ongoing subscriptions. 
+                <p:button value="Join the ReadyFoods meal kit community today!" outcome="newSubscription"/>
+
+
+            </p:panel>
+
+        </main> 
+
+        <main class="card">
+            <h:form id="form">
+                <p:growl id="growl"><p:autoUpdate/></p:growl>
+                TODO: category formatting, DIET TYPE RECC
+                <p:panelGrid  columns="2" styleClass="noBorders" rendered = "#{subscriptionSelectRecipesManagedBean.ongoingSubscription != null}">
+                    <p:column>
+
+                        <p:datePicker id="event" mindate="#{subscriptionSelectRecipesManagedBean.getMinDate()}" 
+                                      maxdate="#{subscriptionSelectRecipesManagedBean.getMaxDate()}"
+                                      value="#{subscriptionSelectRecipesManagedBean.dateForDelivery}" appendTo="@(body)" inline="true">
+                            <p:ajax event="dateSelect" process="@this" listener="#{subscriptionSelectRecipesManagedBean.onDateSelect}" update="growl"/>
+                        </p:datePicker>
+
+                    </p:column>
+                    <p:column>
+
+                        <br/>
+                        <h3>
+                            <!-- Number of remaining recipes -->
+                            <p:outputLabel style="font-weight: bold;" value="Remaining recipes: "/> 
+                            <h:outputText style="color: #AE3126;" value="#{subscriptionSelectRecipesManagedBean.remaining}"/>
+                            <br/>
+                             <p:outputLabel style="font-weight: bold;" value="For #{subscriptionSelectRecipesManagedBean.nextWk}"/> 
+                         
+                        </h3>
+
+                        <h4>
+                               <p:outputLabel style="font-weight: bold;" value="Delivery Date: "/> 
+                            <h:outputText style="color: #AE3126;" value="#{subscriptionSelectRecipesManagedBean.getCurrentOrderDeliveryDate()}">
+                            </h:outputText>
+                                 <br/>
+                            <!--Selecting for which week-->
+                           
+                        </h4>
+
+                    </p:column>
+
+
+                    <!-- Create new subscription order OR update order -->
+
+
+                    <p:commandButton 
+                        value="Save Selection" process="@this"
+                        update="@form" actionListener="#{subscriptionSelectRecipesManagedBean.updateSelection}"/>
+
+
+                </p:panelGrid>
+
+                <p:dataView 
+                    rendered = "#{subscriptionSelectRecipesManagedBean.ongoingSubscription != null}" class="card"
+                    id="dataViewRecipe" var="orderLineItem" value="#{subscriptionSelectRecipesManagedBean.orderLineItems}" paginator="true"
+                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                    gridIcon="pi pi-th-large" listIcon="pi pi-bars"
+                    layout="grid">
+
+                    <p:dataViewGridItem>
+
+                        <div class="card">
+
+                            <div style="text-align: center">
+
+                                <p:graphicImage class="recipePic" width="100px" name="300x300.png" library="images" /> 
+                                <br/>
+                                <br/>
+                                <div style="font-size: 20px"><span><b>#{orderLineItem.recipe.recipeTitle}</b></span></div>
+                                <br/>
+
+                                <h:outputText value="#{orderLineItem.recipe.caloriesPerServing} calories"/><br/>
+                                <h:outputText value="#{orderLineItem.recipe.carbsPerServing} carbs"/>
+
+                                <div>
+                                    <i class="pi pi-tag product-category-icon"/>
+
+                                    <span class="product-category">#{orderLineItem.recipe.categories}</span> 
+                                </div>
+                                <br/>
+
+                                <p:commandButton 
+                                    icon="ui-icon pi pi-search"
+                                    update="ccViewRecipeSummary:formViewRecipe" 
+                                    oncomplete="PF('dialogViewRecipe').show()" 
+                                    title="View Recipe Summary">
+                                    <f:setPropertyActionListener value="#{orderLineItem.recipe}" 
+                                                                 target="#{subscriptionSelectRecipesManagedBean.recipeViewSummarisedManagedBean.recipeToView}" />
+                                </p:commandButton>
+
+                                <p:spinner id ="inputNewQty" value="#{orderLineItem.quantity}"
+                                           stepFactor="1" min="0" max="#{orderLineItem.quantity + subscriptionSelectRecipesManagedBean.remaining}"
+                                           style="width: 20%"> 
+
+
+                                    <f:ajax event="change" listener="#{subscriptionSelectRecipesManagedBean.updateRemaningRecipes(event)}" 
+                                            execute="@form" render="@form"/>
+                                </p:spinner>
+                            </div>
+                        </div>
+                    </p:dataViewGridItem>
+
+                </p:dataView>
+            </h:form>
+        </main>
+
+        <ez:ViewRecipeSummary id="ccViewRecipeSummary" />
+
     </ui:define>
 
 </ui:composition>

@@ -9,6 +9,7 @@ import ejb.session.stateless.CustomerSessionBeanLocal;
 import ejb.session.stateless.OrderEntitySessionBeanLocal;
 import entity.Customer;
 import entity.OrderEntity;
+import entity.OrderLineItem;
 import java.io.IOException;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
@@ -43,8 +44,8 @@ public class OrderManagedBean implements Serializable {
     private Customer currentCustomerEntity;
 
     private List<OrderEntity> listOfOrders;
-    
 
+    private OrderEntity orderToView;
 
     public OrderManagedBean() {
         this.listOfOrders = new ArrayList<>();
@@ -58,7 +59,7 @@ public class OrderManagedBean implements Serializable {
             customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(getCurrentCustomerEntity().getCustomerId());
             this.setListOfOrders(customer.getOrders());
         } catch (CustomerNotFoundException ex) {
-            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Customer not found" + ex.getMessage(), null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Customer not found" + ex.getMessage(), null));
         }
     }
 
@@ -67,20 +68,17 @@ public class OrderManagedBean implements Serializable {
 
     }
 
-//    public void updateStatus(AjaxBehaviorEvent event)
-//    {
-//        OrderEntity order = (OrderEntity)event.getComponent().getAttributes().get("orderToupdate");
-//        try {
-//            orderSessionBeanLocal.updateOrderStatusReceieved(order.getOrderEntityId());
-//        } catch (OrderNotFoundException ex) {
-//            ex.printStackTrace();
-//        }
-//
-//    }
+    public void doViewOrderEntity(ActionEvent event) throws IOException {
+        try {
+            OrderEntity order = (OrderEntity) event.getComponent().getAttributes().get("orderToView");
+            Long orderId = order.getOrderEntityId();
+            OrderEntity orderRetrieved = orderSessionBeanLocal.retrieveOrderByOrderId(orderId);
+            setOrderToView(orderRetrieved);
+        } catch (OrderNotFoundException ex) {
+            ex.printStackTrace();
+        }
+    }
 
-    /**
-     * @return the listOfOrders
-     */
     public List<OrderEntity> getListOfOrders() {
         return listOfOrders;
     }
@@ -91,19 +89,18 @@ public class OrderManagedBean implements Serializable {
     public void setListOfOrders(ArrayList<OrderEntity> listOfOrders) {
         this.setListOfOrders(listOfOrders);
     }
-    
+
     public void updateStatus(ActionEvent event) {
-        
-           OrderEntity orderEntity = (OrderEntity)event.getComponent().getAttributes().get("orderToupdate");
-            try {
-                orderSessionBeanLocal.updateOrderStatusReceieved(orderEntity.getOrderEntityId());
-                
-            } catch (OrderNotFoundException ex) {
-                FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Order not found" + ex.getMessage(), null));
-            }
-        
-        
-        
+
+        OrderEntity orderEntity = (OrderEntity) event.getComponent().getAttributes().get("orderToupdate");
+        try {
+            orderSessionBeanLocal.updateOrderStatusReceieved(orderEntity.getOrderEntityId());
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Status for Order( " + orderEntity.getOrderEntityId() +") has been successfully updated to RECEIVED", null));
+
+        } catch (OrderNotFoundException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error when updating status: " + ex.getMessage(), null));
+        }
+
     }
 
     /**
@@ -127,5 +124,18 @@ public class OrderManagedBean implements Serializable {
         this.listOfOrders = listOfOrders;
     }
 
+    /**
+     * @return the orderToView
+     */
+    public OrderEntity getOrderToView() {
+        return orderToView;
+    }
+
+    /**
+     * @param orderToView the orderToView to set
+     */
+    public void setOrderToView(OrderEntity orderToView) {
+        this.orderToView = orderToView;
+    }
 
 }

@@ -25,5 +25,7 @@ public interface CreditCardSessionBeanLocal {
     public void deleteCreditCardByCreditCardId(Long creditCardId, Long customerId) throws CreditCardNotFoundException, DeleteCreditCardException, CustomerNotFoundException;
 
     public CreditCard retrieveCreditCardByCreditCardId(Long creditCardId) throws CreditCardNotFoundException;
+
+    public CreditCard retrieveCreditCardByCustomerId(Long customerId);
     
 }

@@ -8,6 +8,7 @@ package entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,7 +38,10 @@ public class OrderLineItem implements Serializable {
     @Digits(integer = 9, fraction = 2)
     private BigDecimal recipeSubTotal;
     
-    @OneToMany
+    @Column(nullable = true)
+    private Integer quantity; // only used in subscription orders
+    
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<CustomisedIngredient> customisedIngredients;
     
     @ManyToOne(optional = true)
@@ -150,6 +154,20 @@ public class OrderLineItem implements Serializable {
      */
     public void setRecipeSubTotal(BigDecimal recipeSubTotal) {
         this.recipeSubTotal = recipeSubTotal;
+    }
+
+    /**
+     * @return the quantity
+     */
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    /**
+     * @param quantity the quantity to set
+     */
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
     
 }

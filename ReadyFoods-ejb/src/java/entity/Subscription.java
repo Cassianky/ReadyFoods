@@ -16,12 +16,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.criteria.Order;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  *
@@ -65,6 +66,9 @@ public class Subscription implements Serializable {
     @Column(nullable = false)
     @NotNull
     private Integer remainingDuration; // in weeks
+    
+    @OneToOne
+    private OrderEntity currentOrder;
 
     @OneToMany
     private List<OrderEntity> subscriptionOrders;
@@ -240,6 +244,20 @@ public class Subscription implements Serializable {
      */
     public void setRemainingDuration(Integer remainingDuration) {
         this.remainingDuration = remainingDuration;
+    }
+
+    /**
+     * @return the currentOrder
+     */
+    public OrderEntity getCurrentOrder() {
+        return currentOrder;
+    }
+
+    /**
+     * @param currentOrder the currentOrder to set
+     */
+    public void setCurrentOrder(OrderEntity currentOrder) {
+        this.currentOrder = currentOrder;
     }
 
 }

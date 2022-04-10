@@ -65,6 +65,7 @@ public class ShoppingCartViewManagedBean implements Serializable {
             System.out.println(oli.getRecipe().getRecipeId());
             if (oli.getRecipe().getRecipeId() == recipe.getRecipeId()) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Recipe has already been added to cart! Go to 'my shopping cart' to edit it!", null));
+                setCurrentRecipe(new Recipe());
                 done = true;
                 break;
             }
@@ -110,6 +111,7 @@ public class ShoppingCartViewManagedBean implements Serializable {
 
     public void confirmAddToCart() {
         shoppingCartManagedBean.addRecipeFromRecipeView(currentRecipe);
+        FacesContext.getCurrentInstance().addMessage("growlId", new FacesMessage(FacesMessage.SEVERITY_INFO, "Recipe added to cart! ", currentRecipe.getRecipeTitle()));
         System.out.println("**********Add To Cart");
     }
 

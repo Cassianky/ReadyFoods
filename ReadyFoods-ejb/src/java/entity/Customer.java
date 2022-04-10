@@ -2,6 +2,7 @@ package entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -71,11 +72,14 @@ public class Customer implements Serializable {
     @Column(nullable = false, unique = true, length = 50)
     @Size(min=5, max=50)
     private String address;
+    //@Column(nullable = false)
+    //@NotNull
+    //@Min(18) //To create an account, you must be 18 years old or older
+    //@Max(120)
+    //private Integer age;
     @Column(nullable = false)
     @NotNull
-    @Min(18) //To create an account, you must be 18 years old or older
-    @Max(120)
-    private Integer age;
+    private LocalDate dob;
     @Column(nullable = false, precision = 11, scale = 2)
     @NotNull
     @DecimalMin("0.00")
@@ -112,18 +116,26 @@ public class Customer implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     private CreditCard creditCard;
 
+    @Column(nullable = false)
+    private String profilePicture;
+    
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<FoodDiaryRecord> foodDiaryRecords;
+    
     public Customer() {
         bookmarkedRecipes = new ArrayList<>();
         foods = new ArrayList<>();
         orders = new ArrayList<>();
         enquiries = new ArrayList<>();
         subscriptions = new ArrayList<>();
+        foodDiaryRecords = new ArrayList<>();
         amountSpent = new BigDecimal(0);
         isBanned = false;
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);
+        profilePicture = "";
     }
 
-    public Customer(String userName, String firstName, String lastName, String contactNumber, String password, String email, String address, Integer age, DietType dietType, Gender gender, ActivityLevel activityLevel) {
+    public Customer(String userName, String firstName, String lastName, String contactNumber, String password, String email, String address, DietType dietType, Gender gender, ActivityLevel activityLevel) {
         this();
         this.userName = userName;
         this.firstName = firstName;
@@ -131,7 +143,7 @@ public class Customer implements Serializable {
         this.contactNumber = contactNumber;
         this.email = email;
         this.address = address;
-        this.age = age;
+        //this.age = age;
         this.dietType = dietType;
         this.gender = gender;
         this.activityLevel = activityLevel;
@@ -251,13 +263,13 @@ public class Customer implements Serializable {
         this.address = address;
     }
 
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
+//    public Integer getAge() {
+//        return age;
+//    }
+//
+//    public void setAge(Integer age) {
+//        this.age = age;
+//    }
 
     public BigDecimal getAmountSpent() {
         return amountSpent;
@@ -401,4 +413,49 @@ public class Customer implements Serializable {
         this.creditCard = creditCard;
     }
     
+    /**
+     * @return the profilePicture
+     */
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    /**
+     * @param profilePicture the profilePicture to set
+     */
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    /**
+     * @return the dob
+     */
+    public LocalDate getDob() {
+        return dob;
+    }
+
+    /**
+     * @param dob the dob to set
+     */
+    public void setDob(LocalDate dob) {
+        this.dob = dob;
+    }
+    
+    public List<FoodDiaryRecord> getFoodDiaryRecords() {
+        return this.foodDiaryRecords;
+    }
+
+    public void addFoodDiaryRecord(FoodDiaryRecord foodDiaryRecord) {
+        if(!this.foodDiaryRecords.contains(foodDiaryRecord))
+        {
+            this.getFoodDiaryRecords().add(foodDiaryRecord);
+        }
+    }
+    
+    public void removeFoodDiaryRecord(FoodDiaryRecord foodDiaryRecord) {
+        if(this.getFoodDiaryRecords().contains(foodDiaryRecord))
+        {
+            this.getFoodDiaryRecords().remove(foodDiaryRecord);
+        }
+    }
 }

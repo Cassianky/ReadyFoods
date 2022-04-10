@@ -1,6 +1,7 @@
 package ejb.session.stateless;
 
 import entity.Customer;
+import entity.Recipe;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.Stateless;
@@ -49,6 +50,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
             customer.getBookedmarkedRecipes().size();
             customer.getFoods().size();
             customer.getCreditCard();
+            customer.getFoodDiaryRecords().size();
 
             return customer;
         } else {
@@ -95,6 +97,33 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         }
     }
 
+    @Override
+    public void updatePassword(Customer customer, String oldPassword, String newPassword) throws InputDataValidationException, CustomerNotFoundException, InvalidLoginCredentialException
+    {
+        if(customer != null && customer.getCustomerId() != null)
+        {
+            Set<ConstraintViolation<Customer>>constraintViolations = validator.validate(customer);
+        
+            if(constraintViolations.isEmpty())
+            {
+                Customer customerToUpdate = retrieveCustomerByCustomerId(customer.getCustomerId());
+                String oldPasswordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(oldPassword + customer.getSalt()));
+            
+                if (customer.getPassword().equals(oldPasswordHash)) {
+                customerToUpdate.setSalt(CryptographicHelper.getInstance().generateRandomString(32));
+                customerToUpdate.setPassword(newPassword);
+            } else 
+            {
+                throw new InvalidLoginCredentialException("Customer does not exist or invalid password!");
+            }
+            } else {
+                throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+            }
+        } else {
+            throw new CustomerNotFoundException("Customer ID not provided for customer to be updated");
+        }
+    }
+            
     @Override
     public List<Customer> retrieveAllCustomers()
     {
@@ -147,6 +176,18 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         }
     }
     
+    @Override
+    public void addBookmarkedRecipe(Recipe recipeToAdd, Long customerId){
+        Customer customerToUpdate = em.find(Customer.class,customerId);
+        customerToUpdate.getBookedmarkedRecipes().add(recipeToAdd);
+    }
+    
+    @Override
+    public void removeBookmarkedRecipe(Recipe recipeToRemove, Long customerId){
+        Customer customerToUpdate = em.find(Customer.class,customerId);
+        customerToUpdate.getBookedmarkedRecipes().remove(recipeToRemove);
+    }
+    
     //Ask angely do we need to stop when customer can update some profile stuff?
     @Override
     public void updateCustomer(Customer customer) throws CustomerNotFoundException, UpdateCustomerException, InputDataValidationException
@@ -161,7 +202,17 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 
                 if(customerToUpdate.getEmail().equals(customer.getEmail()))
                 {
-                                 
+                   customerToUpdate.setFirstName(customer.getFirstName());
+                   customerToUpdate.setLastName(customer.getLastName());
+                   customerToUpdate.setUserName(customer.getUserName());
+                   //Cannot update email
+                   //customerToUpdate.setEmail(customer.getEmail());
+                   customerToUpdate.setContactNumber(customer.getContactNumber());
+                   customerToUpdate.setAddress(customer.getAddress());
+                   customerToUpdate.setProfilePicture(customer.getProfilePicture());
+                   customerToUpdate.setDob(customer.getDob());
+                   customerToUpdate.setActivityLevel(customer.getActivityLevel());
+                   customerToUpdate.setDietType(customer.getDietType());
                 }
                 else
                 {

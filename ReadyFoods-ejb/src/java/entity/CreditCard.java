@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -19,31 +20,33 @@ public class CreditCard implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long creditCardId;
+    
     @Column(nullable = false)
     @NotNull
-    @Min(13) //Researched and found ccNumber can be as long as 19 digits and as short as 13 digits
-    @Max(19)
-    private Integer ccNumber;
+    @Size(min=19, max = 19)
+    private String ccNumber;
+//    @Digits(integer = 16, fraction = 0)//Researched and found ccNumber can be as long as 19 digits and as short as 13 digits
+//    private Integer ccNumber;
+    
     @Column(nullable = false)
     @NotNull
-    //CVV can only have 3 numbers
     @Min(100)
     @Max(999)
     private Integer CVV;
+    
     @Column(nullable = false, length = 64)
     @NotNull
     @Size(min=5, max = 64)
+    
     private String nameOnCard;
     @Column(nullable = false)
-    @NotNull
-    @Size(min=7, max = 7)
-    //Sample expiryDate: 10/2023 (length = 7)
-    private String expiryDate;
+    @NotNull//Sample expiryDate: 10/2023 (length = 7)
+    private Date expiryDate;
 
     public CreditCard() {
     }
 
-    public CreditCard(Integer ccNumber, Integer CVV, String nameOnCard, String expiryDate) {
+    public CreditCard(String ccNumber, Integer CVV, String nameOnCard, Date expiryDate) {
         this.ccNumber = ccNumber;
         this.CVV = CVV;
         this.nameOnCard = nameOnCard;
@@ -83,11 +86,11 @@ public class CreditCard implements Serializable {
         return "entity.CreditCard[ id=" + creditCardId + " ]";
     }
 
-    public Integer getCcNumber() {
+    public String getCcNumber() {
         return ccNumber;
     }
 
-    public void setCcNumber(Integer ccNumber) {
+    public void setCcNumber(String ccNumber) {
         this.ccNumber = ccNumber;
     }
 
@@ -107,11 +110,11 @@ public class CreditCard implements Serializable {
         this.nameOnCard = nameOnCard;
     }
 
-    public String getExpiryDate() {
+    public Date getExpiryDate() {
         return expiryDate;
     }
 
-    public void setExpiryDate(String expiryDate) {
+    public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
     }
     

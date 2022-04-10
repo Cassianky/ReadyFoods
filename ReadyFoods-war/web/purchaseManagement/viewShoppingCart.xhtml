@@ -12,57 +12,89 @@
     <ui:define name="content">
         <ez:Breadcrumb pageName="viewShoppingCart" />
         <div>
-            <h3>View Shopping Cart</h3>
+            <h1>View Shopping Cart</h1>
         </div>
+        <p:panel class="card">
 
-        <h:form id="formShoppingCart">
+            <h:form id="formShoppingCart">
 
-            <p:dataView value="#{shoppingCartManagedBean.orderLineItems}"
-                        var="orderLineItem"
-                        styleClass="ui-noborder"
-                        gridIcon="pi pi-th-large" listIcon="pi pi-bars">
-                <p:dataViewListItem>
-                    <h:panelGrid columns="4" style="width:100%" columnClasses="logo,detail">
-                        <p:graphicImage styleClass="viewRecipeImageInCart" height="100" width="100" name="300x300.png" library="images"/>
+                <p:dataView value="#{shoppingCartManagedBean.orderLineItems}"
+                            var="orderLineItem"
+                            styleClass="ui-noborder"
+                            gridIcon="pi pi-th-large" listIcon="pi pi-bars">
+                    <p:dataViewListItem>
+                        <h:panelGrid columns="4" style="width:100%" columnClasses="logo,detail">
+                            <p:graphicImage styleClass="viewRecipeImageInCart" height="100" width="100" name="300x300.png" library="images"/>
 
-                        <p:outputPanel>
-                            <h:panelGrid columns="2" cellpadding="5">
-                                <h:outputText value="Recipe Name:" />
-                                <h:outputText value="#{orderLineItem.recipe.recipeTitle}" style="font-weight: bold"/>
+                            <p:outputPanel>
+                                <h:panelGrid columns="2" cellpadding="5">
+                                    <h:outputText value="Recipe Name:" />
+                                    <h:outputText value="#{orderLineItem.recipe.recipeTitle}" style="font-weight: bold"/>
 
-                                <h:outputText value="Recipe Subtotal:" />
-                                <h:outputText value="#{orderLineItem.recipeSubTotal}" style="font-weight: bold">
-                                    <f:convertNumber type="currency" currencySymbol="$" maxIntegerDigits="5" maxFractionDigits="2"/>
-                                </h:outputText>
-
-                            </h:panelGrid>
-                        </p:outputPanel>
-
-                        <p:column>
-                            <p:commandButton actionListener="#{shoppingCartManagedBean.doUpdateOrderLineItem}"
-                                             update="formUpdateOrderLineItem" 
-                                             oncomplete="PF('dialogUpdateOrderLineItem').show()" 
-                                             icon="ui-icon-pencil"
-                                             title="Update Detail">
-                                <f:attribute name="orderLineItemToUpdate" value="#{orderLineItem}"/>
-                            </p:commandButton>
-                            <p:commandButton icon="ui-icon-trash" 
-                                             actionListener="#{shoppingCartManagedBean.removeFromShoppingCart}" 
-                                             update="formShoppingCart">
-                                <f:attribute name="orderLineItemToRemove" value="#{orderLineItem}" />
-                                <p:confirm header="Confirmation" message="Are you sure you want to delete #{orderLineItem} (#{orderLineItem.recipe.recipeTitle})?" icon="ui-icon-alert" />
-                            </p:commandButton>
-                        </p:column>
+                                    <h:outputText value="Recipe Subtotal:" />
+                                    <h:outputText value="#{orderLineItem.recipeSubTotal}" 
+                                                  style="font-weight: bold">
 
 
-                    </h:panelGrid>
-                </p:dataViewListItem>
-            </p:dataView>
-            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-            </p:confirmDialog>
-        </h:form>
+                                        <f:convertNumber type="currency" currencySymbol="$" maxIntegerDigits="5" maxFractionDigits="2"/>
+                                    </h:outputText>
+
+                                </h:panelGrid>
+                            </p:outputPanel>
+
+                            <p:column>
+                                <p:commandButton actionListener="#{shoppingCartManagedBean.doUpdateOrderLineItem}"
+                                                 update="formUpdateOrderLineItem" 
+                                                 oncomplete="PF('dialogUpdateOrderLineItem').show()" 
+                                                 icon="ui-icon-pencil"
+                                                 title="Update Detail">
+                                    <f:attribute name="orderLineItemToUpdate" value="#{orderLineItem}"/>
+                                </p:commandButton>
+                                <p:commandButton icon="ui-icon-trash" 
+                                                 actionListener="#{shoppingCartManagedBean.removeFromShoppingCart}" 
+                                                 update="formShoppingCart">
+                                    <f:attribute name="orderLineItemToRemove" value="#{orderLineItem}" />
+                                    <p:confirm header="Confirmation" message="Are you sure you want to delete #{orderLineItem} (#{orderLineItem.recipe.recipeTitle})?" icon="ui-icon-alert" />
+                                </p:commandButton>
+                            </p:column>
+
+
+                        </h:panelGrid>
+                    </p:dataViewListItem>
+                </p:dataView>
+
+                <p:panelGrid id="panelGridSummary" columns="2">
+                    <p:outputLabel value="Num Pax" for="numPax"/>
+                    <p:spinner id="numPax" value="#{shoppingCartManagedBean.numPax}" 
+                               min="1" 
+                               required="true"
+                               valueChangeListener="#{shoppingCartManagedBean.updateNumPax}"
+                               requiredMessage="Num pax is required"
+                               >
+                        <p:ajax event="change" update="@form"/>
+                    </p:spinner>
+                    <p:outputLabel value="Total Amount" for="totalAmount"/>
+                    <h:outputText id="totalAmount" value="#{shoppingCartManagedBean.totalPrice}">
+                        <f:convertNumber type="currency" currencySymbol="$" maxIntegerDigits="5" maxFractionDigits="2" minFractionDigits="2"/>
+                    </h:outputText>
+                </p:panelGrid>
+
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+
+                <br></br>
+
+                <p:commandButton value="Checkout!"
+                                 icon="pi pi-dollar"
+                                 actionListener="#{shoppingCartManagedBean.checkoutShoppingCart}"
+                                 oncomplete="if (#{shoppingCartManagedBean.creditCard == null}) { PF('dialogAddCC').show() }">
+
+                </p:commandButton>
+
+            </h:form>
+        </p:panel>
         <h:form id="formUpdateOrderLineItem">
             <p:dialog id="dialogUpdateOrderLineItem" widgetVar="dialogUpdateOrderLineItem" header="Update Order Line Item" closable="true">
                 <p:messages id="messages" redisplay="false" closable="true" />
@@ -71,10 +103,6 @@
                         List Of Ingredients for recipe
                     </f:facet>
 
-                    <p:column headerText="Number">
-                        <h:outputText value="#{ci.lineItemNumber}"/>
-                    </p:column>
-
                     <p:column headerText="Ingredient Name">
                         <h:outputText value="#{ci.ingredientName}"/>
                     </p:column>
@@ -82,11 +110,13 @@
                         <p:spinner id="updateQuantity" value="#{ci.quantityOfIngredient}" stepFactor="1" min="1"/>
                     </p:column>
                     <p:column headerText="Unit Price">
-                        <h:outputText value="#{ci.unitPrice}"/>
+                        <h:outputText value="#{ci.unitPrice}">
+                            <f:convertNumber type="currency" currencySymbol="$" maxIntegerDigits="5" maxFractionDigits="2" minFractionDigits="2"/>
+                        </h:outputText>
                     </p:column>
                     <p:column headerText="Subtotal">
                         <h:outputText value="#{ci.subtotal}">
-                            <f:convertNumber type="currency" currencySymbol="$" maxIntegerDigits="5" maxFractionDigits="2"/>
+                            <f:convertNumber type="currency" currencySymbol="$" maxIntegerDigits="5" maxFractionDigits="2" minFractionDigits="2"/>
                         </h:outputText>
                     </p:column>
                     <p:column headerText="Prepared?">
@@ -97,9 +127,20 @@
                     </p:column>
 
                     <p:column headerText="Action">
-                        <p:commandButton icon="ui-icon-trash" actionListener="#{shoppingCartManagedBean.removeCustomisedIngredientFromOrderLineItem}" update="formUpdateOrderLineItem">
-                            <f:attribute name="orderLineItemToRemove" value="#{orderLineItem}"/>
-                            <p:confirm header="Confirmation" message="Are you sure you want to remove #{orderLineItem.recipe.recipeTitle} from cart?" icon="ui-icon-alert" />
+                        <p:commandButton icon="ui-icon-trash" 
+                                         actionListener="#{shoppingCartManagedBean.removeCustomisedIngredientFromOrderLineItem}" 
+                                         update="formUpdateOrderLineItem"
+                                         oncomplete="PF('dialogUpdateOrderLineItem').show()">
+                            <f:attribute name="customisedIngredientToRemove" value="#{ci}"/>
+                            <p:confirm header="Confirmation" message="Are you sure you want to remove #{ci.ingredientName} from cart?" icon="ui-icon-alert" />
+                        </p:commandButton>
+
+                        <p:commandButton value="Reset" 
+                                         icon="pi pi-undo"
+                                         actionListener="#{shoppingCartManagedBean.reset}"
+                                         update="formUpdateOrderLineItem"
+                                         onclick="PF('dialogUpdateOrderLineItem').show()">
+                            <f:attribute name="cIToReset" value="#{ci}"/>   
                         </p:commandButton>
                     </p:column>
                 </p:dataTable>
@@ -110,7 +151,22 @@
                                  icon="pi pi-check"
                                  onclick="PF('dialogUpdateOrderLineItem').close()"
                                  update="formShoppingCart"/>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
 
+            </p:dialog>
+        </h:form>
+
+        <h:form id="formDialogAddCC">
+            <p:dialog id="dialogAddCC" widgetVar="dialogAddCC" header="You have not added a credit card yet. Would you like to add a credit card?" closable="true">
+                <p:commandButton value="OK!"
+                                 icon="pi pi-check"
+                                 actionListener="#{shoppingCartManagedBean.redirectToAddCC}"/>
+                <p:commandButton value="I'll add it later (you will not be able to check out)"
+                                 icon="pi pi-times"
+                                 onclick="PF('dialogAddCC').close()"/>
             </p:dialog>
         </h:form>
 

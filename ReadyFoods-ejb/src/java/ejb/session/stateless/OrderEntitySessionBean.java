@@ -9,6 +9,7 @@ import entity.Customer;
 import entity.CustomisedIngredient;
 import entity.OrderEntity;
 import entity.OrderLineItem;
+import entity.Subscription;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
@@ -22,6 +23,7 @@ import util.exception.CreateNewOrderException;
 import util.exception.CustomerNotFoundException;
 import util.exception.IngredientInsufficientStockQuantityException;
 import util.exception.IngredientNotFoundException;
+import util.exception.NoOngoingSubscriptionException;
 import util.exception.OrderNotFoundException;
 
 /**
@@ -30,6 +32,9 @@ import util.exception.OrderNotFoundException;
  */
 @Stateless
 public class OrderEntitySessionBean implements OrderEntitySessionBeanLocal {
+
+    @EJB
+    private SubscriptionSessionBeanLocal subscriptionSessionBean;
 
     @EJB(name = "IngredientSessionBeanLocal")
     private IngredientSessionBeanLocal ingredientSessionBeanLocal;
@@ -82,6 +87,86 @@ public class OrderEntitySessionBean implements OrderEntitySessionBeanLocal {
     }
 
     @Override
+    public OrderEntity createNewSubscriptionOrder(Long customerId, OrderEntity newOrderEntity) throws CustomerNotFoundException,
+            CreateNewOrderException, NoOngoingSubscriptionException {
+        if (newOrderEntity != null) {
+
+            Customer customerEntity = customerSessionBeanLocal.retrieveCustomerByCustomerId(customerId);
+
+            Subscription customerSubscription = subscriptionSessionBean.retrieveOngoingSubscriptionForCustomer(customerId);
+
+            entityManager.persist(newOrderEntity);
+
+            customerSubscription.getSubscriptionOrders().add(newOrderEntity);
+            for (OrderLineItem orderLineItemEntity : newOrderEntity.getOrderLineItems()) {
+
+                entityManager.persist(orderLineItemEntity);
+            }
+
+            customerSubscription.setCurrentOrder(newOrderEntity);
+
+//                for (OrderLineItem orderLineItemEntity : newOrderEntity.getOrderLineItems()) {
+//                    for (CustomisedIngredient ci : orderLineItemEntity.getCustomisedIngredients()) {
+//                        ingredientSessionBeanLocal.debitQuantityAtHand(ci.getIngredientId(), ci.getQuantityOfIngredient());
+//                    }
+//                    entityManager.persist(orderLineItemEntity);
+//                }
+            entityManager.flush();
+            return newOrderEntity;
+
+//            } catch (IngredientNotFoundException | IngredientInsufficientStockQuantityException ex) {
+//                // The line below rolls back all changes made to the database.
+//                eJBContext.setRollbackOnly();
+//
+//                throw new CreateNewOrderException(ex.getMessage());
+//            }
+        } else {
+            throw new CreateNewOrderException("Order information not provided");
+        }
+
+    }
+
+    public OrderEntity deleteSubscriptionOrder(Long customerId, Long oldOrderEntityId) throws CustomerNotFoundException,
+            NoOngoingSubscriptionException, OrderNotFoundException {
+        if (oldOrderEntityId != null) {
+
+            OrderEntity oldOrderEntity = retrieveOrderByOrderId(oldOrderEntityId);
+
+            Customer customerEntity = customerSessionBeanLocal.retrieveCustomerByCustomerId(customerId);
+
+            Subscription customerSubscription = subscriptionSessionBean.retrieveOngoingSubscriptionForCustomer(customerId);
+
+            customerSubscription.getSubscriptionOrders().remove(oldOrderEntity);
+            for (OrderLineItem orderLineItemEntity : oldOrderEntity.getOrderLineItems()) {
+
+                entityManager.remove(orderLineItemEntity);
+            }
+
+            customerSubscription.setCurrentOrder(null);
+            entityManager.remove(oldOrderEntity);
+
+//                for (OrderLineItem orderLineItemEntity : newOrderEntity.getOrderLineItems()) {
+//                    for (CustomisedIngredient ci : orderLineItemEntity.getCustomisedIngredients()) {
+//                        ingredientSessionBeanLocal.debitQuantityAtHand(ci.getIngredientId(), ci.getQuantityOfIngredient());
+//                    }
+//                    entityManager.persist(orderLineItemEntity);
+//                }
+            entityManager.flush();
+            return oldOrderEntity;
+
+//            } catch (IngredientNotFoundException | IngredientInsufficientStockQuantityException ex) {
+//                // The line below rolls back all changes made to the database.
+//                eJBContext.setRollbackOnly();
+//
+//                throw new CreateNewOrderException(ex.getMessage());
+//            }
+        } else {
+            throw new OrderNotFoundException("Order information not provided");
+        }
+
+    }
+
+    @Override
     public List<OrderEntity> retrieveAllOrders() {
         Query query = entityManager.createQuery("SELECT o FROM OrderEntity o");
 
@@ -98,7 +183,8 @@ public class OrderEntitySessionBean implements OrderEntitySessionBeanLocal {
 
     @Override
     public OrderEntity retrieveOrderByOrderId(Long orderId) throws OrderNotFoundException {
-        OrderEntity orderEntity = entityManager.find(OrderEntity.class, orderId);
+        OrderEntity orderEntity = entityManager.find(OrderEntity.class,
+                orderId);
         if (orderEntity != null) {
             orderEntity.getOrderLineItems().size();
             return orderEntity;
@@ -110,7 +196,7 @@ public class OrderEntitySessionBean implements OrderEntitySessionBeanLocal {
 
     @Override
     public void updateOrderStatusReceieved(Long orderId) throws OrderNotFoundException {
-        OrderEntity orderEntity = entityManager.find(OrderEntity.class, orderId);
+        OrderEntity orderEntity = entityManager.find(OrderEntity.class,orderId);
         if (orderEntity != null) {
             orderEntity.getOrderLineItems().size();
             orderEntity.setStatus(Status.RECEIVED);
