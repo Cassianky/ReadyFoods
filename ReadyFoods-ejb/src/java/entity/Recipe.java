@@ -76,6 +76,9 @@ public class Recipe implements Serializable {
 
     @OneToMany
     private List<Review> reviews;
+    
+    @OneToMany
+    private List<CommentEntity>comments;
 
     @OneToMany(fetch = FetchType.LAZY)
     private List<IngredientSpecification> ingredientSpecificationList;
@@ -266,6 +269,27 @@ public class Recipe implements Serializable {
      */
     public void setVideoURL(String videoURL) {
         this.videoURL = videoURL;
+    }
+
+    /**
+     * @return the reviews
+     */
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    /**
+     * @return the comments
+     */
+    public List<CommentEntity> getComments() {
+        return comments;
+    }
+
+    /**
+     * @param comments the comments to set
+     */
+    public void setComments(List<CommentEntity> comments) {
+        this.comments = comments;
     }
 
 }

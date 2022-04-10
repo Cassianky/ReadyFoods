@@ -80,9 +80,28 @@
 
             </p:panel>
 
-            <p:panel class="card" id="panelCommentReview" header="#{recipeViewManagedBean.recipe.recipeTitle}" style="margin-bottom:20px">
-            
-                
+            <p:panel class="card" id="panelCommentReview" style="margin-bottom:20px">
+                <p:tabView>
+                    <p:tab title="Reviews">
+                        <p:dataScroller value="#{recipeViewManagedBean.reviews}" var="review" chunkSize="5">
+                            <f:facet name="header">
+                                Scroll Down to Load More Reviews
+                            </f:facet>
+                            <h:panelGrid columns="1" style="width:100%;" >
+                                
+                                <p:rating value="#{review.rating}" readonly="true" />
+                                <h:outputText value="#{review.reviewDate}" style="vertical-align: top; text-align: right"/>
+                                <h:outputText value="#{review.title}" style="font-weight: bold;font-size: 15px"/>
+                                <h:outputText value="#{review.description}"/>
+
+                            </h:panelGrid>
+                        </p:dataScroller>  
+                    </p:tab>
+                    <p:tab title="Comments">
+
+                    </p:tab>
+                </p:tabView>
+
             </p:panel>
 
         </h:form>
