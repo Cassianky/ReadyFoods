@@ -50,28 +50,29 @@
                             <p:outputLabel style="font-weight: bold;" value="Remaining recipes: "/> 
                             <h:outputText style="color: #AE3126;" value="#{subscriptionSelectRecipesManagedBean.remaining}"/>
                             <br/>
-                             <p:outputLabel style="font-weight: bold;" value="For #{subscriptionSelectRecipesManagedBean.nextWk}"/> 
-                         
+                            <p:outputLabel style="font-weight: bold;" value="For #{subscriptionSelectRecipesManagedBean.nextWk}"/> 
+
                         </h3>
 
                         <h4>
-                               <p:outputLabel style="font-weight: bold;" value="Delivery Date: "/> 
+                            <p:outputLabel style="font-weight: bold;" value="Delivery Date: "/> 
                             <h:outputText style="color: #AE3126;" value="#{subscriptionSelectRecipesManagedBean.getCurrentOrderDeliveryDate()}">
                             </h:outputText>
-                                 <br/>
+                            <br/>
                             <!--Selecting for which week-->
-                           
+
                         </h4>
 
                     </p:column>
-
-
                     <!-- Create new subscription order OR update order -->
-
 
                     <p:commandButton 
                         value="Save Selection" process="@this"
                         update="@form" actionListener="#{subscriptionSelectRecipesManagedBean.updateSelection}"/>
+
+                    <p:commandButton 
+                        value="Process [FOR DEMO PURPOSES ONLY]" 
+                        update="@form" actionListener="#{subscriptionSelectRecipesManagedBean.process()}"/>
 
 
                 </p:panelGrid>
