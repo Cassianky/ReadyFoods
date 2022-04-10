@@ -270,7 +270,8 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
 
     public String getCurrentOrderDeliveryDate() {
         ZoneId TZ = ZoneId.of("Asia/Singapore");
-        if (currentOrder.getDateForDelivery() == null) return "Not selected.";
+       
+        if (currentOrder == null || currentOrder.getDateForDelivery() == null) return "Not selected.";
         
         LocalDate date = currentOrder.getDateForDelivery().toInstant().atZone(TZ).toLocalDate();
         return date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));

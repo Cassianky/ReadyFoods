@@ -32,7 +32,7 @@
             <h:form id="form">
                 <p:growl id="growl"><p:autoUpdate/></p:growl>
                 TODO: category formatting, view details, DIET TYPE RECC
-                <p:panelGrid  columns="2" styleClass="noBorders">
+                <p:panelGrid  columns="2" styleClass="noBorders" rendered = "#{subscriptionSelectRecipesManagedBean.ongoingSubscription != null}">
                     <p:column>
 
                         <br/>
@@ -46,16 +46,16 @@
 
                             </h:outputText>
                         </h3>
-                        
+
                     </p:column>
                     <p:column>
-                      
+
                         <p:datePicker id="event" mindate="#{subscriptionSelectRecipesManagedBean.getMinDate()}" 
                                       maxdate="#{subscriptionSelectRecipesManagedBean.getMaxDate()}"
                                       value="#{subscriptionSelectRecipesManagedBean.dateForDelivery}" appendTo="@(body)" inline="true">
                             <p:ajax event="dateSelect" process="@this" listener="#{subscriptionSelectRecipesManagedBean.onDateSelect}" update="growl"/>
                         </p:datePicker>
-                          <h4>
+                        <h4>
                             <!--Selecting for which week-->
                             <p:outputLabel style="font-weight: bold;" value="Selection for week: #{subscriptionSelectRecipesManagedBean.nextWk}"/> 
                         </h4>
@@ -71,10 +71,12 @@
 
                 </p:panelGrid>
 
-                <p:dataView id="dataViewRecipe" var="orderLineItem" value="#{subscriptionSelectRecipesManagedBean.orderLineItems}" paginator="true"
-                            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-                            gridIcon="pi pi-th-large" listIcon="pi pi-bars"
-                            layout="grid">
+                <p:dataView 
+                    rendered = "#{subscriptionSelectRecipesManagedBean.ongoingSubscription != null}" class="card"
+                    id="dataViewRecipe" var="orderLineItem" value="#{subscriptionSelectRecipesManagedBean.orderLineItems}" paginator="true"
+                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                    gridIcon="pi pi-th-large" listIcon="pi pi-bars"
+                    layout="grid">
 
                     <p:dataViewGridItem>
 
@@ -119,61 +121,6 @@
             </h:form>
         </main>
 
-
-
-
-
-
-
-        <!--
-                <main class="card">
-                    <h:form id="selectRecipeForm">
-                        <p:dataView var="recipe" value="#{subscriptionSelectRecipesManagedBean.allRecipes}"  rowsPerPageTemplate="6,12,16"
-                                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                    gridIcon="pi pi-th-large" listIcon="pi pi-bars"  paginator="true">
-        
-                            <p:dataViewListItem>
-                                <h:panelGrid columns="4" style="width:100%" columnClasses="logo,detail,action">
-                                    <p:graphicImage class="recipePic" width="100px" name="300x300.png" library="images" /> 
-        
-                                    <p:outputPanel>
-                                        <h:panelGrid columns="1" cellpadding="5">
-                                            <h:outputText value="#{recipe.recipeTitle}" style="font-weight: bold"/>
-                                            <h:outputText value="#{recipe.recipeChef}"/>
-        
-                                            <div>
-                                                <i class="pi pi-tag product-category-icon"/>
-                                                <span class="product-category">#{recipe.categories[0].description}</span>
-                                            </div>
-                                            <br/>
-        
-                                            <p:commandLink  title="View Detail">
-                                                <h:outputText styleClass="ui-icon pi pi-search" />
-        
-                                            </p:commandLink>
-        
-        
-                                        </h:panelGrid>
-        
-                                    </p:outputPanel>
-        
-        
-                                    <p:spinner style="width: 100%" id ="inputNewQty" 
-                                               stepFactor="1" min="0"> 
-        
-                                        <f:validateBean disabled="true"/>
-                                    </p:spinner>
-        
-        
-        
-        
-                                </h:panelGrid>
-                            </p:dataViewListItem>
-                        </p:dataView>
-        
-        
-                    </h:form>
-                </main>-->
     </ui:define>
 
 </ui:composition>
