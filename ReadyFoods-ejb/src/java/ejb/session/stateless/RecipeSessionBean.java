@@ -4,7 +4,6 @@ import entity.Category;
 import entity.Recipe;
 import entity.IngredientSpecification;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -41,8 +40,6 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
 
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
-    
-    
 
     public RecipeSessionBean() {
         this.validatorFactory = Validation.buildDefaultValidatorFactory();
@@ -50,7 +47,7 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
     }
 
     @Override
-    public Recipe createNewRecipe(Recipe newRecipe, List<Long> categoriesId, List<Long>ingredientSpecificationId)
+    public Recipe createNewRecipe(Recipe newRecipe, List<Long> categoriesId, List<Long> ingredientSpecificationId)
             throws CategoryNotFoundException, CreateRecipeException,
             RecipeTitleExistException, UnknownPersistenceException,
             InputDataValidationException {
@@ -65,13 +62,13 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
                     throw new CreateRecipeException("A category must be selected for the recipe");
                 }
 
-                for(Long isId : ingredientSpecificationId) {
+                for (Long isId : ingredientSpecificationId) {
                     IngredientSpecification is = ingredientSpecificationSessionBeanLocal.retrieveIngredientSpecificationById(isId);
                     newRecipe.getIngredientSpecificationList().add(is);
                     System.out.println("ejb.session.stateless.RecipeSessionBean.createNewRecipe()" + is.getIngredientSpecificationId());
-                    
+
                 }
-                
+
                 List<Category> categoriesList = new ArrayList<>();
 
                 for (Long categoryId : categoriesId) {
@@ -104,19 +101,19 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
 
     @Override
     public List<Recipe> retrieveAllRecipes() {
-        
+
         Query query = em.createQuery("SELECT r FROM Recipe r ORDER BY r.recipeTitle");
-        
+
         List<Recipe> recipes = query.getResultList();
-        
-        for(Recipe r : recipes) {
+
+        for (Recipe r : recipes) {
             r.getIngredientSpecificationList().size();
             r.getCategories().size();
         }
-        
+
         return recipes;
     }
-    
+
     @Override
     public Recipe retrieveRecipeByRecipeId(Long recipeId) throws RecipeNotFoundException {
 
@@ -126,7 +123,7 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
             retrievedRecipe.getCategories().size();
             retrievedRecipe.getRecipeSteps();
             retrievedRecipe.getIngredientSpecificationList().size();
-            
+
             return retrievedRecipe;
         } else {
             throw new RecipeNotFoundException("Recipe ID " + recipeId + " does not exist!");
@@ -142,7 +139,7 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
         List<Recipe> recipes = query.getResultList();
 
         recipes.size();
-        for(Recipe r : recipes) {
+        for (Recipe r : recipes) {
             r.getCategories().size();
             r.getRecipeSteps();
             r.getIngredientSpecificationList().size();
@@ -151,55 +148,73 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
         return recipes;
     }
 
-    //filter recipe by date?
-    
+    @Override
+    public List<Recipe> filterRecipesBySingleCategory(Long categoryId) {
+
+        List<Recipe> recipes = new ArrayList<>();
+        try {
+            Category category = categorySessionBeanLocal.retrieveCategoryByCategoryId(categoryId);
+            //for sub categories
+            if (category.getSubCategories().isEmpty()) {
+                recipes = category.getRecipes();
+            } else {
+                for (Category subCategory : category.getSubCategories()) {
+                    recipes.addAll(subCategory.getRecipes());
+                }
+            }
+        } catch (CategoryNotFoundException ex) {
+            Logger.getLogger(RecipeSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return recipes;
+    }
+
     @Override
     public List<Recipe> filterRecipesByCategory(List<Long> categoryIds, String condition) { //condition be displayed as a button for user to select
 
         List<Recipe> recipes = new ArrayList<>();
-
-        if (categoryIds.isEmpty() || categoryIds == null
-                || !condition.equals("AND") || !condition.equals("OR")) {
-            return recipes;
-        } else {
-            if (condition.equals("OR")) {
-                Query query = em.createQuery("SELECT r FROM Recipe r, IN (r.categories) rc WHERE rc.categoryId IN :inCategoryIds ORDER BY r.recipeTitle ASC");
-                query.setParameter("inCategoryIds", categoryIds);
-                query.getResultList();
-            } else {
-                String selectClause = "Select r FROM Recipe r";
-                String whereClause = "";
-                Boolean firstCat = true;
-                Integer catCount = 1;
-
-                for (Long catId : categoryIds) {
-                    selectClause += ", IN (r.categories) rc" + catCount;
-
-                    if (firstCat) {
-                        whereClause = "WHERE rc.categoryID = " + catId;
-                        firstCat = false;
-                    } else {
-                        whereClause += " AND rc" + catCount + ".tagId = " + catId;
-                    }
-
-                    catCount++;
-                }
-
-                String jpql = selectClause + " " + whereClause + "ORDER BY r.recipeTitle ASC";
-                Query query = em.createQuery(jpql);
-                recipes = query.getResultList();
-
-                recipes.size();
-                for (Recipe r : recipes) {
-                    r.getCategories().size();
-                    r.getRecipeSteps();
-                }
-
-                Collections.sort(recipes, (Recipe r1, Recipe r2) 
-                        -> r1.getRecipeTitle().compareTo(r2.getRecipeTitle()));
-            }
-        }
-        
+//
+//        if (categoryIds.isEmpty() || categoryIds == null
+//                || !condition.equals("AND") || !condition.equals("OR")) {
+//            return recipes;
+//        } else {
+//            if (condition.equals("OR")) {
+//                Query query = em.createQuery("SELECT r FROM Recipe r, IN (r.categories) rc WHERE rc.categoryId IN :inCategoryIds ORDER BY r.recipeTitle ASC");
+//                query.setParameter("inCategoryIds", categoryIds);
+//                query.getResultList();
+//            } else {
+//                String selectClause = "Select r FROM Recipe r";
+//                String whereClause = "";
+//                Boolean firstCat = true;
+//                Integer catCount = 1;
+//
+//                for (Long catId : categoryIds) {
+//                    selectClause += ", IN (r.categories) rc" + catCount;
+//
+//                    if (firstCat) {
+//                        whereClause = "WHERE rc.categoryID = " + catId;
+//                        firstCat = false;
+//                    } else {
+//                        whereClause += " AND rc" + catCount + ".tagId = " + catId;
+//                    }
+//
+//                    catCount++;
+//                }
+//
+//                String jpql = selectClause + " " + whereClause + "ORDER BY r.recipeTitle ASC";
+//                Query query = em.createQuery(jpql);
+//                recipes = query.getResultList();
+//
+//                recipes.size();
+//                for (Recipe r : recipes) {
+//                    r.getCategories().size();
+//                    r.getRecipeSteps();
+//                }
+//
+//                Collections.sort(recipes, (Recipe r1, Recipe r2) 
+//                        -> r1.getRecipeTitle().compareTo(r2.getRecipeTitle()));
+//            }
+//        }
+//        
         return recipes;
     }
 

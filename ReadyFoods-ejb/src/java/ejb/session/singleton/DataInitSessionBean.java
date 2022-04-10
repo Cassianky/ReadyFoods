@@ -192,16 +192,26 @@ public class DataInitSessionBean {
             Category childCategory23 = categorySessionBeanLocal.createNewCategory(new Category("Lunch", "Lunch"), parentCategory2.getCategoryId());
             Category childCategory24 = categorySessionBeanLocal.createNewCategory(new Category("Tea", "Tea"), parentCategory2.getCategoryId());
             Category childCategory25 = categorySessionBeanLocal.createNewCategory(new Category("Dinner", "Dinner"), parentCategory2.getCategoryId());
-
+            Category parentCategory3 = categorySessionBeanLocal.createNewCategory(new Category("Diet Type", "Diet Type"), null);
+            Category childCategory31 = categorySessionBeanLocal.createNewCategory(new Category("Vegetarian", "Vegetarian"), parentCategory3.getCategoryId());
+            Category childCategory32 = categorySessionBeanLocal.createNewCategory(new Category("Gluten Free", "Gluten Free"), parentCategory3.getCategoryId());
+            Category childCategory33 = categorySessionBeanLocal.createNewCategory(new Category("Vegan", "Vegan"), parentCategory3.getCategoryId());
+            Category childCategory34 = categorySessionBeanLocal.createNewCategory(new Category("Pescatarian", "Pescatarian"), parentCategory3.getCategoryId());
+            Category childCategory35 = categorySessionBeanLocal.createNewCategory(new Category("Low Carb", "Low Carb"), parentCategory3.getCategoryId());
+            Category childCategory36 = categorySessionBeanLocal.createNewCategory(new Category("Atkins", "Atkins"), parentCategory3.getCategoryId());
+            
             List<Long> recipe1Categories = new ArrayList<>();
             recipe1Categories.add(childCategory11.getCategoryId());
             recipe1Categories.add(childCategory23.getCategoryId());
             recipe1Categories.add(childCategory25.getCategoryId());
+            recipe1Categories.add(childCategory32.getCategoryId());
+            
             
             List<Long> recipe2Categories = new ArrayList<>();
             recipe2Categories.add(childCategory12.getCategoryId());
             recipe2Categories.add(childCategory23.getCategoryId());
             recipe2Categories.add(childCategory25.getCategoryId());
+            recipe1Categories.add(childCategory35.getCategoryId());
 
             recipeSessionBeanLocal.createNewRecipe(recipe1, recipe1Categories, recipe1IngredientSpecicationsId);
             recipeSessionBeanLocal.createNewRecipe(recipe2, recipe2Categories, recipe2IngredientSpecicationsId);

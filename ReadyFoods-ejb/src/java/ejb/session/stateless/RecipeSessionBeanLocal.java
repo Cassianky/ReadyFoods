@@ -34,4 +34,6 @@ public interface RecipeSessionBeanLocal {
 
     public List<Recipe> retrieveAllRecipes();
 
+    public List<Recipe> filterRecipesBySingleCategory(Long categoryId);
+
 }
