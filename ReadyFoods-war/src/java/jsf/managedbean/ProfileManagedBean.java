@@ -24,6 +24,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.inject.Inject;
 import org.primefaces.event.FileUploadEvent;
 import util.enumeration.ActivityLevel;
 import util.enumeration.DietType;
@@ -47,6 +48,9 @@ public class ProfileManagedBean implements Serializable {
 
     @EJB
     private CustomerSessionBeanLocal customerSessionBeanLocal;
+    
+    @Inject
+    private RecipeViewManagedBean recipeViewManagedBean;
 
     private Customer currentCustomer;
     private String uploadedFilePath;
@@ -120,6 +124,7 @@ public class ProfileManagedBean implements Serializable {
     public void addRecipeToBookMarks(ActionEvent event){
         Recipe recipeToAdd = (Recipe)event.getComponent().getAttributes().get("recipeToAdd");
         customerSessionBeanLocal.addBookmarkedRecipe(recipeToAdd, currentCustomer.getCustomerId());
+        recipeViewManagedBean.setIsBookmarked(true);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Bookmarked recipe successfully!", "" + recipeToAdd.getRecipeTitle()));
         
     }

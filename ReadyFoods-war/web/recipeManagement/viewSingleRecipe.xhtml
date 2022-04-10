@@ -64,7 +64,7 @@
                                      actionListener="#{shoppingCartViewManagedBean.addRecipeToCart}">
                         <f:attribute name="recipeToAdd" value="#{recipeViewManagedBean.recipe}"/>
                     </p:commandButton>
-                    
+
                     <p:commandButton title="Bookmark"
                                      process="@this formViewSingleRecipe"
                                      update="@this formViewSingleRecipe"
@@ -79,53 +79,56 @@
                 </h:panelGrid>
 
             </p:panel>
+
+            <p:panel class="card" id="panelCommentReview" header="#{recipeViewManagedBean.recipe.recipeTitle}" style="margin-bottom:20px">
             
-            
+                
+            </p:panel>
 
         </h:form>
 
         <h:form id="formAddRecipeToCart">
             <p:dialog id="dialogAddRecipeToCart" widgetVar="dialogAddRecipeToCart" header="Add Recipe To Cart" closable="true">
-                 <p:messages id="messagesAddRecipeToCart" redisplay="false" />
-                    <p:dataTable id="dataTableRecipeIngredients"
-                                 value="#{shoppingCartViewManagedBean.currentRecipe.ingredientSpecificationList}"
-                                 var="ingredSpec">
-                        <p:column headerText="Ingredient Name">
-                            <h:outputText value="#{ingredSpec.ingredient.name}" />
-                        </p:column>
-                        <p:column headerText="Quantity">
-                            <p:spinner id="updateQuantity" value="#{ingredSpec.quantityPerServing}" stepFactor="1" min="1">
-                                <p:ajax event="keyup" update="dataTableRecipeIngredients:updateQuantity"/>
-                            </p:spinner>
-                        </p:column>
-                        <p:column headerText="Unit Price">
-                            <h:outputText value="#{ingredSpec.ingredient.unitPrice}"/>
-                        </p:column>
-                        <p:column headerText="Prepared?">
-                            <p:selectOneMenu id="preparedness" value="#{ingredSpec.preparationMethod}">
-                                <f:selectItem itemValue="#{null}" itemLabel="[Select One]" noSelectionOption="true" />
-                                <f:selectItems value="#{shoppingCartViewManagedBean.prepEnums}" var="prepMethod" itemValue="#{prepMethod}" itemLabel="#{prepMethod}" />
-                            </p:selectOneMenu>
-                        </p:column>
+                <p:messages id="messagesAddRecipeToCart" redisplay="false" />
+                <p:dataTable id="dataTableRecipeIngredients"
+                             value="#{shoppingCartViewManagedBean.currentRecipe.ingredientSpecificationList}"
+                             var="ingredSpec">
+                    <p:column headerText="Ingredient Name">
+                        <h:outputText value="#{ingredSpec.ingredient.name}" />
+                    </p:column>
+                    <p:column headerText="Quantity">
+                        <p:spinner id="updateQuantity" value="#{ingredSpec.quantityPerServing}" stepFactor="1" min="1">
+                            <p:ajax event="keyup" update="dataTableRecipeIngredients:updateQuantity"/>
+                        </p:spinner>
+                    </p:column>
+                    <p:column headerText="Unit Price">
+                        <h:outputText value="#{ingredSpec.ingredient.unitPrice}"/>
+                    </p:column>
+                    <p:column headerText="Prepared?">
+                        <p:selectOneMenu id="preparedness" value="#{ingredSpec.preparationMethod}">
+                            <f:selectItem itemValue="#{null}" itemLabel="[Select One]" noSelectionOption="true" />
+                            <f:selectItems value="#{shoppingCartViewManagedBean.prepEnums}" var="prepMethod" itemValue="#{prepMethod}" itemLabel="#{prepMethod}" />
+                        </p:selectOneMenu>
+                    </p:column>
 
-                        <p:column headerText="Action">
-                            <p:commandButton icon="ui-icon-trash" 
-                                             actionListener="#{shoppingCartViewManagedBean.removeIngredSpecFromRecipe}" 
-                                             update="formAddRecipeToCart"
-                                             oncomplete="PF('dialogAddRecipeToCart').show()">
-                                <f:attribute name="ingredSpecToRemove" value="#{ingredSpec}"/>   
-                            </p:commandButton>
+                    <p:column headerText="Action">
+                        <p:commandButton icon="ui-icon-trash" 
+                                         actionListener="#{shoppingCartViewManagedBean.removeIngredSpecFromRecipe}" 
+                                         update="formAddRecipeToCart"
+                                         oncomplete="PF('dialogAddRecipeToCart').show()">
+                            <f:attribute name="ingredSpecToRemove" value="#{ingredSpec}"/>   
+                        </p:commandButton>
 
-                            <p:commandButton value="Reset" 
-                                             icon="pi pi-undo"
-                                             actionListener="#{shoppingCartViewManagedBean.reset}"
-                                             update="formAddRecipeToCart"
-                                             oncomplete="PF('dialogAddRecipeToCart').show()">
-                                <f:attribute name="ingredSpecToReset" value="#{ingredSpec}"/>   
-                            </p:commandButton>
-                        </p:column>
-                    </p:dataTable>
-   
+                        <p:commandButton value="Reset" 
+                                         icon="pi pi-undo"
+                                         actionListener="#{shoppingCartViewManagedBean.reset}"
+                                         update="formAddRecipeToCart"
+                                         oncomplete="PF('dialogAddRecipeToCart').show()">
+                            <f:attribute name="ingredSpecToReset" value="#{ingredSpec}"/>   
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+
                 <div></div>
 
                 <p:commandButton onclick="PF('dialogAddRecipeToCart').close()"
@@ -133,7 +136,7 @@
                                  icon="pi pi-check"
                                  actionListener="#{shoppingCartViewManagedBean.confirmAddToCart}"
                                  />
-                
+
                 <p:commandButton value="OK!"
                                  icon="pi pi-check"
                                  update="formAddRecipeToCart"/>
