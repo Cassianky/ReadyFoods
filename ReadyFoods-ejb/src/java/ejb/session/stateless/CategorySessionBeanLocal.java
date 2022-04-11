@@ -11,6 +11,7 @@ import javax.ejb.Local;
 import util.exception.CategoryNotFoundException;
 import util.exception.CreateCategoryException;
 import util.exception.InputDataValidationException;
+import util.exception.RecipeNotFoundException;
 
 /**
  *
@@ -30,5 +31,7 @@ public interface CategorySessionBeanLocal {
     public List<Category> searchSubCategoriesByName(String searchString);
 
     public List<Category> retrieveAllSubCategories();
+
+    public Category retrieveRecipeDietType(Long recipeId) throws CategoryNotFoundException, RecipeNotFoundException;
 
 }

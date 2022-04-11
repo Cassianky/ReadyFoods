@@ -1,9 +1,11 @@
 package ejb.session.stateless;
 
 import entity.Category;
+import entity.Recipe;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -17,16 +19,22 @@ import javax.validation.ValidatorFactory;
 import util.exception.CategoryNotFoundException;
 import util.exception.CreateCategoryException;
 import util.exception.InputDataValidationException;
+import util.exception.RecipeNotFoundException;
 
 @Stateless
 
 public class CategorySessionBean implements CategorySessionBeanLocal {
+
+    @EJB(name = "RecipeSessionBeanLocal")
+    private RecipeSessionBeanLocal recipeSessionBeanLocal;
 
     @PersistenceContext(unitName = "ReadyFoods-ejbPU")
     private EntityManager em;
 
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
+    
+    
 
     public CategorySessionBean() {
         this.validatorFactory = Validation.buildDefaultValidatorFactory();
@@ -126,6 +134,20 @@ public class CategorySessionBean implements CategorySessionBeanLocal {
         } catch (NoResultException ex) {
             throw new CategoryNotFoundException("Please select a parent category!");
         }
+    }
+    
+    public Category retrieveRecipeDietType(Long recipeId) throws CategoryNotFoundException, RecipeNotFoundException {
+        Recipe recipe = recipeSessionBeanLocal.retrieveRecipeByRecipeId(recipeId);
+        List<Category> cats = recipe.getCategories();
+        
+        for (Category cat : cats) {
+            if (cat.getParentCategory() != null && cat.getParentCategory().getName() == "Diet Type") {
+                return cat;
+            }
+        }
+        
+        throw new CategoryNotFoundException("Recipe has no diet type.");
+        
     }
 
     @Override
