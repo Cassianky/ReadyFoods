@@ -1,0 +1,32 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 12 Apr, 2022, 1:05:44 AM
+    Author     : ngcas
+*/
+
+.header-statistics {
+    background-color: white; 
+    height: auto; 
+    font-weight: bold; 
+    text-align: center;
+}
+
+.headerTwo {
+    font-size: 15; 
+    text-align: center; 
+    margin-top: 20px; 
+    text-decoration: underline;
+}
+
+.content {
+    margin-top:20px; 
+    display: flex; 
+    flex-direction: row; 
+    align-content: center; 
+    justify-content: center;
+}
+
