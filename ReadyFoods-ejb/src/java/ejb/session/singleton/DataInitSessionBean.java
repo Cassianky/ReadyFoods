@@ -215,14 +215,14 @@ public class DataInitSessionBean {
             recipe1Categories.add(childCategory11.getCategoryId());
             recipe1Categories.add(childCategory23.getCategoryId());
             recipe1Categories.add(childCategory25.getCategoryId());
-            recipe1Categories.add(childCategory32.getCategoryId());
+            recipe1Categories.add(childCategory33.getCategoryId());
             
             
             List<Long> recipe2Categories = new ArrayList<>();
             recipe2Categories.add(childCategory12.getCategoryId());
             recipe2Categories.add(childCategory23.getCategoryId());
             recipe2Categories.add(childCategory25.getCategoryId());
-            recipe1Categories.add(childCategory35.getCategoryId());
+            recipe2Categories.add(childCategory34.getCategoryId());
 
             recipeSessionBeanLocal.createNewRecipe(recipe1, recipe1Categories, recipe1IngredientSpecicationsId);
             recipeSessionBeanLocal.createNewRecipe(recipe2, recipe2Categories, recipe2IngredientSpecicationsId);

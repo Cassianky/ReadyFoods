@@ -136,12 +136,14 @@ public class CategorySessionBean implements CategorySessionBeanLocal {
         }
     }
     
+    @Override
     public Category retrieveRecipeDietType(Long recipeId) throws CategoryNotFoundException, RecipeNotFoundException {
         Recipe recipe = recipeSessionBeanLocal.retrieveRecipeByRecipeId(recipeId);
         List<Category> cats = recipe.getCategories();
         
         for (Category cat : cats) {
-            if (cat.getParentCategory() != null && cat.getParentCategory().getName() == "Diet Type") {
+            //System.out.println(cat);
+            if (cat.getParentCategory() != null && cat.getParentCategory().getName().equals("Diet Type")) {
                 return cat;
             }
         }

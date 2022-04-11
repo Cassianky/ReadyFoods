@@ -29,10 +29,10 @@
         </main> 
 
         <main class="card">
-            <h:form id="form">
+            <h1 class="h1title">Recipe Selection</h1>
+            <h:form id="form" class="card">
                 <p:growl id="growl"><p:autoUpdate/></p:growl>
-                TODO: category formatting, DIET TYPE RECC
-                <p:panelGrid  columns="2" styleClass="noBorders" rendered = "#{subscriptionSelectRecipesManagedBean.ongoingSubscription != null}">
+                <p:panelGrid  columns="3" styleClass="noBorders" rendered = "#{subscriptionSelectRecipesManagedBean.ongoingSubscription != null}">
                     <p:column>
 
                         <p:datePicker id="event" mindate="#{subscriptionSelectRecipesManagedBean.getMinDate()}" 
@@ -66,23 +66,96 @@
                     </p:column>
                     <!-- Create new subscription order OR update order -->
 
-                    <p:commandButton 
-                        value="Save Selection" process="@this"
-                        update="@form" actionListener="#{subscriptionSelectRecipesManagedBean.updateSelection}"/>
 
-                    <p:commandButton 
-                        value="Process [FOR DEMO PURPOSES ONLY]" 
-                        update="@form" actionListener="#{subscriptionSelectRecipesManagedBean.process()}"/>
+                    <p:column>
+
+
+                    </p:column>
 
 
                 </p:panelGrid>
+                <p:commandButton 
+                    value="Save Selection" process="@this"
+                    update="@form" actionListener="#{subscriptionSelectRecipesManagedBean.updateSelection}"/>
+                
+                  <p:commandButton 
+                    value="Reset" 
+                    update="@form" actionListener="#{subscriptionSelectRecipesManagedBean.resetSelection}"/>
+
+                <p:commandButton 
+                    value="Process [DEMO]" 
+                    update="@form" actionListener="#{subscriptionSelectRecipesManagedBean.process()}"/>
+                
+              
+
+                <h2>Recommended  recipes for #{subscriptionSelectRecipesManagedBean.currentCustomerEntity.dietType}</h2>
+
 
                 <p:dataView 
-                    rendered = "#{subscriptionSelectRecipesManagedBean.ongoingSubscription != null}" class="card"
-                    id="dataViewRecipe" var="orderLineItem" value="#{subscriptionSelectRecipesManagedBean.orderLineItems}" paginator="true"
+                    rendered = "#{subscriptionSelectRecipesManagedBean.ongoingSubscription != null}" 
+                    id="dataViewRecc" var="reccLineItem" value="#{subscriptionSelectRecipesManagedBean.recommendedLineItems}"
                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
                     gridIcon="pi pi-th-large" listIcon="pi pi-bars"
                     layout="grid">
+
+                    <p:dataViewGridItem>
+
+                        <div class="card">
+
+                            <div style="text-align: center">
+
+                                <p:graphicImage class="recipePic" width="100px" name="300x300.png" library="images" /> 
+                                <br/>
+                                <br/>
+                                <div style="font-size: 20px"><span><b>#{reccLineItem.recipe.recipeTitle}</b></span></div>
+                                <br/>
+
+                                <h:outputText value="#{reccLineItem.recipe.caloriesPerServing} calories"/><br/>
+                                <h:outputText value="#{reccLineItem.recipe.carbsPerServing} carbs"/>
+
+                                <div>
+                                    <i class="pi pi-tag product-category-icon"/>
+
+                                    <span>#{subscriptionSelectRecipesManagedBean.getDietTypeForRecipe(reccLineItem.recipe).name}</span> 
+                                </div>
+                                <br/>
+
+                                <p:commandButton 
+                                    icon="ui-icon pi pi-search"
+                                    update="ccViewRecipeSummary:formViewRecipe" 
+                                    oncomplete="PF('dialogViewRecipe').show()" 
+                                    title="View Recipe Summary">
+                                    <f:setPropertyActionListener value="#{reccLineItem.recipe}" 
+                                                                 target="#{subscriptionSelectRecipesManagedBean.recipeViewSummarisedManagedBean.recipeToView}" />
+                                </p:commandButton>
+
+                                <p:spinner id ="inputNewQty" value="#{reccLineItem.quantity}"
+                                           stepFactor="1" min="0" max="#{reccLineItem.quantity + subscriptionSelectRecipesManagedBean.remaining}"
+                                           style="width: 20%">
+                                    
+                                
+
+
+                                    <f:ajax event="change" listener="#{subscriptionSelectRecipesManagedBean.updateRemaningRecipes(event)}" 
+                                            execute="@form" render="@form"/>
+                                </p:spinner>
+                            </div>
+                        </div>
+                    </p:dataViewGridItem>
+
+                </p:dataView>
+
+
+                <h2>Other  recipes</h2>
+
+
+                <p:dataView 
+                    rendered = "#{subscriptionSelectRecipesManagedBean.ongoingSubscription != null}" 
+                    id="dataViewRecipe" var="orderLineItem" value="#{subscriptionSelectRecipesManagedBean.otherLineItems}" paginator="true"
+                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                    gridIcon="pi pi-th-large" listIcon="pi pi-bars"
+                    layout="grid">
+                    
 
                     <p:dataViewGridItem>
 
@@ -102,7 +175,7 @@
                                 <div>
                                     <i class="pi pi-tag product-category-icon"/>
 
-                                    <span class="product-category">#{orderLineItem.recipe.categories}</span> 
+                                    <span>#{subscriptionSelectRecipesManagedBean.getDietTypeForRecipe(orderLineItem.recipe).name}</span> 
                                 </div>
                                 <br/>
 
@@ -128,6 +201,8 @@
                     </p:dataViewGridItem>
 
                 </p:dataView>
+
+
             </h:form>
         </main>
 
