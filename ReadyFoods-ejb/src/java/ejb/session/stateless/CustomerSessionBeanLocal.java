@@ -1,7 +1,9 @@
 package ejb.session.stateless;
 
 import entity.Customer;
+import entity.FoodDiaryRecord;
 import entity.Recipe;
+import java.util.HashMap;
 import java.util.List;
 import javax.ejb.Local;
 import util.exception.CustomerEmailExistsException;
@@ -10,6 +12,7 @@ import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateCustomerException;
+import wrapper.FoodWrapper;
 
 @Local
 public interface CustomerSessionBeanLocal {
@@ -31,4 +34,12 @@ public interface CustomerSessionBeanLocal {
     public void addBookmarkedRecipe(Recipe recipeToAdd, Long customerId);
 
     public void removeBookmarkedRecipe(Recipe recipeToRemove, Long customerId);
+
+    public FoodWrapper customerConsumedMacroForTheWeek(Long customerId);
+
+    public FoodWrapper customerConsumedMacro(Long customerId);
+
+    public HashMap<String, Double> customerMacroGoals(Long customerId) throws CustomerNotFoundException;
+
+    public List<FoodDiaryRecord> topFoodForEachMacro(Long customerId, String typeMacro);
 }

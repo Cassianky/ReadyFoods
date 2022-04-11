@@ -21,6 +21,11 @@ public class FoodWrapper {
     private Double sugar;
 
     public FoodWrapper() {
+        calories = 0.0;
+        carbs = 0.0;
+        protein = 0.0;
+        fats = 0.0;
+        sugar = 0.0;
     }
 
     public FoodWrapper(String name, Double calories, Double carbs, Double protein, Double fats, Double sugar) {
@@ -35,6 +40,14 @@ public class FoodWrapper {
     public FoodWrapper(Long foodDiaryRecordId, String name, Double calories, Double carbs, Double protein, Double fats, Double sugar) {
         this.foodDiaryRecordId = foodDiaryRecordId;
         this.name = name;
+        this.calories = calories;
+        this.carbs = carbs;
+        this.protein = protein;
+        this.fats = fats;
+        this.sugar = sugar;
+    }
+
+    public FoodWrapper(Double calories, Double carbs, Double protein, Double fats, Double sugar) {
         this.calories = calories;
         this.carbs = carbs;
         this.protein = protein;
@@ -109,6 +122,10 @@ public class FoodWrapper {
     public void setCalories(Double calories) {
         this.calories = calories;
     }
+    
+    public void addCalories(Double newCalories) {
+        this.calories = this.calories + newCalories;
+    }
 
     /**
      * @return the carbs
@@ -122,6 +139,10 @@ public class FoodWrapper {
      */
     public void setCarbs(Double carbs) {
         this.carbs = carbs;
+    }
+    
+    public void addCarbs(Double newCarbs) {
+        this.carbs = this.carbs + newCarbs;
     }
 
     /**
@@ -138,6 +159,9 @@ public class FoodWrapper {
         this.protein = protein;
     }
 
+    public void addProtein(Double newProtein) {
+        this.protein = this.protein + newProtein;
+    }
     /**
      * @return the fats
      */
@@ -150,6 +174,10 @@ public class FoodWrapper {
      */
     public void setFats(Double fats) {
         this.fats = fats;
+    }
+    
+    public void addFats(Double newFats) {
+        this.fats = this.fats + newFats;
     }
 
     /**
@@ -164,6 +192,10 @@ public class FoodWrapper {
      */
     public void setSugar(Double sugar) {
         this.sugar = sugar;
+    }
+    
+    public void addSugar(Double newSugar) {
+        this.sugar = this.carbs + newSugar;
     }
 
     /**

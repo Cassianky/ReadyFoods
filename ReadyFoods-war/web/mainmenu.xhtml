@@ -23,8 +23,8 @@
 
                     <p:submenu label="My Details" rendered="#{sessionScope.isLogin == true}">
                         <p:menuitem value="Profile" outcome="/myDetails/profile.xhtml" icon="pi pi-user" />
-                        <p:menuitem value="Credit Card" outcome="/myDetails/creditCard.xhtml" icon="pi pi-user" />
-                        <p:menuitem value="Change Password" icon="pi pi-ticket" outcome="/myDetails/changePassword.xhtml"/>
+                        <p:menuitem value="Credit Card" outcome="/myDetails/creditCard.xhtml" icon="pi pi-id-card" />
+                        <p:menuitem value="Change Password" icon="pi pi-key" outcome="/myDetails/changePassword.xhtml"/>
                     </p:submenu>
 
                     <p:submenu label="Account Management" rendered="#{sessionScope.isLogin == true}">
@@ -48,10 +48,12 @@
 
                     <p:submenu label="Food Diary" rendered="#{sessionScope.isLogin == true}">
 
-<!--                        <p:menuitem value="My Food Diary" outcome="/foodDiary/myFoodDiary.xhtml"/>-->
+                       <p:menuitem value="My Food Diary" outcome="/foodDiary/myFoodDiary.xhtml" icon="pi pi-calendar-plus"/>
+                        <p:menuitem value="My Foods" outcome="/foodDiary/myFoods.xhtml" icon="pi pi-apple"/>
+                        <p:menuitem value="My Statistics" outcome="/foodDiary/myStatistics.xhtml" icon="pi pi-chart-bar"/>
                     </p:submenu>
                     <p:menuitem rendered="#{sessionScope.isLogin == false}" value="Home" outcome="/index" icon="pi pi-home" />
-                    <p:menuitem rendered="#{sessionScope.isLogin == false}" value="Register" outcome="/registerCustomer" />
+                    <p:menuitem rendered="#{sessionScope.isLogin == false}" value="Register" outcome="/registerCustomer" icon="pi pi-user-plus"/>
                 </p:menu>
 
             </h:form>
