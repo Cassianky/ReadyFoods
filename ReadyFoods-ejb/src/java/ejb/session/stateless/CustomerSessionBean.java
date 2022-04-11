@@ -1,7 +1,17 @@
 package ejb.session.stateless;
 
 import entity.Customer;
+import entity.FoodDiaryRecord;
 import entity.Recipe;
+import static java.time.DayOfWeek.MONDAY;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Period;
+import static java.time.temporal.TemporalAdjusters.next;
+import static java.time.temporal.TemporalAdjusters.previousOrSame;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.Stateless;
@@ -15,6 +25,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import util.enumeration.ActivityLevel;
+import util.enumeration.Gender;
 import util.exception.CustomerEmailExistsException;
 import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
@@ -22,6 +34,7 @@ import util.exception.InvalidLoginCredentialException;
 import util.exception.UnknownPersistenceException;
 import util.exception.UpdateCustomerException;
 import util.security.CryptographicHelper;
+import wrapper.FoodWrapper;
 
 @Stateless
 public class CustomerSessionBean implements CustomerSessionBeanLocal {
@@ -228,6 +241,203 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         {
             throw new CustomerNotFoundException("Customer ID not provided for customer to be updated");
         }
+    }
+
+    @Override
+    public HashMap<String, Double> customerMacroGoals(Long customerId) throws CustomerNotFoundException {
+        Customer currentCustomer = retrieveCustomerByCustomerId(customerId);
+        LocalDate todayDate = LocalDate.now();
+        int age = 0;
+        double calories = 0;
+        ActivityLevel activityLevel = currentCustomer.getActivityLevel();
+        if (currentCustomer.getDob() != null && todayDate != null) {
+            age = Period.between(currentCustomer.getDob(), todayDate).getYears();
+        }
+
+        if (age <= 30) {
+            if (currentCustomer.getGender().equals(Gender.FEMALE)) {
+                //Customer is female
+                switch (activityLevel) {
+                    case HIGH:
+                        calories = 2400;
+                        break;
+                    case MODERATE:
+                        calories = 2200;
+                        break;
+                    case LOW:
+                        calories = 2000;
+                        break;
+                }
+            } else {
+                //Customer is male
+                switch (activityLevel) {
+                    case HIGH:
+                        calories = 3200;
+                        break;
+                    case MODERATE:
+                        calories = 2800;
+                        break;
+                    case LOW:
+                        calories = 2600;
+                        break;
+                }
+            }
+        } else if (age <= 50) {
+            if (currentCustomer.getGender().equals(Gender.FEMALE)) {
+                //Customer is female
+                switch (activityLevel) {
+                    case HIGH:
+                        calories = 2200;
+                        break;
+                    case MODERATE:
+                        calories = 2000;
+                        break;
+                    case LOW:
+                        calories = 1800;
+                        break;
+                }
+            } else {
+                //Customer is male
+                switch (activityLevel) {
+                    case HIGH:
+                        calories = 3000;
+                        break;
+                    case MODERATE:
+                        calories = 2600;
+                        break;
+                    case LOW:
+                        calories = 2400;
+                        break;
+                }
+            }
+        } else {
+            //Customer is older than 50 years old
+
+            if (currentCustomer.getGender().equals(Gender.FEMALE)) {
+                //Customer is female
+                switch (activityLevel) {
+                    case HIGH:
+                        calories = 2200;
+                        break;
+                    case MODERATE:
+                        calories = 1800;
+                        break;
+                    case LOW:
+                        calories = 1600;
+                        break;
+                }
+            } else {
+                //Customer is male
+                switch (activityLevel) {
+                    case HIGH:
+                        calories = 2800;
+                        break;
+                    case MODERATE:
+                        calories = 2400;
+                        break;
+                    case LOW:
+                        calories = 2200;
+                        break;
+                }
+            }
+        }
+
+        HashMap<String, Double> map = new HashMap<String, Double>();
+        double fats = (0.35 * calories) / 9.0;
+        double sugar = (0.10 * calories) / 4.0;
+        double protein = (0.35 * calories) / 4.0;
+        double carbs = (0.65 * calories) / 4.0;
+        map.put("calories", calories);
+        map.put("fats", fats);
+        map.put("sugar", sugar);
+        map.put("protein", protein);
+        map.put("carbs", carbs);
+        return map;
+    }
+
+    @Override
+    public FoodWrapper customerConsumedMacro(Long customerId) {
+        Query query = em.createQuery("SELECT df from FoodDiaryRecord df WHERE df.customer.customerId = :inCustomerId AND df.startDate >= :inStartDate1 AND df.startDate < :inStartDate2");
+        query.setParameter("inCustomerId", customerId);
+        query.setParameter("inStartDate1", LocalDate.now().atTime(0, 0));
+        query.setParameter("inStartDate2", LocalDate.now().plusDays(1).atTime(0, 0));
+        List<FoodDiaryRecord> records = query.getResultList();
+
+        FoodWrapper consumed = new FoodWrapper();
+        for (FoodDiaryRecord record : records) {
+            consumed.addCalories(record.getCalories());
+            consumed.addCarbs(record.getCarbs());
+            consumed.addFats(record.getFats());
+            consumed.addProtein(record.getProtein());
+            consumed.addSugar(record.getSugar());
+        }
+
+        return consumed;
+    }
+
+    @Override
+    public FoodWrapper customerConsumedMacroForTheWeek(Long customerId) {
+        Query query = em.createQuery("SELECT df from FoodDiaryRecord df WHERE df.customer.customerId = :inCustomerId AND df.startDate >= :inStartDate1 AND df.startDate < :inStartDate2");
+        query.setParameter("inCustomerId", customerId);
+        query.setParameter("inStartDate1", LocalDate.now().with(previousOrSame(MONDAY)).atTime(0, 0));
+        query.setParameter("inStartDate2", LocalDate.now().with(next(MONDAY)).atTime(0, 0));
+        List<FoodDiaryRecord> records = query.getResultList();
+
+        FoodWrapper consumed = new FoodWrapper();
+        for (FoodDiaryRecord record : records) {
+            System.out.println("*******************************RecordID   " + record.getFoodDiaryRecordId());
+            consumed.addCalories(record.getCalories());
+            consumed.addCarbs(record.getCarbs());
+            consumed.addFats(record.getFats());
+            consumed.addProtein(record.getProtein());
+            consumed.addSugar(record.getSugar());
+        }
+
+        return consumed;
+    }
+
+    @Override
+    public List<FoodDiaryRecord> topFoodForEachMacro(Long customerId, String typeMacro) {
+        List<FoodDiaryRecord> records = new ArrayList<>();
+        if(typeMacro.equals("calories"))
+        {   
+        Query query = em.createQuery("SELECT df from FoodDiaryRecord df WHERE df.customer.customerId = :inCustomerId AND df.startDate >= :inStartDate1"
+                + " AND df.calories = (SELECT MAX(df2.calories) FROM FoodDiaryRecord df2 WHERE df2.customer.customerId = :inCustomerId)");
+        query.setParameter("inCustomerId", customerId);
+        query.setParameter("inStartDate1", LocalDate.now().with(previousOrSame(MONDAY)).atTime(0, 0));
+        records = query.getResultList();
+        } else if(typeMacro.equals("carbs"))
+        {
+        Query query = em.createQuery("SELECT df from FoodDiaryRecord df WHERE df.customer.customerId = :inCustomerId AND df.startDate >= :inStartDate1"
+                + " AND df.carbs = (SELECT MAX(df2.carbs) FROM FoodDiaryRecord df2 WHERE df2.customer.customerId = :inCustomerId)");
+        query.setParameter("inCustomerId", customerId);
+        query.setParameter("inStartDate1", LocalDate.now().with(previousOrSame(MONDAY)).atTime(0, 0));
+        records = query.getResultList();
+        } else if(typeMacro.equals("protein"))
+        {
+        Query query = em.createQuery("SELECT df from FoodDiaryRecord df WHERE df.customer.customerId = :inCustomerId AND df.startDate >= :inStartDate1"
+                + " AND df.protein = (SELECT MAX(df2.protein) FROM FoodDiaryRecord df2 WHERE df2.customer.customerId = :inCustomerId)");
+        query.setParameter("inCustomerId", customerId);
+        query.setParameter("inStartDate1", LocalDate.now().with(previousOrSame(MONDAY)).atTime(0, 0));
+        records = query.getResultList();
+        } else if(typeMacro.equals("fats"))
+        {
+        Query query = em.createQuery("SELECT df from FoodDiaryRecord df WHERE df.customer.customerId = :inCustomerId AND df.startDate >= :inStartDate1"
+                + " AND df.fats = (SELECT MAX(df2.fats) FROM FoodDiaryRecord df2 WHERE df2.customer.customerId = :inCustomerId)");
+        query.setParameter("inCustomerId", customerId);
+        query.setParameter("inStartDate1", LocalDate.now().with(previousOrSame(MONDAY)).atTime(0, 0));
+        records = query.getResultList();
+        } else if(typeMacro.equals("sugar"))
+        {
+        Query query = em.createQuery("SELECT df from FoodDiaryRecord df WHERE df.customer.customerId = :inCustomerId AND df.startDate >= :inStartDate1"
+                + " AND df.sugar = (SELECT MAX(df2.sugar) FROM FoodDiaryRecord df2 WHERE df2.customer.customerId = :inCustomerId)");
+        query.setParameter("inCustomerId", customerId);
+        query.setParameter("inStartDate1", LocalDate.now().with(previousOrSame(MONDAY)).atTime(0, 0));
+        records = query.getResultList();
+        }
+        
+        return records;
+
     }
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Customer>> constraintViolations) {

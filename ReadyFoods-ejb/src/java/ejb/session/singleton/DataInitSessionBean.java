@@ -57,7 +57,7 @@ public class DataInitSessionBean {
 
     @EJB
     private IngredientSpecificaitonSessionBeanLocal ingredientSpecificationSessionBeanLocal;
-    
+
     @EJB
     private CustomerSessionBeanLocal customerSessionBeanLocal;
     @EJB
@@ -121,7 +121,7 @@ public class DataInitSessionBean {
             IngredientSpecification ingredientSpecifcation4 = new IngredientSpecification(30);
             IngredientSpecification ingredientSpecifcation5 = new IngredientSpecification(1, PreparationMethod.Sliced);
             IngredientSpecification ingredientSpecifcation6 = new IngredientSpecification(1);
-            
+
             IngredientSpecification ingredientSpecifcation7 = new IngredientSpecification(1);
             IngredientSpecification ingredientSpecifcation8 = new IngredientSpecification(1);
             IngredientSpecification ingredientSpecifcation9 = new IngredientSpecification(1, PreparationMethod.Minced);
@@ -151,7 +151,7 @@ public class DataInitSessionBean {
             recipe1IngredientSpecicationsId.add(ingredientSpecification4Id);
             recipe1IngredientSpecicationsId.add(ingredientSpecification5Id);
             recipe1IngredientSpecicationsId.add(ingredientSpecification6Id);
-            
+
             List<Long> recipe2IngredientSpecicationsId = new ArrayList<>();
             recipe2IngredientSpecicationsId.add(ingredientSpecification7Id);
             recipe2IngredientSpecicationsId.add(ingredientSpecification8Id);
@@ -210,7 +210,7 @@ public class DataInitSessionBean {
             Category childCategory34 = categorySessionBeanLocal.createNewCategory(new Category("Pescatarian", "Pescatarian"), parentCategory3.getCategoryId());
             Category childCategory35 = categorySessionBeanLocal.createNewCategory(new Category("Low Carb", "Low Carb"), parentCategory3.getCategoryId());
             Category childCategory36 = categorySessionBeanLocal.createNewCategory(new Category("Atkins", "Atkins"), parentCategory3.getCategoryId());
-            
+
             List<Long> recipe1Categories = new ArrayList<>();
             recipe1Categories.add(childCategory11.getCategoryId());
             recipe1Categories.add(childCategory23.getCategoryId());
@@ -227,13 +227,23 @@ public class DataInitSessionBean {
             recipeSessionBeanLocal.createNewRecipe(recipe1, recipe1Categories, recipe1IngredientSpecicationsId);
             recipeSessionBeanLocal.createNewRecipe(recipe2, recipe2Categories, recipe2IngredientSpecicationsId);
 
-            Food food1 = new Food("french fries", 100.0, 100.0, 100.0, 100.0, 100.0);
-            Food food2 = new Food("Sphaghetti", 100.0, 100.0, 100.0, 100.0, 100.0);
+            Food food1 = new Food("french fries", 100.0, 90.0, 90.0, 90.0, 90.0);
+
+            Food food2 = new Food("Sphaghetti", 90.0, 100.0, 90.0, 90.0, 90.0);
+
+            Food food3 = new Food("Mixed Rice", 90.0, 90.0, 100.0, 90.0, 90.0);
+
+            Food food4 = new Food("Laksa", 90.0, 90.0, 90.0, 100.0, 90.0);
+
+            Food food5 = new Food("Korean Food", 90.0, 90.0, 90.0, 90.0, 100.0);
+
             foodSessionBeanLocal.createNewFood(food1, customer1.getCustomerId());
             foodSessionBeanLocal.createNewFood(food2, customer1.getCustomerId());
-            
-            
-        } catch (CustomerNotFoundException| InputDataValidationException | UnknownPersistenceException | CustomerEmailExistsException | CategoryNotFoundException
+            foodSessionBeanLocal.createNewFood(food3, customer1.getCustomerId());
+            foodSessionBeanLocal.createNewFood(food4, customer1.getCustomerId());
+            foodSessionBeanLocal.createNewFood(food5, customer1.getCustomerId());
+
+        } catch (CustomerNotFoundException | InputDataValidationException | UnknownPersistenceException | CustomerEmailExistsException | CategoryNotFoundException
                 | CreateCategoryException | CreateRecipeException | RecipeTitleExistException | IngredientExistsException ex) {
             ex.printStackTrace();
         } catch (IngredientNotFoundException ex) {

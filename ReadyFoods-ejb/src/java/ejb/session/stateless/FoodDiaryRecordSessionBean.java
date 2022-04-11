@@ -55,6 +55,7 @@ public class FoodDiaryRecordSessionBean implements FoodDiarySessionBeanLocal {
             try {
                 //Association
                 System.out.println("Called createNewFoodDiaryRecord***************************************");
+                newFoodDiaryRecord.setCustomer(customer);
                 customer.addFoodDiaryRecord(newFoodDiaryRecord);
                 em.persist(newFoodDiaryRecord);
                 em.flush();
