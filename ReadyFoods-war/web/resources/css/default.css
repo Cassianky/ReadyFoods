@@ -130,4 +130,17 @@ a:link:hover, a:visited:hover {
     background-color: #d9d6c4
 }
 
+.login-content {
+    display: flex; 
+    flex-direction: column;
+    font-size: 15;
+    font-weight: 700;
+    margin: 20px;
+}
+
+.login-button-style {
+    width: 220px; 
+    margin-left: auto; 
+    margin-right: auto;
+}
 
