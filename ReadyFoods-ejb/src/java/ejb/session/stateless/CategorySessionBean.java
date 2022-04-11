@@ -41,6 +41,7 @@ public class CategorySessionBean implements CategorySessionBeanLocal {
             try {
                 if (parentCategoryId != null) {
                     Category parentCategory = retrieveCategoryByCategoryId(parentCategoryId);
+                    newCategory.setParentCategory(parentCategory);
 
                     if (!parentCategory.getRecipes().isEmpty()) {
                         throw new CreateCategoryException("Parent category cannot be associated with any recipe!");
