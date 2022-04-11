@@ -95,6 +95,15 @@
 
             <p:tabView id="panelCommentReview">
                 <p:tab title="Reviews">
+                    <p:commandButton value="Add Review"
+                                     icon="pi pi-comments"
+                                     onclick="PF('dialogAddReview').show()" 
+                                     title="Add Review"
+                                     value="#{recipeViewManagedBean.customerHasBoughtRecipe ? 'Buy Recipe To Add Review' : 'Add a Review'}"
+                                     actionListener="#{recipeViewManagedBean.addReview}"
+                                     icon="#{recipeViewManagedBean.customerHasBoughtRecipe ? '' : 'pi pi-star-o'}"
+                                     disabled="#{recipeViewManagedBean.customerHasBoughtRecipe == false}"
+                                     />
                     <p:dataScroller value="#{recipeViewManagedBean.reviews}" var="review" chunkSize="5">
                         <f:facet name="header">
                             Scroll Down to Load More Reviews

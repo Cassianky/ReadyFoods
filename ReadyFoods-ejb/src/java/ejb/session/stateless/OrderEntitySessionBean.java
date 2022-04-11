@@ -16,6 +16,8 @@ import javax.ejb.EJB;
 import javax.ejb.EJBContext;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import util.enumeration.Status;
@@ -84,6 +86,21 @@ public class OrderEntitySessionBean implements OrderEntitySessionBeanLocal {
             throw new CreateNewOrderException("Order information not provided");
         }
 
+    }
+    
+    public OrderEntity retrieveOrderByCustomerId(Long customerId){
+        Query query = entityManager.createQuery("SELECT o FROM OrderEntity o WHERE o.customer.customerId =: inCustomerId");
+        query.setParameter("inCustomerId", customerId);
+        OrderEntity orderRetrieved = (OrderEntity)query.getSingleResult();
+        try 
+        {
+            return (OrderEntity) query.getSingleResult();
+        } 
+        catch (NoResultException | NonUniqueResultException ex) 
+        {
+//            throw new CustomerNotFoundException("Customer Email " + email + " does not exist!");
+        }
+        return orderRetrieved;
     }
 
     @Override
