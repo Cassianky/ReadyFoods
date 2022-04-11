@@ -6,7 +6,10 @@
 package ejb.session.stateless;
 
 import entity.Ingredient;
+import entity.Recipe;
+import java.util.List;
 import java.util.Set;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -31,6 +34,9 @@ public class IngredientSessionBean implements IngredientSessionBeanLocal {
     @PersistenceContext(unitName = "ReadyFoods-ejbPU")
     private EntityManager entityManager;
 
+    @EJB
+    private RecipeSessionBeanLocal recipeSessionBeanLocal;
+    
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
 
@@ -104,7 +110,15 @@ public class IngredientSessionBean implements IngredientSessionBeanLocal {
         } else {
             throw new IngredientNotFoundException("Ingredient ID " + ingredientId + " does not exist!");
         }
-
     }
+    
+//    @Override
+//    public void deleteIngredient(Long ingredientId) throws IngredientNotFoundException {
+//        
+//        Ingredient ingredientToDelete = retrieveIngredientByIngredientId(ingredientId);
+//        
+//        //List<Recipe> recipes = recipeSessionBeanLocal.retrieveAllRecipesByIngredientId();
+//        
+//    }
 
 }

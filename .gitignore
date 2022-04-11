@@ -8,3 +8,6 @@
 /ReadyFoods-war/build/
 /ReadyFoods-ejb/dist/
 /ReadyFoods-war/web/WEB-INF/web.xml
+/ReadyFoodsRws/nbproject/private/
+/ReadyFoodsRws/build/
+/ReadyFoodsRws/dist/
