@@ -93,26 +93,26 @@
 
             </p:panel>
 
-            <p:tabView id="panelCommentReview">
+            <p:tabView id="panelCommentReview" style="margin-bottom:20px; margin: 30px;">
                 <p:tab title="Reviews">
-                    <p:commandButton value="Add Review"
-                                     icon="pi pi-comments"
-                                     onclick="PF('dialogAddReview').show()" 
-                                     title="Add Review"
-                                     value="#{recipeViewManagedBean.customerHasBoughtRecipe ? 'Buy Recipe To Add Review' : 'Add a Review'}"
-                                     actionListener="#{recipeViewManagedBean.addReview}"
-                                     icon="#{recipeViewManagedBean.customerHasBoughtRecipe ? '' : 'pi pi-star-o'}"
-                                     disabled="#{recipeViewManagedBean.customerHasBoughtRecipe == false}"
-                                     />
+                    <p:commandButton 
+                        onclick="PF('dialogAddReview').show()" 
+                        title="Add Review"
+                        value="#{recipeViewManagedBean.customerHasBoughtRecipe ? 'Add a Review' : 'Buy Recipe To Add Review'}"
+                        actionListener="#{recipeViewManagedBean.addReview}"
+                        icon="#{recipeViewManagedBean.customerHasBoughtRecipe ? 'pi pi-star-o' : 'pi pi-dollar' }"
+                        disabled="#{recipeViewManagedBean.customerHasBoughtRecipe == false}"
+                        />
                     <p:dataScroller value="#{recipeViewManagedBean.reviews}" var="review" chunkSize="5">
                         <f:facet name="header">
                             Scroll Down to Load More Reviews
                         </f:facet>
-                        <h:panelGrid columns="1" style="width:100%;" >
+                        <h:panelGrid style="width:100%;" >
 
+                            <h:outputText value="#{review.reviewDate}" style="float: right; text-align: right; font-size: 11px; color: grey; font-style: italic"/>
                             <p:rating value="#{review.rating}" readonly="true" />
-                            <h:outputText value="#{review.reviewDate}" style="vertical-align: top; text-align: right"/>
-                            <h:outputText value="#{review.title}" style="font-weight: bold;font-size: 15px"/>
+                            <h:outputText value="#{review.title}" style="font-weight: bold; font-size: 17px;color: #4D2913; text-decoration : underline;"/>
+                            <br></br>
                             <h:outputText value="#{review.description}"/>
 
                         </h:panelGrid>
@@ -131,7 +131,7 @@
                         <h:panelGrid columns="1" style="width:100%;overflow: scroll;">
                             <h:outputText value="#{comment.commentDate}" style="float: right; text-align: right; font-size: 11px; color: grey; font-style: italic"/>
                             <p:graphicImage height="80" width="80" name="300x300.png" library="images" style="float: left;border-radius: 100px;border: 2px solid #ddd; padding: 3px;" />
-                            
+
                             <h:outputText value="#{comment.customerName}" style="font-weight: bold; font-size: 17px;color: #4D2913; text-decoration : underline;"/>
                             <h:outputText value="#{comment.description}"/>
 
@@ -163,6 +163,72 @@
                     </p:commandButton>
 
                 </p:panelGrid>
+
+            </p:dialog>
+
+        </h:form>
+
+        <h:form id="formAddReview">
+            <p:dialog id="dialogAddReview" 
+                      widgetVar="dialogAddReview" 
+                      header="Add A Review!" 
+                      closable="true">
+                <p:messages/>
+                <p:panelGrid id="panelGridAddReview">
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="reviewTitle" value="Title" style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputTextarea cols="30" id="reviewTitle" value="#{reviewManagedBean.title}" placeholder="Brief summary of review...">
+                                <f:validateLength maximum="64"/>
+                            </p:inputTextarea>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="reviewRating" value="Rating" style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:rating id="reviewRating" value="#{reviewManagedBean.rating}" stars="5" cancel="false">
+                                <f:validateLongRange minimum="1" maximum="5" />
+                            </p:rating>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="reviewDesc" value="Description" style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:inputTextarea id="reviewDesc"
+                                             value="#{reviewManagedBean.description}" 
+                                             placeholder="Describe your review..."
+                                             rows="3"
+                                             cols="30"
+                                             maxlength="320"
+                                             counterTemplate="{0} characters remaining."
+                                             counter="display">
+                                <f:validateLength maximum="320"/>
+                            </p:inputTextarea>
+                            <br></br>
+                            <h:outputText style="font-size: 13px; color: grey; font-style: italic" id="display" />
+                        </p:column>
+                    </p:row>
+
+
+                </p:panelGrid>
+                <br></br>
+
+                <p:commandButton value="Submit!"
+                                 icon="pi pi-reply"
+                                 actionListener="#{reviewManagedBean.createNewReview}"
+                                 update="formViewSingleRecipe:panelCommentReview"
+                                 onclick="PF('dialogAddReview').close()" >
+                    <f:attribute name="recipeToReview" value="#{recipeViewManagedBean.recipe}"/>
+                </p:commandButton>
+
 
             </p:dialog>
 

@@ -10,6 +10,8 @@ import ejb.session.stateless.OrderEntitySessionBeanLocal;
 import ejb.session.stateless.RecipeSessionBeanLocal;
 import entity.CommentEntity;
 import entity.Customer;
+import entity.OrderEntity;
+import entity.OrderLineItem;
 import entity.Recipe;
 import entity.Review;
 import javax.inject.Named;
@@ -23,6 +25,7 @@ import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.xml.stream.events.Comment;
 import util.exception.CustomerNotFoundException;
+import util.exception.OrderNotFoundException;
 import util.exception.RecipeNotFoundException;
 
 /**
@@ -56,6 +59,7 @@ public class RecipeViewManagedBean implements Serializable {
 
     public RecipeViewManagedBean() {
         recipeId = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("recipeToView");
+        customerHasBoughtRecipe = false;
     }
 
     @PostConstruct
@@ -63,6 +67,7 @@ public class RecipeViewManagedBean implements Serializable {
         try {
             recipe = recipeSessionBeanLocal.retrieveRecipeByRecipeId(getRecipeId());
             comments = recipe.getComments();
+            reviews = recipe.getReviews();
             Customer currentCustomer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
             Customer customerRetrieved = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomer.getCustomerId());
             for (Recipe bookmarkedRecipe : customerRetrieved.getBookedmarkedRecipes()) {
@@ -162,7 +167,14 @@ public class RecipeViewManagedBean implements Serializable {
         Customer currentCustomer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
         try {
             Customer customerRetrieved = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomer.getCustomerId());
-//            orderEntitySessionBeanLocal.retrieveOrderByCustomerId(customerRetrieved.getCustomerId());
+            for(OrderEntity order:customerRetrieved.getOrders()){
+                for(OrderLineItem orderLineItem:order.getOrderLineItems()){
+                    if(orderLineItem.getRecipe().getRecipeId() == recipe.getRecipeId()){
+                        setCustomerHasBoughtRecipe(true);
+                    }
+                }
+            }
+            
         } catch (CustomerNotFoundException ex) {
             Logger.getLogger(RecipeViewManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }

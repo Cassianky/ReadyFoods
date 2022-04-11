@@ -88,19 +88,20 @@ public class OrderEntitySessionBean implements OrderEntitySessionBeanLocal {
 
     }
     
-    public OrderEntity retrieveOrderByCustomerId(Long customerId){
-        Query query = entityManager.createQuery("SELECT o FROM OrderEntity o WHERE o.customer.customerId =: inCustomerId");
+    @Override
+    public OrderEntity retrieveOrderByCustomerId(Long recipeId, Long customerId) throws OrderNotFoundException{
+        Query query = entityManager.createQuery("SELECT o FROM OrderEntity o WHERE o.orderLineItems.recipe.recipeId =:inRecipeId AND o.customer =:inCustomerId");
         query.setParameter("inCustomerId", customerId);
-        OrderEntity orderRetrieved = (OrderEntity)query.getSingleResult();
+        query.setParameter("inRecipeId", recipeId);
         try 
         {
             return (OrderEntity) query.getSingleResult();
         } 
         catch (NoResultException | NonUniqueResultException ex) 
         {
-//            throw new CustomerNotFoundException("Customer Email " + email + " does not exist!");
+            throw new OrderNotFoundException("Order does not exist!");
         }
-        return orderRetrieved;
+        
     }
 
     @Override
