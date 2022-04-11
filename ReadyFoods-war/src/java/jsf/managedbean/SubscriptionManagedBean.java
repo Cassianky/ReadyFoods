@@ -9,6 +9,7 @@ import ejb.session.stateless.CustomerSessionBeanLocal;
 import ejb.session.stateless.SubscriptionSessionBeanLocal;
 import entity.Customer;
 import entity.Subscription;
+import java.io.IOException;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
