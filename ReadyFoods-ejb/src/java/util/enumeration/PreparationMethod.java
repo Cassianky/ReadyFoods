@@ -7,6 +7,7 @@ package util.enumeration;
 
 public enum PreparationMethod {
     
+    Nil,
     Chopped,
     Diced,
     Minced,

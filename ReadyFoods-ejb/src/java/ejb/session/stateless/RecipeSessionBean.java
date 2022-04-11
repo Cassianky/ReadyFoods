@@ -1,6 +1,7 @@
 package ejb.session.stateless;
 
 import entity.Category;
+import entity.CommentEntity;
 import entity.Recipe;
 import entity.IngredientSpecification;
 import java.util.ArrayList;
@@ -44,6 +45,12 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
     public RecipeSessionBean() {
         this.validatorFactory = Validation.buildDefaultValidatorFactory();
         this.validator = validatorFactory.getValidator();
+    }
+    
+    @Override
+    public List<CommentEntity>getAllComments(Recipe recipe){
+        Recipe r = em.find(Recipe.class, recipe.getRecipeId());
+        return r.getComments();
     }
 
     @Override

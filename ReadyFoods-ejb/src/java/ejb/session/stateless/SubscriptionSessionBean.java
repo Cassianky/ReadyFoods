@@ -71,13 +71,12 @@ public class SubscriptionSessionBean implements SubscriptionSessionBeanLocal {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
-    
+
     // basic cancellation w no edge case check
     public void cancelSubscription(Long subscriptionId) throws SubscriptionNotFoundException {
         Subscription subToCancel = retrieveSubscriptionBySubscriptionId(subscriptionId);
         subToCancel.setOngoing(false);
-        
-    
+
     }
 
     @Override
@@ -118,6 +117,19 @@ public class SubscriptionSessionBean implements SubscriptionSessionBeanLocal {
             }
         }
         throw new NoOngoingSubscriptionException("Customer does not have an ongoing subscription.");
+
+    }
+
+    public List<Subscription> retrieveAllOngoingSubscriptions() {
+        Query query = em.createQuery("SELECT s FROM Subscription s WHERE s.ongoing = true");
+        List<Subscription> subscriptions = query.getResultList();
+
+        for (Subscription s : subscriptions) {
+            s.getSubscriptionOrders().size();
+
+        }
+
+        return subscriptions;
 
     }
 

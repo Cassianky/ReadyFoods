@@ -9,7 +9,10 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:define name="content">
-        <h1>Make payment</h1>
+        <h1>Make Payment</h1>
+        <p:growl id="growlId" showDetail="true">
+            <p:autoUpdate />
+        </p:growl>
         <h:form id="formOrderSummary" style="margin: 30px">
             <p:dataTable id="dataTableOrderSummary" var="orderLineItem" value="#{shoppingCartManagedBean.orderLineItems}">
                 <f:facet name="header">
@@ -97,7 +100,7 @@
                 <h3> Payment Method: 
 
                     <h:outputText style="float: right" 
-                                  value="#{shoppingCartManagedBean.creditCard}">
+                                  value="#{shoppingCartManagedBean.creditCard.ccNumber}">
                     </h:outputText>
                 </h3>
                 <br></br>

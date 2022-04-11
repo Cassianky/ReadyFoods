@@ -61,12 +61,24 @@ public class PaymentManagedBean implements Serializable {
     @Inject
     private ShoppingCartManagedBean shoppingCartManagedBean;
     
+    @Inject
+    private ProfileManagedBean profileManagedBean;
+    
     public PaymentManagedBean() {
     }
 
     @PostConstruct
     public void postConstruct() {
         System.out.println("jsf.managedbean.PaymentManagedBean.postConstruct()");
+        if(profileManagedBean.getCreditCard() != null){
+            setCcNumber(profileManagedBean.getCreditCard().getCcNumber());
+            setCVV(profileManagedBean.getCreditCard().getCVV());
+            setExpiryDate(profileManagedBean.getCreditCard().getExpiryDate());
+            setNameOnCard(profileManagedBean.getCreditCard().getNameOnCard());
+        } else {
+            System.out.println("jsf.managedbean.PaymentManagedBean.postConstruct()");
+            
+        }
     }
 
     public void foo() {
@@ -80,7 +92,7 @@ public class PaymentManagedBean implements Serializable {
         try {
             Long ccId = creditCardSessionBeanLocal.createNewCreditCard(newCreditCard, currentCustomer.getCustomerId());
             CreditCard createdCard = creditCardSessionBeanLocal.retrieveCreditCardByCreditCardId(ccId);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Credit Card successfully created!", "Credit Card Number: " + createdCard.getCcNumber()));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Credit Card successfully updated!", "Credit Card Number: " + createdCard.getCcNumber()));
             shoppingCartManagedBean.setCreditCard(createdCard);
 
         } catch (UnknownPersistenceException ex) {

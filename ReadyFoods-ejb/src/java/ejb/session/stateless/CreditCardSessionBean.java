@@ -49,6 +49,11 @@ public class CreditCardSessionBean implements CreditCardSessionBeanLocal {
             try {
                 //Association
                 Customer customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(customerId);
+                if(customer.getCreditCard() != null){
+                    Long ccId = customer.getCreditCard().getCreditCardId();
+                    CreditCard toDelete = em.find(CreditCard.class, ccId);
+                    em.remove(toDelete);
+                }
                 customer.setCreditCard(newCreditCard);
                 
                 em.persist(newCreditCard);

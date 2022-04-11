@@ -5,20 +5,20 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
-                  xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
                 template="/template/defaultTemplate.xhtml"
                 xmlns:pe="http://primefaces.org/ui/extensions" >
 
     <ui:define name="content">
         <ez:Breadcrumb pageName="updateCreditCard" />
-   
+
         <h:form id="formAddCreditCard" prependId="false">
-            <p:growl id="growl" showDetail="true" sticky="true">
+            <p:growl id="growl" showDetail="true">
                 <p:autoUpdate/>
             </p:growl> 
 
-            <p:panelGrid id="pnlCreditCard" columns="2" styleClass="ui-noborder" layout="grid">
-                <f:facet name="header">
+            <p:panelGrid id="pnlCreditCard" columns="1" styleClass="ui-panelgrid-blank" layout="grid" style="text-align: center">
+                <f:facet name="header" class="ccthing">
                     <pe:creditCard id="creditCard" labelMonthYear="MM/YY" placeholderExpiry="**/**" placeholderName="Ready Foods"/>
                 </f:facet>
                 <p:inputMask id="number" 
@@ -28,11 +28,9 @@
                 </p:inputMask>
 
 
-                <p:message for="number" style="color:red"/>
-
                 <p:inputText id="name" placeholder="Full name" 
                              value="#{paymentManagedBean.nameOnCard}" />
-                <p:message for="name" style="color:red"/>
+
 
                 <p:datePicker id="month" 
                               view="month" 
@@ -44,7 +42,7 @@
 
                 </p:datePicker>
 
-                <p:message for="month" style="color:red"/>
+
 
 
                 <p:inputMask id="cvv" 
@@ -53,7 +51,7 @@
                              mask="999">
                     <f:convertNumber type="number"/> 
                 </p:inputMask>
-                <p:message for="cvv" style="color:red"/>
+
 
                 <p:commandButton value="Update"
                                  actionListener="#{paymentManagedBean.saveCC}"
