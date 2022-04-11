@@ -1,0 +1,214 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./../template/defaultTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:define name="content">
+        <h:outputStylesheet name="myFoods.css" library="css"/>
+        <p:messages id="messages" redisplay="false" closable="true" />
+        <h:form id="formSearchFood">
+            <p:outputPanel style="text-align: center;">
+                <p:commandButton style="text-align: center;" value="Create new food" update="formViewAllFoods" oncomplete="PF('dialogCreateFood').show()">
+                    <p:ajax update="formViewAllFoods"/>
+                </p:commandButton>
+            </p:outputPanel>
+            <p:outputPanel style="text-align: right;">
+                <h:outputText value="Search food name: " />
+                <p:inputText style="width:300px" placeholder="Enter Food name to search"/>
+                <p:commandButton value="Search"/>
+            </p:outputPanel>
+        </h:form>
+        <h:form id="formViewAllFoods">
+            <p:dataView id="foodDetails" var="food" value="#{myFoodsManagedBean.foods}">
+                <p:dataViewGridItem>
+                    <p:panel header="#{food.name}" style="text-align:center">
+                        <h:panelGrid columns="1" style="width:100%">
+
+                            <h:outputText value="Calories: #{food.calories} cal" />
+                            <h:outputText value="Carbs: #{food.calories} g" />
+                            <h:outputText value="Protein: #{food.protein} g" />
+                            <h:outputText value="Fats: #{food.protein} g" />
+                            <h:outputText value="Sugar: #{food.protein} g" />
+
+                            <p:commandButton icon="ui-icon-trash" update="formViewAllFoods:foodDetails" style="margin:0 auto;" actionListener="#{myFoodsManagedBean.deleteFood}">
+                                <f:attribute name="foodToDelete" value="#{food}" />
+                                <p:confirm header="Confirmation" message="Are you sure you want to delete this Food:#{food.name}?" icon="ui-icon-alert" />
+                            </p:commandButton>
+                        </h:panelGrid>
+                    </p:panel>
+                </p:dataViewGridItem>
+                <p:dataViewListItem>
+                    <h:panelGrid columns="3" style="width:100%">
+                        <h:column>
+                            <p:outputPanel>
+                                <h:panelGrid columns="2" cellpadding="5">
+                                    <h:outputText value="Food:" />
+                                    <h:outputText value="#{food.name}" style="font-weight: bold"/>
+
+                                    <h:outputText value="Calories:" />
+                                    <h:outputText value="#{food.calories} cal" style="font-weight: bold"/>
+
+                                    <h:outputText value="Carbs:" />
+                                    <h:outputText value="#{food.carbs} g" style="font-weight: bold"/>
+
+                                    <h:outputText value="Protein:" />
+                                    <h:outputText value="#{food.protein} g" style="font-weight: bold"/>
+
+                                    <h:outputText value="Fats:" />
+                                    <h:outputText value="#{food.fats} g" style="font-weight: bold"/>
+
+                                    <h:outputText value="Sugar:" />
+                                    <h:outputText value="#{food.sugar} g" style="font-weight: bold"/>
+                                </h:panelGrid>
+                            </p:outputPanel>
+                        </h:column>
+                        <h:column>
+                            <p:commandButton icon="ui-icon-trash" update="formViewAllFoods:foodDetails" actionListener="#{myFoodsManagedBean.deleteFood}">
+                                <f:attribute name="foodToDelete" value="#{food}" />
+                                <p:confirm header="Confirmation" message="Are you sure you want to delete this Food:#{food.name}?" icon="ui-icon-alert" />
+                            </p:commandButton>
+                        </h:column>
+                    </h:panelGrid>
+                </p:dataViewListItem>
+            </p:dataView>
+            <p:growl>
+                <p:autoUpdate />
+            </p:growl>
+        </h:form>
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+        </p:confirmDialog>
+        <h:form id="formCreateFood">
+            <p:dialog id="dialogCreateFood" widgetVar="dialogCreateFood" header="Create New Food" closable="true">
+                <p:messages id="messagesCreateFood" redisplay="false" />
+                <p:panelGrid id="details">
+                    <p:row>
+                        <p:column colspan="3">
+                            <p:selectOneRadio id="console" value="#{myFoodsManagedBean.isNotFromRecipe}" unselectable="false">
+                                <f:selectItem itemLabel="Create New Food By New Inputs" itemValue="true"/>
+                                <f:selectItem itemLabel="Create New Food From Recipes" itemValue="false"/>
+                                <p:ajax update="details"/>
+                            </p:selectOneRadio>
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{myFoodsManagedBean.isNotFromRecipe != true}">
+                        <p:column colspan="3">
+                            <p:outputLabel for="numServing" value="Number of Servings:" />
+                            <p:spinner id="numServing" value="#{myFoodsManagedBean.numServings}" stepFactor="1" min="1"/>
+                        </p:column> 
+                    </p:row>
+                    <p:row rendered="#{myFoodsManagedBean.isNotFromRecipe != true}">
+                        <p:column> 
+                            <p:outputLabel for="recipe" value="Recipe:" />
+                            <p:selectOneListbox id="recipe" converter="recipeConverter" value="#{myFoodsManagedBean.selectedRecipe}" var="t" filter="true" filterMatchMode="contains">
+                                <f:selectItems value="#{myFoodsManagedBean.recipes}" var="recipe" itemLabel="#{recipe.recipeTitle}" itemValue="#{recipe}" />
+
+                                <p:column rowspan="6">
+                                    <h:outputText value="#{t.recipeTitle}: " />
+                                    <h:outputText value="#{t.caloriesPerServing} cal, " />
+                                    <h:outputText value="Carbs-#{t.carbsPerServing} g, " />
+                                    <h:outputText value="Protein-#{t.proteinsPerServing} g, " />
+                                    <h:outputText value="Fats-#{t.fatsPerServing} g, " />
+                                    <h:outputText value="Sugar-#{t.sugarPerServing} g" />
+                                </p:column>
+                            </p:selectOneListbox>
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{myFoodsManagedBean.isNotFromRecipe == true}">
+                        <p:column>
+                            <p:outputLabel for="name" value="Food Name: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="name" value="#{myFoodsManagedBean.foodToCreate.name}" required="true" requiredMessage="Food Name is required" >
+                                <f:validateLength maximum="32" />
+                            </p:inputText>
+                        </p:column>
+                        <p:column>
+                            <p:message for="name" />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{myFoodsManagedBean.isNotFromRecipe == true}">
+                        <p:column>
+                            <p:outputLabel for="calories" value="Food Calories(cal): " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="calories" value="#{myFoodsManagedBean.foodToCreate.calories}" required="true" requiredMessage="Calories is required" >
+                                <f:validateDoubleRange minimum="0.00" maximum="10000.00"/>
+                            </p:inputText>
+                        </p:column>
+                        <p:column>
+                            <p:message for="calories" />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{myFoodsManagedBean.isNotFromRecipe == true}">
+                        <p:column>
+                            <p:outputLabel for="carbs" value="Food Carbs(g): " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="carbs" value="#{myFoodsManagedBean.foodToCreate.carbs}" required="true" requiredMessage="Carbs is required" >
+                                <f:validateDoubleRange minimum="0.00" maximum="10000.00"/>
+                            </p:inputText>
+                        </p:column>
+                        <p:column>
+                            <p:message for="carbs" />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{myFoodsManagedBean.isNotFromRecipe == true}">
+                        <p:column>
+                            <p:outputLabel for="protein" value="Food Protein(g): " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="protein" value="#{myFoodsManagedBean.foodToCreate.protein}" required="true" requiredMessage="Protein is required" >
+                                <f:validateDoubleRange minimum="0.00" maximum="10000.00"/>
+                            </p:inputText>
+                        </p:column>
+                        <p:column>
+                            <p:message for="protein" />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{myFoodsManagedBean.isNotFromRecipe == true}">
+                        <p:column>
+                            <p:outputLabel for="fats" value="Food Calories: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="fats" value="#{myFoodsManagedBean.foodToCreate.fats}" required="true" requiredMessage="Fats is required" >
+                                <f:validateDoubleRange minimum="0.00" maximum="10000.00"/>
+                            </p:inputText>
+                        </p:column>
+                        <p:column>
+                            <p:message for="fats" />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{myFoodsManagedBean.isNotFromRecipe == true}">
+                        <p:column>
+                            <p:outputLabel for="sugar" value="Food Sugar: " />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="sugar" value="#{myFoodsManagedBean.foodToCreate.sugar}" required="true" requiredMessage="Sugar is required" >
+                                <f:validateDoubleRange minimum="0.00" maximum="10000.00"/>
+                            </p:inputText>
+                        </p:column>
+                        <p:column>
+                            <p:message for="sugar" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="3">
+                            <div align="center">
+                                <p:commandButton value="Create New Food" type="submit" actionListener="#{myFoodsManagedBean.createANewFood}" update="@form formViewAllFoods" oncomplete="PF('dialogCreateFood').show();"/>
+                            </div>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+
+

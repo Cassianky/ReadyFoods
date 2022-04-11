@@ -9,7 +9,7 @@
 
     <ui:define name="content">
         <h:form>
-            <p:growl id="messages" showDetail="true" />
+            <p:messages id="messages" showDetail="true" />
 
             <h:panelGrid columnClasses="value">
                 <h1 style="background-color: white; height: auto; font-weight: bold; text-align: center">My Food Diary</h1>
@@ -19,7 +19,6 @@
                     <p:ajax event="eventSelect" listener="#{foodDiaryManagedBean.onEventSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
 
                 </p:schedule>
-
             </h:panelGrid>
 
             <p:dialog widgetVar="eventDialog" header="New Food Diary Record" showEffect="clip" hideEffect="clip">
@@ -96,64 +95,62 @@
                     <!-- View upon creation of schedule event --> 
                     <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id != null}">
                         <p:column colspan="3">
-                        <p:outputLabel value="Title: #{foodDiaryManagedBean.scheduleEvent.title}" />
+                            <p:outputLabel value="Title: #{foodDiaryManagedBean.scheduleEvent.title}" />
                         </p:column>
                     </p:row>
                     <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id != null}">
                         <p:column colspan="3">
-                        <p:outputLabel value="Description: #{foodDiaryManagedBean.scheduleEvent.description}" />
+                            <p:outputLabel value="Description: #{foodDiaryManagedBean.scheduleEvent.description}" />
                         </p:column>
                     </p:row>
                     <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id != null}">
                         <p:column colspan="3">
-                        <p:outputLabel value="From: #{foodDiaryManagedBean.scheduleEvent.startDate}" /> 
+                            <p:outputLabel value="From: #{foodDiaryManagedBean.scheduleEvent.startDate}" /> 
                         </p:column>
                     </p:row>
                     <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id != null}">
                         <p:column colspan="3">
-                        <p:outputLabel value="To: #{foodDiaryManagedBean.scheduleEvent.endDate}" /> 
+                            <p:outputLabel value="To: #{foodDiaryManagedBean.scheduleEvent.endDate}" /> 
                         </p:column>
                     </p:row>
                     <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id != null}">
                         <p:column colspan="3">
-                        <p:outputLabel value="Selected Food: #{foodDiaryManagedBean.scheduleEvent.data.name}" />
+                            <p:outputLabel value="Selected Food: #{foodDiaryManagedBean.scheduleEvent.data.name}" />
                         </p:column>
                     </p:row>
                     <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id != null}">
                         <p:column colspan="3">
-                        <p:outputLabel value="Calories: #{foodDiaryManagedBean.scheduleEvent.data.calories} cal" />
+                            <p:outputLabel value="Calories: #{foodDiaryManagedBean.scheduleEvent.data.calories} cal" />
                         </p:column>
                     </p:row>
                     <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id != null}">
                         <p:column colspan="3">
-                        <p:outputLabel value="Carbs: #{foodDiaryManagedBean.scheduleEvent.data.carbs} g" />
+                            <p:outputLabel value="Carbs: #{foodDiaryManagedBean.scheduleEvent.data.carbs} g" />
                         </p:column>
                     </p:row>
                     <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id != null}">
                         <p:column colspan="3">
-                        <p:outputLabel value="Protein: #{foodDiaryManagedBean.scheduleEvent.data.protein} g" />
+                            <p:outputLabel value="Protein: #{foodDiaryManagedBean.scheduleEvent.data.protein} g" />
                         </p:column>
                     </p:row>
                     <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id != null}">
                         <p:column colspan="3">
-                        <p:outputLabel value="Fats: #{foodDiaryManagedBean.scheduleEvent.data.fats} g" />
+                            <p:outputLabel value="Fats: #{foodDiaryManagedBean.scheduleEvent.data.fats} g" />
                         </p:column>
                     </p:row>
                     <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id != null}">
                         <p:column colspan="3">
-                        <p:outputLabel value="Sugar: #{foodDiaryManagedBean.scheduleEvent.data.sugar} g" />
+                            <p:outputLabel value="Sugar: #{foodDiaryManagedBean.scheduleEvent.data.sugar} g" />
                         </p:column>
                     </p:row>
                     <p:row rendered="#{foodDiaryManagedBean.scheduleEvent.id != null}">
                         <p:column colspan="3">
-                        <p:commandButton id="deleteButton" actionListener="#{foodDiaryManagedBean.deleteEvent}" value="Delete" oncomplete="PF('myschedule').update();PF('eventDialog').hide();"/>
+                            <p:commandButton id="deleteButton" actionListener="#{foodDiaryManagedBean.deleteEvent}" value="Delete" oncomplete="PF('myschedule').update();PF('eventDialog').hide();"/>
                         </p:column>
                     </p:row> 
                 </p:panelGrid>
 
-
             </p:dialog>    
-
         </h:form>
     </ui:define>
 

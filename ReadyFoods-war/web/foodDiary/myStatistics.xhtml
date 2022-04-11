@@ -1,0 +1,194 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./../template/defaultTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:define name="content">
+        <h1 style="background-color: white; height: auto; font-weight: bold; text-align: center">My Statistics</h1>
+        <div style="font-size: 15; text-align: center; margin-top: 20px; text-decoration: underline;">
+            <h:outputText value="Since #{statisticsManagedBean.lastMonDate.toString()} (Monday) ..."/>
+        </div>
+        <div style="margin-top:20px; display: flex; flex-direction: row; align-content: center; justify-content: center;">
+            <p:chart type="bar" model="#{statisticsManagedBean.weeklyCaloriesModel}" />
+            <p:chart type="bar" model="#{statisticsManagedBean.weeklyMacroModel}" />
+        </div>
+        <div style="margin-top:20px; display: flex; flex-direction: row; align-content: center; justify-content: center;">
+            <p:panelGrid>
+                <f:facet name="header">
+                    <p:row>
+                        <p:column colspan="12">
+                            <h:outputText value="Today's #{statisticsManagedBean.todayDate} Calories and Macronutrients"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2">Type</p:column>
+                        <p:column colspan="2">Calories (cal)</p:column>
+                        <p:column colspan="2">Carbs (g)</p:column>
+                        <p:column colspan="2">Fats (g)</p:column>
+                        <p:column colspan="2">Protein (g)</p:column>
+                        <p:column colspan="2">Sugar (g)</p:column>
+                    </p:row>
+                </f:facet>
+                <p:row>
+                    <p:column colspan="2">Goals</p:column>
+                    <p:column colspan="2">
+                        <h:outputText value="#{statisticsManagedBean.goals.calories}">
+                            <f:convertNumber pattern="#0.00" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column colspan="2">
+                        <h:outputText value="#{statisticsManagedBean.goals.carbs}">
+                            <f:convertNumber pattern="#0.00" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column colspan="2">
+                        <h:outputText value="#{statisticsManagedBean.goals.fats}">
+                            <f:convertNumber pattern="#0.00" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column colspan="2">
+                        <h:outputText value="#{statisticsManagedBean.goals.protein}">
+                            <f:convertNumber pattern="#0.00" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column colspan="2">
+                        <h:outputText value="#{statisticsManagedBean.goals.sugar}">
+                            <f:convertNumber pattern="#0.00" />
+                        </h:outputText>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column colspan="2">Consumed</p:column>
+                    <p:column colspan="2">
+                        <h:outputText value="#{statisticsManagedBean.consumed.calories}">
+                            <f:convertNumber pattern="#0.00" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column colspan="2">
+                        <h:outputText value="#{statisticsManagedBean.consumed.carbs}">
+                            <f:convertNumber pattern="#0.00" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column colspan="2">
+                        <h:outputText value="#{statisticsManagedBean.consumed.fats}">
+                            <f:convertNumber pattern="#0.00" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column colspan="2">
+                        <h:outputText value="#{statisticsManagedBean.consumed.fats}">
+                            <f:convertNumber pattern="#0.00" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column colspan="2">
+                        <h:outputText value="#{statisticsManagedBean.consumed.sugar}">
+                            <f:convertNumber pattern="#0.00" />
+                        </h:outputText>
+                    </p:column>
+                </p:row>
+                <f:facet name="footer">
+                    <p:row>
+                        <p:column colspan="2">Remaining</p:column>
+                        <p:column colspan="2">
+                            <h:outputText value="#{statisticsManagedBean.goals.calories - statisticsManagedBean.consumed.calories}">
+                                <f:convertNumber pattern="#0.00" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column colspan="2">
+                            <h:outputText value="#{statisticsManagedBean.goals.carbs - statisticsManagedBean.consumed.carbs}">
+                                <f:convertNumber pattern="#0.00" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column colspan="2">
+                            <h:outputText value="#{statisticsManagedBean.goals.fats - statisticsManagedBean.consumed.fats}">
+                                <f:convertNumber pattern="#0.00" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column colspan="2">
+                            <h:outputText value="#{statisticsManagedBean.goals.protein - statisticsManagedBean.consumed.protein}">
+                                <f:convertNumber pattern="#0.00" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column colspan="2">
+                            <h:outputText value="#{statisticsManagedBean.goals.sugar - statisticsManagedBean.consumed.sugar}">
+                                <f:convertNumber pattern="#0.00" />
+                            </h:outputText>
+                        </p:column>
+                    </p:row>
+                </f:facet>
+            </p:panelGrid>
+        </div>
+        <div style="margin-top:20px; display: flex; flex-direction: row; align-content: center; justify-content: center;">
+            <p:panelGrid>
+                <f:facet name="header">
+                    <p:row>
+                        <p:column colspan="25">
+                            <h:outputText value="Top Meal for Each Macronutrient this Week Since Monday #{statisticsManagedBean.lastMonDate.toString()}"/>
+                        </p:column>
+                    </p:row>
+                </f:facet>
+                <p:row>
+                    <p:column colspan="5">
+                        <p:dataTable value="#{statisticsManagedBean.topCaloriesMeals}" var="cal">
+                            <p:column headerText="Calories (cal)">
+                                <h:outputText value="Meal: #{cal.name}" />
+                                <br/>
+                                <h:outputText value="#{cal.calories} cal" />
+                                <br/>
+                                <h:outputText value="#{cal.startDate}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:column>
+                    <p:column colspan="5">
+                        <p:dataTable value="#{statisticsManagedBean.topCarbsMeals}" var="carbs">
+                            <p:column headerText="Carbs (g)">
+                                <h:outputText value="Meal: #{carbs.name}" />
+                                <br/>
+                                <h:outputText value="#{carbs.carbs} g" />
+                                <br/>
+                                <h:outputText value="#{carbs.startDate}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:column>
+                    <p:column colspan="5">
+                        <p:dataTable value="#{statisticsManagedBean.topProteinMeals}" var="protein">
+                            <p:column headerText="Protein (g)">
+                                <h:outputText value="Meal: #{protein.name}" />
+                                <br/>
+                                <h:outputText value="#{protein.protein} g" />
+                                <br/>
+                                <h:outputText value="#{protein.startDate}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:column>
+                    <p:column colspan="5">
+                        <p:dataTable value="#{statisticsManagedBean.topFatsMeals}" var="fats">
+                            <p:column headerText="Fats (g)">
+                                <h:outputText value="Meal: #{fats.name}" />
+                                <br/>
+                                <h:outputText value="#{fats.fats} g" />
+                                <br/>
+                                <h:outputText value="#{fats.startDate}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:column>
+                    <p:column colspan="5">
+                        <p:dataTable value="#{statisticsManagedBean.topSugarMeals}" var="sugar">
+                            <p:column headerText="Sugar (g)">
+                                <h:outputText value="Meal: #{sugar.name}" />
+                                <br/>
+                                <h:outputText value="#{sugar.sugar} g" />
+                                <br/>
+                                <h:outputText value="#{sugar.startDate}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+        </div>
+    </ui:define>
+
+</ui:composition>
