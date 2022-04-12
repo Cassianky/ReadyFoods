@@ -32,8 +32,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -209,7 +207,7 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
 
         setRemaining((Integer) ongoingSubscription.getNumOfRecipes() - selected);
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, 
+        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                 "Remaining recipes: " + remaining,
                 null));
     }
@@ -232,21 +230,20 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
 
         }
         try {
-            if (currentOrder == null) {
+            List<OrderLineItem> lineItemsToBuy = new ArrayList<>();
 
-                List<OrderLineItem> lineItemsToBuy = new ArrayList<>();
-
-                for (OrderLineItem oli : orderLineItems) {
-                    if (oli.getQuantity() != 0) {
-                        lineItemsToBuy.add(oli);
-                    }
+            for (OrderLineItem oli : orderLineItems) {
+                if (oli.getQuantity() != 0) {
+                    lineItemsToBuy.add(oli);
                 }
+            }
 
-                OrderEntity newOrder = new OrderEntity(ongoingSubscription.getNumOfPeople(), ongoingSubscription.getWeeklyPrice(), false,
-                        new Date(), Status.PENDING, lineItemsToBuy);
-                newOrder.setAdditionalNotes(getAdditionalNotes());
-                newOrder.setDateForDelivery(dateForDelivery);
-
+            OrderEntity newOrder = new OrderEntity(ongoingSubscription.getNumOfPeople(), ongoingSubscription.getWeeklyPrice(), false,
+                    new Date(), Status.PENDING, lineItemsToBuy);
+            newOrder.setAdditionalNotes(getAdditionalNotes());
+            newOrder.setDateForDelivery(dateForDelivery);
+            
+            if (currentOrder == null) {
                 newOrder = orderEntitySessionBeanLocal.createNewSubscriptionOrder(currentCustomerEntity.getCustomerId(), newOrder);
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -254,21 +251,6 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
                 currentOrder = newOrder;
 
             } else {
-                List<OrderLineItem> lineItemsToBuy = new ArrayList<>();
-
-                for (OrderLineItem oli : orderLineItems) {
-                    if (oli.getQuantity() != 0) {
-                        lineItemsToBuy.add(oli);
-                    }
-                }
-
-                OrderEntity newOrder = new OrderEntity(ongoingSubscription.getNumOfPeople(), ongoingSubscription.getWeeklyPrice(), false,
-                        new Date(), Status.PENDING, lineItemsToBuy);
-                newOrder.setAdditionalNotes(getAdditionalNotes());
-                newOrder.setDateForDelivery(dateForDelivery);
-
-                System.out.println("currentOrder" + currentOrder.getOrderEntityId());
-
                 OrderEntity oldOrder = orderEntitySessionBeanLocal.deleteSubscriptionOrder(currentCustomerEntity.getCustomerId(), currentOrder.getOrderEntityId());
 
                 newOrder = orderEntitySessionBeanLocal.createNewSubscriptionOrder(currentCustomerEntity.getCustomerId(), newOrder);
