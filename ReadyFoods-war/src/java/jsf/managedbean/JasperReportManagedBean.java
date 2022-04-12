@@ -18,6 +18,7 @@ import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.inject.Inject;
 import javax.sql.DataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperRunManager;
@@ -36,13 +37,19 @@ public class JasperReportManagedBean {
     private OrderEntity order;
     
     private Customer customer;
+    
+    @Inject
+    private ShoppingCartManagedBean shoppingCartManagedBean;
 
     public JasperReportManagedBean() {
-        order = (OrderEntity)FacesContext.getCurrentInstance().getExternalContext().getFlash().get("orderToGenerate");
-          
-        System.out.println("jsf.managedbean.JasperReportManagedBean.postConstruct()*************" + order.getOrderEntityId());
-  
-        customer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
+     
+    }
+    
+    @PostConstruct
+    public void postConstruct(){
+         order = shoppingCartManagedBean.getOrderToGenerate();
+         customer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
+         System.out.println("jsf.managedbean.JasperReportManagedBean.postConstruct()" + customer.getUserName());
     }
   
 
