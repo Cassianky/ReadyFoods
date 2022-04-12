@@ -34,4 +34,6 @@ public interface OrderEntitySessionBeanLocal {
 
     public OrderEntity deleteSubscriptionOrder(Long customerId, Long oldOrderEntityId) throws CustomerNotFoundException, NoOngoingSubscriptionException, OrderNotFoundException;
 
+    public OrderEntity retrieveOrderByCustomerId(Long recipeId, Long customerId) throws OrderNotFoundException;
+
 }
