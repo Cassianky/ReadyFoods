@@ -19,6 +19,9 @@
             </div>
         </h:panelGroup>
         <ez:loginDialog/>
+        <h:panelGroup rendered="#{sessionScope.isLogin == true}">
+            
+        </h:panelGroup>             
     </ui:define>
 
 </ui:composition>

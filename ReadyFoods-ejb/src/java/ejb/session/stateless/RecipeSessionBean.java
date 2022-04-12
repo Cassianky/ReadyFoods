@@ -224,7 +224,7 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
 //        
         return recipes;
     }
-
+    
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Recipe>> constraintViolations) {
         String msg = "Input data validation error!:";
 

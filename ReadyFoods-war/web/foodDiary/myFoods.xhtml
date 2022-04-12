@@ -10,17 +10,16 @@
     <ui:define name="content">
         <h:outputStylesheet name="myFoods.css" library="css"/>
         <p:messages id="messages" redisplay="false" closable="true" />
+        <h1 style="background-color: white; height: auto; font-weight: bold; text-align: center">My Foods</h1>
         <h:form id="formSearchFood">
-            <p:outputPanel style="text-align: center;">
-                <p:commandButton style="text-align: center;" value="Create new food" update="formViewAllFoods" oncomplete="PF('dialogCreateFood').show()">
-                    <p:ajax update="formViewAllFoods"/>
-                </p:commandButton>
-            </p:outputPanel>
-            <p:outputPanel style="text-align: right;">
-                <h:outputText value="Search food name: " />
-                <p:inputText style="width:300px" placeholder="Enter Food name to search"/>
-                <p:commandButton value="Search"/>
-            </p:outputPanel>
+
+            <p:commandButton value="Create a new food" update="formViewAllFoods" oncomplete="PF('dialogCreateFood').show()">
+                <p:ajax update="formViewAllFoods"/>
+            </p:commandButton> &nbsp;
+
+            <h:outputText value="Search food name: " />
+            <p:inputText style="width:300px" placeholder="Enter Food name to search"/>
+            <p:commandButton value="Search"/>
         </h:form>
         <h:form id="formViewAllFoods">
             <p:dataView id="foodDetails" var="food" value="#{myFoodsManagedBean.foods}">

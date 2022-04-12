@@ -59,27 +59,11 @@ public class RegisterCustomerManagedBeanRF implements Serializable {
         try {
             Long newCustomerId = customerSessionBeanLocal.createNewCustomer(newCustomer);
             Customer ce = customerSessionBeanLocal.retrieveCustomerByCustomerId(newCustomerId);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Customer Registered Successfully! (Email: " + ce.getEmail() + ") A welcome email is also sent!", null));
-            System.out.print("1111111111111111111111111111111111111111111111111111");
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Customer Registered Successfully! (Email: " + ce.getEmail() + ")", null));
+ 
             Future<Boolean> asyncResult = customerSessionBeanLocal.sendWelcomeEmail(ce.getFirstName(), ce.getEmail(), path);
-            System.out.print("2222222222222222222222222222222222222222222222");
-            //Email sending is slow, please be patient!
-            Thread thread = new Thread() {
-                public void run() {
-                    try {
-                        if (asyncResult.get()) {
-                            System.out.print("3333333333333333333333333333333333333333333333333333333");
-                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Email sent successfully", null));
-                        } else {
-                            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while sending email", null));
-                        }
-                    } catch (ExecutionException | InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            };
 
-            thread.start();
+             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "A welcome email is also sent! Please check your email!", null));
 
             newCustomer = new Customer();
 
@@ -89,14 +73,6 @@ public class RegisterCustomerManagedBeanRF implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while registering: " + ex.getMessage(), null));
         }
     }
-
-//    @Asynchronous
-//    public Future<Boolean> sendWelcomeEmail(String name, String email, String path) throws InterruptedException {
-//        EmailManager emailManager = new EmailManager("readyfoodscorporation@gmail.com", "fgdlhkfsl4648795");
-//        Boolean result = emailManager.email(name, "readyfoodscorporation@gmail.com", email, path);
-//        return new AsyncResult<>(result);
-//    }
-
     /**
      * @return the newCustomer
      */

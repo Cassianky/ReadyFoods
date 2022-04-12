@@ -28,5 +28,6 @@ and open the template in the editor.
     flex-direction: row; 
     align-content: center; 
     justify-content: center;
+    padding-left: 40px;
+    padding-right: 40px;
 }
-

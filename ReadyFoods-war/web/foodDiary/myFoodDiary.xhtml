@@ -13,7 +13,7 @@
 
             <h:panelGrid columnClasses="value">
                 <h1 style="background-color: white; height: auto; font-weight: bold; text-align: center">My Food Diary</h1>
-                <p:schedule resizable="false" draggable="false" style="background-color: white;" id="schedule" value="#{foodDiaryManagedBean.scheduleModel}" widgetVar="myschedule" timeZone="GMT+8">
+                <p:schedule resizable="false" style="background-color: white;" draggable="false" id="schedule" value="#{foodDiaryManagedBean.scheduleModel}" widgetVar="myschedule" timeZone="GMT+8">
 
                     <p:ajax event="dateSelect" listener="#{foodDiaryManagedBean.onDateSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
                     <p:ajax event="eventSelect" listener="#{foodDiaryManagedBean.onEventSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
