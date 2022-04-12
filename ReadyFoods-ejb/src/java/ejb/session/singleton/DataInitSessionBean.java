@@ -151,16 +151,16 @@ public class DataInitSessionBean {
             IngredientSpecification ingredientSpecifcation13 = new IngredientSpecification(1);
 
             //Mac and Cheese
-            IngredientSpecification ingredientSpecifcation14 = new IngredientSpecification(3);
+            IngredientSpecification ingredientSpecifcation14 = new IngredientSpecification(300);
             IngredientSpecification ingredientSpecifcation15 = new IngredientSpecification(1);
             IngredientSpecification ingredientSpecifcation16 = new IngredientSpecification(1);
             IngredientSpecification ingredientSpecifcation17 = new IngredientSpecification(1);
-            IngredientSpecification ingredientSpecifcation2MacAndCheese = new IngredientSpecification(1);
+            IngredientSpecification ingredientSpecifcation2MacAndCheese = new IngredientSpecification(10);
 
             //Egg Fried Rice
             IngredientSpecification ingredientSpecifcation18 = new IngredientSpecification(2);
             IngredientSpecification ingredientSpecifcation19 = new IngredientSpecification(3);
-            IngredientSpecification ingredientSpecifcation20 = new IngredientSpecification(1);
+            IngredientSpecification ingredientSpecifcation20 = new IngredientSpecification(20);
             IngredientSpecification ingredientSpecifcation3EggFriedRice = new IngredientSpecification(1);
             IngredientSpecification ingredientSpecifcation13EggFriedRice = new IngredientSpecification(1);
             IngredientSpecification ingredientSpecifcation4EggFriedRice = new IngredientSpecification(1);
@@ -169,8 +169,8 @@ public class DataInitSessionBean {
             IngredientSpecification ingredientSpecifcation8EggFriedRice = new IngredientSpecification(1);
 
             //For Fudge Brownie
-            IngredientSpecification ingredientSpecifcation21 = new IngredientSpecification(1);
-            IngredientSpecification ingredientSpecifcation22 = new IngredientSpecification(2);
+            IngredientSpecification ingredientSpecifcation21 = new IngredientSpecification(500);
+            IngredientSpecification ingredientSpecifcation22 = new IngredientSpecification(200);
             IngredientSpecification ingredientSpecifcation19FudgeBrownie = new IngredientSpecification(2);
 
             Long ingredientSpecification1Id = ingredientSpecificationSessionBeanLocal.createNewIngredientSpecification(ingredientSpecifcation1, 1L);
