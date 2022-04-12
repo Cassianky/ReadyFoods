@@ -11,22 +11,20 @@
     <ui:define name="content">
         <!--        <ez:Breadcrumb pageName="mySubscriptionOrders" />-->
 
+
+
         <ez:Breadcrumb pageName="viewSubscriptionOrder" />
-        <p:growl >
-            <p:autoUpdate />
-        </p:growl>
-
-
-
-        <main class="card">
-
+        <h:form id="viewSubscriptionOrderForm" class="card">
+            <p:growl >
+                <p:autoUpdate />
+            </p:growl>
 
             <h1 class="h1title">Meal Kits</h1>
 
 
             <ui:repeat value="#{subscriptionOrderViewManagedBean.orders}" var="order">
 
-                <p:panel style="width: 50%" header="#{subscriptionOrderViewManagedBean.getWeek(order.dateOfOrder)}" >
+                <p:panel id="orderPanel" style="width: 50%" header="#{subscriptionOrderViewManagedBean.getWeek(order.dateOfOrder)}" >
                     <h:outputText value="STATUS: #{order.status}" 
                                   style="float: right; text-align: right;
                                   font-style: italic"/>
@@ -35,22 +33,12 @@
                     <h:outputText value="Additional notes: #{order.additionalNotes}"/>
                     <br/>    <br/>   
 
-
-
-
-
-
-                    <p:panel style="" header="Meal kits in this order">
+                    <p:panel id="lineItemPanel" style="" header="Meal kits in this order">
                         <ui:repeat value="#{order.orderLineItems}" var="orderLineItem">
 
                             <h:panelGrid style="width:100%;" >
 
-                                <span>
-
-                                    <h:outputText value="#{orderLineItem.recipe.recipeTitle} x #{orderLineItem.quantity}" 
-                                                  /></span>
-
-
+                                <span><h:outputText value="#{orderLineItem.recipe.recipeTitle} x #{orderLineItem.quantity}"/></span>
 
                             </h:panelGrid>
 
@@ -59,7 +47,14 @@
 
                     </p:panel>
                     <br/>
-                    <p:commandButton style="" icon="pi pi-check" value="Received order"/>
+                    <p:commandButton style="" icon="pi pi-check" 
+                                     value="Received order"
+                                     actionListener="#{subscriptionOrderViewManagedBean.updateOrderStatus}"
+                                     process="@this"
+                                     update="@form viewSubscriptionOrderForm"
+                                     disabled="#{not subscriptionOrderViewManagedBean.canUpdateOrderStatus(order)}">
+                        <f:attribute name="idToUpdate" value="#{order.orderEntityId}"/>
+                    </p:commandButton>
 
                 </p:panel>
                 <br/> 
@@ -67,12 +62,7 @@
 
             </ui:repeat>                                                              
 
-
-
-        </main>
-
-
-
+        </h:form>
     </ui:define>
 
 </ui:composition>

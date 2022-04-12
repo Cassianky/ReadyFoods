@@ -41,7 +41,9 @@
                           sortBy="#{orderEntity.totalCost}" 
                           filterBy="#{orderEntity.totalCost}" 
                           filterMatchMode="contains">
-                    <h:outputText value="#{orderEntity.totalCost}" />
+                    <h:outputText value="#{orderEntity.totalCost}" >
+                        <f:convertNumber type="currency" currencySymbol="$" maxIntegerDigits="5" maxFractionDigits="2"/>
+                    </h:outputText>
                 </p:column>
                 <p:column headerText="Date ordered" 
                           sortBy="#{orderEntity.dateOfOrder}" 
@@ -63,18 +65,19 @@
                 </p:column>      
                 <p:column headerText="Action">
                     <p:commandButton title="Received" 
-                                     update="@this viewAllOrdersForm:dataTableAllOrders"
-                                     actionListener="#{orderManagedBean.updateStatus}">
-                        <f:attribute name="orderToupdate" value="#{orderEntity}"/>
-                        <p:ajax update="@this viewAllOrdersForm:dataTableAllOrders"/>
+                                     value="Received"
+                                     update="viewAllOrdersForm:dataTableAllOrders"
+                                     actionListener="#{orderManagedBean.updateStatus}"
+                                     disabled="#{orderEntity.status == orderManagedBean.statusEnum[4]}">
+                        <f:attribute name="orderToupdate" value="#{orderEntity.orderEntityId}"/>
+                        <p:ajax update="viewAllOrdersForm:dataTableAllOrders"/>
                     </p:commandButton>
 
-                    <p:commandButton update="formViewOrderDetails" 
-                                     onclick="PF('dialogViewOrderDetails').show()" 
-                                     icon="ui-icon-document" 
-                                     title="View"
-                                     actionListener="#{orderManagedBean.doViewOrderEntity}">
-                        <f:attribute name="orderToView" value="#{orderEntity}"/>
+                    <p:commandButton 
+                        icon="ui-icon-document" 
+                        title="View"
+                        actionListener="#{orderManagedBean.doViewOrderEntity}">
+                        <f:attribute name="orderToView" value="#{orderEntity.orderEntityId}"/>
                     </p:commandButton>
 
                 </p:column>
@@ -82,69 +85,6 @@
             </p:dataTable>
         </h:form>
 
-        <h:form id="formViewOrderDetails">
-            <p:dialog id="dialogViewOrderDetails" 
-                      widgetVar="dialogViewOrderDetails">
-                <p:messages id="messages" redisplay="false" closable="true" />
-                <p:dataTable id="dataTableViewOrder"
-                             value="#{orderManagedBean.orderToView.orderLineItems}"
-                             var="orderLineItem">
-                    <p:column style="width:16px">
-                        <p:rowToggler />
-                    </p:column>
-                    <p:column headerText="Recipe">
-                        <h:outputText value="#{orderLineItem.recipe.recipeTitle}" />
-                    </p:column>
-                    <p:column headerText="Recipe subtotal">
-                        <h:outputText value="#{orderLineItem.recipeSubTotal}">
-                            <f:convertNumber type="currency" currencySymbol="$" maxIntegerDigits="5" maxFractionDigits="2" minFractionDigits="2"/>
-                        </h:outputText>
-                    </p:column>
-
-                    <p:rowExpansion>
-                        <p:dataTable  style="width:50%;"
-                                      value="#{orderLineItem.customisedIngredients}" 
-                                      var="ci">
-                            <f:facet name="header">
-                                <p:graphicImage styleClass="viewRecipeImageInCart" height="100" width="100" name="300x300.png" library="images"/>
-                            </f:facet>
-
-                            <p:column headerText="Ingredient Name">
-                                <h:outputText value="#{ci.ingredientName}"/>
-                            </p:column>
-                            <p:column headerText="Quantity">
-                                <h:outputText value="#{ci.quantityOfIngredient}"/>
-                            </p:column>
-                            <p:column headerText="Unit Price">
-                                <h:outputText value="#{ci.unitPrice}"/>
-                            </p:column>
-                            <p:column headerText="Subtotal">
-                                <h:outputText value="#{ci.subtotal}">
-                                    <f:convertNumber type="currency" currencySymbol="$" maxIntegerDigits="5" maxFractionDigits="2" minFractionDigits="2"/>
-                                </h:outputText>
-                            </p:column>
-                            <p:column headerText="Prepared?">
-                                <h:outputText value="#{ci.preparationMethod}" />
-                            </p:column>
-                        </p:dataTable>
-
-                    </p:rowExpansion>
-
-                    <div></div>
-
-                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                    </p:confirmDialog>
-                </p:dataTable>
-                
-                <p:commandButton value="OK!"
-                                     icon="pi pi-check"
-                                     onclick="PF('dialogViewOrderDetails').close()"
-                                     update="viewAllOrdersForm"/>
-
-            </p:dialog>
-        </h:form>
 
 
     </ui:define>

@@ -6,6 +6,10 @@
     <res-ref-name>readyFoods</res-ref-name>
     <jndi-name>jdbc/readyFoods</jndi-name>
   </resource-ref>
+  <resource-ref>
+    <res-ref-name>readyFoodsDataSource</res-ref-name>
+    <jndi-name>jdbc/readyfoods</jndi-name>
+  </resource-ref>
   <class-loader delegate="true"/>
   <jsp-config>
     <property name="keepgenerated" value="true">

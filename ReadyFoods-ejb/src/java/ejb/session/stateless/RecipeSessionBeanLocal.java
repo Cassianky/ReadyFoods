@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import entity.CommentEntity;
 import entity.Recipe;
+import entity.Review;
 import java.util.List;
 import javax.ejb.Local;
 import util.exception.CategoryNotFoundException;
@@ -38,4 +39,8 @@ public interface RecipeSessionBeanLocal {
 
     public void updateRecipeContent(Recipe recipeToUpdate) throws RecipeNotFoundException, 
             IngredientSpecificationNotFoundException, CategoryNotFoundException;
+
+    public List<Review> getAllReviews(Recipe recipe);
+
+
 }

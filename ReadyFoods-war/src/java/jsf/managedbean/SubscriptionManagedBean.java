@@ -103,7 +103,7 @@ public class SubscriptionManagedBean implements Serializable {
     public void redirectSubOrder(ActionEvent event) throws IOException {
         Long subIdToView = (Long) event.getComponent().getAttributes().get("subIdToView");
 
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("subIdToView", subIdToView);
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("subIdToView", subIdToView);
 
         FacesContext.getCurrentInstance().getExternalContext().redirect("viewSubscriptionOrder.xhtml");
     }

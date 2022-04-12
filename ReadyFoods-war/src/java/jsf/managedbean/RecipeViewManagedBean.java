@@ -136,7 +136,7 @@ public class RecipeViewManagedBean implements Serializable {
      * @return the reviews
      */
     public List<Review> getReviews() {
-        return reviews;
+        return recipeSessionBeanLocal.getAllReviews(recipe);
     }
 
     /**
