@@ -38,15 +38,16 @@ public class JasperReportManagedBean {
     private Customer customer;
 
     public JasperReportManagedBean() {
+        order = (OrderEntity)FacesContext.getCurrentInstance().getExternalContext().getFlash().get("orderToGenerate");
+          
+        System.out.println("jsf.managedbean.JasperReportManagedBean.postConstruct()*************" + order.getOrderEntityId());
+  
+        customer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
     }
+  
 
-    @PostConstruct
-    public void postConstruct(){
-        setOrder((OrderEntity)FacesContext.getCurrentInstance().getExternalContext().getFlash().get("orderToGenerate"));
-        setCustomer((Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer"));
-    }
     public void generateReport(ActionEvent event) {
-        OrderEntity order = (OrderEntity) event.getComponent().getAttributes().get("orderIdToGenerate");
+        
         try {
             HashMap parameters = new HashMap();
             parameters.put("orderEntityId", order.getOrderEntityId());

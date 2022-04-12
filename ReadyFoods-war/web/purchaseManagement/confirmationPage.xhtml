@@ -13,9 +13,9 @@
          <h:form>
 
          <p:panel class="card">
+             #{jasperReportManagedBean.foo()}
              <h:outputText style="text-align: center;font-size: 40px;font-weight: bold;color: #94774b;" value="THANK YOU FOR SHOPPING WITH READYFOODS!"/>
              <p:commandButton value="download report" actionListener="#{jasperReportManagedBean.generateReport}" ajax="false">
-                 
              </p:commandButton>
          </p:panel>
                           
