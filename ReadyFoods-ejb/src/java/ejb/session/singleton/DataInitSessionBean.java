@@ -293,7 +293,7 @@ public class DataInitSessionBean {
                     + "Bake Time (in minutes)**: 22-25 | 36-38 | 50-52<br/><br />"
                     + "**If using nonstick pan, shorten bake time by 3 min<br/><br />"
                     + "Heat oven as directed in above. Grease bottom of pan.<br/><br />"
-                    + "tir Brownie Mix, water, oil and eggs in medium bowl until well blended. Spread in pan.<br/><br />"
+                    + "Stir Brownie Mix, water, oil and eggs in medium bowl until well blended. Spread in pan.<br/><br />"
                     + "Bake as directed above or until toothpick inserted 2 inches from side of pan comes out almost clean; cool.";
             
             Recipe recipe1 = new Recipe("Hainanese Chicken Rice", "Chicken Rice King", 45, recipe1Steps, 1248, 87, 76, 47, 9, "https://www.youtube.com/embed/XPA3rn1XImY");
