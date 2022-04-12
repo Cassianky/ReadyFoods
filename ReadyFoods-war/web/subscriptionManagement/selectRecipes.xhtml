@@ -30,16 +30,29 @@
 
         <main class="card">
             <h1 class="h1title">Recipe Selection</h1>
-            <h:form id="form" class="card">
+            <h:form id="infoForm" class="card">
                 <p:growl id="growl"><p:autoUpdate/></p:growl>
+
                 <p:panelGrid  columns="3" styleClass="noBorders" rendered = "#{subscriptionSelectRecipesManagedBean.ongoingSubscription != null}">
                     <p:column>
 
                         <p:datePicker id="event" mindate="#{subscriptionSelectRecipesManagedBean.getMinDate()}" 
                                       maxdate="#{subscriptionSelectRecipesManagedBean.getMaxDate()}"
                                       value="#{subscriptionSelectRecipesManagedBean.dateForDelivery}" appendTo="@(body)" inline="true">
-                            <p:ajax event="dateSelect" process="@this" listener="#{subscriptionSelectRecipesManagedBean.onDateSelect}" update="growl"/>
+                            <p:ajax event="dateSelect" process="@this" 
+                                    listener="#{subscriptionSelectRecipesManagedBean.onDateSelect}" update="growl"/>
                         </p:datePicker>
+
+                    </p:column>
+
+                    <p:column> 
+
+
+                        <p:inputTextarea placeholder="Additional notes" rows="6" cols="30" autoResize="false" id="additionalNotes" 
+                                         value="#{subscriptionSelectRecipesManagedBean.additionalNotes}" 
+                                         required="false"/>
+
+
 
                     </p:column>
                     <p:column>
@@ -50,13 +63,15 @@
                             <p:outputLabel style="font-weight: bold;" value="Remaining recipes: "/> 
                             <h:outputText style="color: #AE3126;" value="#{subscriptionSelectRecipesManagedBean.remaining}"/>
                             <br/>
-                            <p:outputLabel style="font-weight: bold;" value="For #{subscriptionSelectRecipesManagedBean.nextWk}"/> 
+                            <p:outputLabel style="font-weight: bold;" value="For 
+                                           #{subscriptionSelectRecipesManagedBean.nextWk}"/> 
 
                         </h3>
 
                         <h4>
                             <p:outputLabel style="font-weight: bold;" value="Delivery Date: "/> 
-                            <h:outputText style="color: #AE3126;" value="#{subscriptionSelectRecipesManagedBean.getCurrentOrderDeliveryDate()}">
+                            <h:outputText style="color: #AE3126;" 
+                                          value="#{subscriptionSelectRecipesManagedBean.getCurrentOrderDeliveryDate()}">
                             </h:outputText>
                             <br/>
                             <!--Selecting for which week-->
@@ -67,26 +82,23 @@
                     <!-- Create new subscription order OR update order -->
 
 
-                    <p:column>
 
-
-                    </p:column>
 
 
                 </p:panelGrid>
                 <p:commandButton 
-                    value="Save Selection" process="@this"
+                    value="Save Selection" process="@this infoForm"
                     update="@form" actionListener="#{subscriptionSelectRecipesManagedBean.updateSelection}"/>
-                
-                  <p:commandButton 
+
+                <p:commandButton 
                     value="Reset" 
                     update="@form" actionListener="#{subscriptionSelectRecipesManagedBean.resetSelection}"/>
 
                 <p:commandButton 
                     value="Process [DEMO]" 
                     update="@form" actionListener="#{subscriptionSelectRecipesManagedBean.process()}"/>
-                
-              
+
+
 
                 <h2>Recommended  recipes for #{subscriptionSelectRecipesManagedBean.currentCustomerEntity.dietType}</h2>
 
@@ -130,10 +142,16 @@
                                 </p:commandButton>
 
                                 <p:spinner id ="inputNewQty" value="#{reccLineItem.quantity}"
-                                           stepFactor="1" min="0" max="#{reccLineItem.quantity + subscriptionSelectRecipesManagedBean.remaining}"
-                                           style="width: 20%">
-                                    
-                                
+                                           stepFactor="1" min="0" 
+                                           max="#{reccLineItem.quantity + subscriptionSelectRecipesManagedBean.remaining}"
+                                           validatorMessage="Please enter a number between 0 and #{reccLineItem.quantity + subscriptionSelectRecipesManagedBean.remaining}"
+                                           style="width: 20%" >
+<!--                                    <f:validateLongRange minimum="0" 
+                                                         maximum="#{2}"
+                                                         />
+                                    <p:message for="inputNewQty"/>-->
+
+
 
 
                                     <f:ajax event="change" listener="#{subscriptionSelectRecipesManagedBean.updateRemaningRecipes(event)}" 
@@ -155,7 +173,7 @@
                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
                     gridIcon="pi pi-th-large" listIcon="pi pi-bars"
                     layout="grid">
-                    
+
 
                     <p:dataViewGridItem>
 
@@ -188,10 +206,15 @@
                                                                  target="#{subscriptionSelectRecipesManagedBean.recipeViewSummarisedManagedBean.recipeToView}" />
                                 </p:commandButton>
 
-                                <p:spinner id ="inputNewQty" value="#{orderLineItem.quantity}"
-                                           stepFactor="1" min="0" max="#{orderLineItem.quantity + subscriptionSelectRecipesManagedBean.remaining}"
-                                           style="width: 20%"> 
-
+                                <p:spinner id ="inputNewQty2" value="#{orderLineItem.quantity}"
+                                           stepFactor="1" min="0"
+                                           max="#{orderLineItem.quantity + subscriptionSelectRecipesManagedBean.remaining}"
+                                           validatorMessage="Please enter a number between 0 and #{reccLineItem.quantity + subscriptionSelectRecipesManagedBean.remaining}"
+                                           style="width: 20%" >
+<!--                                    <f:validateLongRange minimum="0" 
+                                                         maximum="#{orderLineItem.quantity + subscriptionSelectRecipesManagedBean.remaining + 1}"
+                                                         />
+                                    <p:message for="inputNewQty2"/>-->
 
                                     <f:ajax event="change" listener="#{subscriptionSelectRecipesManagedBean.updateRemaningRecipes(event)}" 
                                             execute="@form" render="@form"/>

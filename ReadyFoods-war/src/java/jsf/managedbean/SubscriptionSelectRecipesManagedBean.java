@@ -77,11 +77,7 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
 
     @EJB(name = "RecipeSessionBeanLocal")
     private RecipeSessionBeanLocal recipeSessionBeanLocal;
-    
-    
-    
-    
-    
+
     @Inject
     private RecipeViewSummarisedManagedBean recipeViewSummarisedManagedBean;
 
@@ -95,18 +91,20 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
     private Customer currentCustomerEntity;
     private Subscription ongoingSubscription;
     private OrderEntity currentOrder;
+    private String additionalNotes;
 
     private Integer remaining;
     private String nextWk;
     private Date dateForDelivery;
 
-     /**
+    /**
      * Creates a new instance of SubscriptionSelectRecipesManagedBean
      */
     public SubscriptionSelectRecipesManagedBean() {
         this.setOrderLineItems(new ArrayList<>());
         this.recommendedLineItems = new ArrayList<>();
         this.otherLineItems = new ArrayList<>();
+        additionalNotes = "";
         nextWk = getNextWeek();
 
     }
@@ -122,7 +120,7 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
 
             // This line throws NoONgoingSubscriptionException
             this.setOngoingSubscription(subscriptionSessionBeanLocal.retrieveOngoingSubscriptionForCustomer(getCurrentCustomerEntity().getCustomerId()));
-            
+
             initCustomerOrderInformation();
 
         } catch (CustomerNotFoundException ex) {
@@ -138,101 +136,100 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
         }
 
     }
-    
+
     public void resetSelection(ActionEvent event) {
-        
-        for (OrderLineItem oli: this.orderLineItems) {
+
+        for (OrderLineItem oli : this.orderLineItems) {
             oli.setQuantity(0);
         }
-        
+
         Integer selected = 0;
         for (OrderLineItem oli : orderLineItems) {
-            
+
             selected += oli.getQuantity();
             //System.out.println(selected);
         }
 
         setRemaining((Integer) ongoingSubscription.getNumOfRecipes() - selected);
-        
-        
-        
-        
+
     }
-    
+
     public void initCustomerOrderInformation() {
-         // Generate list of order line items
-            System.out.println("Generating order line items for use in selectRecipes.xhtml");
-            this.setRemaining(ongoingSubscription.getNumOfRecipes());
+        // Generate list of order line items
+        System.out.println("Generating order line items for use in selectRecipes.xhtml");
+        this.setRemaining(ongoingSubscription.getNumOfRecipes());
 
-            currentOrder = ongoingSubscription.getCurrentOrder();
+        currentOrder = ongoingSubscription.getCurrentOrder();
 
-            List<Long> usedRecipeIds = new ArrayList<Long>();
+        List<Long> usedRecipeIds = new ArrayList<Long>();
 
-            if (currentOrder != null) {
-                System.out.println("Current order not null");
-                dateForDelivery = currentOrder.getDateForDelivery();
-                for (OrderLineItem orderLineItem : currentOrder.getOrderLineItems()) {
-                    orderLineItems.add(orderLineItem);
-                    orderLineItem.getRecipe().getCategories().size();
-                    usedRecipeIds.add(orderLineItem.getRecipe().getRecipeId());
-                    this.remaining -= orderLineItem.getQuantity();
-                }
+        if (currentOrder != null) {
+
+            setAdditionalNotes(currentOrder.getAdditionalNotes());
+            dateForDelivery = currentOrder.getDateForDelivery();
+            for (OrderLineItem orderLineItem : currentOrder.getOrderLineItems()) {
+                orderLineItems.add(orderLineItem);
+                orderLineItem.getRecipe().getCategories().size();
+                usedRecipeIds.add(orderLineItem.getRecipe().getRecipeId());
+                this.remaining -= orderLineItem.getQuantity();
+
             }
+        }
 
-            for (Recipe recipe : allRecipes) {
-                if (!usedRecipeIds.contains(recipe.getRecipeId())) {
-                    OrderLineItem oli = new OrderLineItem();
-                    oli.setRecipeSubTotal(BigDecimal.ZERO); // no need to update as amount user is charged is predetermined
-                    oli.setRecipe(recipe);
-                    oli.setQuantity(0);
-                    this.getOrderLineItems().add(oli);
-                }
+        for (Recipe recipe : allRecipes) {
+            if (!usedRecipeIds.contains(recipe.getRecipeId())) {
+                OrderLineItem oli = new OrderLineItem();
+                oli.setRecipeSubTotal(BigDecimal.ZERO); // no need to update as amount user is charged is predetermined
+                oli.setRecipe(recipe);
+                oli.setQuantity(0);
+                this.getOrderLineItems().add(oli);
             }
-            
-            System.out.println(currentCustomerEntity.getDietType());
-            
-            for(OrderLineItem oli : orderLineItems) {
-                Category dietType = getDietTypeForRecipe(oli.getRecipe());
-                if (dietType != null && dietType.getName().toLowerCase().equals(currentCustomerEntity.getDietType().name().toLowerCase())) {
-                    getRecommendedLineItems().add(oli);
-                } else {
-                    this.otherLineItems.add(oli);
-                }
-            }
-            
+        }
 
-            
-        
+        //System.out.println(currentCustomerEntity.getDietType());
+        for (OrderLineItem oli : orderLineItems) {
+            Category dietType = getDietTypeForRecipe(oli.getRecipe());
+            if (dietType != null && dietType.getName().toLowerCase().equals(currentCustomerEntity.getDietType().name().toLowerCase())) {
+                getRecommendedLineItems().add(oli);
+            } else {
+                this.otherLineItems.add(oli);
+            }
+        }
+
     }
 
     public void updateRemaningRecipes(ValueChangeEvent event) {
         System.out.println("Update remaining recipes");
         Integer selected = 0;
         for (OrderLineItem oli : orderLineItems) {
-            
+
             selected += oli.getQuantity();
             //System.out.println(selected);
         }
 
         setRemaining((Integer) ongoingSubscription.getNumOfRecipes() - selected);
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, 
+                "Remaining recipes: " + remaining,
+                null));
     }
 
     public void updateSelection(ActionEvent event) {
         System.out.println("Date for delivery" + dateForDelivery);
-        
+
         if (remaining != 0) {
-            
+
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR,
                             "You have " + remaining + " recipe(s) remaining!", null));
             return;
-            
+
         } else if (dateForDelivery == null) {
-             FacesContext.getCurrentInstance().addMessage(null,
+            FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR,
                             "Please select a delivery date!", null));
             return;
-            
+
         }
         try {
             if (currentOrder == null) {
@@ -247,6 +244,7 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
 
                 OrderEntity newOrder = new OrderEntity(ongoingSubscription.getNumOfPeople(), ongoingSubscription.getWeeklyPrice(), false,
                         new Date(), Status.PENDING, lineItemsToBuy);
+                newOrder.setAdditionalNotes(getAdditionalNotes());
                 newOrder.setDateForDelivery(dateForDelivery);
 
                 newOrder = orderEntitySessionBeanLocal.createNewSubscriptionOrder(currentCustomerEntity.getCustomerId(), newOrder);
@@ -266,6 +264,7 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
 
                 OrderEntity newOrder = new OrderEntity(ongoingSubscription.getNumOfPeople(), ongoingSubscription.getWeeklyPrice(), false,
                         new Date(), Status.PENDING, lineItemsToBuy);
+                newOrder.setAdditionalNotes(getAdditionalNotes());
                 newOrder.setDateForDelivery(dateForDelivery);
 
                 System.out.println("currentOrder" + currentOrder.getOrderEntityId());
@@ -282,7 +281,7 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
 
             }
         } catch (CustomerNotFoundException | CreateNewOrderException | NoOngoingSubscriptionException | OrderNotFoundException ex) {
-           
+
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR,
                             "Error when updating recipe selection: " + ex.getMessage(), null));
@@ -299,7 +298,6 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
 //
 //        return start + "-" + end;
 //    }
-
     public String getNextWeek() {
         ZoneId TZ = ZoneId.of("Asia/Singapore");
         final DayOfWeek firstDayOfWeek = WeekFields.of(Locale.FRANCE).getFirstDayOfWeek();
@@ -336,9 +334,11 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
 
     public String getCurrentOrderDeliveryDate() {
         ZoneId TZ = ZoneId.of("Asia/Singapore");
-       
-        if (currentOrder == null || currentOrder.getDateForDelivery() == null) return "Not selected.";
-        
+
+        if (currentOrder == null || currentOrder.getDateForDelivery() == null) {
+            return "Not selected.";
+        }
+
         LocalDate date = currentOrder.getDateForDelivery().toInstant().atZone(TZ).toLocalDate();
         return date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
 
@@ -358,21 +358,21 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
         PrimeFaces.current().ajax().update("form");
         PrimeFaces.current().executeScript("PF('dlg').show()");
     }
-    
+
     public void process() {
         processRecipeSelectionManagedBeanLocal.process();
-          FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_INFO,
-                                "Processed for every customer!", null));
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO,
+                        "Processed for every customer!", null));
     }
-    
+
     public Category getDietTypeForRecipe(Recipe recipe) {
-        
+
         try {
             return categorySessionBeanLocal.retrieveRecipeDietType(recipe.getRecipeId());
         } catch (CategoryNotFoundException | RecipeNotFoundException ex) {
             return null;
-            
+
         }
 
     }
@@ -497,7 +497,8 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
     }
 
     /**
-     * @param recipeViewSummarisedManagedBean the recipeViewSummarisedManagedBean to set
+     * @param recipeViewSummarisedManagedBean the
+     * recipeViewSummarisedManagedBean to set
      */
     public void setRecipeViewSummarisedManagedBean(RecipeViewSummarisedManagedBean recipeViewSummarisedManagedBean) {
         this.recipeViewSummarisedManagedBean = recipeViewSummarisedManagedBean;
@@ -529,6 +530,20 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
      */
     public void setOtherLineItems(List<OrderLineItem> otherLineItems) {
         this.otherLineItems = otherLineItems;
+    }
+
+    /**
+     * @return the additionalNotes
+     */
+    public String getAdditionalNotes() {
+        return additionalNotes;
+    }
+
+    /**
+     * @param additionalNotes the additionalNotes to set
+     */
+    public void setAdditionalNotes(String additionalNotes) {
+        this.additionalNotes = additionalNotes;
     }
 
 }
