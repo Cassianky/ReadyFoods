@@ -27,20 +27,6 @@ public class ProcessRecipeSelectionManagedBean implements ProcessRecipeSelection
     // "Insert Code > Add Business Method")
     //@Schedule(dayOfWeek = "7", hour = "23", minute = "59", second = "59")
     public void weeklyProcess() {
-        System.out.println("**********AUto processing subscription orders***********");
-
-        List<Subscription> ongoingSubscriptions = subscriptionSessionBeanLocal.retrieveAllOngoingSubscriptions();
-
-        for (Subscription sub : ongoingSubscriptions) {
-            if (sub.getCurrentOrder() == null) {
-                System.out.println("TODO: Generate for customer if they do not select");
-            } else {
-                sub.setRemainingDuration(sub.getRemainingDuration() - 1);
-                OrderEntity currOrder = sub.getCurrentOrder();
-                currOrder.setStatus(Status.PROCESSED);
-                currOrder.setPaid(Boolean.TRUE);
-            }
-        }
 
     }
 
@@ -52,6 +38,9 @@ public class ProcessRecipeSelectionManagedBean implements ProcessRecipeSelection
         for (Subscription sub : ongoingSubscriptions) {
             if (sub.getCurrentOrder() == null) {
                 System.out.println("TODO: Generate for customer if they do not select");
+                
+                
+                
             } else {
                 System.out.println("Current order found");
                 sub.setRemainingDuration(sub.getRemainingDuration() - 1);
@@ -59,6 +48,10 @@ public class ProcessRecipeSelectionManagedBean implements ProcessRecipeSelection
                 sub.getCurrentOrder().setStatus(Status.PROCESSED);
                 sub.getCurrentOrder().setPaid(Boolean.TRUE);
                 sub.setCurrentOrder(null);
+                
+                if (sub.getRemainingDuration() == 0) {
+                    sub.setOngoing(Boolean.FALSE);
+                }
             }
         }
 
