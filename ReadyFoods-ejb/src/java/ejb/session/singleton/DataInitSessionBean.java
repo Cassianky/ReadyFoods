@@ -318,7 +318,7 @@ public class DataInitSessionBean {
             Category childCategory31 = categorySessionBeanLocal.createNewCategory(new Category("Vegetarian", "Vegetarian"), parentCategory3.getCategoryId());
             Category childCategory32 = categorySessionBeanLocal.createNewCategory(new Category("Gluten Free", "Gluten Free"), parentCategory3.getCategoryId());
             Category childCategory33 = categorySessionBeanLocal.createNewCategory(new Category("Vegan", "Vegan"), parentCategory3.getCategoryId());
-            Category childCategory34 = categorySessionBeanLocal.createNewCategory(new Category("Pescatarian", "Pescatarian"), parentCategory3.getCategoryId());
+            Category childCategory34 = categorySessionBeanLocal.createNewCategory(new Category("Pescetarian", "Pescetarian"), parentCategory3.getCategoryId());
             Category childCategory35 = categorySessionBeanLocal.createNewCategory(new Category("Low Carb", "Low Carb"), parentCategory3.getCategoryId());
             Category childCategory36 = categorySessionBeanLocal.createNewCategory(new Category("Atkins", "Atkins"), parentCategory3.getCategoryId());
 
