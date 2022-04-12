@@ -5,6 +5,7 @@ import entity.FoodDiaryRecord;
 import entity.Recipe;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Future;
 import javax.ejb.Local;
 import util.exception.CustomerEmailExistsException;
 import util.exception.CustomerNotFoundException;
@@ -42,4 +43,6 @@ public interface CustomerSessionBeanLocal {
     public HashMap<String, Double> customerMacroGoals(Long customerId) throws CustomerNotFoundException;
 
     public List<FoodDiaryRecord> topFoodForEachMacro(Long customerId, String typeMacro);
+
+    public Future<Boolean> sendWelcomeEmail(String name, String email, String path) throws InterruptedException;
 }

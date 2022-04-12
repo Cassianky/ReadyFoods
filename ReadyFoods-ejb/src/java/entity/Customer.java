@@ -37,7 +37,7 @@ public class Customer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long customerId;
-    @Column(nullable = false, unique = true, length = 64)
+    @Column(nullable = false, length = 64)
     @NotNull
     @Size(min=5, max = 64)
     private String userName;
@@ -69,7 +69,7 @@ public class Customer implements Serializable {
     @NotNull
     private Boolean isBanned;
     @NotNull
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(nullable = false, length = 50)
     @Size(min=5, max=50)
     private String address;
     //@Column(nullable = false)
