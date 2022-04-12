@@ -10,8 +10,8 @@
 
     <ui:define name="content">
         <!--        <ez:Breadcrumb pageName="mySubscriptionOrders" />-->
-        
-         <ez:Breadcrumb pageName="viewSubscriptionOrder" />
+
+        <ez:Breadcrumb pageName="viewSubscriptionOrder" />
         <p:growl >
             <p:autoUpdate />
         </p:growl>
@@ -23,31 +23,50 @@
 
             <h1 class="h1title">Meal Kits</h1>
 
-            <p>                    
-                <ui:repeat value="#{subscriptionViewManagedBean.orders}" var="order">
 
-                    <p:panel header="Order for week of [placeholder, replace w actual week] #{order.dateOfOrder}">
-                        <h:outputText value="INSERT INFO ABOUT ORDER HERE">
+            <ui:repeat value="#{subscriptionOrderViewManagedBean.orders}" var="order">
 
-                        </h:outputText>
+                <p:panel style="width: 50%" header="#{subscriptionOrderViewManagedBean.getWeek(order.dateOfOrder)}" >
+                    <h:outputText value="STATUS: #{order.status}" 
+                                  style="float: right; text-align: right;
+                                  font-style: italic"/>
+                    <h:outputText value="Initially ordered on: #{order.dateOfOrder}"/>
+                    <br/>
+                    <h:outputText value="Additional notes: #{order.additionalNotes}"/>
+                    <br/>    <br/>   
 
-                        <br/> 
-                        <p:panel header="Meal kits for this subscription">
-                            <ui:repeat value="#{order.orderLineItems}" var="orderLineItem">
-                                
 
-                                <p:panel><h:outputText value="#{orderLineItem.recipe.recipeTitle} - #{orderLineItem.quantity} qty" />
-                           </p:panel>
 
-                            </ui:repeat>  
-                        </p:panel>
-                        <p:commandButton style="" icon="pi pi-check" value="Received order"/>
+
+
+
+                    <p:panel style="" header="Meal kits in this order">
+                        <ui:repeat value="#{order.orderLineItems}" var="orderLineItem">
+
+                            <h:panelGrid style="width:100%;" >
+
+                                <span>
+
+                                    <h:outputText value="#{orderLineItem.recipe.recipeTitle} x #{orderLineItem.quantity}" 
+                                                  /></span>
+
+
+
+                            </h:panelGrid>
+
+                        </ui:repeat> 
+
 
                     </p:panel>
-                    
-                    
-                </ui:repeat>                                                              
-            </p>
+                    <br/>
+                    <p:commandButton style="" icon="pi pi-check" value="Received order"/>
+
+                </p:panel>
+                <br/> 
+
+
+            </ui:repeat>                                                              
+
 
 
         </main>

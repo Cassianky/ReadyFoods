@@ -113,9 +113,10 @@
                         <p:selectBooleanCheckbox value="#{sub.ongoing}" disabled="true"/>
                     </p:column>
                     <p:column headerText="Action" style="text-align: center">
-                        <p:button value="View Meal Kits" outcome="viewSubscriptionOrder">
-                            <f:param name="subIdToView" value="#{sub.subscriptionId}" />
-                        </p:button>
+                        <p:commandButton value="View Meal Kits" actionListener="#{subscriptionManagedBean.redirectSubOrder}">
+                            <f:attribute name="subIdToView" value="#{sub.subscriptionId}"/>
+                            
+                        </p:commandButton>
                     </p:column>
 
 

@@ -11,7 +11,16 @@ import entity.Subscription;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.WeekFields;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -22,31 +31,35 @@ import util.exception.SubscriptionNotFoundException;
  *
  * @author angler
  */
-@Named(value = "subscriptionViewManagedBean")
+@Named(value = "subscriptionOrderViewManagedBean")
 @ViewScoped
-public class SubscriptionViewManagedBean implements Serializable {
+public class SubscriptionOrderViewManagedBean implements Serializable {
 
     @EJB(name = "SubscriptionSessionBeanLocal")
     private SubscriptionSessionBeanLocal subscriptionSessionBeanLocal;
 
     /**
-     * Creates a new instance of SubscriptionViewManagedBean
+     * Creates a new instance of SubscriptionOrderViewManagedBean
      */
     private Long subId;
     private Subscription subscription;
-    
+
     private List<OrderEntity> orders;
 
-    public SubscriptionViewManagedBean() {
+    private ZoneId TZ = ZoneId.of("Asia/Singapore");
+
+    public SubscriptionOrderViewManagedBean() {
     }
 
     @PostConstruct
     public void postConstruct() {
         try {
-            subId = Long.valueOf(FacesContext.getCurrentInstance()
-                    .getExternalContext().getRequestParameterMap().get("subIdToView"));
+
+            subId = (Long) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("subIdToView");
+
+
             subscription = subscriptionSessionBeanLocal.retrieveSubscriptionBySubscriptionId(subId);
-            
+
             setOrders(subscription.getSubscriptionOrders());
 
         } catch (NumberFormatException ex) {
@@ -57,6 +70,39 @@ public class SubscriptionViewManagedBean implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR,
                             "An error has occurred while retrieving the subscription record: " + ex.getMessage(), null));
         }
+    }
+
+    public LocalDate getMinDate(Date date) {
+        LocalDate today = date.toInstant().atZone(TZ).toLocalDate();
+        LocalDate monday = today;
+        while (monday.getDayOfWeek() != DayOfWeek.MONDAY) {
+            monday = monday.minusDays(1);
+        }
+
+        return monday;
+
+        //return Date.from(monday.atStartOfDay(TZ).toInstant());
+    }
+
+    public LocalDate getMaxDate(Date date) {
+        LocalDate today = date.toInstant().atZone(TZ).toLocalDate();
+
+        LocalDate sunday = today;
+        while (sunday.getDayOfWeek() != DayOfWeek.SUNDAY) {
+            sunday = sunday.plusDays(1);
+        }
+        return sunday;
+
+        //return Date.from(sunday.atStartOfDay(TZ).toInstant());
+    }
+
+    public String getWeek(Date orderDate) {
+        LocalDate monday = getMinDate(orderDate);
+        LocalDate sunday = getMaxDate(orderDate);
+
+        return monday.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
+                + " - " + sunday.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+
     }
 
     /**
