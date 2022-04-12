@@ -39,7 +39,7 @@
                             />
                 <p:menuitem value="Select Recipes" url="#{application.contextPath}/subscriptionManagement/selectRecipes.xhtml" 
                             rendered="#{cc.attrs.pageName == 'selectRecipes'}" />
-                
+
                 <p:menuitem value="View Subscription Order" url="#{application.contextPath}/subscriptionManagement/viewSubscriptionOrder.xhtml" 
                             rendered="#{cc.attrs.pageName == 'viewSubscriptionOrder'}" />
 
@@ -56,11 +56,14 @@
                             rendered="#{cc.attrs.pageName == 'orderManagement'}" />
 
                 <p:menuitem value="ReadyFood Recipes" rendered="#{cc.attrs.pageName == 'viewAllRecipe' 
-                                                                  || cc.attrs.pageName == 'viewSingleRecipe'}"/>
+                                                                  || cc.attrs.pageName == 'viewSingleRecipe'
+                                                                  || cc.attrs.pageName == 'searchByCategory'}"/>
                 <p:menuitem value="All Recipes" url="#{application.contextPath}/recipeManagement/viewAllRecipe.xhtml" 
                             rendered="#{cc.attrs.pageName == 'viewAllRecipe'}" />
                 <p:menuitem value="View Recipe" url="#{application.contextPath}/recipeManagement/viewSingleRecipe.xhtml" 
                             rendered="#{cc.attrs.pageName == 'viewSingleRecipe'}" />                
+                <p:menuitem value="Search by Category" url="#{application.contextPath}/recipeManagement/searchRecipeByCategory.xhtml" 
+                            rendered="#{cc.attrs.pageName == 'searchByCategory'}" />                
 
 
                 <p:menuitem value="Enquiry Management" url="#{application.contextPath}/accountManagement/enquiryManagement.xhtml" 
