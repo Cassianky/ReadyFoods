@@ -39,7 +39,6 @@ public interface RecipeSessionBeanLocal {
 
     public void updateRecipeContent(Recipe recipeToUpdate) throws RecipeNotFoundException, 
             IngredientSpecificationNotFoundException, CategoryNotFoundException;
-    public List<Recipe> filterRecipesBySingleCategory(Long categoryId);
 
     public List<Review> getAllReviews(Recipe recipe);
 

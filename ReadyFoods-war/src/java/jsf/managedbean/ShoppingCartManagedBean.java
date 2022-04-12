@@ -142,12 +142,11 @@ public class ShoppingCartManagedBean implements Serializable {
         try {
             OrderEntity orderEntity = orderEntitySessionBeanLocal.createNewOrder(customer.getCustomerId(), newOrderEntity);
             Long orderCreatedId = orderEntity.getOrderEntityId();
-            confirmation = new ConfirmationEntity(orderEntity);
             orderLineItems.clear();
-            generateReceipt(newOrderEntity);
             
             numPax = 1;
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Succesfuly created order! (Order ID: " + orderCreatedId + ")", null));
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("orderToGenerate", orderEntity);
             FacesContext.getCurrentInstance().getExternalContext().redirect("confirmationPage.xhtml");
             
         } catch (CustomerNotFoundException ex) {
