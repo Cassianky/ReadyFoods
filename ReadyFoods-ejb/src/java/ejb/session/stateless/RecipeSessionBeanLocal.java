@@ -32,6 +32,8 @@ public interface RecipeSessionBeanLocal {
     public Recipe retrieveRecipeByRecipeId(Long recipeId) throws RecipeNotFoundException;
 
     public List<Recipe> searchRecipesByName(String searchString);
+    
+    public List<Recipe> searchRecipesByIngredients(List<Long> ingredientIds, String condition);
 
     public List<Recipe> retrieveAllRecipes();
 

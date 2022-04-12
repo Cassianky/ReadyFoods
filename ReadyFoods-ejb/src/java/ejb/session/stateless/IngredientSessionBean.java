@@ -6,7 +6,6 @@
 package ejb.session.stateless;
 
 import entity.Ingredient;
-import entity.Recipe;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.EJB;
@@ -14,6 +13,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -32,7 +32,7 @@ import util.exception.UnknownPersistenceException;
 public class IngredientSessionBean implements IngredientSessionBeanLocal {
 
     @PersistenceContext(unitName = "ReadyFoods-ejbPU")
-    private EntityManager entityManager;
+    private EntityManager em;
 
     @EJB
     private RecipeSessionBeanLocal recipeSessionBeanLocal;
@@ -51,8 +51,8 @@ public class IngredientSessionBean implements IngredientSessionBeanLocal {
         Set<ConstraintViolation<Ingredient>> constraintViolations = validator.validate(newIngredient);
         if (constraintViolations.isEmpty()) {
             try {
-                entityManager.persist(newIngredient);
-                entityManager.flush();
+                em.persist(newIngredient);
+                em.flush();
                 System.out.println("********ejb.session.stateless.IngredientSessionBean.createNewIngredient()");
 
                 return newIngredient.getIngredientId();
@@ -74,6 +74,15 @@ public class IngredientSessionBean implements IngredientSessionBeanLocal {
 
     }
 
+    @Override 
+    public List<Ingredient> retrieveAllIngredients() {
+        Query query = em.createQuery("SELECT i FROM Ingredient i ORDER BY i.name ASC");
+        
+        List<Ingredient> ingredients = query.getResultList();
+        
+        return ingredients;
+    }
+    
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Ingredient>> constraintViolations) {
         String msg = "Input data validation error!:";
 
@@ -103,7 +112,7 @@ public class IngredientSessionBean implements IngredientSessionBeanLocal {
 
     @Override
     public Ingredient retrieveIngredientByIngredientId(Long ingredientId) throws IngredientNotFoundException {
-        Ingredient ingredient = entityManager.find(Ingredient.class, ingredientId);
+        Ingredient ingredient = em.find(Ingredient.class, ingredientId);
 
         if (ingredient != null) {
             return ingredient;

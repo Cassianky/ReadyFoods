@@ -53,11 +53,11 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
         Recipe r = em.find(Recipe.class, recipe.getRecipeId());
         return r.getComments();
     }
-    
+
     @Override
-    public List<Review>getAllReviews(Recipe recipe){
-         Recipe r = em.find(Recipe.class, recipe.getRecipeId());
-         return r.getReviews();
+    public List<Review> getAllReviews(Recipe recipe) {
+        Recipe r = em.find(Recipe.class, recipe.getRecipeId());
+        return r.getReviews();
     }
 
     @Override
@@ -142,7 +142,59 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
         } else {
             throw new RecipeNotFoundException("Recipe ID " + recipeId + " does not exist!");
         }
+    }
 
+    @Override
+    public List<Recipe> searchRecipesByIngredients(List<Long> ingredientIds, String condition) {
+
+        System.out.print("==================================Entering filter by ingredients====================");
+        List<Recipe> recipes = new ArrayList<>();
+
+        System.out.println("Condition currently: " + condition);
+        System.out.println("Ingredient currently: " + ingredientIds.size());
+        
+        if (ingredientIds == null || ingredientIds.isEmpty() || (!condition.equals("COMBINE") && !condition.equals("NO"))) {
+                    System.out.print("empty recipe==================================");
+            return recipes;
+        } else {
+            if (condition.equals("NO")) {
+                System.out.print("entering no combine recipe==================================");
+                Query query = em.createQuery("SELECT DISTINCT r FROM Recipe r, IN(r.ingredientSpecificationList) isl, IN(isl.ingredientSpecification) s, IN(s.ingredient) i WHERE i.ingredientId IN :inIngredientIds ORDER BY r.recipeTitle ASC");
+                query.setParameter("inIngredientIds", ingredientIds);
+                recipes = query.getResultList();
+                System.out.print("no combine recipe==================================");
+            } else {
+                System.out.print("entering combine recipe==================================");
+                String selectClause = "SELECT r FROM Recipe r";
+                String whereClause = "";
+                Boolean firstIngredient = true;
+                Integer ingredientCount = 1;
+
+                for (Long ingredientId : ingredientIds) {
+                    selectClause += ", IN (r.ingredientSpecificationList) isl" + ingredientCount;
+
+                    if (firstIngredient) {
+                        whereClause = "WHERE isl1.ingredient.ingredientId = " + ingredientId;
+                    } else {
+                        whereClause += "AND isl" + ingredientCount + ".ingredient.ingredientId" + ingredientId;
+                    }
+
+                    ingredientCount++;
+                }
+
+                String jpql = selectClause + " " + whereClause + " " + "ORDER BY r.recipeTitle ASC";
+
+                Query query = em.createQuery(jpql);
+                recipes = query.getResultList();
+                System.out.print("combine recipe==================================");
+                System.out.print(jpql + "==================================");
+            }
+            for (Recipe recipe : recipes) {
+                recipe.getCategories().size();
+                recipe.getIngredientSpecificationList().size();
+            }
+        }
+        return recipes;
     }
 
     //kiv retrieving recipe by chef
@@ -205,6 +257,5 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
 
         return msg;
     }
-
 
 }

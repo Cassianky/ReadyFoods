@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.Ingredient;
+import java.util.List;
 import javax.ejb.Local;
 import util.exception.IngredientExistsException;
 import util.exception.IngredientInsufficientStockQuantityException;
@@ -27,5 +28,7 @@ public interface IngredientSessionBeanLocal {
     public void creditQuantityOnHand(Long ingredientId, Integer quantityToCredit) throws IngredientNotFoundException;
 
     public Long createNewIngredient(Ingredient newIngredient) throws IngredientExistsException, UnknownPersistenceException, InputDataValidationException;
+
+    public List<Ingredient> retrieveAllIngredients();
     
 }
