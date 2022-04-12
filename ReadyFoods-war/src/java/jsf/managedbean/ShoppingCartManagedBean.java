@@ -87,6 +87,8 @@ public class ShoppingCartManagedBean implements Serializable {
     private CreditCard creditCard;
     
     private ConfirmationEntity confirmation;
+    
+    private OrderEntity orderToGenerate;
 
 
     public ShoppingCartManagedBean() {
@@ -146,7 +148,7 @@ public class ShoppingCartManagedBean implements Serializable {
             
             numPax = 1;
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Succesfuly created order! (Order ID: " + orderCreatedId + ")", null));
-            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("orderToGenerate", orderEntity);
+            setOrderToGenerate(orderEntity);
             FacesContext.getCurrentInstance().getExternalContext().redirect("confirmationPage.xhtml");
             
         } catch (CustomerNotFoundException ex) {
@@ -400,6 +402,20 @@ public class ShoppingCartManagedBean implements Serializable {
      */
     public void setConfirmation(ConfirmationEntity confirmation) {
         this.confirmation = confirmation;
+    }
+
+    /**
+     * @return the orderToGenerate
+     */
+    public OrderEntity getOrderToGenerate() {
+        return orderToGenerate;
+    }
+
+    /**
+     * @param orderToGenerate the orderToGenerate to set
+     */
+    public void setOrderToGenerate(OrderEntity orderToGenerate) {
+        this.orderToGenerate = orderToGenerate;
     }
 
 }

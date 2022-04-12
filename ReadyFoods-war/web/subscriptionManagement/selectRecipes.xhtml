@@ -30,10 +30,11 @@
 
         <main class="card">
             <h1 class="h1title">Recipe Selection</h1>
-            <h:form id="infoForm" class="card">
+            <h:form id="infoForm" class="card" 
+                    rendered = "#{subscriptionSelectRecipesManagedBean.ongoingSubscription != null}">
                 <p:growl id="growl"><p:autoUpdate/></p:growl>
 
-                <p:panelGrid  columns="3" styleClass="noBorders" rendered = "#{subscriptionSelectRecipesManagedBean.ongoingSubscription != null}">
+                <p:panelGrid  columns="3" styleClass="noBorders" >
                     <p:column>
 
                         <p:datePicker id="event" mindate="#{subscriptionSelectRecipesManagedBean.getMinDate()}" 
@@ -103,6 +104,7 @@
                 <h2>Recommended  recipes for #{subscriptionSelectRecipesManagedBean.currentCustomerEntity.dietType}</h2>
 
 
+
                 <p:dataView 
                     rendered = "#{subscriptionSelectRecipesManagedBean.ongoingSubscription != null}" 
                     id="dataViewRecc" var="reccLineItem" value="#{subscriptionSelectRecipesManagedBean.recommendedLineItems}"
@@ -146,6 +148,7 @@
                                            max="#{reccLineItem.quantity + subscriptionSelectRecipesManagedBean.remaining}"
                                            validatorMessage="Please enter a number between 0 and #{reccLineItem.quantity + subscriptionSelectRecipesManagedBean.remaining}"
                                            style="width: 20%" 
+
                                            onkeydown="return false">
 
                                     <f:ajax event="change" listener="#{subscriptionSelectRecipesManagedBean.updateRemaningRecipes(event)}" 
@@ -160,10 +163,20 @@
 
                 <h2>Other  recipes</h2>
 
+                <p:outputPanel style="text-align: right;">
+                    <h:outputText value="Search by keyword: " />
+                    <p:inputText id="keyword" value="#{subscriptionSelectRecipesManagedBean.keyword}" style="width:300px" placeholder="Enter keyword">
+                        <p:ajax event="keyup" process="@this" 
+                                update="@form infoForm:dataViewRecipe" 
+                                listener="#{subscriptionSelectRecipesManagedBean.searchOtherRecipesByString()}" />
+                    </p:inputText>
+                </p:outputPanel>
+
+
 
                 <p:dataView 
                     rendered = "#{subscriptionSelectRecipesManagedBean.ongoingSubscription != null}" 
-                    id="dataViewRecipe" var="orderLineItem" value="#{subscriptionSelectRecipesManagedBean.otherLineItems}" paginator="true"
+                    id="dataViewRecipe" var="orderLineItem" value="#{subscriptionSelectRecipesManagedBean.otherRecipesToView}" paginator="true"
                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
                     gridIcon="pi pi-th-large" listIcon="pi pi-bars"
                     layout="grid">

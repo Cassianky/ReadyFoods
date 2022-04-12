@@ -43,7 +43,7 @@ public class CustomisedIngredient implements Serializable {
     @NotNull
     private Long ingredientId;
     
-    @Column(nullable = false, unique = true, length = 32)
+    @Column(nullable = false, length = 32)
     @NotNull
     @Size(max = 32)
     private String ingredientName;
