@@ -36,8 +36,7 @@
                             frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                             allowfullscreen="true" />
 
-                    <p:graphicImage name="300x300.png" library="images"/>
-                    <!--image to be acquired from object source later-->
+                    <p:graphicImage name="/recipe/#{recipeViewManagedBean.recipe.picUrl}" library="images"/>
 
                     <p:panelGrid columns="2">
                         <h:outputText value="Recipe Chef: #{recipeViewManagedBean.recipe.recipeChef}" />

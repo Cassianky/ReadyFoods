@@ -19,7 +19,7 @@
                         <p:carousel value="#{subCat.recipes}" var="recipe" headerText="#{subCat.recipes.size() == 0? 'We will be back with more recipes for this category!' : 'Available Recipes'}" itemStyle="text-align:center" responsive="true">
                             <p:panelGrid columns="1" style="width:100%;margin:0px" layout="grid" styleClass="ui-panelgrid-blank">
                                 <f:facet name="header">
-                                    <p:graphicImage class="recipePic" style="object-fit: scale-down; overflow: hidden" name="300x300.png" library="images" />  
+                                    <p:graphicImage class="recipePic" style="object-fit: scale-down; overflow: hidden" name="/recipe/#{recipe.picUrl}" library="images" />  
                                 </f:facet>
 
                                 <h:outputText value="Recipe Title: #{recipe.recipeTitle}" style="font-weight: bold"/>
