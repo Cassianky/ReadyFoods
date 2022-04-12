@@ -11,7 +11,28 @@
     <ui:define name="content">
         <ez:Breadcrumb pageName="searchByCategory" />
 
-        <h2>To be implemented</h2>
-        
+        <h3>Filter by Category</h3>
+        <p:tabView value="#{filterRecipeByCategoryManagedBean.parentCategories}" var="parentCat">
+            <p:tab title="Category - #{parentCat.name}">
+                <p:tabView value="#{parentCat.subCategories}" var="subCat">
+                    <p:tab title="#{subCat.name}">
+                        <p:carousel value="#{subCat.recipes}" var="recipe" headerText="#{subCat.recipes.size() == 0? 'We will be back with more recipes for this category!' : 'Available Recipes'}" itemStyle="text-align:center" responsive="true">
+                            <p:panelGrid columns="1" style="width:100%;margin:0px" layout="grid" styleClass="ui-panelgrid-blank">
+                                <f:facet name="header">
+                                    <p:graphicImage class="recipePic" style="object-fit: scale-down; overflow: hidden" name="/recipe/#{recipe.picUrl}" library="images" />  
+                                </f:facet>
+
+                                <h:outputText value="Recipe Title: #{recipe.recipeTitle}" style="font-weight: bold"/>
+
+                                <h:outputText value="Cooking Time: #{recipe.cookingTime}" style="font-weight: bold"/>
+
+                                <h:outputText value="Chef: #{recipe.recipeChef}" style="font-weight: bold"/>
+                            </p:panelGrid>
+                        </p:carousel>
+                    </p:tab>
+                </p:tabView>
+            </p:tab>
+        </p:tabView>
+
     </ui:define>
 </ui:composition>
