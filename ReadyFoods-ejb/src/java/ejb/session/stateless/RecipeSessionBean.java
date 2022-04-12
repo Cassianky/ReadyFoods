@@ -143,6 +143,7 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
     public List<Recipe> searchRecipesByName(String searchString) {
 
         Query query = em.createQuery("SELECT r FROM Recipe r WHERE r.recipeTitle LIKE :inSearchString ORDER BY r.recipeTitle ASC");
+        query.setParameter("inSearchString", "%" + searchString + "%");
         List<Recipe> recipes = query.getResultList();
 
         recipes.size();
