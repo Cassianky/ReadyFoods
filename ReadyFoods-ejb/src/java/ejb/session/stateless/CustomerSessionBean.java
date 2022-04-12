@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Future;
+import javax.ejb.AsyncResult;
+import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -25,6 +28,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import util.email.EmailManager;
 import util.enumeration.ActivityLevel;
 import util.enumeration.Gender;
 import util.exception.CustomerEmailExistsException;
@@ -438,6 +442,14 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         
         return records;
 
+    }
+    
+    @Override
+    @Asynchronous
+    public Future<Boolean> sendWelcomeEmail(String name, String email, String path) throws InterruptedException {
+        EmailManager emailManager = new EmailManager("readyfoodscorporation@gmail.com", "fgdlhkfsl4648795");
+        Boolean result = emailManager.email(name, "readyfoodscorporation@gmail.com", email, path);
+        return new AsyncResult<>(result);
     }
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Customer>> constraintViolations) {
