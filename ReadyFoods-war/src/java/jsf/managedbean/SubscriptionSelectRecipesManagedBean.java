@@ -289,15 +289,6 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
 
     }
 
-//    public String getCurrentWeek() {
-//        ZoneId TZ = ZoneId.of("Asia/Singapore");
-//        final DayOfWeek firstDayOfWeek = WeekFields.of(Locale.FRANCE).getFirstDayOfWeek();
-//        final DayOfWeek lastDayOfWeek = DayOfWeek.of(((firstDayOfWeek.getValue() + 5) % DayOfWeek.values().length) + 1);
-//        LocalDate start = LocalDate.now(TZ).with(TemporalAdjusters.previousOrSame(firstDayOfWeek)); // first day
-//        LocalDate end = LocalDate.now(TZ).with(TemporalAdjusters.nextOrSame(lastDayOfWeek));      // last day
-//
-//        return start + "-" + end;
-//    }
     public String getNextWeek() {
         ZoneId TZ = ZoneId.of("Asia/Singapore");
         final DayOfWeek firstDayOfWeek = WeekFields.of(Locale.FRANCE).getFirstDayOfWeek();
