@@ -34,13 +34,12 @@ public class RecipeManagedBean implements Serializable {
 
     @Inject
     private RecipeViewManagedBean recipeViewManagedBean;
-    
+
     private List<Recipe> allRecipesToView;
+    private String keyword;
     private Recipe recipeToView;
-    
-    
+
     private Recipe recipe;
-    
 
     public RecipeManagedBean() {
         recipeToView = new Recipe();
@@ -50,17 +49,28 @@ public class RecipeManagedBean implements Serializable {
     @PostConstruct
     public void postConstruct() {
         allRecipesToView = recipeSessionBeanLocal.retrieveAllRecipes();
+
+        setKeyword((String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("keywordString"));
+
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("recipeToView", recipeToView);
     }
 
     public void viewRecipeDetails(ActionEvent event) throws IOException {
-        Long recipeId = (Long)event.getComponent().getAttributes().get("recipeToView");
-
-//        recipeToView = (Recipe) event.getComponent().getAttributes().get("recipeToView");
+        Long recipeId = (Long) event.getComponent().getAttributes().get("recipeToView");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().replace("recipeToView", recipeId);
         FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getApplicationContextPath() + "/recipeManagement/viewSingleRecipe.xhtml");
     }
-    
+
+    public void searchRecipesByString() {
+        System.out.println("Entered search method");
+
+        if (keyword == null || keyword.trim().length() == 0) {
+            this.allRecipesToView = recipeSessionBeanLocal.retrieveAllRecipes();
+        }
+        {
+            this.allRecipesToView = recipeSessionBeanLocal.searchRecipesByName(this.keyword);
+        }
+    }
 
     public List<Recipe> getAllRecipesToView() {
         return allRecipesToView;
@@ -78,8 +88,6 @@ public class RecipeManagedBean implements Serializable {
         this.recipeViewManagedBean = recipeViewManagedBean;
     }
 
-  
-
     /**
      * @return the recipe
      */
@@ -92,6 +100,15 @@ public class RecipeManagedBean implements Serializable {
      */
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("keywordString", keyword);
     }
 
 }
