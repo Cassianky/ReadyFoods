@@ -11,19 +11,27 @@
     <ui:define name="content">
         <ez:Breadcrumb pageName="viewAllRecipe" />
 
+        <h:outputStylesheet name="viewRecipe.css" library="css"/>
+
         <h:form id="formViewAllRecipes" >
-            <p:dataGrid value="#{recipeManagedBean.allRecipesToView}" var="recipe" columns="3" layout="grid"
-                        rows="10" paginator="true" id="recipe"
+
+            <p:dataGrid id="dataGridAllRecipes" value="#{recipeManagedBean.allRecipesToView}" var="recipe" columns="3" layout="grid"
+                        rows="10" paginator="true"
                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                         rowsPerPageTemplate="5,10,25">
 
                 <f:facet name="header">
-                    Ready Foods Recipes
+                    <p:outputPanel style="text-align: right;">
+                            <h:outputText value="Search by keyword: " />
+                            <p:inputText id="keyword" value="#{recipeManagedBean.keyword}" style="width:300px" placeholder="Enter keyword">
+                                <p:ajax event="keyup" process="@this" update="formViewAllRecipes" listener="#{recipeManagedBean.searchRecipesByString}" />
+                            </p:inputText>
+                        </p:outputPanel>
                 </f:facet>
 
                 <p:panel header="#{recipe.recipeTitle}" style="text-align:center">
                     <h:panelGrid columns="1" style="width:100%;margin: 0 auto;text-align: center">
-                        <p:graphicImage class="recipePic" style="object-fit: scale-down; overflow: hidden" name="300x300.png" library="images" /> 
+                        <p:graphicImage class="recipePic" style="object-fit: scale-down; overflow: hidden" name="/recipe/#{recipe.picUrl}" library="images" /> 
                         <h:outputText value="Cooking Time: #{recipe.cookingTime}" />
                         <h:outputText value="Chef: #{recipe.recipeChef}" />
 
@@ -35,7 +43,6 @@
                 </p:panel>
 
             </p:dataGrid>
-
         </h:form>
 
     </ui:define>

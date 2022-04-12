@@ -213,11 +213,12 @@ public class OrderEntitySessionBean implements OrderEntitySessionBeanLocal {
     }
 
     @Override
-    public void updateOrderStatusReceieved(Long orderId) throws OrderNotFoundException {
+    public OrderEntity updateOrderStatusReceieved(Long orderId) throws OrderNotFoundException {
         OrderEntity orderEntity = entityManager.find(OrderEntity.class,orderId);
         if (orderEntity != null) {
             orderEntity.getOrderLineItems().size();
             orderEntity.setStatus(Status.RECEIVED);
+            return orderEntity;
         } else {
             throw new OrderNotFoundException("Order " + orderId + " does not exist!");
         }

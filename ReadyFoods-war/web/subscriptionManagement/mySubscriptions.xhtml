@@ -66,8 +66,13 @@
                                      actionListener="#{subscriptionManagedBean.cancelSubscription}">
                         <p:confirm header="Confirmation" 
                                    message="Are you  sure you want to unsubscribe? 
-                                   Your subscription will end the week after next."
+                                   Your orders for next week will be cancelled."
                                    icon="ui-icon-alert" />
+
+                    </p:commandButton>
+                    <p:commandButton value="View Meal Kits" 
+                                     actionListener="#{subscriptionManagedBean.redirectSubOrder}">
+                        <f:attribute name="subIdToView" value="#{subscriptionManagedBean.ongoingSubscription.subscriptionId}"/>
 
                     </p:commandButton>
                 </p:panel>
@@ -115,7 +120,7 @@
                     <p:column headerText="Action" style="text-align: center">
                         <p:commandButton value="View Meal Kits" actionListener="#{subscriptionManagedBean.redirectSubOrder}">
                             <f:attribute name="subIdToView" value="#{sub.subscriptionId}"/>
-                            
+
                         </p:commandButton>
                     </p:column>
 

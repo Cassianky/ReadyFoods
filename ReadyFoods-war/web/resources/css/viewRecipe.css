@@ -47,6 +47,13 @@ and open the template in the editor.
     border-bottom-color: var(--input-border-color, #A8A8A8);
 }
 
+.value {
+    font-weight: bold;
+}
+
+.ui-carousel {
+    margin-bottom: 20px;
+}
 
 .detail {
     width: 85%;

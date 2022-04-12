@@ -30,16 +30,30 @@
 
         <main class="card">
             <h1 class="h1title">Recipe Selection</h1>
-            <h:form id="form" class="card">
+            <h:form id="infoForm" class="card" 
+                    rendered = "#{subscriptionSelectRecipesManagedBean.ongoingSubscription != null}">
                 <p:growl id="growl"><p:autoUpdate/></p:growl>
-                <p:panelGrid  columns="3" styleClass="noBorders" rendered = "#{subscriptionSelectRecipesManagedBean.ongoingSubscription != null}">
+
+                <p:panelGrid  columns="3" styleClass="noBorders" >
                     <p:column>
 
                         <p:datePicker id="event" mindate="#{subscriptionSelectRecipesManagedBean.getMinDate()}" 
                                       maxdate="#{subscriptionSelectRecipesManagedBean.getMaxDate()}"
                                       value="#{subscriptionSelectRecipesManagedBean.dateForDelivery}" appendTo="@(body)" inline="true">
-                            <p:ajax event="dateSelect" process="@this" listener="#{subscriptionSelectRecipesManagedBean.onDateSelect}" update="growl"/>
+                            <p:ajax event="dateSelect" process="@this" 
+                                    listener="#{subscriptionSelectRecipesManagedBean.onDateSelect}" update="growl"/>
                         </p:datePicker>
+
+                    </p:column>
+
+                    <p:column> 
+
+
+                        <p:inputTextarea placeholder="Additional notes" rows="6" cols="30" autoResize="false" id="additionalNotes" 
+                                         value="#{subscriptionSelectRecipesManagedBean.additionalNotes}" 
+                                         required="false"/>
+
+
 
                     </p:column>
                     <p:column>
@@ -50,13 +64,15 @@
                             <p:outputLabel style="font-weight: bold;" value="Remaining recipes: "/> 
                             <h:outputText style="color: #AE3126;" value="#{subscriptionSelectRecipesManagedBean.remaining}"/>
                             <br/>
-                            <p:outputLabel style="font-weight: bold;" value="For #{subscriptionSelectRecipesManagedBean.nextWk}"/> 
+                            <p:outputLabel style="font-weight: bold;" value="For 
+                                           #{subscriptionSelectRecipesManagedBean.nextWk}"/> 
 
                         </h3>
 
                         <h4>
                             <p:outputLabel style="font-weight: bold;" value="Delivery Date: "/> 
-                            <h:outputText style="color: #AE3126;" value="#{subscriptionSelectRecipesManagedBean.getCurrentOrderDeliveryDate()}">
+                            <h:outputText style="color: #AE3126;" 
+                                          value="#{subscriptionSelectRecipesManagedBean.getCurrentOrderDeliveryDate()}">
                             </h:outputText>
                             <br/>
                             <!--Selecting for which week-->
@@ -67,28 +83,26 @@
                     <!-- Create new subscription order OR update order -->
 
 
-                    <p:column>
 
-
-                    </p:column>
 
 
                 </p:panelGrid>
                 <p:commandButton 
-                    value="Save Selection" process="@this"
+                    value="Save Selection" process="@this infoForm"
                     update="@form" actionListener="#{subscriptionSelectRecipesManagedBean.updateSelection}"/>
-                
-                  <p:commandButton 
+
+                <p:commandButton 
                     value="Reset" 
                     update="@form" actionListener="#{subscriptionSelectRecipesManagedBean.resetSelection}"/>
 
                 <p:commandButton 
                     value="Process [DEMO]" 
                     update="@form" actionListener="#{subscriptionSelectRecipesManagedBean.process()}"/>
-                
-              
+
+
 
                 <h2>Recommended  recipes for #{subscriptionSelectRecipesManagedBean.currentCustomerEntity.dietType}</h2>
+
 
 
                 <p:dataView 
@@ -104,7 +118,7 @@
 
                             <div style="text-align: center">
 
-                                <p:graphicImage class="recipePic" width="100px" name="300x300.png" library="images" /> 
+                                <p:graphicImage class="recipePic" width="100px" name="/recipe/#{reccLineItem.recipe.picUrl}" library="images"/> 
                                 <br/>
                                 <br/>
                                 <div style="font-size: 20px"><span><b>#{reccLineItem.recipe.recipeTitle}</b></span></div>
@@ -130,11 +144,12 @@
                                 </p:commandButton>
 
                                 <p:spinner id ="inputNewQty" value="#{reccLineItem.quantity}"
-                                           stepFactor="1" min="0" max="#{reccLineItem.quantity + subscriptionSelectRecipesManagedBean.remaining}"
-                                           style="width: 20%">
-                                    
-                                
+                                           stepFactor="1" min="0" 
+                                           max="#{reccLineItem.quantity + subscriptionSelectRecipesManagedBean.remaining}"
+                                           validatorMessage="Please enter a number between 0 and #{reccLineItem.quantity + subscriptionSelectRecipesManagedBean.remaining}"
+                                           style="width: 20%" 
 
+                                           onkeydown="return false">
 
                                     <f:ajax event="change" listener="#{subscriptionSelectRecipesManagedBean.updateRemaningRecipes(event)}" 
                                             execute="@form" render="@form"/>
@@ -148,14 +163,24 @@
 
                 <h2>Other  recipes</h2>
 
+                <p:outputPanel style="text-align: right;">
+                    <h:outputText value="Search by keyword: " />
+                    <p:inputText id="keyword" value="#{subscriptionSelectRecipesManagedBean.keyword}" style="width:300px" placeholder="Enter keyword">
+                        <p:ajax event="keyup" process="@this" 
+                                update="@form infoForm:dataViewRecipe" 
+                                listener="#{subscriptionSelectRecipesManagedBean.searchOtherRecipesByString()}" />
+                    </p:inputText>
+                </p:outputPanel>
+
+
 
                 <p:dataView 
                     rendered = "#{subscriptionSelectRecipesManagedBean.ongoingSubscription != null}" 
-                    id="dataViewRecipe" var="orderLineItem" value="#{subscriptionSelectRecipesManagedBean.otherLineItems}" paginator="true"
+                    id="dataViewRecipe" var="orderLineItem" value="#{subscriptionSelectRecipesManagedBean.otherRecipesToView}" paginator="true"
                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
                     gridIcon="pi pi-th-large" listIcon="pi pi-bars"
                     layout="grid">
-                    
+
 
                     <p:dataViewGridItem>
 
@@ -163,7 +188,7 @@
 
                             <div style="text-align: center">
 
-                                <p:graphicImage class="recipePic" width="100px" name="300x300.png" library="images" /> 
+                                <p:graphicImage class="recipePic" width="100px" name="/recipe/#{orderLineItem.recipe.picUrl}" library="images" /> 
                                 <br/>
                                 <br/>
                                 <div style="font-size: 20px"><span><b>#{orderLineItem.recipe.recipeTitle}</b></span></div>
@@ -188,9 +213,13 @@
                                                                  target="#{subscriptionSelectRecipesManagedBean.recipeViewSummarisedManagedBean.recipeToView}" />
                                 </p:commandButton>
 
-                                <p:spinner id ="inputNewQty" value="#{orderLineItem.quantity}"
-                                           stepFactor="1" min="0" max="#{orderLineItem.quantity + subscriptionSelectRecipesManagedBean.remaining}"
-                                           style="width: 20%"> 
+                                <p:spinner id ="inputNewQty2" value="#{orderLineItem.quantity}"
+                                           stepFactor="1" min="0"
+                                           max="#{orderLineItem.quantity + subscriptionSelectRecipesManagedBean.remaining}"
+                                           validatorMessage="Please enter a number between 0 and 
+                                           #{orderLineItem.quantity + subscriptionSelectRecipesManagedBean.remaining}"
+                                           style="width: 20%" 
+                                           onkeydown="return false">
 
 
                                     <f:ajax event="change" listener="#{subscriptionSelectRecipesManagedBean.updateRemaningRecipes(event)}" 

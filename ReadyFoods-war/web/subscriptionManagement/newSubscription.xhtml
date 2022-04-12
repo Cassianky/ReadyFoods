@@ -147,23 +147,15 @@
                     <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                     <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                 </p:confirmDialog>
-                
-                
-
-
-
 
                 <!--Start of your kit panel-->
-
-
-
 
                 <p:panel style=" margin-left: auto; margin-right: 0; width: 40%; margin-right: 20px" >
                     <h1 class="h1title">Your Kit</h1>
                     <p>#{newSubscriptionManagedBean.newSubscription.numOfRecipes} recipes 
                         for #{newSubscriptionManagedBean.newSubscription.numOfPeople} people per week</p>
                     <p>#{newSubscriptionManagedBean.newSubscription.numOfRecipes * newSubscriptionManagedBean.newSubscription.numOfPeople} total servings</p>
-
+                    <p>#{newSubscriptionManagedBean.newSubscription.duration} month(s) </p>
                     <p:separator></p:separator>
 
                     <h3> Weekly Box Price: 
