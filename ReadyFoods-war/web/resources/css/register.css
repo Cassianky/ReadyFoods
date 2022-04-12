@@ -11,6 +11,8 @@ and open the template in the editor.
 .register{
     width: 60%;
     background-color: #FFFFFF !important;
+    font-size: 15;
+    font-weight: 700;
 }
 
 .registerBg {

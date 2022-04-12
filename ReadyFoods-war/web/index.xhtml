@@ -10,8 +10,13 @@
 
     <ui:define name="content">
         <h:panelGroup rendered="#{sessionScope.isLogin == false}">
-            <p:graphicImage class="home" name="home.png" library="images"/>
-
+            <div class="home-bg"> 
+                <h1 class="home-header">Get Cooking <br/> with <br/> ReadyFoods!</h1>
+                <p class="home-text">No minimum orders. Free Recipes. Food Diary.</p>
+                <div class="home-button">
+                    <p:commandButton class="home-button" actionListener="#{loginManagedBeanRF.toRegisterPage}" value="Register at ReadyFoods Today!"></p:commandButton>
+                </div>
+            </div>
         </h:panelGroup>
         <ez:loginDialog/>
     </ui:define>
