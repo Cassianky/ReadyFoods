@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import entity.CommentEntity;
 import entity.Recipe;
+import entity.Review;
 import java.util.List;
 import javax.ejb.Local;
 import util.exception.CategoryNotFoundException;
@@ -38,6 +39,8 @@ public interface RecipeSessionBeanLocal {
     public List<CommentEntity> getAllComments(Recipe recipe);
 
     public List<Recipe> filterRecipesBySingleCategory(Long categoryId);
+
+    public List<Review> getAllReviews(Recipe recipe);
 
 
 }

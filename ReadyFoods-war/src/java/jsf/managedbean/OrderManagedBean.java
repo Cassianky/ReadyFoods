@@ -24,6 +24,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
+import util.enumeration.Status;
 import util.exception.CustomerNotFoundException;
 import util.exception.OrderNotFoundException;
 
@@ -44,11 +45,14 @@ public class OrderManagedBean implements Serializable {
     private Customer currentCustomerEntity;
 
     private List<OrderEntity> listOfOrders;
-
-    private OrderEntity orderToView;
+    
+    private Status[] statusEnum = Status.values();
+    
+   
 
     public OrderManagedBean() {
         this.listOfOrders = new ArrayList<>();
+
     }
 
     @PostConstruct
@@ -70,31 +74,37 @@ public class OrderManagedBean implements Serializable {
 
     public void doViewOrderEntity(ActionEvent event) throws IOException {
         try {
-            OrderEntity order = (OrderEntity) event.getComponent().getAttributes().get("orderToView");
-            Long orderId = order.getOrderEntityId();
+            Long orderId = (Long) event.getComponent().getAttributes().get("orderToView");
+            
             OrderEntity orderRetrieved = orderSessionBeanLocal.retrieveOrderByOrderId(orderId);
-            setOrderToView(orderRetrieved);
+            Status statusRetrieved = orderRetrieved.getStatus();
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("orderToView", orderRetrieved);
+            FacesContext.getCurrentInstance().getExternalContext().redirect("viewAnOrder.xhtml");
+
+            
         } catch (OrderNotFoundException ex) {
             ex.printStackTrace();
         }
     }
 
     public List<OrderEntity> getListOfOrders() {
-        return listOfOrders;
+        setListOfOrders(orderSessionBeanLocal.retrieveAllOrdersForACustomer(currentCustomerEntity.getCustomerId()));
+        return orderSessionBeanLocal.retrieveAllOrdersForACustomer(currentCustomerEntity.getCustomerId());
     }
 
     /**
      * @param listOfOrders the listOfOrders to set
      */
     public void setListOfOrders(ArrayList<OrderEntity> listOfOrders) {
-        this.setListOfOrders(listOfOrders);
+        this.listOfOrders = listOfOrders;
     }
 
     public void updateStatus(ActionEvent event) {
 
-        OrderEntity orderEntity = (OrderEntity) event.getComponent().getAttributes().get("orderToupdate");
+        Long orderEntityId = (Long) event.getComponent().getAttributes().get("orderToupdate");
         try {
-            orderSessionBeanLocal.updateOrderStatusReceieved(orderEntity.getOrderEntityId());
+            OrderEntity orderEntity = orderSessionBeanLocal.updateOrderStatusReceieved(orderEntityId);
+            getListOfOrders();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Status for Order( " + orderEntity.getOrderEntityId() +") has been successfully updated to RECEIVED", null));
 
         } catch (OrderNotFoundException ex) {
@@ -124,18 +134,21 @@ public class OrderManagedBean implements Serializable {
         this.listOfOrders = listOfOrders;
     }
 
+
     /**
-     * @return the orderToView
+     * @return the statusEnum
      */
-    public OrderEntity getOrderToView() {
-        return orderToView;
+    public Status[] getStatusEnum() {
+        return statusEnum;
     }
 
     /**
-     * @param orderToView the orderToView to set
+     * @param statusEnum the statusEnum to set
      */
-    public void setOrderToView(OrderEntity orderToView) {
-        this.orderToView = orderToView;
+    public void setStatusEnum(Status[] statusEnum) {
+        this.statusEnum = statusEnum;
     }
+
+    
 
 }

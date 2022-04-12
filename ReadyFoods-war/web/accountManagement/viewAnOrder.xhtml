@@ -16,7 +16,7 @@
             <h1>View An Order</h1>
                 <p:messages id="messages" redisplay="false" closable="true" />
                 <p:dataTable id="dataTableViewOrder"
-                             value="#{orderManagedBean.orderToView.orderLineItems}"
+                             value="#{orderViewManagedBean.orderToView.orderLineItems}"
                              var="orderLineItem">
                     <p:column style="width:16px">
                         <p:rowToggler />

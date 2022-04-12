@@ -10,6 +10,7 @@ import ejb.session.stateless.CustomerSessionBeanLocal;
 import ejb.session.stateless.IngredientSpecificaitonSessionBeanLocal;
 import ejb.session.stateless.OrderEntitySessionBeanLocal;
 import ejb.session.stateless.RecipeSessionBeanLocal;
+import entity.ConfirmationEntity;
 import entity.CreditCard;
 import entity.Customer;
 import entity.CustomisedIngredient;
@@ -84,6 +85,9 @@ public class ShoppingCartManagedBean implements Serializable {
     private Integer numPax;
 
     private CreditCard creditCard;
+    
+    private ConfirmationEntity confirmation;
+
 
     public ShoppingCartManagedBean() {
         this.orderLineItems = new ArrayList<>();
@@ -96,6 +100,7 @@ public class ShoppingCartManagedBean implements Serializable {
 
     @PostConstruct
     public void postConstruct() {
+        newOrderEntity = null;
 
     }
 
@@ -137,9 +142,10 @@ public class ShoppingCartManagedBean implements Serializable {
         try {
             OrderEntity orderEntity = orderEntitySessionBeanLocal.createNewOrder(customer.getCustomerId(), newOrderEntity);
             Long orderCreatedId = orderEntity.getOrderEntityId();
+            confirmation = new ConfirmationEntity(orderEntity);
             orderLineItems.clear();
             generateReceipt(newOrderEntity);
-            newOrderEntity = null;
+            
             numPax = 1;
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Succesfuly created order! (Order ID: " + orderCreatedId + ")", null));
             FacesContext.getCurrentInstance().getExternalContext().redirect("confirmationPage.xhtml");
@@ -381,6 +387,20 @@ public class ShoppingCartManagedBean implements Serializable {
      */
     public void setCreditCard(CreditCard creditCard) {
         this.creditCard = creditCard;
+    }
+
+    /**
+     * @return the confirmation
+     */
+    public ConfirmationEntity getConfirmation() {
+        return confirmation;
+    }
+
+    /**
+     * @param confirmation the confirmation to set
+     */
+    public void setConfirmation(ConfirmationEntity confirmation) {
+        this.confirmation = confirmation;
     }
 
 }

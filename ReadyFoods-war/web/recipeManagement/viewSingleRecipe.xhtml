@@ -92,8 +92,9 @@
                 </h:panelGrid>
 
             </p:panel>
-
+            <h1>Review and Comment section</h1>
             <p:tabView id="panelCommentReview" style="margin-bottom:20px; margin: 30px;">
+
                 <p:tab title="Reviews">
                     <p:commandButton 
                         onclick="PF('dialogAddReview').show()" 
@@ -109,7 +110,16 @@
                         </f:facet>
                         <h:panelGrid style="width:100%;" >
 
-                            <h:outputText value="#{review.reviewDate}" style="float: right; text-align: right; font-size: 11px; color: grey; font-style: italic"/>
+                            <h:outputText value="#{review.reviewDate}" style="float: right; text-align: right; font-size: 11px; color: grey; font-style: italic"/>&#160;
+                            <p:graphicImage height="80" width="80" url="/uploadedFiles/profile/#{profileManagedBean.currentCustomer.profilePicture}" 
+                                            rendered="#{profileManagedBean.currentCustomer.profilePicture.length() != 0}" 
+                                            style="float: left;border-radius: 100px;border: 2px solid #ddd; padding: 3px;" />
+                            <p:graphicImage  class="customer-img" 
+                                             height="80" width="80"
+                                             name="defaultProfilePic.png" 
+                                             library="images"
+                                             style="float: left;border-radius: 100px;border: 2px solid #ddd; padding: 3px;"
+                                             rendered="#{profileManagedBean.currentCustomer.profilePicture.length() == 0}"/>
                             <p:rating value="#{review.rating}" readonly="true" />
                             <h:outputText value="#{review.title}" style="font-weight: bold; font-size: 17px;color: #4D2913; text-decoration : underline;"/>
                             <br></br>
@@ -130,7 +140,15 @@
                         </f:facet>
                         <h:panelGrid columns="1" style="width:100%;overflow: scroll;">
                             <h:outputText value="#{comment.commentDate}" style="float: right; text-align: right; font-size: 11px; color: grey; font-style: italic"/>
-                            <p:graphicImage height="80" width="80" name="300x300.png" library="images" style="float: left;border-radius: 100px;border: 2px solid #ddd; padding: 3px;" />
+                            <p:graphicImage height="80" width="80" url="/uploadedFiles/profile/#{profileManagedBean.currentCustomer.profilePicture}" 
+                                            rendered="#{profileManagedBean.currentCustomer.profilePicture.length() != 0}" 
+                                            style="float: left;border-radius: 100px;border: 2px solid #ddd; padding: 3px;" />
+                            <p:graphicImage  class="customer-img" 
+                                             height="80" width="80"
+                                             name="defaultProfilePic.png" 
+                                             library="images"
+                                             style="float: left;border-radius: 100px;border: 2px solid #ddd; padding: 3px;"
+                                             rendered="#{profileManagedBean.currentCustomer.profilePicture.length() == 0}"/>
 
                             <h:outputText value="#{comment.customerName}" style="font-weight: bold; font-size: 17px;color: #4D2913; text-decoration : underline;"/>
                             <h:outputText value="#{comment.description}"/>
@@ -173,7 +191,7 @@
                       widgetVar="dialogAddReview" 
                       header="Add A Review!" 
                       closable="true">
-                <p:messages/>
+                
                 <p:panelGrid id="panelGridAddReview">
                     <p:row>
                         <p:column>

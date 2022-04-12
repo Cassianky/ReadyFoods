@@ -4,6 +4,7 @@ import entity.Category;
 import entity.CommentEntity;
 import entity.Recipe;
 import entity.IngredientSpecification;
+import entity.Review;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -51,6 +52,12 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
     public List<CommentEntity>getAllComments(Recipe recipe){
         Recipe r = em.find(Recipe.class, recipe.getRecipeId());
         return r.getComments();
+    }
+    
+    @Override
+    public List<Review>getAllReviews(Recipe recipe){
+         Recipe r = em.find(Recipe.class, recipe.getRecipeId());
+         return r.getReviews();
     }
 
     @Override
