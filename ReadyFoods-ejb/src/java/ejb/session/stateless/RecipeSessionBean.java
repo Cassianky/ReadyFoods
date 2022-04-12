@@ -47,9 +47,9 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
         this.validatorFactory = Validation.buildDefaultValidatorFactory();
         this.validator = validatorFactory.getValidator();
     }
-    
+
     @Override
-    public List<CommentEntity>getAllComments(Recipe recipe){
+    public List<CommentEntity> getAllComments(Recipe recipe) {
         Recipe r = em.find(Recipe.class, recipe.getRecipeId());
         return r.getComments();
     }
@@ -163,73 +163,36 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
     }
 
     @Override
-    public List<Recipe> filterRecipesBySingleCategory(Long categoryId) {
+    public void updateRecipeContent(Recipe recipeToUpdate) throws RecipeNotFoundException, IngredientSpecificationNotFoundException, CategoryNotFoundException {
+        if (recipeToUpdate != null && recipeToUpdate.getRecipeId() != null) {
+            Set<ConstraintViolation<Recipe>> constraintViolations = validator.validate(recipeToUpdate);
 
-        List<Recipe> recipes = new ArrayList<>();
-        try {
-            Category category = categorySessionBeanLocal.retrieveCategoryByCategoryId(categoryId);
-            //for sub categories
-            if (category.getSubCategories().isEmpty()) {
-                recipes = category.getRecipes();
-            } else {
-                for (Category subCategory : category.getSubCategories()) {
-                    recipes.addAll(subCategory.getRecipes());
+            if (constraintViolations.isEmpty()) {
+                if (!recipeToUpdate.getIngredientSpecificationList().isEmpty()) {
+                    if (!recipeToUpdate.getCategories().isEmpty()) {
+                        Recipe updatedRecipe = retrieveRecipeByRecipeId(recipeToUpdate.getRecipeId());
+                        updatedRecipe.setCaloriesPerServing(recipeToUpdate.getCaloriesPerServing());
+                        updatedRecipe.setCarbsPerServing(recipeToUpdate.getCarbsPerServing());
+                        updatedRecipe.setCategories(recipeToUpdate.getCategories());
+                        updatedRecipe.setCookingTime(recipeToUpdate.getCookingTime());
+                        updatedRecipe.setFatsPerServing(recipeToUpdate.getFatsPerServing());
+                        updatedRecipe.setIngredientSpecificationList(recipeToUpdate.getIngredientSpecificationList());
+                        updatedRecipe.setPicUrl(recipeToUpdate.getPicUrl());
+                        updatedRecipe.setProteinsPerServing(recipeToUpdate.getProteinsPerServing());
+                        updatedRecipe.setRecipeChef(recipeToUpdate.getRecipeChef());
+                        updatedRecipe.setRecipeSteps(recipeToUpdate.getRecipeSteps());
+                        updatedRecipe.setSugarPerServing(recipeToUpdate.getSugarPerServing());
+                        updatedRecipe.setVideoURL(recipeToUpdate.getVideoURL());
+                    } else {
+                        throw new IngredientSpecificationNotFoundException("Ingredient list cannot be empty!");
+                    }
+                } else {
+                    throw new CategoryNotFoundException("Category list cannot be empty!");
                 }
+            } else {
+                throw new RecipeNotFoundException("Recipe to be updated does not match existing records!");
             }
-        } catch (CategoryNotFoundException ex) {
-            Logger.getLogger(RecipeSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return recipes;
-    }
-
-    @Override
-    public List<Recipe> filterRecipesByCategory(List<Long> categoryIds, String condition) { //condition be displayed as a button for user to select
-
-        List<Recipe> recipes = new ArrayList<>();
-//
-//        if (categoryIds.isEmpty() || categoryIds == null
-//                || !condition.equals("AND") || !condition.equals("OR")) {
-//            return recipes;
-//        } else {
-//            if (condition.equals("OR")) {
-//                Query query = em.createQuery("SELECT r FROM Recipe r, IN (r.categories) rc WHERE rc.categoryId IN :inCategoryIds ORDER BY r.recipeTitle ASC");
-//                query.setParameter("inCategoryIds", categoryIds);
-//                query.getResultList();
-//            } else {
-//                String selectClause = "Select r FROM Recipe r";
-//                String whereClause = "";
-//                Boolean firstCat = true;
-//                Integer catCount = 1;
-//
-//                for (Long catId : categoryIds) {
-//                    selectClause += ", IN (r.categories) rc" + catCount;
-//
-//                    if (firstCat) {
-//                        whereClause = "WHERE rc.categoryID = " + catId;
-//                        firstCat = false;
-//                    } else {
-//                        whereClause += " AND rc" + catCount + ".tagId = " + catId;
-//                    }
-//
-//                    catCount++;
-//                }
-//
-//                String jpql = selectClause + " " + whereClause + "ORDER BY r.recipeTitle ASC";
-//                Query query = em.createQuery(jpql);
-//                recipes = query.getResultList();
-//
-//                recipes.size();
-//                for (Recipe r : recipes) {
-//                    r.getCategories().size();
-//                    r.getRecipeSteps();
-//                }
-//
-//                Collections.sort(recipes, (Recipe r1, Recipe r2) 
-//                        -> r1.getRecipeTitle().compareTo(r2.getRecipeTitle()));
-//            }
-//        }
-//        
-        return recipes;
     }
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Recipe>> constraintViolations) {

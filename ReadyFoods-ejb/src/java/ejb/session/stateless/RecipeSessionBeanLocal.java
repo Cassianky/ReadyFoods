@@ -12,6 +12,7 @@ import java.util.List;
 import javax.ejb.Local;
 import util.exception.CategoryNotFoundException;
 import util.exception.CreateRecipeException;
+import util.exception.IngredientSpecificationNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.RecipeNotFoundException;
 import util.exception.RecipeTitleExistException;
@@ -24,7 +25,7 @@ import util.exception.UnknownPersistenceException;
 @Local
 public interface RecipeSessionBeanLocal {
 
-    public Recipe createNewRecipe(Recipe newRecipe, List<Long> categoriesId, List<Long>recipeSpecificationId)throws CategoryNotFoundException, CreateRecipeException,
+    public Recipe createNewRecipe(Recipe newRecipe, List<Long> categoriesId, List<Long> recipeSpecificationId) throws CategoryNotFoundException, CreateRecipeException,
             RecipeTitleExistException, UnknownPersistenceException,
             InputDataValidationException;
 
@@ -32,12 +33,12 @@ public interface RecipeSessionBeanLocal {
 
     public List<Recipe> searchRecipesByName(String searchString);
 
-    public List<Recipe> filterRecipesByCategory(List<Long> categoryIds, String condition);
-
     public List<Recipe> retrieveAllRecipes();
 
     public List<CommentEntity> getAllComments(Recipe recipe);
 
+    public void updateRecipeContent(Recipe recipeToUpdate) throws RecipeNotFoundException, 
+            IngredientSpecificationNotFoundException, CategoryNotFoundException;
     public List<Recipe> filterRecipesBySingleCategory(Long categoryId);
 
     public List<Review> getAllReviews(Recipe recipe);

@@ -3,7 +3,6 @@ package ejb.session.singleton;
 import ejb.session.stateless.CategorySessionBeanLocal;
 import ejb.session.stateless.CustomerSessionBeanLocal;
 import ejb.session.stateless.FoodSessionBeanLocal;
-import ejb.session.stateless.IngredientSessionBean;
 import ejb.session.stateless.IngredientSessionBeanLocal;
 import ejb.session.stateless.IngredientSpecificaitonSessionBeanLocal;
 import ejb.session.stateless.RecipeSessionBeanLocal;
@@ -15,10 +14,7 @@ import entity.IngredientSpecification;
 import entity.Recipe;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,6 +37,7 @@ import util.exception.CustomerEmailExistsException;
 import util.exception.CustomerNotFoundException;
 import util.exception.IngredientExistsException;
 import util.exception.IngredientNotFoundException;
+import util.exception.IngredientSpecificationNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.RecipeNotFoundException;
 import util.exception.RecipeTitleExistException;
@@ -203,7 +200,7 @@ public class DataInitSessionBean {
             Long ingredientSpecification21Id = ingredientSpecificationSessionBeanLocal.createNewIngredientSpecification(ingredientSpecifcation21, ingredient21Id);
             Long ingredientSpecification22Id = ingredientSpecificationSessionBeanLocal.createNewIngredientSpecification(ingredientSpecifcation22, ingredient22Id);
             Long ingredientSpecifcation19FudgeBrownieId = ingredientSpecificationSessionBeanLocal.createNewIngredientSpecification(ingredientSpecifcation19FudgeBrownie, ingredient19Id);
-            
+
             //Chicken Rice
             List<Long> recipe1IngredientSpecicationsId = new ArrayList<>();
             recipe1IngredientSpecicationsId.add(ingredientSpecification1Id);
@@ -248,60 +245,59 @@ public class DataInitSessionBean {
             recipe5IngredientSpecicationsId.add(ingredientSpecification21Id);
             recipe5IngredientSpecicationsId.add(ingredientSpecification22Id);
             recipe5IngredientSpecicationsId.add(ingredientSpecifcation19FudgeBrownieId);
-  
-            //purpose used <br /><br /> for replacement
-            String recipe1Steps = "Preparation" + "<br /><br />"
-                    + "To clean the chicken, rub all over with a handful of kosher salt, getting rid of any loose skin. Rinse the chicken well inside and out. Pat dry with paper towels." + "<br /><br />"
-                    + "Remove any excess fat from the chicken and set aside for later." + "<br /><br />"
-                    + "Season the chicken generously with salt. Stuff the chicken cavity with the ginger slices and scallions." + "<br /><br />"
-                    + "Place the chicken in a large stock pot, cover with cold water by 1 inch (2 cm), and season with salt to taste." + "<br /><br />"
-                    + "Bring to a boil over high heat, then immediately reduce the heat to low to maintain a simmer. Cover and cook for about 30 minutes, or until the internal temperature of the chicken reaches 165°F (75°C). Remove the pot from the heat." + "<br /><br />"
-                    + "Remove the chicken from the pot, reserving the poaching liquid for later, and transfer to an ice bath for 5 minutes to stop the cooking process and to keep the chicken skin springy. Discard the ginger and green onion." + "<br /><br />"
-                    + "After it’s cooled, pat the chicken dry with paper towels and rub all over with sesame oil. This will help prevent the chicken from drying out." + "<br /><br />"
-                    + "In a large wok or skillet, heat ¼ cup (60 ml) of sesame oil over medium-high heat. Add 2 tablespoons of reserved chopped chicken fat, the garlic, ginger, and salt, and fry until aromatic, about 10 minutes." + "<br /><br />"
-                    + "Reserve ¼ of the fried garlic mixture, then add the rice to the remaining fried garlic and stir to coat. Cook for 3 minutes." + "<br /><br />"
-                    + "Transfer the rice to a rice cooker and add 2 cups (480 ml) of reserved poaching broth. Steam the rice for 60 minutes, or until tender." + "<br /><br />"
-                    + "While the rice is cooking, carve the chicken for serving." + "<br /><br />"
-                    + "Make the chili sauce: combine the sambal, Sriracha, sugar, garlic, ginger, lime juice, and chicken broth in a small bowl and stir to incorporate." + "<br /><br />"
-                    + "Make the ginger garlic sauce: in a small bowl, combine the ginger, garlic, salt, peanut oil, and rice vinegar, and stir to incorporate." + "<br /><br />"
-                    + "Make the soy sauce: in a small bowl, combine the reserved fried garlic and ginger with the oyster sauce, dark soy sauce, light soy sauce, and chicken broth, and stir to incorporate." + "<br /><br />"
-                    + "Serve the sliced chicken with the rice, dipping sauces, sliced cucumbers, and fresh cilantro." + "<br /><br />"
+
+            //purpose used <br /><br /> for paragraphing
+            String recipe1Steps = "1. To clean the chicken, rub all over with a handful of kosher salt, getting rid of any loose skin. Rinse the chicken well inside and out. Pat dry with paper towels." + "<br /><br />"
+                    + "2. Remove any excess fat from the chicken and set aside for later." + "<br /><br />"
+                    + "3. Season the chicken generously with salt. Stuff the chicken cavity with the ginger slices and scallions." + "<br /><br />"
+                    + "4. Place the chicken in a large stock pot, cover with cold water by 1 inch (2 cm), and season with salt to taste." + "<br /><br />"
+                    + "5. Bring to a boil over high heat, then immediately reduce the heat to low to maintain a simmer. Cover and cook for about 30 minutes, or until the internal temperature of the chicken reaches 165°F (75°C). Remove the pot from the heat." + "<br /><br />"
+                    + "6. Remove the chicken from the pot, reserving the poaching liquid for later, and transfer to an ice bath for 5 minutes to stop the cooking process and to keep the chicken skin springy. Discard the ginger and green onion." + "<br /><br />"
+                    + "7. After it’s cooled, pat the chicken dry with paper towels and rub all over with sesame oil. This will help prevent the chicken from drying out." + "<br /><br />"
+                    + "8. In a large wok or skillet, heat ¼ cup (60 ml) of sesame oil over medium-high heat. Add 2 tablespoons of reserved chopped chicken fat, the garlic, ginger, and salt, and fry until aromatic, about 10 minutes." + "<br /><br />"
+                    + "9. Reserve ¼ of the fried garlic mixture, then add the rice to the remaining fried garlic and stir to coat. Cook for 3 minutes." + "<br /><br />"
+                    + "10. Transfer the rice to a rice cooker and add 2 cups (480 ml) of reserved poaching broth. Steam the rice for 60 minutes, or until tender." + "<br /><br />"
+                    + "11. While the rice is cooking, carve the chicken for serving." + "<br /><br />"
+                    + "12. Make the chili sauce: combine the sambal, Sriracha, sugar, garlic, ginger, lime juice, and chicken broth in a small bowl and stir to incorporate." + "<br /><br />"
+                    + "13. Make the ginger garlic sauce: in a small bowl, combine the ginger, garlic, salt, peanut oil, and rice vinegar, and stir to incorporate." + "<br /><br />"
+                    + "14. Make the soy sauce: in a small bowl, combine the reserved fried garlic and ginger with the oyster sauce, dark soy sauce, light soy sauce, and chicken broth, and stir to incorporate." + "<br /><br />"
+                    + "15. Serve the sliced chicken with the rice, dipping sauces, sliced cucumbers, and fresh cilantro." + "<br /><br />"
                     + "Enjoy!";
 
             //different formatting to test
-            String recipe2Steps = "Heat oil in a large pot or deep skillet over medium high heat. Add onion and garlic, cook for 3 minutes or until light golden and softened.<br/><br />"
-                    + "Turn heat up to high and add beef. Cook, breaking it up as your go, until browned.<br /><br />"
-                    + "Add red wine. Bring to simmer and cook for 1 minute, scraping the bottom of the pot, until the alcohol smell is gone.<br /><br />"
-                    + "Add remaining ingredients except salt and pepper. Stir, bring to a simmer then turn down to medium so it bubbles gently. Cook for 20 – 30 minutes (no lid), adding water if the sauce gets too thick for your taste. Stir occasionally.<br /><br />"
-                    + "Slow simmer option: really takes this to another level, if you have the time! Add 3/4 cup of water, cover with lid and simmer on very low for 2 – 2.5 hours, stirring every 30 minutes or so. (Note 5) Uncover, simmer 20 minutes to thicken sauce. (Note 6 for slow cooker)<br /><br />"
-                    + "Adjust salt and pepper to taste right at the end. Serve over spaghetti – though if you have the time, I recommend tossing the sauce and pasta per steps below.";
+            String recipe2Steps = "1. Heat oil in a large pot or deep skillet over medium high heat. Add onion and garlic, cook for 3 minutes or until light golden and softened.<br/><br />"
+                    + "2. Turn heat up to high and add beef. Cook, breaking it up as your go, until browned.<br /><br />"
+                    + "3. Add red wine. Bring to simmer and cook for 1 minute, scraping the bottom of the pot, until the alcohol smell is gone.<br /><br />"
+                    + "4. Add remaining ingredients except salt and pepper. Stir, bring to a simmer then turn down to medium so it bubbles gently. Cook for 20 – 30 minutes (no lid), adding water if the sauce gets too thick for your taste. Stir occasionally.<br /><br />"
+                    + "5. Slow simmer option: really takes this to another level, if you have the time! Add 3/4 cup of water, cover with lid and simmer on very low for 2 – 2.5 hours, stirring every 30 minutes or so. (Note 5) Uncover, simmer 20 minutes to thicken sauce. (Note 6 for slow cooker)<br /><br />"
+                    + "6. Adjust salt and pepper to taste right at the end. Serve over spaghetti – though if you have the time, I recommend tossing the sauce and pasta per steps below.";
 
-            String recipe3Steps = "Bring a pot of water to a boil. Cook elbow macaroni until al dente, about 8 minutes.<br/><br />"
-                    + "Quick release the steam so your noodles don’t overcook.<br/><br />"
-                    + "Open the lid and mix in the cheeses and heavy cream. Stir until combined and serve.<br/><br />"
+            String recipe3Steps = "1. Bring a pot of water to a boil. Cook elbow macaroni until al dente, about 8 minutes.<br/><br />"
+                    + "2. Quick release the steam so your noodles don’t overcook.<br/><br />"
+                    + "3. Open the lid and mix in the cheeses and heavy cream. Stir until combined and serve.<br/><br />"
                     + "*Note: There should only be a very small amount of water left in the pot, if there is a large amount, drain most of it off before adding the cream and cheese.";
 
-            String recipe4Steps = "Loosen the rice grains as much as possible with chopsticks or a spoon. Lightly beat the eggs until the whites and yolks are fully incorporated.<br/><br />"
-                    + "Heat up an empty, well-seasoned wok over high heat until it becomes very hot (smoke rises). Pour in 1 tablespoon of oil then swirl it around to coat the side of the wok.<br/><br />"
-                    + "Pour in the egg. Once it begins to set at the bottom, stir to help the running part flow. Use a spatula to scramble quickly so that it turns into small pieces. Transfer out and set aside.<br/><br />"
-                    + "Place the wok back on the burner. Add the remaining ½ tablespoon of oil. Fry garlic until fragrant then add the rice. Stir and toss continuously until the rice is piping hot. Use the spatula to break any clumps.<br/><br />"
-                    + "Return the egg to the wok, along with scallions. Continue frying until everything is heated thoroughly.<br/><br />"
-                    + "Season with light soy sauce, sesame oil, salt and white pepper. Give everything a good stir. Dish out and serve immediately.";
+            String recipe4Steps = "1. Loosen the rice grains as much as possible with chopsticks or a spoon. Lightly beat the eggs until the whites and yolks are fully incorporated.<br/><br />"
+                    + "2. Heat up an empty, well-seasoned wok over high heat until it becomes very hot (smoke rises). Pour in 1 tablespoon of oil then swirl it around to coat the side of the wok.<br/><br />"
+                    + "3. Pour in the egg. Once it begins to set at the bottom, stir to help the running part flow. Use a spatula to scramble quickly so that it turns into small pieces. Transfer out and set aside.<br/><br />"
+                    + "4. Place the wok back on the burner. Add the remaining ½ tablespoon of oil. Fry garlic until fragrant then add the rice. Stir and toss continuously until the rice is piping hot. Use the spatula to break any clumps.<br/><br />"
+                    + "5. Return the egg to the wok, along with scallions. Continue frying until everything is heated thoroughly.<br/><br />"
+                    + "6. Season with light soy sauce, sesame oil, salt and white pepper. Give everything a good stir. Dish out and serve immediately.";
 
             String recipe5Steps = "Pan Size: 13”x9” | 9\"x9\" | 8\"x8\"<br/><br />"
                     + "Oven Temp: 350°F | 350°F | 325°F<br/><br />"
                     + "Bake Time (in minutes)**: 22-25 | 36-38 | 50-52<br/><br />"
                     + "**If using nonstick pan, shorten bake time by 3 min<br/><br />"
-                    + "Heat oven as directed in above. Grease bottom of pan.<br/><br />"
-                    + "Stir Brownie Mix, water, oil and eggs in medium bowl until well blended. Spread in pan.<br/><br />"
-                    + "Bake as directed above or until toothpick inserted 2 inches from side of pan comes out almost clean; cool.";
-            
+                    + "1. Heat oven as directed in above. Grease bottom of pan.<br/><br />"
+                    + "2. Stir Brownie Mix, water, oil and eggs in medium bowl until well blended. Spread in pan.<br/><br />"
+                    + "3. Bake as directed above or until toothpick inserted 2 inches from side of pan comes out almost clean; cool.";
+
             Recipe recipe1 = new Recipe("Hainanese Chicken Rice", "Chicken Rice King", 45, recipe1Steps, 1248, 87, 76, 47, 9, "https://www.youtube.com/embed/XPA3rn1XImY");
             Recipe recipe2 = new Recipe("Spaghetti Bolognese", "Gotten Ramshy", 30, recipe2Steps, 510, 53, 12, 40, 9, "https://www.youtube.com/embed/yShBC-G-jrQ");
             Recipe recipe3 = new Recipe("Mac and Cheese", "Ew Gene", 15, recipe3Steps, 500, 40, 10, 20, 5, "https://www.youtube.com/embed/IzLn0pXntNE");
             Recipe recipe4 = new Recipe("Egg Fried Rice", "Jamie Oliver", 30, recipe4Steps, 400, 47, 12, 21, 2, "https://www.youtube.com/embed/Ojwlq_1HGc0");
             Recipe recipe5 = new Recipe("Fudge Brownie", "Antasisa Goh", 45, recipe5Steps, 800, 96, 36, 14, 22, "https://www.youtube.com/embed/iapsC9jqo4Q");
-            
+
             Category parentCategory1 = categorySessionBeanLocal.createNewCategory(new Category("Cuisine", "Cuisine"), null);
             Category childCategory11 = categorySessionBeanLocal.createNewCategory(new Category("Asian", "Asian"), parentCategory1.getCategoryId());
             Category childCategory12 = categorySessionBeanLocal.createNewCategory(new Category("Western", "Western"), parentCategory1.getCategoryId());
@@ -345,18 +341,30 @@ public class DataInitSessionBean {
             recipe4Categories.add(childCategory11.getCategoryId());
             recipe4Categories.add(childCategory23.getCategoryId());
             recipe4Categories.add(childCategory25.getCategoryId());
-            
+
             List<Long> recipe5Categories = new ArrayList<>();
             recipe5Categories.add(childCategory24.getCategoryId());
             recipe5Categories.add(childCategory32.getCategoryId());
             recipe5Categories.add(childCategory21.getCategoryId());
 
-            recipeSessionBeanLocal.createNewRecipe(recipe1, recipe1Categories, recipe1IngredientSpecicationsId);
-            recipeSessionBeanLocal.createNewRecipe(recipe2, recipe2Categories, recipe2IngredientSpecicationsId);
-            recipeSessionBeanLocal.createNewRecipe(recipe3, recipe3Categories, recipe3IngredientSpecicationsId);
-            recipeSessionBeanLocal.createNewRecipe(recipe4, recipe4Categories, recipe4IngredientSpecicationsId);
-            recipeSessionBeanLocal.createNewRecipe(recipe5, recipe5Categories, recipe5IngredientSpecicationsId);
-            
+            recipe1 = recipeSessionBeanLocal.createNewRecipe(recipe1, recipe1Categories, recipe1IngredientSpecicationsId);
+            recipe2 = recipeSessionBeanLocal.createNewRecipe(recipe2, recipe2Categories, recipe2IngredientSpecicationsId);
+            recipe3 = recipeSessionBeanLocal.createNewRecipe(recipe3, recipe3Categories, recipe3IngredientSpecicationsId);
+            recipe4 = recipeSessionBeanLocal.createNewRecipe(recipe4, recipe4Categories, recipe4IngredientSpecicationsId);
+            recipe5 = recipeSessionBeanLocal.createNewRecipe(recipe5, recipe5Categories, recipe5IngredientSpecicationsId);
+
+            recipe1.setPicUrl("chicken_rice_300x300.jpg");
+            recipe2.setPicUrl("spaghetti_bolognaise_300x300.jpg");
+            recipe3.setPicUrl("mac_and_cheese_300x300.jpg");
+            recipe4.setPicUrl("egg_fried_rice_300x300.jpg");
+            recipe5.setPicUrl("fudge_brownie_300x300.jpg");
+
+            recipeSessionBeanLocal.updateRecipeContent(recipe1);
+            recipeSessionBeanLocal.updateRecipeContent(recipe2);
+            recipeSessionBeanLocal.updateRecipeContent(recipe3);
+            recipeSessionBeanLocal.updateRecipeContent(recipe4);
+            recipeSessionBeanLocal.updateRecipeContent(recipe5);
+
             Food food1 = new Food("french fries", 100.0, 90.0, 90.0, 90.0, 90.0);
             Food food2 = new Food("Sphaghetti", 90.0, 100.0, 90.0, 90.0, 90.0);
             Food food3 = new Food("Mixed Rice", 90.0, 90.0, 100.0, 90.0, 90.0);
@@ -370,9 +378,9 @@ public class DataInitSessionBean {
             foodSessionBeanLocal.createNewFood(food5, customer1.getCustomerId());
 
         } catch (CustomerNotFoundException | InputDataValidationException | UnknownPersistenceException | CustomerEmailExistsException | CategoryNotFoundException
-                | CreateCategoryException | CreateRecipeException | RecipeTitleExistException | IngredientExistsException ex) {
-            ex.printStackTrace();
-        } catch (IngredientNotFoundException ex) {
+                | CreateCategoryException | CreateRecipeException | RecipeTitleExistException | IngredientExistsException
+                | IngredientSpecificationNotFoundException | IngredientNotFoundException
+                | RecipeNotFoundException ex) {
             Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

@@ -70,6 +70,11 @@ public class Recipe implements Serializable {
     @NotNull
     @Min(0)
     private Integer sugarPerServing;
+    //allowed to be nullable at start
+    //constructing recipe initially doesnt require picUrl
+    //to be added in subsequently
+    @Column
+    private String picUrl;
     @Column(nullable = false)
     @NotNull
     private String videoURL;
@@ -290,6 +295,14 @@ public class Recipe implements Serializable {
      */
     public void setComments(List<CommentEntity> comments) {
         this.comments = comments;
+    }
+
+    public String getPicUrl() {
+        return picUrl;
+    }
+
+    public void setPicUrl(String picUrl) {
+        this.picUrl = picUrl;
     }
 
 }

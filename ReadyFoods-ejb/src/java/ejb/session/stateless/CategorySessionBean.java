@@ -99,10 +99,10 @@ public class CategorySessionBean implements CategorySessionBeanLocal {
 
         Query query = em.createQuery("SELECT c FROM Category c WHERE c.parentCategory IS NULL");
         try {
-            query.getSingleResult();
             parentCategories = query.getResultList();
             parentCategories.size();
             parentCategories.forEach(result -> result.getSubCategories().size());
+            parentCategories.forEach(pc -> pc.getSubCategories().forEach(sc -> sc.getRecipes().size()));
             //parent category will have no recipe(s)
             return parentCategories;
         } catch (NoResultException ex) {
