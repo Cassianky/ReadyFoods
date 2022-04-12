@@ -46,6 +46,11 @@ public class LoginManagedBeanRF implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid login credential: " + ex.getMessage(), null));
         }
     }
+    
+    public void toRegisterPage(ActionEvent event) throws IOException
+    {
+         FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getApplicationContextPath() + "/registerCustomer.xhtml");
+    }
      
     public void logout(ActionEvent event) throws IOException
     {
