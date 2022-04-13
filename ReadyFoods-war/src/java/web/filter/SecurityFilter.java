@@ -65,8 +65,6 @@ public class SecurityFilter implements Filter {
         if (path.equals("/index.xhtml")
                 || path.equals("/accessRightError.xhtml")
                 || path.equals("/registerCustomer.xhtml")
-                || path.equals("/subscription/subscription.xhtml")
-                || path.equals("/viewShoppingCart.xhtml")
                 || path.startsWith("/javax.faces.resource")) {
             return true;
         } else {

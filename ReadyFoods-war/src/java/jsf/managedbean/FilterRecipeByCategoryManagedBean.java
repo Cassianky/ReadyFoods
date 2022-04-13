@@ -31,11 +31,8 @@ public class FilterRecipeByCategoryManagedBean implements Serializable {
     @EJB
     RecipeSessionBeanLocal recipeSessionBeanLocal;
 
-//    private TreeNode treeNode;
-//    private TreeNode selectedTreeNode;
     private List<Category> parentCategories;
-//    private List<Category> subCategoriesToView;
-//    private List<Recipe> recipes;
+
 
     public FilterRecipeByCategoryManagedBean() {
     }

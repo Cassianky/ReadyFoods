@@ -53,11 +53,11 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
         Recipe r = em.find(Recipe.class, recipe.getRecipeId());
         return r.getComments();
     }
-    
+
     @Override
-    public List<Review>getAllReviews(Recipe recipe){
-         Recipe r = em.find(Recipe.class, recipe.getRecipeId());
-         return r.getReviews();
+    public List<Review> getAllReviews(Recipe recipe) {
+        Recipe r = em.find(Recipe.class, recipe.getRecipeId());
+        return r.getReviews();
     }
 
     @Override
@@ -122,6 +122,9 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
 
         for (Recipe r : recipes) {
             r.getIngredientSpecificationList().size();
+            for (IngredientSpecification is : r.getIngredientSpecificationList()) {
+                is.getIngredient();
+            }
             r.getCategories().size();
         }
 
@@ -142,12 +145,85 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
         } else {
             throw new RecipeNotFoundException("Recipe ID " + recipeId + " does not exist!");
         }
+    }
 
+    @Override
+    public List<Recipe> searchRecipesByIngredients(List<Long> ingredientIds, String condition) {
+
+        System.out.print("==================================Entering filter by ingredients====================");
+        List<Recipe> recipes = new ArrayList<>();
+        List<Recipe> filteredRecipes = new ArrayList<>();
+        
+        List<Long> iIdConv = new ArrayList<>();
+        
+        for(Long l : ingredientIds) {
+            iIdConv.add(l);
+        }
+
+        if (ingredientIds == null || ingredientIds.isEmpty() || (!condition.equals("COMBINE") && !condition.equals("NO"))) {
+            System.out.print("empty recipe==================================");
+            return recipes;
+        } else {
+            if (condition.equals("NO")) {
+                System.out.print("entering no combine recipe==================================");
+
+                recipes = retrieveAllRecipes();
+
+                for (Recipe r : recipes) {
+                    for (IngredientSpecification is : r.getIngredientSpecificationList()) {
+                        for (Long id : iIdConv) {
+                            if (is.getIngredient().getIngredientId().equals(id)) {
+                                filteredRecipes.add(r);
+                                break;
+                            }
+                        }
+                        if (filteredRecipes.contains(r)) {
+                            break;
+                        }
+                    }
+                }
+                System.out.print("completed no combine recipe==================================");
+            } else {
+                System.out.print("entering combine recipe==================================");
+
+                recipes = retrieveAllRecipes();
+                boolean contains = false;
+
+                for (Recipe r : recipes) {
+                    int i = 0;
+                    for(Long id : iIdConv){
+                        for(IngredientSpecification is : r.getIngredientSpecificationList()) {
+                            if(id.equals(is.getIngredient().getIngredientId())) {
+                                contains = true;
+                                i++;
+                            }
+                        }
+                        if(!true){
+                            break;
+                        } else {
+                            contains = false;
+                        }
+                    }
+                    if(i == ingredientIds.size()) {
+                        filteredRecipes.add(r);
+                    }
+                }
+                
+                System.out.print("completed no combine recipe==================================");
+
+                for (Recipe recipe : filteredRecipes) {
+                    recipe.getCategories().size();
+                    recipe.getIngredientSpecificationList().size();
+                }
+            }
+        }
+        return filteredRecipes;
     }
 
     //kiv retrieving recipe by chef
     @Override
-    public List<Recipe> searchRecipesByName(String searchString) {
+    public List<Recipe> searchRecipesByName(String searchString
+    ) {
 
         Query query = em.createQuery("SELECT r FROM Recipe r WHERE r.recipeTitle LIKE :inSearchString ORDER BY r.recipeTitle ASC");
         query.setParameter("inSearchString", "%" + searchString + "%");
@@ -205,6 +281,5 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
 
         return msg;
     }
-
 
 }
