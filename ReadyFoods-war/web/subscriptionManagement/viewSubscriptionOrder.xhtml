@@ -24,28 +24,33 @@
 
             <ui:repeat value="#{subscriptionOrderViewManagedBean.orders}" var="order">
 
-                <p:panel id="orderPanel" style="width: 50%" header="#{subscriptionOrderViewManagedBean.getWeek(order.dateOfOrder)}" >
+                <p:fieldset id="orderPanel" style=" width: 70%" 
+                         legend="#{subscriptionOrderViewManagedBean.getWeek(order.dateOfOrder)}" >
                     <h:outputText value="STATUS: #{order.status}" 
                                   style="float: right; text-align: right;
-                                  font-style: italic"/>
+                                  font-style: italic; font-weight: bold">
+                    </h:outputText>
                     <h:outputText value="Initially ordered on: #{order.dateOfOrder}"/>
                     <br/>
                     <h:outputText value="Additional notes: #{order.additionalNotes}"/>
                     <br/>    <br/>   
 
-                    <p:panel id="lineItemPanel" style="" header="Meal kits in this order">
-                        <ui:repeat value="#{order.orderLineItems}" var="orderLineItem">
+                    <p:fieldset id="lineItemPanel" legend="Meal kits in this order">
+                        <p:dataGrid value="#{order.orderLineItems}" var="orderLineItem">
 
                             <h:panelGrid style="width:100%;" >
 
-                                <span><h:outputText value="#{orderLineItem.recipe.recipeTitle} x #{orderLineItem.quantity}"/></span>
+
+                                <p:graphicImage style="float: left;border-radius: 100px;border: 2px solid #ddd; padding: 3px;" library="images" width="100px" name="/recipe/#{orderLineItem.recipe.picUrl}"/>
+                                <h:outputText  style="vertical-align:top;display:inline-block;" value="#{orderLineItem.recipe.recipeTitle} x #{orderLineItem.quantity}"/>
+
 
                             </h:panelGrid>
 
-                        </ui:repeat> 
+                        </p:dataGrid> 
 
 
-                    </p:panel>
+                    </p:fieldset>
                     <br/>
                     <p:commandButton style="" icon="pi pi-check" 
                                      value="Received order"
@@ -56,7 +61,7 @@
                         <f:attribute name="idToUpdate" value="#{order.orderEntityId}"/>
                     </p:commandButton>
 
-                </p:panel>
+                </p:fieldset>
                 <br/> 
 
 
