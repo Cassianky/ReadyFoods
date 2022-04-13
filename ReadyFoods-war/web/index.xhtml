@@ -22,7 +22,7 @@
         <h:panelGroup rendered="#{sessionScope.isLogin == true}">
             <div class="home-2-bg">
                 <h1 class="home-2-header">Recipe Of The Day!</h1>
-                <div style="margin-left: 200; margin-right: 200;">
+                <div style="width:500px; margin-left: auto; margin-right: auto;">
                     <p:fieldset legend="#{recipeOfTheDayManagedBean.recipe.recipeTitle}">
                         <h:panelGrid columns="2" cellpadding="5">
                             <p:graphicImage library="images" name="/recipe/#{recipeOfTheDayManagedBean.recipe.picUrl}" />
