@@ -22,10 +22,10 @@ public interface CreditCardSessionBeanLocal {
 
     public Long createNewCreditCard(CreditCard newCreditCard, Long customerId) throws UnknownPersistenceException, InputDataValidationException, CustomerNotFoundException;
 
-    public void deleteCreditCardByCreditCardId(Long creditCardId, Long customerId) throws CreditCardNotFoundException, DeleteCreditCardException, CustomerNotFoundException;
-
     public CreditCard retrieveCreditCardByCreditCardId(Long creditCardId) throws CreditCardNotFoundException;
 
     public CreditCard retrieveCreditCardByCustomerId(Long customerId);
+
+    public void deleteCreditCardByCustomerId(Long customerId) throws CreditCardNotFoundException, DeleteCreditCardException, CustomerNotFoundException;
     
 }

@@ -58,17 +58,19 @@ public class JasperReportManagedBean {
         try {
             HashMap parameters = new HashMap();
             System.out.print("((((((((((((((((((((((((" + order.getOrderEntityId());
-            parameters.put("orderEntityId", order.getOrderEntityId());
-           parameters.put("customerFirstName", customer.getFirstName());
-            parameters.put("customerLastName", customer.getLastName());
-           parameters.put("customerAddress", customer.getAddress());
-           parameters.put("customerNumber", customer.getContactNumber());
+            parameters.put("orderEntityId", "1");
+           parameters.put("customerFirstName", "Customer");
            
-           System.out.println(readyFoodsDataSource.getConnection());
+            parameters.put("customerLastName", "one");
+           parameters.put("customerAddress", "address");
+           parameters.put("customerNumber", "98986554");
+
+            System.out.println(readyFoodsDataSource.getConnection());
             InputStream reportStream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/jasperreport/orderInvoice.jasper");
             OutputStream outputStream = FacesContext.getCurrentInstance().getExternalContext().getResponseOutputStream();
+            System.out.println("PRINT AFTER TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
             JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, readyFoodsDataSource.getConnection());
-            
+            System.out.println("PRINT BEFOREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE TESTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
             
         } catch (JRException ex) {
             ex.printStackTrace();

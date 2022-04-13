@@ -51,19 +51,22 @@
                              mask="999">
                     <f:convertNumber type="number"/> 
                 </p:inputMask>
-
-
                 <p:commandButton value="Update"
                                  actionListener="#{paymentManagedBean.saveCC}"
                                  update="@form">
-
+                </p:commandButton>
+                <p:commandButton icon="ui-icon-trash" update="@form" actionListener="#{paymentManagedBean.deleteCard}">
+                    <p:confirm header="Confirmation" message="Are you sure you want to delete this Credit Card?" icon="ui-icon-alert" />
                 </p:commandButton>
             </p:panelGrid>
-
 
             <br></br>
 
         </h:form>
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+        </p:confirmDialog>
     </ui:define>
 
 </ui:composition>
