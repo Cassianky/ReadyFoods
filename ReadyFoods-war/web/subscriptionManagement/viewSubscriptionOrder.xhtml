@@ -20,8 +20,8 @@
             </p:growl>
 
             <h1 class="h1title">Meal Kits</h1>
-
-
+            <p:outputLabel class="text-subscription-order" value="Please add more meal kits or subscription has been cancelled..." rendered="#{subscriptionOrderViewManagedBean.subscriptionOrderExists == false}"></p:outputLabel>
+            
             <ui:repeat value="#{subscriptionOrderViewManagedBean.orders}" var="order">
 
                 <p:fieldset id="orderPanel" style=" width: 70%" 
