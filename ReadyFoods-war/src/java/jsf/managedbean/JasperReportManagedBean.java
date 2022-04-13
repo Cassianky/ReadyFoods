@@ -22,7 +22,6 @@ import javax.inject.Inject;
 import javax.sql.DataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperRunManager;
-
 /**
  *
  * @author PYT
@@ -33,39 +32,41 @@ public class JasperReportManagedBean {
 
     @Resource(name = "readyFoodsDataSource")
     private DataSource readyFoodsDataSource;
-    
+
     private OrderEntity order;
-    
+
     private Customer customer;
-    
+
     @Inject
     private ShoppingCartManagedBean shoppingCartManagedBean;
 
     public JasperReportManagedBean() {
-     
+
     }
-    
+
     @PostConstruct
-    public void postConstruct(){
-         order = shoppingCartManagedBean.getOrderToGenerate();
-         customer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
-         System.out.println("jsf.managedbean.JasperReportManagedBean.postConstruct()" + customer.getUserName());
+    public void postConstruct() {
+        order = shoppingCartManagedBean.getOrderToGenerate();
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        customer = (Customer) ctx.getExternalContext().getSessionMap().get("currentCustomer");
+        ctx.responseComplete();
+        System.out.println("jsf.managedbean.JasperReportManagedBean.postConstruct()" + customer.getUserName());
     }
-  
 
     public void generateReport(ActionEvent event) {
-        
+
         try {
             HashMap parameters = new HashMap();
+            System.out.print("((((((((((((((((((((((((" + order.getOrderEntityId());
             parameters.put("orderEntityId", order.getOrderEntityId());
-            parameters.put("customerFirstName",customer.getFirstName());
-            parameters.put("customerLastName",customer.getLastName());
-            parameters.put("customerAddress",customer.getAddress());
-            parameters.put("customerNumber",customer.getContactNumber());
-
+           parameters.put("customerFirstName", customer.getFirstName());
+            parameters.put("customerLastName", customer.getLastName());
+           parameters.put("customerAddress", customer.getAddress());
+           parameters.put("customerNumber", customer.getContactNumber());
+           
+           System.out.println(readyFoodsDataSource.getConnection());
             InputStream reportStream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/jasperreport/orderInvoice.jasper");
             OutputStream outputStream = FacesContext.getCurrentInstance().getExternalContext().getResponseOutputStream();
-
             JasperRunManager.runReportToPdfStream(reportStream, outputStream, parameters, readyFoodsDataSource.getConnection());
             
             
@@ -74,6 +75,9 @@ public class JasperReportManagedBean {
         } catch (SQLException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
