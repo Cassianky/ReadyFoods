@@ -175,7 +175,7 @@ public class DataInitSessionBean {
             Long ingredientSpecification3Id = ingredientSpecificationSessionBeanLocal.createNewIngredientSpecification(ingredientSpecifcation3, ingredient3Id);
             Long ingredientSpecification4Id = ingredientSpecificationSessionBeanLocal.createNewIngredientSpecification(ingredientSpecifcation4, ingredient4Id);
             Long ingredientSpecification5Id = ingredientSpecificationSessionBeanLocal.createNewIngredientSpecification(ingredientSpecifcation5, ingredient5Id);
-            Long ingredientSpecification6Id = ingredientSpecificationSessionBeanLocal.createNewIngredientSpecification(ingredientSpecifcation6, ingredient6Id);
+            Long ingredientSpecification6Id = ingredientSpecificationSessionBeanLocal.createNewIngredientSpecification(ingredientSpecifcation6, ingredient18Id);
             Long ingredientSpecification7Id = ingredientSpecificationSessionBeanLocal.createNewIngredientSpecification(ingredientSpecifcation7, ingredient7Id);
             Long ingredientSpecification8Id = ingredientSpecificationSessionBeanLocal.createNewIngredientSpecification(ingredientSpecifcation8, ingredient8Id);
             Long ingredientSpecification9Id = ingredientSpecificationSessionBeanLocal.createNewIngredientSpecification(ingredientSpecifcation9, ingredient9Id);

@@ -209,7 +209,7 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
                     }
                 }
                 
-                System.out.print("completed no combine recipe==================================");
+                System.out.print("completed combine recipe==================================");
 
                 for (Recipe recipe : filteredRecipes) {
                     recipe.getCategories().size();
