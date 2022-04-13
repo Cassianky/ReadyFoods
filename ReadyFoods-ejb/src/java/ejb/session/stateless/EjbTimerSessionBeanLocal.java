@@ -19,5 +19,7 @@ public interface EjbTimerSessionBeanLocal {
     public void recipeOfTheDay();
 
     public List<RecipeOfTheDay> retrieveRecipeOftheDay();
+
+    public void recipeOfTheDayInitialise();
     
 }

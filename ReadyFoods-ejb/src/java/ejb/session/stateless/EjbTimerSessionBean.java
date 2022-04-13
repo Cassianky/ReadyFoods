@@ -39,7 +39,7 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanLocal {
     }
     
     @Override
-    @Schedule(hour = "12", info = "recipeOfTheDay")
+    @Schedule(hour = "2", info = "recipeOfTheDay")
     //@Schedule(hour = "*", minute = "*", second = "*/5", info = "recipeOfTheDay")
     public void recipeOfTheDay() {
         
@@ -52,6 +52,19 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanLocal {
             em.remove(recipe);
         }
         
+        Query query2 = em.createQuery("SELECT r FROM Recipe r");
+        List<Recipe> recipesExisting = query2.getResultList();
+        Random random = new Random();
+        Long newRecipeOfTheDayId = (recipesExisting.get(random.nextInt(recipesExisting.size()))).getRecipeId();
+        RecipeOfTheDay newRecipeOfTheDay = new RecipeOfTheDay();
+        newRecipeOfTheDay.setRecipeId(newRecipeOfTheDayId);
+        System.out.print("Recipe Of The Day" + newRecipeOfTheDayId);
+        em.persist(newRecipeOfTheDay);
+        em.flush();
+    }
+    
+    @Override
+    public void recipeOfTheDayInitialise() { 
         Query query2 = em.createQuery("SELECT r FROM Recipe r");
         List<Recipe> recipesExisting = query2.getResultList();
         Random random = new Random();

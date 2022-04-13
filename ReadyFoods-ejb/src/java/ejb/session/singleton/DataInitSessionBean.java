@@ -2,6 +2,7 @@ package ejb.session.singleton;
 
 import ejb.session.stateless.CategorySessionBeanLocal;
 import ejb.session.stateless.CustomerSessionBeanLocal;
+import ejb.session.stateless.EjbTimerSessionBeanLocal;
 import ejb.session.stateless.FoodSessionBeanLocal;
 import ejb.session.stateless.IngredientSessionBeanLocal;
 import ejb.session.stateless.IngredientSpecificaitonSessionBeanLocal;
@@ -50,6 +51,9 @@ import util.exception.UnknownPersistenceException;
 public class DataInitSessionBean {
 
     @EJB
+    private EjbTimerSessionBeanLocal ejbTimerSessionBeanLocal;
+
+    @EJB
     private FoodSessionBeanLocal foodSessionBeanLocal;
 
     @EJB
@@ -63,7 +67,7 @@ public class DataInitSessionBean {
     CategorySessionBeanLocal categorySessionBeanLocal;
     @EJB
     IngredientSessionBeanLocal ingredientSessionBeanLocal;
-
+    
     @PersistenceContext(unitName = "ReadyFoods-ejbPU")
     private EntityManager em;
 
@@ -377,6 +381,8 @@ public class DataInitSessionBean {
             foodSessionBeanLocal.createNewFood(food4, customer1.getCustomerId());
             foodSessionBeanLocal.createNewFood(food5, customer1.getCustomerId());
 
+            ejbTimerSessionBeanLocal.recipeOfTheDayInitialise();
+            
         } catch (CustomerNotFoundException | InputDataValidationException | UnknownPersistenceException | CustomerEmailExistsException | CategoryNotFoundException
                 | CreateCategoryException | CreateRecipeException | RecipeTitleExistException | IngredientExistsException
                 | IngredientSpecificationNotFoundException | IngredientNotFoundException

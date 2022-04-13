@@ -51,6 +51,7 @@ public class MyFoodsManagedBean implements Serializable {
     private Recipe selectedRecipe;
     private Food foodToCreate;
     private int numServings;
+    private String keyword;
 
     public MyFoodsManagedBean() {
         isNotFromRecipe = true;
@@ -115,6 +116,17 @@ public class MyFoodsManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unknown error occurred while creating new food: " + ex.getMessage(), null));
         } catch (InputDataValidationException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Inputs for new food are not correct!: " + ex.getMessage(), null));
+        }
+    }
+    
+    public void searchFoodsByString() throws CustomerNotFoundException {
+        System.out.println("Entered search method");
+
+        if (getKeyword() == null || getKeyword().trim().length() == 0) {
+            this.foods = foodSessionBeanLocal.retrieveAllFoodsByCustomerId(currentCustomer.getCustomerId());
+        }
+        {
+            this.foods = foodSessionBeanLocal.searchFoodsByNameForCustomer(keyword, currentCustomer.getCustomerId());
         }
     }
 
@@ -214,5 +226,19 @@ public class MyFoodsManagedBean implements Serializable {
      */
     public void setSelectedRecipe(Recipe selectedRecipe) {
         this.selectedRecipe = selectedRecipe;
+    }
+
+    /**
+     * @return the keyword
+     */
+    public String getKeyword() {
+        return keyword;
+    }
+
+    /**
+     * @param keyword the keyword to set
+     */
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 }

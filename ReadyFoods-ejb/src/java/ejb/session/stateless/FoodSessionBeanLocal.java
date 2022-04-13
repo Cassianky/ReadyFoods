@@ -28,4 +28,6 @@ public interface FoodSessionBeanLocal {
     public void deleteFoodByFoodId(Long foodId, Long customerId) throws FoodNotFoundException, DeleteFoodException, CustomerNotFoundException;
 
     public List<Food> retrieveAllFoodsByCustomerId(Long customerId) throws CustomerNotFoundException;
+
+    public List<Food> searchFoodsByNameForCustomer(String searchString, Long customerId);
 }

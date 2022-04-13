@@ -9,6 +9,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -45,6 +46,7 @@ public class FoodSessionBean implements FoodSessionBeanLocal {
             try {
                 //Association
                 customer.addFood(newFood);
+                newFood.setCustomer(customer);
                 em.persist(newFood);
                 em.flush();
 
@@ -80,6 +82,17 @@ public class FoodSessionBean implements FoodSessionBeanLocal {
         customer.removeFood(foodToDelete);
         
         em.remove(foodToDelete);
+    }
+    
+    @Override
+    public List<Food> searchFoodsByNameForCustomer(String searchString, Long customerId) {
+
+        Query query = em.createQuery("SELECT f FROM Food f WHERE f.name LIKE :inSearchString AND f.customer.customerId = :inCustomerId ORDER BY f.name ASC");
+        query.setParameter("inSearchString", "%" + searchString + "%");
+        query.setParameter("inCustomerId", customerId);
+        List<Food> foods = query.getResultList();
+
+        return foods;
     }
     
     @Override
