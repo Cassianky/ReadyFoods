@@ -7,12 +7,14 @@ import ejb.session.stateless.FoodSessionBeanLocal;
 import ejb.session.stateless.IngredientSessionBeanLocal;
 import ejb.session.stateless.IngredientSpecificaitonSessionBeanLocal;
 import ejb.session.stateless.RecipeSessionBeanLocal;
+import ejb.session.stateless.StaffSessionBeanLocal;
 import entity.Category;
 import entity.Customer;
 import entity.Food;
 import entity.Ingredient;
 import entity.IngredientSpecification;
 import entity.Recipe;
+import entity.Staff;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ import util.enumeration.DietType;
 import util.enumeration.Gender;
 import util.enumeration.IngredientUnit;
 import util.enumeration.PreparationMethod;
+import util.enumeration.StaffType;
 import util.exception.CategoryNotFoundException;
 import util.exception.CreateCategoryException;
 import util.exception.CreateRecipeException;
@@ -42,6 +45,7 @@ import util.exception.IngredientSpecificationNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.RecipeNotFoundException;
 import util.exception.RecipeTitleExistException;
+import util.exception.StaffUsernameExistException;
 import util.exception.UnknownPersistenceException;
 
 @Singleton
@@ -49,6 +53,9 @@ import util.exception.UnknownPersistenceException;
 @Startup
 
 public class DataInitSessionBean {
+
+    @EJB
+    private StaffSessionBeanLocal staffSessionBeanLocal;
 
     @EJB
     private EjbTimerSessionBeanLocal ejbTimerSessionBeanLocal;
@@ -67,7 +74,7 @@ public class DataInitSessionBean {
     CategorySessionBeanLocal categorySessionBeanLocal;
     @EJB
     IngredientSessionBeanLocal ingredientSessionBeanLocal;
-    
+
     @PersistenceContext(unitName = "ReadyFoods-ejbPU")
     private EntityManager em;
 
@@ -87,6 +94,9 @@ public class DataInitSessionBean {
             Customer customer1 = new Customer("customer1", "customer1", "customer1", "99999999", "password", "customer1@gmail.com", "123 Street", DietType.VEGAN, Gender.FEMALE, ActivityLevel.HIGH);
             customer1.setDob(dob);
             customerSessionBeanLocal.createNewCustomer(customer1);
+
+            staffSessionBeanLocal.createNewStaff(new Staff("Administrator", "Admin", StaffType.ADMINISTRATOR, "admin", "password"));
+            
 
             Ingredient ingredient1 = new Ingredient("Chicken", "Whole Chicken between 1kg to 1.5kg", IngredientUnit.Whole, new BigDecimal("10.00"), 50, 150);
             Ingredient ingredient2 = new Ingredient("Salt", "Salt by 10 grams.unit", IngredientUnit.Gram, new BigDecimal("0.05"), 100 * 1000, 20 * 1000);
@@ -382,11 +392,11 @@ public class DataInitSessionBean {
             foodSessionBeanLocal.createNewFood(food5, customer1.getCustomerId());
 
             ejbTimerSessionBeanLocal.recipeOfTheDayInitialise();
-            
+
         } catch (CustomerNotFoundException | InputDataValidationException | UnknownPersistenceException | CustomerEmailExistsException | CategoryNotFoundException
                 | CreateCategoryException | CreateRecipeException | RecipeTitleExistException | IngredientExistsException
                 | IngredientSpecificationNotFoundException | IngredientNotFoundException
-                | RecipeNotFoundException ex) {
+                | RecipeNotFoundException | StaffUsernameExistException ex) {
             Logger.getLogger(DataInitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

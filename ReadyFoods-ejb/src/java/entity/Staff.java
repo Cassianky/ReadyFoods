@@ -63,7 +63,7 @@ public class Staff implements Serializable {
         this.salt = CryptographicHelper.getInstance().generateRandomString(32);
     }
 
-    public Staff(String firstName, String lastName, StaffType staffType, String username) {
+    public Staff(String firstName, String lastName, StaffType staffType, String username, String password) {
         this();
         this.firstName = firstName;
         this.lastName = lastName;
