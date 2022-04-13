@@ -185,3 +185,38 @@ a:link:hover, a:visited:hover {
     margin-left: auto !important;
     margin-right: auto !important;
 }
+
+.home-2-bg {
+    background: url("#{resource['images/homeLoggedIn.gif']}");
+    background-size: cover;
+    /* Set rules to fill background */
+    min-height: 100%;
+    min-width: 900px;
+
+    /* Set up proportionate scaling */
+    width: 100%;
+    height: auto;
+}
+
+.home-2-header {
+    font-family: PlayfairDisplay, "Playfair Display Black";
+    font-size: 80;
+    text-align: center;
+    font-weight: 700;
+    color: whitesmoke;
+    padding-top: 40px;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.access-right-bg {
+    background: url("#{resource['images/errorAccess.png']}");
+    background-size: cover;
+    /* Set rules to fill background */
+    min-height: 100%;
+    min-width: 900px;
+
+    /* Set up proportionate scaling */
+    width: 100%;
+    height: auto;
+}

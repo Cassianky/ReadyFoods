@@ -20,7 +20,32 @@
         </h:panelGroup>
         <ez:loginDialog/>
         <h:panelGroup rendered="#{sessionScope.isLogin == true}">
-            
+            <div class="home-2-bg">
+                <h1 class="home-2-header">Recipe Of The Day!</h1>
+                <div style="margin-left: 200; margin-right: 200;">
+                    <p:fieldset legend="#{recipeOfTheDayManagedBean.recipe.recipeTitle}">
+                        <h:panelGrid columns="2" cellpadding="5">
+                            <p:graphicImage library="images" name="/recipe/#{recipeOfTheDayManagedBean.recipe.picUrl}" />
+                            <p:panelGrid>
+                                <p:row>
+                                    <p:column><p:outputLabel
+                                            value="Cooktime: #{recipeOfTheDayManagedBean.recipe.cookingTime}" /></p:column>
+  
+                                </p:row>
+                                <p:row>
+                                    <p:column><p:outputLabel
+                                            value="Recipe's Chef: #{recipeOfTheDayManagedBean.recipe.recipeChef}" /></p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column><p:outputLabel
+                                            value="Calories: #{recipeOfTheDayManagedBean.recipe.caloriesPerServing}" /></p:column>
+                                </p:row>
+                            </p:panelGrid>
+                            <p:commandButton value="View More Details" actionListener="#{recipeOfTheDayManagedBean.viewRecipeDetails}"></p:commandButton>
+                        </h:panelGrid>
+                    </p:fieldset>
+                </div>
+            </div>
         </h:panelGroup>             
     </ui:define>
 
