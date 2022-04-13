@@ -35,7 +35,6 @@ public class FilterRecipeByIngredientManagedBean implements Serializable {
 
     @PostConstruct
     public void postConstruct() {
-        System.err.print("post constructing==================================");
         List <Ingredient> ingredients = ingredientSessionBeanLocal.retrieveAllIngredients();
 
         setSelectItems(new ArrayList<>());
@@ -44,22 +43,12 @@ public class FilterRecipeByIngredientManagedBean implements Serializable {
             selectItems.add(new SelectItem(i.getIngredientId(), i.getName(), i.getDescription()));
         }
 
-//        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("IngredientConverter_ingredients", ingredients);
-
         setCondition((String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("conditionIngredients"));
         setSelectedIngredientIds((List<Long>) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("selectedIngredients"));
 
         filterRecipe();
-        System.err.print("finish post constructing==================================");
     }
     
-//    @PreDestroy
-//    public void preDestroy()
-//    {
-//        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("IngredientConverter_ingredients", null);
-//        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("IngredientConverter_ingredients", null);
-//    }
-
     public void filterRecipe() {
         if (selectedIngredientIds != null && selectedIngredientIds.size() > 0) {
             recipes = recipeSessionBeanLocal.searchRecipesByIngredients(selectedIngredientIds, condition);
