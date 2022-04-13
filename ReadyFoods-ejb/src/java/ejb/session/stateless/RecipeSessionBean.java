@@ -150,22 +150,19 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
     @Override
     public List<Recipe> searchRecipesByIngredients(List<Long> ingredientIds, String condition) {
 
-        System.out.print("==================================Entering filter by ingredients====================");
         List<Recipe> recipes = new ArrayList<>();
         List<Recipe> filteredRecipes = new ArrayList<>();
-        
+
         List<Long> iIdConv = new ArrayList<>();
-        
-        for(Long l : ingredientIds) {
+
+        for (Long l : ingredientIds) {
             iIdConv.add(l);
         }
 
         if (ingredientIds == null || ingredientIds.isEmpty() || (!condition.equals("COMBINE") && !condition.equals("NO"))) {
-            System.out.print("empty recipe==================================");
             return recipes;
         } else {
             if (condition.equals("NO")) {
-                System.out.print("entering no combine recipe==================================");
 
                 recipes = retrieveAllRecipes();
 
@@ -182,35 +179,30 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
                         }
                     }
                 }
-                System.out.print("completed no combine recipe==================================");
             } else {
-                System.out.print("entering combine recipe==================================");
 
                 recipes = retrieveAllRecipes();
                 boolean contains = false;
 
                 for (Recipe r : recipes) {
                     int i = 0;
-                    for(Long id : iIdConv){
-                        for(IngredientSpecification is : r.getIngredientSpecificationList()) {
-                            if(id.equals(is.getIngredient().getIngredientId())) {
+                    for (Long id : iIdConv) {
+                        for (IngredientSpecification is : r.getIngredientSpecificationList()) {
+                            if (id.equals(is.getIngredient().getIngredientId())) {
                                 contains = true;
                                 i++;
                             }
                         }
-                        if(!true){
+                        if (!true) {
                             break;
                         } else {
                             contains = false;
                         }
                     }
-                    if(i == ingredientIds.size()) {
+                    if (i == ingredientIds.size()) {
                         filteredRecipes.add(r);
                     }
                 }
-                
-                System.out.print("completed no combine recipe==================================");
-
                 for (Recipe recipe : filteredRecipes) {
                     recipe.getCategories().size();
                     recipe.getIngredientSpecificationList().size();
