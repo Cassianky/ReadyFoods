@@ -451,6 +451,15 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         Boolean result = emailManager.email(name, "readyfoodscorporation@gmail.com", email, path);
         return new AsyncResult<>(result);
     }
+    
+    @Override
+    @Asynchronous
+    public Future<Boolean> sendOrderInvoiceEmail(String name, String email, String path) throws InterruptedException {
+        EmailManager emailManager = new EmailManager("readyfoodscorporation@gmail.com", "fgdlhkfsl4648795");
+        Boolean result = emailManager.emailOrderInvoice(name, "readyfoodscorporation@gmail.com", email, path);
+        return new AsyncResult<>(result);
+    }
+
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Customer>> constraintViolations) {
         String msg = "Input data validation error!:";

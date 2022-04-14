@@ -45,4 +45,6 @@ public interface CustomerSessionBeanLocal {
     public List<FoodDiaryRecord> topFoodForEachMacro(Long customerId, String typeMacro);
 
     public Future<Boolean> sendWelcomeEmail(String name, String email, String path) throws InterruptedException;
+
+    public Future<Boolean> sendOrderInvoiceEmail(String name, String email, String path) throws InterruptedException;
 }

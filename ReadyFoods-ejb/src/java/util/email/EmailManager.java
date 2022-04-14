@@ -91,5 +91,68 @@ public class EmailManager {
 
             return false;
         }
+        
+        
+        
+    }
+    
+    public Boolean emailOrderInvoice(String name, String fromEmailAddress, String toEmailAddress, String path) {
+        try {
+            Properties props = new Properties();
+            props.put("mail.transport.protocol", "smtp");
+            props.put("mail.smtp.host", emailServerName);
+            props.put("mail.smtp.port", "587");
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.smtp.ssl.trust", emailServerName);
+            props.put("mail.smtp.debug", "true");
+            javax.mail.Authenticator auth = new SMTPAuthenticator(smtpAuthUser, smtpAuthPassword);
+            Session session = Session.getInstance(props, auth);
+            session.setDebug(true);
+            Message msg = new MimeMessage(session);
+
+            if (msg != null) {
+                msg.setFrom(InternetAddress.parse(fromEmailAddress, false)[0]);
+                msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmailAddress, false));
+                msg.setSubject("Dear " + name + ", your order at ReadyFoods has been confirmed");
+                msg.setHeader("X-Mailer", mailer);
+                Date timeStamp = new Date();
+                msg.setSentDate(timeStamp);
+
+                // This mail has 2 part, the BODY and the embedded image
+                MimeMultipart multipart = new MimeMultipart("related");
+
+                // first part (the html)
+                BodyPart messageBodyPart = new MimeBodyPart();
+                String htmlText = "<H1>View your order invoice below!</H1>";
+                messageBodyPart.setContent(htmlText, "text/html");
+                // add it
+                multipart.addBodyPart(messageBodyPart);
+
+                // second part (the image)
+                messageBodyPart = new MimeBodyPart();
+                DataSource fds = new FileDataSource(path);
+                
+                messageBodyPart.setDataHandler(new DataHandler(fds));
+                messageBodyPart.setFileName("OrderInvoice.pdf");
+                // add image to the multipart
+                multipart.addBodyPart(messageBodyPart);
+
+                // put everything together
+                msg.setContent(multipart);
+                Transport.send(msg);
+
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return false;
+        }
+        
+        
+        
     }
 }
