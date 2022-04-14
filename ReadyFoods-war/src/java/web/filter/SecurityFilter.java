@@ -62,7 +62,8 @@ public class SecurityFilter implements Filter {
         if (path.equals("/index.xhtml")
                 || path.equals("/accessRightError.xhtml")
                 || path.equals("/registerCustomer.xhtml")
-                || path.startsWith("/javax.faces.resource")) {
+                || path.startsWith("/javax.faces.resource")
+                || path.equals("/jasperreport/jasper.png")) {
             return true;
         } else {
             return false;
