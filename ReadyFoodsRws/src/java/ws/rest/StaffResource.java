@@ -69,6 +69,7 @@ public class StaffResource {
         }
     }
 
+    @Path("createStaff")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -77,11 +78,12 @@ public class StaffResource {
             try {
                 Staff currentStaff = staffSessionBeanLocal.staffLogin(createStaffReq.getUsername(), createStaffReq.getPassword());
                 System.out.println("********** StaffResource.createStaff(): Staff " + currentStaff.getUsername() + " login remotely via web service");
-
+                Staff newStaff = createStaffReq.getNewStaff();
+                System.out.println("********** StaffResource.createStaff(): Staff " + newStaff.getFirstName());
                 Long newStaffId = staffSessionBeanLocal.createNewStaff(createStaffReq.getNewStaff());
-                Staff newStaff = staffSessionBeanLocal.retrieveStaffByStaffId(newStaffId);
+                Staff newStafff = staffSessionBeanLocal.retrieveStaffByStaffId(newStaffId);
 
-                return Response.status(Response.Status.OK).entity(newStaff).build();
+                return Response.status(Response.Status.OK).entity(newStafff).build();
             } catch (InvalidLoginCredentialException ex) {
                 return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();
             } catch (UnknownPersistenceException | InputDataValidationException | StaffNotFoundException ex) {

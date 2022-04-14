@@ -6,7 +6,6 @@
 package ws.datamodel;
 
 import entity.Staff;
-import util.enumeration.StaffType;
 
 /**
  *
