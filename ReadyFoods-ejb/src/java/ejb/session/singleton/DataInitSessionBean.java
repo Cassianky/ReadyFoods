@@ -96,7 +96,7 @@ public class DataInitSessionBean {
             customerSessionBeanLocal.createNewCustomer(customer1);
 
             staffSessionBeanLocal.createNewStaff(new Staff("Administrator", "Admin", StaffType.ADMINISTRATOR, "admin", "password"));
-              staffSessionBeanLocal.createNewStaff(new Staff("Administrator", "Admin", StaffType.MODERATOR, "moderator1", "password"));
+              staffSessionBeanLocal.createNewStaff(new Staff("Moderator", "Moderator1", StaffType.MODERATOR, "moderator1", "password"));
             
             
 
