@@ -96,6 +96,8 @@ public class DataInitSessionBean {
             customerSessionBeanLocal.createNewCustomer(customer1);
 
             staffSessionBeanLocal.createNewStaff(new Staff("Administrator", "Admin", StaffType.ADMINISTRATOR, "admin", "password"));
+              staffSessionBeanLocal.createNewStaff(new Staff("Moderator", "Moderator1", StaffType.MODERATOR, "moderator1", "password"));
+            
             
 
             Ingredient ingredient1 = new Ingredient("Chicken", "Whole Chicken between 1kg to 1.5kg", IngredientUnit.Whole, new BigDecimal("10.00"), 50, 150);

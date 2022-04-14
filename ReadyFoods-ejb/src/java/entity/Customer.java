@@ -39,17 +39,17 @@ public class Customer implements Serializable {
     private Long customerId;
     @Column(nullable = false, length = 64)
     @NotNull
-    @Size(min=5, max = 64)
+    @Size(min = 5, max = 64)
     private String userName;
     @NotNull
-    @Size(min=2, max = 32)
+    @Size(min = 2, max = 32)
     private String firstName;
     @NotNull
-    @Size(min=2, max = 32)
+    @Size(min = 2, max = 32)
     private String lastName;
     @NotNull
     @Column(nullable = false, length = 8)
-    @Size(min=8, max=8)
+    @Size(min = 8, max = 8)
     private String contactNumber;
     // Updated in v4.5 to use CHAR instead of VARCHAR
     // @Column(nullable = false, length = 32)
@@ -62,7 +62,7 @@ public class Customer implements Serializable {
     private String salt;
     @Column(nullable = false, unique = true, length = 64)
     @NotNull
-    @Size(min=5, max = 64)
+    @Size(min = 5, max = 64)
     @Email
     private String email;
     @Column(nullable = false)
@@ -70,7 +70,7 @@ public class Customer implements Serializable {
     private Boolean isBanned;
     @NotNull
     @Column(nullable = false, length = 50)
-    @Size(min=5, max=50)
+    @Size(min = 5, max = 50)
     private String address;
     //@Column(nullable = false)
     //@NotNull
@@ -97,31 +97,31 @@ public class Customer implements Serializable {
     @Column(nullable = false)
     @NotNull
     private ActivityLevel activityLevel;
-    
+
     @OneToMany(fetch = FetchType.LAZY)
     private List<Subscription> subscriptions;
-    
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
     private List<Enquiry> enquiries;
 
-    @OneToMany(mappedBy = "customer",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<OrderEntity> orders;
-    
+
     @OneToMany(fetch = FetchType.LAZY)
     private List<Food> foods;
-    
+
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Recipe> bookmarkedRecipes;
-    
+
     @OneToOne(fetch = FetchType.LAZY)
     private CreditCard creditCard;
 
     @Column(nullable = false)
     private String profilePicture;
-    
+
     @OneToMany(fetch = FetchType.LAZY)
     private List<FoodDiaryRecord> foodDiaryRecords;
-    
+
     public Customer() {
         bookmarkedRecipes = new ArrayList<>();
         foods = new ArrayList<>();
@@ -150,7 +150,6 @@ public class Customer implements Serializable {
         setPassword(password);
     }
 
-    
     public Long getCustomerId() {
         return customerId;
     }
@@ -221,12 +220,9 @@ public class Customer implements Serializable {
     }
 
     public void setPassword(String password) {
-        if(password != null)
-        {
+        if (password != null) {
             this.password = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + this.salt));
-        }
-        else
-        {
+        } else {
             this.password = null;
         }
     }
@@ -270,7 +266,6 @@ public class Customer implements Serializable {
 //    public void setAge(Integer age) {
 //        this.age = age;
 //    }
-
     public BigDecimal getAmountSpent() {
         return amountSpent;
     }
@@ -308,15 +303,13 @@ public class Customer implements Serializable {
     }
 
     public void addSubscription(Subscription subscription) {
-        if(!this.subscriptions.contains(subscription))
-        {
+        if (!this.subscriptions.contains(subscription)) {
             this.getSubscriptions().add(subscription);
         }
     }
-    
+
     public void removeSubscription(Subscription subscription) {
-        if(this.getSubscriptions().contains(subscription))
-        {
+        if (this.getSubscriptions().contains(subscription)) {
             this.getSubscriptions().remove(subscription);
         }
     }
@@ -326,15 +319,13 @@ public class Customer implements Serializable {
     }
 
     public void addEnquiry(Enquiry enquiry) {
-        if(!this.enquiries.contains(enquiry))
-        {
+        if (!this.enquiries.contains(enquiry)) {
             this.getEnquiries().add(enquiry);
         }
     }
-    
+
     public void removeEnquiry(Enquiry enquiry) {
-        if(this.getEnquiries().contains(enquiry))
-        {
+        if (this.getEnquiries().contains(enquiry)) {
             this.getEnquiries().remove(enquiry);
         }
     }
@@ -343,28 +334,18 @@ public class Customer implements Serializable {
         return orders;
     }
 
-    public void addOrder(OrderEntity order) throws EntityInstanceExistsInCollectionException
-    {
-        if(!this.orders.contains(order))
-        {
+    public void addOrder(OrderEntity order) throws EntityInstanceExistsInCollectionException {
+        if (!this.orders.contains(order)) {
             this.orders.add(order);
-        }
-        else
-        {
+        } else {
             throw new EntityInstanceExistsInCollectionException("Order already exists");
         }
     }
-    
-    
-    
-    public void removeOrder(OrderEntity order) throws EntityInstanceMissingInCollectionException
-    {
-        if(this.orders.contains(order))
-        {
+
+    public void removeOrder(OrderEntity order) throws EntityInstanceMissingInCollectionException {
+        if (this.orders.contains(order)) {
             this.orders.remove(order);
-        }
-        else
-        {
+        } else {
             throw new EntityInstanceMissingInCollectionException("Order missing");
         }
     }
@@ -374,15 +355,13 @@ public class Customer implements Serializable {
     }
 
     public void addFood(Food food) {
-        if(!this.foods.contains(food))
-        {
+        if (!this.foods.contains(food)) {
             this.getFoods().add(food);
         }
     }
-    
+
     public void removeFood(Food food) {
-        if(this.getFoods().contains(food))
-        {
+        if (this.getFoods().contains(food)) {
             this.getFoods().remove(food);
         }
     }
@@ -391,16 +370,14 @@ public class Customer implements Serializable {
         return bookmarkedRecipes;
     }
 
-     public void addBookedmarkedRecipe(Recipe bookmarkedRecipe) {
-        if(!this.getBookedmarkedRecipes().contains(bookmarkedRecipe))
-        {
+    public void addBookedmarkedRecipe(Recipe bookmarkedRecipe) {
+        if (!this.getBookedmarkedRecipes().contains(bookmarkedRecipe)) {
             this.getBookedmarkedRecipes().add(bookmarkedRecipe);
         }
     }
-    
+
     public void removeBookedmarkedRecipe(Recipe bookmarkedRecipe) {
-        if(this.getBookedmarkedRecipes().contains(bookmarkedRecipe))
-        {
+        if (this.getBookedmarkedRecipes().contains(bookmarkedRecipe)) {
             this.getBookedmarkedRecipes().remove(bookmarkedRecipe);
         }
     }
@@ -412,7 +389,7 @@ public class Customer implements Serializable {
     public void setCreditCard(CreditCard creditCard) {
         this.creditCard = creditCard;
     }
-    
+
     /**
      * @return the profilePicture
      */
@@ -440,21 +417,19 @@ public class Customer implements Serializable {
     public void setDob(LocalDate dob) {
         this.dob = dob;
     }
-    
+
     public List<FoodDiaryRecord> getFoodDiaryRecords() {
         return this.foodDiaryRecords;
     }
 
     public void addFoodDiaryRecord(FoodDiaryRecord foodDiaryRecord) {
-        if(!this.foodDiaryRecords.contains(foodDiaryRecord))
-        {
+        if (!this.foodDiaryRecords.contains(foodDiaryRecord)) {
             this.getFoodDiaryRecords().add(foodDiaryRecord);
         }
     }
-    
+
     public void removeFoodDiaryRecord(FoodDiaryRecord foodDiaryRecord) {
-        if(this.getFoodDiaryRecords().contains(foodDiaryRecord))
-        {
+        if (this.getFoodDiaryRecords().contains(foodDiaryRecord)) {
             this.getFoodDiaryRecords().remove(foodDiaryRecord);
         }
     }

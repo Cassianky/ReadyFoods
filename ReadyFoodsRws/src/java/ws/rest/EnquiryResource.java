@@ -65,7 +65,14 @@ public class EnquiryResource {
             List<Enquiry> enquires = enquirySessionBeanLocal.retrieveAllEnquires();
 
             for (Enquiry enquiry : enquires) {
-                enquiry.setCustomer(null);
+                enquiry.getCustomer().getEnquiries().clear();
+                enquiry.getCustomer().getFoodDiaryRecords().clear();
+                enquiry.getCustomer().setCreditCard(null);
+                enquiry.getCustomer().getBookedmarkedRecipes().clear();
+                enquiry.getCustomer().getFoods().clear();
+                enquiry.getCustomer().getOrders().clear();
+                enquiry.getCustomer().getSubscriptions().clear();
+     
             }
 
             GenericEntity<List<Enquiry>> genericEntity = new GenericEntity<List<Enquiry>>(enquires) {
