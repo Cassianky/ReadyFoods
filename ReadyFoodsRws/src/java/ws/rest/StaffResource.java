@@ -46,9 +46,9 @@ public class StaffResource {
     {
         try
         {
-            Staff staff = staffSessionBeanLocal.staffLogin(username, password);
-            System.out.println("********** StaffResource.staffLogin(): Staff " + staff.getUsername() + " login remotely via web service");
 
+            Staff staff = staffSessionBeanLocal.staffLogin(username, password);
+            System.out.println("********** StaffResource.staffLogin(): Staff  login remotely via web service");
             staff.setPassword(null);
             staff.setSalt(null);
             
