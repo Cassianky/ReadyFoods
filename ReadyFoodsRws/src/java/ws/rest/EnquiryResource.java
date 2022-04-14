@@ -49,7 +49,7 @@ public class EnquiryResource {
     public EnquiryResource() {
     }
 
-    @Path("retrieveAllEnquires")
+    @Path("retrieveAllEnquiries")
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
