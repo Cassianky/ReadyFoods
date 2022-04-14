@@ -12,10 +12,8 @@
         <h1>Confirmation Page</h1>
         <h:form>
             <h:outputText style="text-align: center;font-size: 40px;font-weight: bold;color: #94774b;" value="THANK YOU FOR SHOPPING WITH READYFOODS!"/>
-            <p:commandButton value="download report" actionListener="#{jasperReportManagedBean.generateReport}" ajax="false">
+            <p:commandButton value="Send Order Invoice to Email" actionListener="#{jasperReportManagedBean.generateReport}" ajax="false">
             </p:commandButton>
-
-
         </h:form>
     </ui:define>
 

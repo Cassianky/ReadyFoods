@@ -6,13 +6,17 @@
 package jsf.managedbean;
 
 import ejb.session.stateless.CreditCardSessionBeanLocal;
+import ejb.session.stateless.CustomerSessionBeanLocal;
+import ejb.session.stateless.SubscriptionSessionBeanLocal;
 import entity.CreditCard;
 import entity.Customer;
+import entity.Subscription;
 import java.io.IOException;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -39,53 +43,72 @@ import util.exception.UnknownPersistenceException;
 @Named(value = "paymentManagedBean")
 @ViewScoped
 public class PaymentManagedBean implements Serializable {
-    
+
+    @EJB(name = "CustomerSessionBeanLocal")
+    private CustomerSessionBeanLocal customerSessionBeanLocal;
+
     @EJB(name = "CreditCardSessionBeanLocal")
     private CreditCardSessionBeanLocal creditCardSessionBeanLocal;
-    
+
     @NotNull(message = "Credit Card Number is required")
     @Size(min = 19, max = 19)
     private String ccNumber;
-    
+
     @NotNull(message = "CVV is required")
     @Min(100)
     @Max(999)
     private Integer CVV;
-    
+
     @NotNull(message = "Name on card is required")
     @Size(min = 5, max = 64)
     private String nameOnCard;
-    
+
     @NotNull(message = "Expiry date is required")
     private Date expiryDate;
-    
+
+    private Boolean isSubscribed;
+
     @Inject
     private ShoppingCartManagedBean shoppingCartManagedBean;
-    
+
     @Inject
     private ProfileManagedBean profileManagedBean;
-    
+
     public PaymentManagedBean() {
     }
-    
+
     @PostConstruct
     public void postConstruct() {
-        System.out.println("jsf.managedbean.PaymentManagedBean.postConstruct()");
-        if (profileManagedBean.getCreditCard() != null) {
-            setCcNumber(profileManagedBean.getCreditCard().getCcNumber());
-            setCVV(profileManagedBean.getCreditCard().getCVV());
-            setExpiryDate(profileManagedBean.getCreditCard().getExpiryDate());
-            setNameOnCard(profileManagedBean.getCreditCard().getNameOnCard());
-        } else {
+        try {
+            Customer customer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
+            Customer currentCustomer = customerSessionBeanLocal.retrieveCustomerByCustomerId(customer.getCustomerId());
+            List<Subscription> subscriptions = currentCustomer.getSubscriptions();
+            isSubscribed = false;
+            //If subscribed, user cannot delete credit card
+            for (Subscription sub : subscriptions) {
+                if (sub.getOngoing() == true) {
+                    isSubscribed = true;
+                }
+            }
             System.out.println("jsf.managedbean.PaymentManagedBean.postConstruct()");
-            
+            if (profileManagedBean.getCreditCard() != null) {
+                setCcNumber(profileManagedBean.getCreditCard().getCcNumber());
+                setCVV(profileManagedBean.getCreditCard().getCVV());
+                setExpiryDate(profileManagedBean.getCreditCard().getExpiryDate());
+                setNameOnCard(profileManagedBean.getCreditCard().getNameOnCard());
+            } else {
+                System.out.println("jsf.managedbean.PaymentManagedBean.postConstruct()");
+
+            }
+        } catch (CustomerNotFoundException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Customer ID is not found!" + ex.getMessage(), ""));
         }
     }
-    
+
     public void foo() {
-        
+
     }
-    
+
     public void deleteCard(ActionEvent event) {
         try {
             creditCardSessionBeanLocal.deleteCreditCardByCustomerId(profileManagedBean.getCurrentCustomer().getCustomerId());
@@ -102,7 +125,7 @@ public class PaymentManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Customer Not Found!: " + ex.getMessage(), null));
         }
     }
-    
+
     public void saveCC(ActionEvent event) throws IOException {
         System.out.println("jsf.managedbean.PaymentManagedBean.saveCC()");
         Customer currentCustomer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
@@ -112,7 +135,7 @@ public class PaymentManagedBean implements Serializable {
             CreditCard createdCard = creditCardSessionBeanLocal.retrieveCreditCardByCreditCardId(ccId);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Credit Card successfully updated!", "Credit Card Number: " + createdCard.getCcNumber()));
             shoppingCartManagedBean.setCreditCard(createdCard);
-            
+
         } catch (UnknownPersistenceException ex) {
             ex.printStackTrace();
         } catch (CustomerNotFoundException ex) {
@@ -123,11 +146,11 @@ public class PaymentManagedBean implements Serializable {
             Logger.getLogger(PaymentManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void redirectBackToCheckOut() throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().redirect("viewShoppingCart.xhtml");
     }
-    
+
     public void redirectToOrderPayment() throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().redirect("orderPayment.xhtml");
     }
@@ -191,5 +214,19 @@ public class PaymentManagedBean implements Serializable {
         System.out.println("jsf.managedbean.PaymentManagedBean.setCcNumber(): " + ccNumber);
         this.ccNumber = ccNumber;
     }
-    
+
+    /**
+     * @return the isSubscribed
+     */
+    public Boolean getIsSubscribed() {
+        return isSubscribed;
+    }
+
+    /**
+     * @param isSubscribed the isSubscribed to set
+     */
+    public void setIsSubscribed(Boolean isSubscribed) {
+        this.isSubscribed = isSubscribed;
+    }
+
 }
