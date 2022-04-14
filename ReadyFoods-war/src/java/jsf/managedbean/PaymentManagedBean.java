@@ -28,6 +28,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import util.exception.CreditCardNotFoundException;
 import util.exception.CustomerNotFoundException;
+import util.exception.DeleteCreditCardException;
 import util.exception.InputDataValidationException;
 import util.exception.UnknownPersistenceException;
 
@@ -38,26 +39,26 @@ import util.exception.UnknownPersistenceException;
 @Named(value = "paymentManagedBean")
 @ViewScoped
 public class PaymentManagedBean implements Serializable {
-
+    
     @EJB(name = "CreditCardSessionBeanLocal")
     private CreditCardSessionBeanLocal creditCardSessionBeanLocal;
-
+    
     @NotNull(message = "Credit Card Number is required")
-    @Size(min=19, max = 19)
+    @Size(min = 19, max = 19)
     private String ccNumber;
-
+    
     @NotNull(message = "CVV is required")
     @Min(100)
     @Max(999)
     private Integer CVV;
-
+    
     @NotNull(message = "Name on card is required")
-    @Size(min=5, max = 64)
+    @Size(min = 5, max = 64)
     private String nameOnCard;
-
+    
     @NotNull(message = "Expiry date is required")
     private Date expiryDate;
-
+    
     @Inject
     private ShoppingCartManagedBean shoppingCartManagedBean;
     
@@ -66,11 +67,11 @@ public class PaymentManagedBean implements Serializable {
     
     public PaymentManagedBean() {
     }
-
+    
     @PostConstruct
     public void postConstruct() {
         System.out.println("jsf.managedbean.PaymentManagedBean.postConstruct()");
-        if(profileManagedBean.getCreditCard() != null){
+        if (profileManagedBean.getCreditCard() != null) {
             setCcNumber(profileManagedBean.getCreditCard().getCcNumber());
             setCVV(profileManagedBean.getCreditCard().getCVV());
             setExpiryDate(profileManagedBean.getCreditCard().getExpiryDate());
@@ -80,11 +81,28 @@ public class PaymentManagedBean implements Serializable {
             
         }
     }
-
+    
     public void foo() {
-
+        
     }
-
+    
+    public void deleteCard(ActionEvent event) {
+        try {
+            creditCardSessionBeanLocal.deleteCreditCardByCustomerId(profileManagedBean.getCurrentCustomer().getCustomerId());
+            setCVV(null);
+            setCcNumber(null);
+            setExpiryDate(null);
+            setNameOnCard(null);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Credit Card deleted successfully!: ", null));
+        } catch (DeleteCreditCardException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error occured while adding deleting CC: " + ex.getMessage(), null));
+        } catch (CreditCardNotFoundException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "CC Not Found!: " + ex.getMessage(), null));
+        } catch (CustomerNotFoundException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Customer Not Found!: " + ex.getMessage(), null));
+        }
+    }
+    
     public void saveCC(ActionEvent event) throws IOException {
         System.out.println("jsf.managedbean.PaymentManagedBean.saveCC()");
         Customer currentCustomer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
@@ -94,7 +112,7 @@ public class PaymentManagedBean implements Serializable {
             CreditCard createdCard = creditCardSessionBeanLocal.retrieveCreditCardByCreditCardId(ccId);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Credit Card successfully updated!", "Credit Card Number: " + createdCard.getCcNumber()));
             shoppingCartManagedBean.setCreditCard(createdCard);
-
+            
         } catch (UnknownPersistenceException ex) {
             ex.printStackTrace();
         } catch (CustomerNotFoundException ex) {
@@ -105,7 +123,7 @@ public class PaymentManagedBean implements Serializable {
             Logger.getLogger(PaymentManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     public void redirectBackToCheckOut() throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().redirect("viewShoppingCart.xhtml");
     }
@@ -173,5 +191,5 @@ public class PaymentManagedBean implements Serializable {
         System.out.println("jsf.managedbean.PaymentManagedBean.setCcNumber(): " + ccNumber);
         this.ccNumber = ccNumber;
     }
-
+    
 }

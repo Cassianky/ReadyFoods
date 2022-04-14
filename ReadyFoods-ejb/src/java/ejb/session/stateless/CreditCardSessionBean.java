@@ -69,11 +69,10 @@ public class CreditCardSessionBean implements CreditCardSessionBeanLocal {
     }
   
     @Override
-    public void deleteCreditCardByCreditCardId(Long creditCardId, Long customerId) throws CreditCardNotFoundException, DeleteCreditCardException, CustomerNotFoundException
+    public void deleteCreditCardByCustomerId(Long customerId) throws CreditCardNotFoundException, DeleteCreditCardException, CustomerNotFoundException
     {
-        CreditCard creditCardToDelete = retrieveCreditCardByCreditCardId(creditCardId);
         Customer customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(customerId);
-        
+        CreditCard creditCardToDelete = customer.getCreditCard();
         //Disassociation
         customer.setCreditCard(null);
         

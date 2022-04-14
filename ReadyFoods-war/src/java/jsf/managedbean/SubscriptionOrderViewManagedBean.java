@@ -54,6 +54,8 @@ public class SubscriptionOrderViewManagedBean implements Serializable {
 
     private ZoneId TZ = ZoneId.of("Asia/Singapore");
 
+    private Boolean subscriptionOrderExists;
+
     public SubscriptionOrderViewManagedBean() {
     }
 
@@ -66,6 +68,12 @@ public class SubscriptionOrderViewManagedBean implements Serializable {
             subscription = subscriptionSessionBeanLocal.retrieveSubscriptionBySubscriptionId(subId);
 
             setOrders(subscription.getSubscriptionOrders());
+
+            if (orders.size() > 0) {
+                subscriptionOrderExists = true;
+            } else {
+                subscriptionOrderExists = false;
+            }
 
         } catch (NumberFormatException ex) {
             FacesContext.getCurrentInstance().addMessage(null,
@@ -113,13 +121,12 @@ public class SubscriptionOrderViewManagedBean implements Serializable {
     public void updateOrderStatus(ActionEvent event) {
         try {
             Long id = (Long) event.getComponent().getAttributes().get("idToUpdate");
- 
 
             orderEntitySessionBeanLocal.updateOrderStatusReceieved(id);
             subscription = subscriptionSessionBeanLocal.retrieveSubscriptionBySubscriptionId(subscription.getSubscriptionId());
 
             setOrders(subscription.getSubscriptionOrders());
-            
+
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO,
                             "Updated status!", null));
@@ -162,6 +169,20 @@ public class SubscriptionOrderViewManagedBean implements Serializable {
      */
     public void setOrders(List<OrderEntity> orders) {
         this.orders = orders;
+    }
+
+    /**
+     * @return the subscriptionOrderExists
+     */
+    public Boolean getSubscriptionOrderExists() {
+        return subscriptionOrderExists;
+    }
+
+    /**
+     * @param subscriptionOrderExists the subscriptionOrderExists to set
+     */
+    public void setSubscriptionOrderExists(Boolean subscriptionOrderExists) {
+        this.subscriptionOrderExists = subscriptionOrderExists;
     }
 
 }
