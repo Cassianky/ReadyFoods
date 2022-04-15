@@ -20,6 +20,7 @@ import util.exception.CategoryNotFoundException;
 import util.exception.CreateCategoryException;
 import util.exception.InputDataValidationException;
 import util.exception.RecipeNotFoundException;
+import util.exception.UpdateCategoryException;
 
 @Stateless
 
@@ -40,7 +41,7 @@ public class CategorySessionBean implements CategorySessionBeanLocal {
         this.validatorFactory = Validation.buildDefaultValidatorFactory();
         this.validator = validatorFactory.getValidator();
     }
-
+    
     @Override
     public Category createNewCategory(Category newCategory, Long parentCategoryId) throws CreateCategoryException, InputDataValidationException {
         Set<ConstraintViolation<Category>> constraintViolations = validator.validate(newCategory);
@@ -72,6 +73,44 @@ public class CategorySessionBean implements CategorySessionBeanLocal {
             }
         } else {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+        }
+    }
+    
+    @Override
+    public void updateCategory(Category category) throws UpdateCategoryException, CategoryNotFoundException, InputDataValidationException
+    {
+        Boolean isParentDiet = true;
+        if(category.getParentCategory() != null)
+        {
+            if(category.getParentCategory().getName().equals("Diet Type"))
+            {
+                isParentDiet = true;
+            } else {
+                isParentDiet = false;
+            }
+        } else if ((category.getName()).equals("Diet Type") == false) {
+            isParentDiet = false;
+        }
+        
+        if(category != null && category.getCategoryId() != null && isParentDiet == false)
+        {
+            Set<ConstraintViolation<Category>>constraintViolations = validator.validate(category);
+            if(constraintViolations.isEmpty())
+            {
+                Category categoryToUpdate = retrieveCategoryByCategoryId(category.getCategoryId());
+                
+                if(categoryToUpdate.getCategoryId().equals(category.getCategoryId()))
+                {
+                    categoryToUpdate.setName(category.getName());
+                    categoryToUpdate.setDescription(category.getDescription());
+                } else {
+                    throw new UpdateCategoryException("An error occur during updating category of ID" + categoryToUpdate.getCategoryId());
+                }
+            } else {
+                throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+            }
+        } else {
+            throw new CategoryNotFoundException("Category ID is not found!");
         }
     }
 
