@@ -116,10 +116,11 @@ public class StaffResource {
             System.out.println("********** StaffResource.deleteStaff(): Staff "
                     + currentStaff.getUsername() + " login remotely via web service");
 
-            Staff staffToDel = staffSessionBeanLocal.retrieveStaffByStaffId(staffId);
+              
+            staffSessionBeanLocal.deleteStaff(staffId);
 
             return Response.status(Status.OK).build();
-        } catch (Exception ex) {
+        } catch (InvalidLoginCredentialException | StaffNotFoundException ex) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
