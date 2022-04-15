@@ -101,11 +101,11 @@ public class StaffResource {
         }
     }
     
-    @Path("retrieveStaff/{staffId}")
+    @Path("deleteStaff/{staffId}")
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveStaff(
+    public Response deleteStaff(
             @QueryParam("username") String username,
             @QueryParam("password") String password,
             @PathParam("staffId") Long staffId) {
@@ -113,12 +113,12 @@ public class StaffResource {
 
             Staff currentStaff = staffSessionBeanLocal.staffLogin(username, password);
 
-            System.out.println("********** EnquiryResource.retrieveEnquiry(): Staff "
+            System.out.println("********** StaffResource.deleteStaff(): Staff "
                     + currentStaff.getUsername() + " login remotely via web service");
 
-            Staff staffToView = staffSessionBeanLocal.retrieveStaffByStaffId(staffId);
+            Staff staffToDel = staffSessionBeanLocal.retrieveStaffByStaffId(staffId);
 
-            return Response.status(Status.OK).entity(staffToView).build();
+            return Response.status(Status.OK).build();
         } catch (Exception ex) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }

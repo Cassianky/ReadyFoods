@@ -117,6 +117,17 @@ public class StaffSessionBean implements StaffSessionBeanLocal {
             throw new InvalidLoginCredentialException("Username does not exist or invalid password!");
         }
     }
+    
+    public void deleteStaff(Long staffId)throws StaffNotFoundException {
+        Staff staff = em.find(Staff.class, staffId);
+
+        if (staff != null) {
+            em.remove(staff);
+            em.flush();
+        } else {
+            throw new StaffNotFoundException("Staff ID " + staffId + " does not exist!");
+        }
+    }
 
     // update and delete?
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Staff>> constraintViolations) {
