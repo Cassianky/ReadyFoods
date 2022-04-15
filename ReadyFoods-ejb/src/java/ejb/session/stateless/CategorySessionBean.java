@@ -79,7 +79,20 @@ public class CategorySessionBean implements CategorySessionBeanLocal {
     @Override
     public void updateCategory(Category category) throws UpdateCategoryException, CategoryNotFoundException, InputDataValidationException
     {
-        if(category != null && category.getCategoryId() != null && (category.getParentCategory().getName()).equals("Diet Type") ==  false && (category.getName()).equals("Diet Type") == false)
+        Boolean isParentDiet = true;
+        if(category.getParentCategory() != null)
+        {
+            if(category.getParentCategory().getName().equals("Diet Type"))
+            {
+                isParentDiet = true;
+            } else {
+                isParentDiet = false;
+            }
+        } else if ((category.getName()).equals("Diet Type") == false) {
+            isParentDiet = false;
+        }
+        
+        if(category != null && category.getCategoryId() != null && isParentDiet == false)
         {
             Set<ConstraintViolation<Category>>constraintViolations = validator.validate(category);
             if(constraintViolations.isEmpty())
