@@ -14,6 +14,7 @@ import entity.OrderEntity;
 import entity.OrderLineItem;
 import entity.Recipe;
 import entity.Review;
+import entity.Subscription;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
@@ -23,9 +24,8 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
-import javax.xml.stream.events.Comment;
+import util.enumeration.Status;
 import util.exception.CustomerNotFoundException;
-import util.exception.OrderNotFoundException;
 import util.exception.RecipeNotFoundException;
 
 /**
@@ -44,8 +44,6 @@ public class RecipeViewManagedBean implements Serializable {
 
     @EJB(name = "RecipeSessionBeanLocal")
     private RecipeSessionBeanLocal recipeSessionBeanLocal;
-    
-    
 
     private List<Review> reviews;
     private List<CommentEntity> comments;
@@ -167,14 +165,31 @@ public class RecipeViewManagedBean implements Serializable {
         Customer currentCustomer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
         try {
             Customer customerRetrieved = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomer.getCustomerId());
-            for(OrderEntity order:customerRetrieved.getOrders()){
-                for(OrderLineItem orderLineItem:order.getOrderLineItems()){
-                    if(orderLineItem.getRecipe().getRecipeId() == recipe.getRecipeId()){
+            for (OrderEntity order : customerRetrieved.getOrders()) {
+                for (OrderLineItem orderLineItem : order.getOrderLineItems()) {
+                    if (orderLineItem.getRecipe().getRecipeId() == recipe.getRecipeId()) {
                         setCustomerHasBoughtRecipe(true);
+                        return customerHasBoughtRecipe;
+
                     }
                 }
             }
-            
+
+            List<Subscription> subscriptions = customerRetrieved.getSubscriptions();
+
+            for (Subscription sub : subscriptions) {
+                for (OrderEntity order : sub.getSubscriptionOrders()) {
+                    if (order.getStatus() != Status.PENDING) {
+                        for (OrderLineItem orderLineItem : order.getOrderLineItems()) {
+                            if (orderLineItem.getRecipe().getRecipeId() == recipe.getRecipeId()) {
+                                setCustomerHasBoughtRecipe(true);
+                                return customerHasBoughtRecipe;
+                            }
+                        }
+                    }
+                }
+            }
+
         } catch (CustomerNotFoundException ex) {
             Logger.getLogger(RecipeViewManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }

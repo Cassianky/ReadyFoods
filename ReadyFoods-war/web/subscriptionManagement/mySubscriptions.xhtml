@@ -38,14 +38,16 @@
                         <h:outputText style="float: right"
                                       value="#{subscriptionManagedBean.ongoingSubscription.weeklyPrice - 
                                                5}">
-                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2" type="currency" currencyCode="SGD" />
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2" type="currency" 
+                                             currencySymbol="$"  />
                         </h:outputText>
                     </h3>
                     <h3> Shipping: 
 
                         <h:outputText style=" float: right" 
                                       value="#{5}">
-                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2" type="currency" currencyCode="SGD" />
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2" type="currency" currencySymbol="$"
+                                              />
                         </h:outputText>
                     </h3>
 
@@ -53,7 +55,8 @@
 
                         <h:outputText style="color: #AE3126; float: right " 
                                       value="#{subscriptionManagedBean.ongoingSubscription.weeklyPrice}">
-                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2" type="currency" currencyCode="SGD" />
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2" type="currency" 
+                                             currencySymbol="$" />
                         </h:outputText>
                     </h3>
 
