@@ -58,6 +58,7 @@ public class OrderEntitySessionBean implements OrderEntitySessionBeanLocal {
         if (newOrderEntity != null) {
             try {
                 Customer customerEntity = customerSessionBeanLocal.retrieveCustomerByCustomerId(customerId);
+                customerEntity.setAmountSpent(customerEntity.getAmountSpent().add(newOrderEntity.getTotalCost()));
 
                 newOrderEntity.setCustomer(customerEntity);
                 customerEntity.getOrders().add(newOrderEntity);
