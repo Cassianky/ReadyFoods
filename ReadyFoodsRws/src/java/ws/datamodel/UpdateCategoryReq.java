@@ -53,5 +53,19 @@ public class UpdateCategoryReq {
     public Category getCategory() {
         return category;
     }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    /**
+     * @param category the category to set
+     */
+    public void setCategory(Category category) {
+        this.category = category;
+    }
     
 }

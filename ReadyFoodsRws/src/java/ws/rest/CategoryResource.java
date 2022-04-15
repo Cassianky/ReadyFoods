@@ -142,7 +142,9 @@ public class CategoryResource {
             try {
                  System.out.print("$$$$$$$$$$$$$$$$$" + updateCategoryReq.getUsername());
                  System.out.print("$$$$$$$$$$$$$$$$$" + updateCategoryReq.getPassword());
-                Staff staff = staffSessionBeanLocal.staffLogin(updateCategoryReq.getUsername(), updateCategoryReq.getPassword());
+                 System.out.print("$$$$$$$$$$$$$$$$$" + updateCategoryReq.getCategory());
+                Staff staff = staffSessionBeanLocal.staffLogin(updateCategoryReq.getUsername(), 
+                        updateCategoryReq.getPassword());
                 System.out.println("********** CategoryResource.updateCategory(): Staff " + staff.getUsername() + " login remotely via web service");
                 System.out.print("CHECK LOGINNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN 22222222222222222222");
                 categorySessionBeanLocal.updateCategory(updateCategoryReq.getCategory());
