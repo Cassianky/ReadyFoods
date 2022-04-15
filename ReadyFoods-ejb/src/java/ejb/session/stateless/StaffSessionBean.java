@@ -118,6 +118,7 @@ public class StaffSessionBean implements StaffSessionBeanLocal {
         }
     }
     
+    @Override
     public void deleteStaff(Long staffId)throws StaffNotFoundException {
         Staff staff = em.find(Staff.class, staffId);
 
