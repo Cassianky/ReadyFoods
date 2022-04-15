@@ -95,13 +95,15 @@
             <p:tabView id="panelCommentReview" style="margin-bottom:20px; margin: 30px;">
 
                 <p:tab title="Reviews">
+                    <h:outputText style="color: red" value="#{profileManagedBean.currentCustomer.isBanned ? 'Your account has been banned and you will be unable to comment and review!' : ''}"/>
+                    <br></br>
                     <p:commandButton 
                         onclick="PF('dialogAddReview').show()" 
                         title="Add Review"
                         value="#{recipeViewManagedBean.customerHasBoughtRecipe ? 'Add a Review' : 'Buy Recipe To Add Review'}"
                         actionListener="#{recipeViewManagedBean.addReview}"
                         icon="#{recipeViewManagedBean.customerHasBoughtRecipe ? 'pi pi-star-o' : 'pi pi-dollar' }"
-                        disabled="#{recipeViewManagedBean.customerHasBoughtRecipe == false}"
+                        disabled="#{recipeViewManagedBean.customerHasBoughtRecipe == false || profileManagedBean.currentCustomer.isBanned}"
                         />
                     <p:dataScroller value="#{recipeViewManagedBean.reviews}" var="review" chunkSize="5">
                         <f:facet name="header">
@@ -128,10 +130,13 @@
                     </p:dataScroller>  
                 </p:tab>
                 <p:tab title="Comments">
+                    <h:outputText style="color: red" value="#{profileManagedBean.currentCustomer.isBanned ? 'Your account has been banned and you will be unable to comment and review!' : ''}"/>
+                    <br></br>
                     <p:commandButton value="Add Comment"
                                      icon="pi pi-comments"
                                      onclick="PF('dialogAddComment').show()" 
                                      title="Add Comment"
+                                     disabled="#{profileManagedBean.currentCustomer.isBanned}"
                                      />
                     <p:dataScroller value="#{recipeViewManagedBean.comments}" var="comment" chunkSize="5">
                         <f:facet name="header">
@@ -184,7 +189,8 @@
             </p:dialog>
 
         </h:form>
-
+        
+        
         <h:form id="formAddReview">
             <p:dialog id="dialogAddReview" 
                       widgetVar="dialogAddReview" 
