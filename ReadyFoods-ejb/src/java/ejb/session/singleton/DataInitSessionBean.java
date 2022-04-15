@@ -93,13 +93,14 @@ public class DataInitSessionBean {
             LocalDate dob = LocalDate.of(1990, 10, 20);
             Customer customer1 = new Customer("customer1", "customer1", "customer1", "99999999", "password", "customer1@gmail.com", "123 Street", DietType.VEGAN, Gender.FEMALE, ActivityLevel.HIGH);
             customer1.setDob(dob);
-//            customer1.setIsBanned(true);
+            Customer customer2 = new Customer("customer", "twoooo", "customer2", "99999999", "password", "customer2@gmail.com", "123 Street", DietType.GLUTENFREE, Gender.MALE, ActivityLevel.HIGH);
+            customer2.setIsBanned(Boolean.TRUE);
+            customer2.setDob(dob);
             customerSessionBeanLocal.createNewCustomer(customer1);
+            customerSessionBeanLocal.createNewCustomer(customer2);
 
             staffSessionBeanLocal.createNewStaff(new Staff("Administrator", "Admin", StaffType.ADMINISTRATOR, "admin", "password"));
-              staffSessionBeanLocal.createNewStaff(new Staff("Moderator", "Moderator1", StaffType.MODERATOR, "moderator1", "password"));
-            
-            
+            staffSessionBeanLocal.createNewStaff(new Staff("Moderator", "Moderator1", StaffType.MODERATOR, "moderator1", "password"));
 
             Ingredient ingredient1 = new Ingredient("Chicken", "Whole Chicken between 1kg to 1.5kg", IngredientUnit.Whole, new BigDecimal("10.00"), 50, 150);
             Ingredient ingredient2 = new Ingredient("Salt", "Salt by 10 grams.unit", IngredientUnit.Gram, new BigDecimal("0.05"), 100 * 1000, 20 * 1000);

@@ -19,7 +19,9 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
@@ -38,21 +40,17 @@ public class CustomerResource {
     StaffSessionBeanLocal staffSessionBean = lookupStaffSessionBeanLocal();
 
     CustomerSessionBeanLocal customerSessionBean = lookupCustomerSessionBeanLocal();
-    
-    
 
     @Context
     private UriInfo context;
-    
-    
 
     /**
      * Creates a new instance of CustomerResource
      */
     public CustomerResource() {
     }
-    
-     @Path("retrieveAllCustomers")
+
+    @Path("retrieveAllCustomers")
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
@@ -91,6 +89,30 @@ public class CustomerResource {
         }
     }
 
+    @Path("banCustomer/{customerId}")
+    @GET
+   @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response banCustomer(@QueryParam("username") String username,
+            @QueryParam("password") String password,
+            @PathParam("customerId") Long customerId) {
+        try {
+            Staff staff = staffSessionBean.staffLogin(username, password);
+
+            System.out.println("********** CustomerResource.banCustomer(): Staff "
+                    + staff.getUsername() + " login remotely via web service");
+            
+            customerSessionBean.banCustomer(customerId);
+
+            return Response.status(Status.OK).build();
+        } catch (InvalidLoginCredentialException ex) {
+            return Response.status(Status.UNAUTHORIZED).entity(ex.getMessage()).build();
+        
+        } catch (Exception ex) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
+
     private CustomerSessionBeanLocal lookupCustomerSessionBeanLocal() {
         try {
             javax.naming.Context c = new InitialContext();
@@ -111,5 +133,4 @@ public class CustomerResource {
         }
     }
 
-   
 }
