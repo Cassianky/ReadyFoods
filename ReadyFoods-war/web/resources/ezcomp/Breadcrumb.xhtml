@@ -29,7 +29,8 @@
                 <p:menuitem value="Purchase Management" rendered="#{cc.attrs.pageName == 'viewShoppingCart'
                                                                     || cc.attrs.pageName == 'viewBookmarkedRecipes'}"/>
 
-                <p:menuitem value="My Details" rendered="#{cc.attrs.pageName == 'updateCreditCard'}"/>
+                <p:menuitem value="My Details" rendered="#{cc.attrs.pageName == 'updateCreditCard'}
+                            || #{cc.attrs.pageName == 'profile'}"/>
 
                 <p:menuitem value="New Subscription" url="#{application.contextPath}/subscriptionManagement/newSubscription.xhtml" 
                             rendered="#{cc.attrs.pageName == 'newSubscription'}" />
@@ -51,6 +52,13 @@
 
                 <p:menuitem value="Credit Card" url="#{application.contextPath}/myDetails/creditCard.xhtml" 
                             rendered="#{cc.attrs.pageName == 'updateCreditCard'}" />
+
+                <p:menuitem value="Profile" url="#{application.contextPath}/myDetails/profile.xhtml" 
+                            rendered="#{cc.attrs.pageName == 'profile'}" />
+                
+                
+                <p:menuitem value="Change Password" url="#{application.contextPath}/myDetails/changePassword.xhtml" 
+                            rendered="#{cc.attrs.pageName == 'changePassword'}" />
 
                 <p:menuitem value="View My Orders" url="#{application.contextPath}/accountManagement/orderManagement.xhtml" 
                             rendered="#{cc.attrs.pageName == 'orderManagement'}" />

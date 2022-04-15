@@ -24,7 +24,7 @@
                             gridIcon="pi pi-th-large" listIcon="pi pi-bars">
                     <p:dataViewListItem>
                         <h:panelGrid columns="4" style="width:100%" columnClasses="logo,detail">
-                            <p:graphicImage styleClass="viewRecipeImageInCart" height="100" width="100" name="300x300.png" library="images"/>
+                            <p:graphicImage name="/recipe/#{orderLineItem.recipe.picUrl}" library="images" styleClass="viewRecipeImageInCart" height="100" width="100"/>
 
                             <p:outputPanel>
                                 <h:panelGrid columns="2" cellpadding="5">

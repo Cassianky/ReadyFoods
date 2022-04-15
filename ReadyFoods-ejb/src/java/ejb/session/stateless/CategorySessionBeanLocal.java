@@ -12,6 +12,7 @@ import util.exception.CategoryNotFoundException;
 import util.exception.CreateCategoryException;
 import util.exception.InputDataValidationException;
 import util.exception.RecipeNotFoundException;
+import util.exception.UpdateCategoryException;
 
 /**
  *
@@ -33,5 +34,7 @@ public interface CategorySessionBeanLocal {
     public List<Category> retrieveAllSubCategories();
 
     public Category retrieveRecipeDietType(Long recipeId) throws CategoryNotFoundException, RecipeNotFoundException;
+
+     public void updateCategory(Category category) throws UpdateCategoryException, CategoryNotFoundException, InputDataValidationException;
 
 }

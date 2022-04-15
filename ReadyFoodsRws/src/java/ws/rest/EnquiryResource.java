@@ -19,6 +19,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
@@ -26,7 +27,9 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import util.exception.EnquiryNotFoundException;
 import util.exception.InvalidLoginCredentialException;
+import ws.datamodel.UpdateEnquiryReq;
 
 /**
  * REST Web Service
@@ -65,7 +68,16 @@ public class EnquiryResource {
             List<Enquiry> enquires = enquirySessionBeanLocal.retrieveAllEnquires();
 
             for (Enquiry enquiry : enquires) {
-                enquiry.setCustomer(null);
+                enquiry.getCustomer().getEnquiries().clear();
+                enquiry.getCustomer().getFoodDiaryRecords().clear();
+                enquiry.getCustomer().setCreditCard(null);
+                enquiry.getCustomer().getBookedmarkedRecipes().clear();
+                enquiry.getCustomer().getFoods().clear();
+                enquiry.getCustomer().getOrders().clear();
+                enquiry.getCustomer().getSubscriptions().clear();
+                enquiry.getCustomer().setSalt(null);
+                enquiry.getCustomer().setPassword(null);
+
             }
 
             GenericEntity<List<Enquiry>> genericEntity = new GenericEntity<List<Enquiry>>(enquires) {
@@ -101,6 +113,31 @@ public class EnquiryResource {
             return Response.status(Status.OK).entity(enquiry).build();
         } catch (Exception ex) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateEnquiryResponse(UpdateEnquiryReq updateEnquiryReq) {
+        if (updateEnquiryReq != null) {
+            try {
+                 Staff staff = staffSessionBeanLocal.staffLogin(updateEnquiryReq.getUsername(),
+                         updateEnquiryReq.getPassword());
+                 System.out.println("********** Logged in to update enquiry" + (updateEnquiryReq.getEnquiry()));
+                 
+                 enquirySessionBeanLocal.updateEnquiry(updateEnquiryReq.getEnquiry().getEnquiryId(), 
+                         updateEnquiryReq.getResponse(), updateEnquiryReq.getResolved());
+
+                
+                return Response.status(Response.Status.OK).build();
+
+            } catch (EnquiryNotFoundException | InvalidLoginCredentialException ex) {
+                Logger.getLogger(EnquiryResource.class.getName()).log(Level.SEVERE, null, ex);
+                return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
+            }
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid update product request").build();
         }
     }
 

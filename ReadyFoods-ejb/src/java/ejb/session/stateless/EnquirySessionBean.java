@@ -125,7 +125,19 @@ public class EnquirySessionBean implements EnquirySessionBeanLocal {
             throw new EnquiryResolveException("Enquiry is already resolved.");
         }
         toResolve.setResolved(Boolean.TRUE);
+    }
+
+    public void updateEnquiry(Long enquiryId, String response, Boolean resolved) throws EnquiryNotFoundException {
+        System.out.println("Updating enquiry...." + response + resolved);
+        Enquiry toUpdate = retrieveEnquiryByEnquiryId(enquiryId);
         
+        
+        
+        if (response != null) {
+            toUpdate.setResponse(response);
+        } else if (resolved != null && resolved && !toUpdate.getResolved()) {
+            toUpdate.setResolved(resolved);
+        } 
 
     }
 

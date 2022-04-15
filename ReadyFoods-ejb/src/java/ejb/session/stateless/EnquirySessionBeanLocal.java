@@ -32,5 +32,7 @@ public interface EnquirySessionBeanLocal {
     public void deleteEnquiry(Long enquiryId) throws EnquiryNotFoundException;
 
     public void resolveEnquiry(Long enquiryId) throws EnquiryNotFoundException, EnquiryResolveException;
+
+    public void updateEnquiry(Long enquiryId, String response, Boolean resolved) throws EnquiryNotFoundException;
     
 }
