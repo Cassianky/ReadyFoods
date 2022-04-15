@@ -89,7 +89,7 @@ public class CategorySessionBean implements CategorySessionBeanLocal {
                 if(categoryToUpdate.getCategoryId().equals(category.getCategoryId()))
                 {
                     categoryToUpdate.setName(category.getName());
-                    categoryToUpdate.setDescription(categoryToUpdate.getDescription());
+                    categoryToUpdate.setDescription(category.getDescription());
                 } else {
                     throw new UpdateCategoryException("An error occur during updating category of ID" + categoryToUpdate.getCategoryId());
                 }
