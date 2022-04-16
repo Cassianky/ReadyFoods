@@ -21,4 +21,22 @@
     <welcome-file-list>
         <welcome-file>faces/index.xhtml</welcome-file>
     </welcome-file-list>
+    <ejb-local-ref>
+        <ejb-ref-name>RecipeSessionBeanLocal</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.session.stateless.RecipeSessionBeanLocal</local>
+        <ejb-link>ReadyFoods-ejb.jar#RecipeSessionBean</ejb-link>
+    </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>StaffSessionBeanLocal</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.session.stateless.StaffSessionBeanLocal</local>
+        <ejb-link>ReadyFoods-ejb.jar#StaffSessionBean</ejb-link>
+    </ejb-local-ref>
+    <ejb-local-ref>
+        <ejb-ref-name>CommentSessionBeanLocal</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <local>ejb.session.stateless.CommentSessionBeanLocal</local>
+        <ejb-link>ReadyFoods-ejb.jar#CommentSessionBean</ejb-link>
+    </ejb-local-ref>
 </web-app>
