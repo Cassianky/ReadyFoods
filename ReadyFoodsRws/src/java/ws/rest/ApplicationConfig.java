@@ -38,6 +38,7 @@ public class ApplicationConfig extends Application {
         resources.add(ws.rest.RecipeResource.class);
         resources.add(ws.rest.ReviewResource.class);
         resources.add(ws.rest.StaffResource.class);
+        resources.add(ws.rest.SubscriptionResource.class);
     }
     
 }
