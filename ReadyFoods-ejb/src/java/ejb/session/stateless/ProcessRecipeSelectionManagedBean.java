@@ -51,8 +51,9 @@ public class ProcessRecipeSelectionManagedBean implements ProcessRecipeSelection
 
     }
 
-    public void process() {
-         System.out.println("**********Processing subscription orders manually***********");
+    public Integer process() {
+        int count = 0;
+        System.out.println("**********Processing subscription orders manually***********");
 
         List<Subscription> ongoingSubscriptions = subscriptionSessionBeanLocal.retrieveAllOngoingSubscriptions();
 
@@ -67,12 +68,15 @@ public class ProcessRecipeSelectionManagedBean implements ProcessRecipeSelection
                 sub.getCurrentOrder().setStatus(Status.PROCESSED);
                 sub.getCurrentOrder().setPaid(Boolean.TRUE);
                 sub.setCurrentOrder(null);
+                count++;
 
                 if (sub.getRemainingDuration() == 0) {
                     sub.setOngoing(Boolean.FALSE);
                 }
             }
         }
+        return count;
 
     }
+
 }

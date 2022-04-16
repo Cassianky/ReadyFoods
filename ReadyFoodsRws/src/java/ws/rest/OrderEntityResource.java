@@ -6,6 +6,7 @@
 package ws.rest;
 
 import ejb.session.stateless.OrderEntitySessionBeanLocal;
+import ejb.session.stateless.ProcessRecipeSelectionManagedBeanLocal;
 import ejb.session.stateless.StaffSessionBeanLocal;
 import entity.Customer;
 import entity.OrderEntity;
@@ -36,9 +37,13 @@ import util.exception.InvalidLoginCredentialException;
 @Path("OrderEntity")
 public class OrderEntityResource {
 
+    ProcessRecipeSelectionManagedBeanLocal processRecipeSelectionManagedBean = lookupProcessRecipeSelectionManagedBeanLocal();
+
     StaffSessionBeanLocal staffSessionBean = lookupStaffSessionBeanLocal();
 
     OrderEntitySessionBeanLocal orderEntitySessionBean = lookupOrderEntitySessionBeanLocal();
+    
+    
 
     @Context
     private UriInfo context;
@@ -124,6 +129,35 @@ public class OrderEntityResource {
             
         }
     }
+    
+     @Path("processAllSubscriptionOrders")
+    @GET
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response processAllSubscriptionOrders(@QueryParam("username") String username,
+            @QueryParam("password") String password) {
+        try {
+
+           
+            Staff staff = staffSessionBean.staffLogin(username, password);
+
+            System.out.println("********** CustomerResource.retrieveAllOrders(): Staff "
+                    + staff.getUsername() + " login remotely via web service");
+
+            Integer count = processRecipeSelectionManagedBean.process();
+
+            GenericEntity<Integer> genericEntity = new GenericEntity<Integer>(count) {
+            };
+
+            return Response.status(Status.OK).entity(genericEntity).build();
+        } catch (InvalidLoginCredentialException ex) {
+            return Response.status(Status.UNAUTHORIZED).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
+             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ex);
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+            
+        }
+    }
 
     private OrderEntitySessionBeanLocal lookupOrderEntitySessionBeanLocal() {
         try {
@@ -139,6 +173,16 @@ public class OrderEntityResource {
         try {
             javax.naming.Context c = new InitialContext();
             return (StaffSessionBeanLocal) c.lookup("java:global/ReadyFoods/ReadyFoods-ejb/StaffSessionBean!ejb.session.stateless.StaffSessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private ProcessRecipeSelectionManagedBeanLocal lookupProcessRecipeSelectionManagedBeanLocal() {
+        try {
+            javax.naming.Context c = new InitialContext();
+            return (ProcessRecipeSelectionManagedBeanLocal) c.lookup("java:global/ReadyFoods/ReadyFoods-ejb/ProcessRecipeSelectionManagedBean!ejb.session.stateless.ProcessRecipeSelectionManagedBeanLocal");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
