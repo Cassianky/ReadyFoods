@@ -197,8 +197,6 @@ public class OrderEntitySessionBean implements OrderEntitySessionBeanLocal {
                 }
             }
         }
-        subs.clear();
-        customers.clear();
         return allSubscriptionOrders;
 
     }
@@ -250,5 +248,17 @@ public class OrderEntitySessionBean implements OrderEntitySessionBeanLocal {
         } else {
             throw new OrderNotFoundException("Order " + orderId + " does not exist!");
         }
+    }
+    
+    public OrderEntity updateOrderStatus(Long orderId, Status status) throws OrderNotFoundException {
+             OrderEntity orderEntity = entityManager.find(OrderEntity.class, orderId);
+        if (orderEntity != null) {
+            orderEntity.getOrderLineItems().size();
+            orderEntity.setStatus(status);
+            return orderEntity;
+        } else {
+            throw new OrderNotFoundException("Order " + orderId + " does not exist!");
+        }
+        
     }
 }

@@ -63,6 +63,7 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
                 Recipe recipe = recipeSessionBeanLocal.retrieveRecipeByRecipeId(recipeId);
                 
                 newReview.setCustomer(customer);
+                newReview.setRecipe(recipe);
                     
                 em.persist(newReview);
                 recipe.getReviews().add(newReview);
@@ -78,6 +79,22 @@ public class ReviewSessionBean implements ReviewSessionBeanLocal {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
         return null;
+    }
+    
+    @Override
+    public void deleteReview(Long reviewId){
+        Review reviewToDelete = em.find(Review.class, reviewId);
+        Recipe r = reviewToDelete.getRecipe();
+        Recipe recipe = em.find(Recipe.class, r.getRecipeId());
+        for(Review review : recipe.getReviews()){
+            if(review.getReviewId() == reviewToDelete.getReviewId()){
+                recipe.getReviews().remove(review);
+                break;
+            }
+        }
+        em.remove(reviewToDelete);
+        em.flush();      
+        
     }
 
     @Override
