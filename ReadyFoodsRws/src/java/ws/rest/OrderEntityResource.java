@@ -38,17 +38,14 @@ public class OrderEntityResource {
 
     StaffSessionBeanLocal staffSessionBean = lookupStaffSessionBeanLocal();
 
-    OrderEntitySessionBeanLocal orderEntitySessionBean = lookupOrderEntitySessionBeanLocal();   
-    
-    
-   
+    OrderEntitySessionBeanLocal orderEntitySessionBean = lookupOrderEntitySessionBeanLocal();
+
     @Context
     private UriInfo context;
 
-   
     public OrderEntityResource() {
     }
-    
+
     @Path("retrieveAllOrders")
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
@@ -68,8 +65,7 @@ public class OrderEntityResource {
                 System.out.println("****************************");
                 System.out.println(order.getOrderEntityId());
                 order.setDateForDelivery(null);
-                
-                
+
                 order.getCustomer().getEnquiries().clear();
                 order.getCustomer().getFoodDiaryRecords().clear();
                 order.getCustomer().setCreditCard(null);
@@ -93,7 +89,41 @@ public class OrderEntityResource {
         }
     }
 
-    
+    @Path("retrieveAllSubscriptionOrders")
+    @GET
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveAllSubscriptionOrders(@QueryParam("username") String username,
+            @QueryParam("password") String password) {
+        try {
+
+            Staff staff = staffSessionBean.staffLogin(username, password);
+
+            System.out.println("********** CustomerResource.retrieveAllOrders(): Staff "
+                    + staff.getUsername() + " login remotely via web service");
+
+            List<OrderEntity> subOrders = orderEntitySessionBean.retrieveAllSubscriptionOrders();
+            for (OrderEntity order : subOrders) {
+                
+
+                System.out.println(order.getOrderEntityId());
+                //sub order is not linked to customer
+                order.setOrderLineItems(null);
+
+            }
+
+            GenericEntity<List<OrderEntity>> genericEntity = new GenericEntity<List<OrderEntity>>(subOrders) {
+            };
+
+            return Response.status(Status.OK).entity(genericEntity).build();
+        } catch (InvalidLoginCredentialException ex) {
+            return Response.status(Status.UNAUTHORIZED).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
+             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ex);
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+            
+        }
+    }
 
     private OrderEntitySessionBeanLocal lookupOrderEntitySessionBeanLocal() {
         try {

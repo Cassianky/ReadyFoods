@@ -10,6 +10,7 @@ import entity.CustomisedIngredient;
 import entity.OrderEntity;
 import entity.OrderLineItem;
 import entity.Subscription;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
@@ -88,21 +89,18 @@ public class OrderEntitySessionBean implements OrderEntitySessionBeanLocal {
         }
 
     }
-    
+
     @Override
-    public OrderEntity retrieveOrderByCustomerId(Long recipeId, Long customerId) throws OrderNotFoundException{
+    public OrderEntity retrieveOrderByCustomerId(Long recipeId, Long customerId) throws OrderNotFoundException {
         Query query = entityManager.createQuery("SELECT o FROM OrderEntity o WHERE o.orderLineItems.recipe.recipeId =:inRecipeId AND o.customer =:inCustomerId");
         query.setParameter("inCustomerId", customerId);
         query.setParameter("inRecipeId", recipeId);
-        try 
-        {
+        try {
             return (OrderEntity) query.getSingleResult();
-        } 
-        catch (NoResultException | NonUniqueResultException ex) 
-        {
+        } catch (NoResultException | NonUniqueResultException ex) {
             throw new OrderNotFoundException("Order does not exist!");
         }
-        
+
     }
 
     @Override
@@ -185,6 +183,26 @@ public class OrderEntitySessionBean implements OrderEntitySessionBeanLocal {
 
     }
 
+    public List<OrderEntity> retrieveAllSubscriptionOrders() {
+        List<Customer> customers = customerSessionBeanLocal.retrieveAllCustomers();
+        List<OrderEntity> allSubscriptionOrders = new ArrayList<>();
+        List<Subscription> subs = new ArrayList<>();
+        for (Customer customer : customers) {
+            subs = customer.getSubscriptions();
+            for (Subscription sub : subs) {
+                for (OrderEntity subOrder : sub.getSubscriptionOrders()) {
+                    subOrder.getCustomer();
+                    allSubscriptionOrders.add(subOrder);
+                    
+                }
+            }
+        }
+        subs.clear();
+        customers.clear();
+        return allSubscriptionOrders;
+
+    }
+
     @Override
     public List<OrderEntity> retrieveAllOrders() {
         Query query = entityManager.createQuery("SELECT o FROM OrderEntity o");
@@ -215,7 +233,7 @@ public class OrderEntitySessionBean implements OrderEntitySessionBeanLocal {
 
     @Override
     public OrderEntity updateOrderStatusReceieved(Long orderId) throws OrderNotFoundException {
-        OrderEntity orderEntity = entityManager.find(OrderEntity.class,orderId);
+        OrderEntity orderEntity = entityManager.find(OrderEntity.class, orderId);
         if (orderEntity != null) {
             orderEntity.getOrderLineItems().size();
             orderEntity.setStatus(Status.RECEIVED);
