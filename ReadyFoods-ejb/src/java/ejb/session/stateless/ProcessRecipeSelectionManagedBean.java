@@ -33,7 +33,7 @@ public class ProcessRecipeSelectionManagedBean implements ProcessRecipeSelection
 
         for (Subscription sub : ongoingSubscriptions) {
             if (sub.getCurrentOrder() == null) {
-                System.out.println("TODO: Generate for customer if they do not select");
+                System.out.println("Customer did not select this week, skipping...");
 
             } else {
                 System.out.println("Current order found");
@@ -59,7 +59,7 @@ public class ProcessRecipeSelectionManagedBean implements ProcessRecipeSelection
 
         for (Subscription sub : ongoingSubscriptions) {
             if (sub.getCurrentOrder() == null) {
-                System.out.println("TODO: Generate for customer if they do not select");
+                  System.out.println("Customer did not select this week, skipping...");
 
             } else {
                 System.out.println("Current order found");

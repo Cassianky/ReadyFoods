@@ -8,6 +8,7 @@ package ejb.session.stateless;
 import entity.OrderEntity;
 import java.util.List;
 import javax.ejb.Local;
+import util.enumeration.Status;
 import util.exception.CreateNewOrderException;
 import util.exception.CustomerNotFoundException;
 import util.exception.NoOngoingSubscriptionException;
@@ -39,5 +40,7 @@ public interface OrderEntitySessionBeanLocal {
     public List<OrderEntity> retrieveAllSubscriptionOrders();
 
     public List<OrderEntity> retrieveAllNormalOrders();
+
+    public OrderEntity updateOrderStatus(Long orderId, Status status) throws OrderNotFoundException;
 
 }

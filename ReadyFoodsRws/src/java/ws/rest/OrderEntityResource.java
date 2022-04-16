@@ -21,6 +21,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
@@ -28,6 +29,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import util.exception.InvalidLoginCredentialException;
+import ws.datamodel.UpdateOrderReq;
 
 /**
  * REST Web Service
@@ -42,8 +44,6 @@ public class OrderEntityResource {
     StaffSessionBeanLocal staffSessionBean = lookupStaffSessionBeanLocal();
 
     OrderEntitySessionBeanLocal orderEntitySessionBean = lookupOrderEntitySessionBeanLocal();
-    
-    
 
     @Context
     private UriInfo context;
@@ -110,9 +110,7 @@ public class OrderEntityResource {
 
             List<OrderEntity> subOrders = orderEntitySessionBean.retrieveAllSubscriptionOrders();
             for (OrderEntity order : subOrders) {
-                
 
-                System.out.println(order.getOrderEntityId());
                 //sub order is not linked to customer
                 order.setOrderLineItems(null);
 
@@ -121,17 +119,19 @@ public class OrderEntityResource {
             GenericEntity<List<OrderEntity>> genericEntity = new GenericEntity<List<OrderEntity>>(subOrders) {
             };
 
+            System.out.println("Retrieved all");
+
             return Response.status(Status.OK).entity(genericEntity).build();
         } catch (InvalidLoginCredentialException ex) {
             return Response.status(Status.UNAUTHORIZED).entity(ex.getMessage()).build();
         } catch (Exception ex) {
-             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ex);
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ex);
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
-            
+
         }
     }
-    
-     @Path("processAllSubscriptionOrders")
+
+    @Path("processAllSubscriptionOrders")
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
@@ -139,7 +139,6 @@ public class OrderEntityResource {
             @QueryParam("password") String password) {
         try {
 
-           
             Staff staff = staffSessionBean.staffLogin(username, password);
 
             System.out.println("********** CustomerResource.retrieveAllOrders(): Staff "
@@ -154,9 +153,38 @@ public class OrderEntityResource {
         } catch (InvalidLoginCredentialException ex) {
             return Response.status(Status.UNAUTHORIZED).entity(ex.getMessage()).build();
         } catch (Exception ex) {
-             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ex);
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ex);
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
-            
+
+        }
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateOrder(UpdateOrderReq updateOrderReq) {
+        if (updateOrderReq != null) {
+            try {
+                Staff staff = staffSessionBean.staffLogin(updateOrderReq.getUsername(), updateOrderReq.getPassword());
+                System.out.println("********** OrderEntityResource.updateOrder(): Staff "
+                        + staff.getUsername() + " login remotely via web service");
+                
+                System.out.println(updateOrderReq.getStatus());
+
+                orderEntitySessionBean.updateOrderStatus(updateOrderReq.getOrder().getOrderEntityId(),
+                        updateOrderReq.getStatus());
+
+                return Response.status(Response.Status.OK).build();
+            } catch (InvalidLoginCredentialException ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ex);
+                return Response.status(Status.UNAUTHORIZED).entity(ex.getMessage()).build();
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ex);
+                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+            }
+        } else {
+           
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid update order request").build();
         }
     }
 
