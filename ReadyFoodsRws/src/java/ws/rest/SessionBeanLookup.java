@@ -1,6 +1,7 @@
 package ws.rest;
 
 import ejb.session.stateless.IngredientSessionBeanLocal;
+import ejb.session.stateless.RecipeSessionBeanLocal;
 import ejb.session.stateless.StaffSessionBeanLocal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,6 +30,16 @@ public class SessionBeanLookup {
         try {
             javax.naming.Context c = new InitialContext();
             return (StaffSessionBeanLocal) c.lookup(ejbModuleJndiPath + "StaffSessionBean!ejb.session.stateless.StaffSessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+    
+    public RecipeSessionBeanLocal lookupRecipeSessionBeanLocal() {
+        try {
+            javax.naming.Context c = new InitialContext();
+            return (RecipeSessionBeanLocal) c.lookup(ejbModuleJndiPath + "RecipeSessionBean!ejb.session.stateless.RecipeSessionBeanLocal");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);
