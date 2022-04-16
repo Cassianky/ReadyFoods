@@ -175,7 +175,7 @@
                     </p:row>
                     <p:row rendered="#{myFoodsManagedBean.isNotFromRecipe == true}">
                         <p:column>
-                            <p:outputLabel for="fats" value="Food Calories: " />
+                            <p:outputLabel for="fats" value="Food Fats(g): " />
                         </p:column>
                         <p:column>
                             <p:inputText id="fats" value="#{myFoodsManagedBean.foodToCreate.fats}" required="true" requiredMessage="Fats is required" >
@@ -188,7 +188,7 @@
                     </p:row>
                     <p:row rendered="#{myFoodsManagedBean.isNotFromRecipe == true}">
                         <p:column>
-                            <p:outputLabel for="sugar" value="Food Sugar: " />
+                            <p:outputLabel for="sugar" value="Food Sugar(g): " />
                         </p:column>
                         <p:column>
                             <p:inputText id="sugar" value="#{myFoodsManagedBean.foodToCreate.sugar}" required="true" requiredMessage="Sugar is required" >
