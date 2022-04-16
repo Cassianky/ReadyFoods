@@ -171,7 +171,7 @@
                       header="Add A Comment!" 
                       closable="true">
                 <p:panelGrid id="panelGridAddComment" columns="1">
-                    <p:inputText value="#{commentsManagedBean.customerName}" placeholder="Nickname..."/> 
+                    <h:outputText id="customerUser" value="Username: #{profileManagedBean.currentCustomer.userName}" /> 
                     <p:inputTextarea value="#{commentsManagedBean.description}" 
                                      placeholder="Write your comment..."
                                      rows="3"
