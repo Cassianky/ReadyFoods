@@ -58,9 +58,10 @@ public class RecipeResource {
             List<Recipe> recipes = recipeSessionBeanLocal.retrieveAllRecipes();
             
             for(Recipe r : recipes) {
-                r.getCategories().clear();
+                //r.getCategories().clear();
                 
                 for(Category c : r.getCategories()){
+                    c.setParentCategory(null);
                     c.getRecipes().clear();
                 }
             }
@@ -94,7 +95,7 @@ public class RecipeResource {
                 c.getRecipes().clear();
             }
             
-            recipe.getCategories().clear();
+//            recipe.getCategories().clear();
 
             GenericEntity<Recipe> genericRecipe = new GenericEntity<Recipe>(recipe){};
 
