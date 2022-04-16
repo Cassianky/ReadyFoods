@@ -12,6 +12,7 @@ import util.exception.CreateNewSubscriptionException;
 import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.NoOngoingSubscriptionException;
+import util.exception.OrderNotFoundException;
 import util.exception.SubscriptionNotFoundException;
 
 /**
@@ -32,5 +33,7 @@ public interface SubscriptionSessionBeanLocal {
     public void cancelSubscription(Long subscriptionId) throws SubscriptionNotFoundException;
 
     public List<Subscription> retrieveAllOngoingSubscriptions();
+
+    public void cancelSubscription(Long customerId, Long subscriptionId) throws SubscriptionNotFoundException, CustomerNotFoundException, NoOngoingSubscriptionException, OrderNotFoundException;
     
 }

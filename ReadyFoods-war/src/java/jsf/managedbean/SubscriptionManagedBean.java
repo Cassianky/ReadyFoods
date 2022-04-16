@@ -23,6 +23,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import util.exception.CustomerNotFoundException;
 import util.exception.NoOngoingSubscriptionException;
+import util.exception.OrderNotFoundException;
 import util.exception.SubscriptionNotFoundException;
 
 /**
@@ -77,9 +78,31 @@ public class SubscriptionManagedBean implements Serializable {
 
     }
 
+//    public void cancelSubscription(ActionEvent event) {
+//        try {
+//            subscriptionSessionBeanLocal.cancelSubscription(ongoingSubscription.getSubscriptionId());
+//
+//            FacesContext.getCurrentInstance().addMessage(null,
+//                    new FacesMessage(FacesMessage.SEVERITY_INFO,
+//                            "Subscription successfully cancelled: "
+//                            + ongoingSubscription.getSubscriptionId(), null));
+//            this.ongoingSubscription = null;
+//            Customer customer = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomerEntity.getCustomerId());
+//            this.pastSubscriptions = customer.getSubscriptions();
+//
+//        } catch (SubscriptionNotFoundException ex) {
+//            FacesContext.getCurrentInstance().addMessage(null,
+//                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+//                            "Subscription not found" + ex.getMessage(), null));
+//
+//        } catch (CustomerNotFoundException ex) {
+//            Logger.getLogger(SubscriptionManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//    }
     public void cancelSubscription(ActionEvent event) {
         try {
-            subscriptionSessionBeanLocal.cancelSubscription(ongoingSubscription.getSubscriptionId());
+            subscriptionSessionBeanLocal.cancelSubscription(currentCustomerEntity.getCustomerId(), ongoingSubscription.getSubscriptionId());
 
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -94,8 +117,10 @@ public class SubscriptionManagedBean implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR,
                             "Subscription not found" + ex.getMessage(), null));
 
-        } catch (CustomerNotFoundException ex) {
-            Logger.getLogger(SubscriptionManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CustomerNotFoundException | NoOngoingSubscriptionException | OrderNotFoundException ex) {
+             FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Error when cancelling sub" + ex.getMessage(), null));
         }
 
     }
