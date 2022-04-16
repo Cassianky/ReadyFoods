@@ -90,11 +90,11 @@ public class RecipeResource {
 
             Recipe recipe = recipeSessionBeanLocal.retrieveRecipeByRecipeId(recipeId);
             
-            recipe.getCategories().clear();
-
             for(Category c : recipe.getCategories()) {
                 c.getRecipes().clear();
             }
+            
+            recipe.getCategories().clear();
 
             GenericEntity<Recipe> genericRecipe = new GenericEntity<Recipe>(recipe){};
 
