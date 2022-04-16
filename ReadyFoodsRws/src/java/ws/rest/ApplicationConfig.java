@@ -34,6 +34,7 @@ public class ApplicationConfig extends Application {
         resources.add(ws.rest.EnquiryResource.class);
         resources.add(ws.rest.IngredientResource.class);
         resources.add(ws.rest.IngredientSpecificationResource.class);
+        resources.add(ws.rest.OrderEntityResource.class);
         resources.add(ws.rest.RecipeResource.class);
         resources.add(ws.rest.StaffResource.class);
     }

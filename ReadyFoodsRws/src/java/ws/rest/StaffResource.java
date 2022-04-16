@@ -121,7 +121,7 @@ public class StaffResource {
 
             return Response.status(Status.OK).build();
         } catch (InvalidLoginCredentialException | StaffNotFoundException ex) {
-            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+            return Response.status(Status.UNAUTHORIZED).entity(ex.getMessage()).build();
         }
     }
     
