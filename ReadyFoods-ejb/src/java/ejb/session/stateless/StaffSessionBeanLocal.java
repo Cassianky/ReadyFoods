@@ -30,5 +30,7 @@ public interface StaffSessionBeanLocal {
     public Staff retrieveStaffByUsername(String username) throws StaffNotFoundException;
 
     public Staff staffLogin(String username, String password) throws InvalidLoginCredentialException;
+
+    public void deleteStaff(Long staffId) throws StaffNotFoundException;
     
 }

@@ -47,4 +47,8 @@ public interface CustomerSessionBeanLocal {
     public Future<Boolean> sendWelcomeEmail(String name, String email, String path) throws InterruptedException;
 
     public Future<Boolean> sendOrderInvoiceEmail(String name, String email, String path) throws InterruptedException;
+
+    public void unbanCustomer(Long customerId);
+
+    public void banCustomer(Long customerId);
 }

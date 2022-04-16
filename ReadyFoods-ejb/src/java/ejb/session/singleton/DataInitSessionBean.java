@@ -93,6 +93,7 @@ public class DataInitSessionBean {
             LocalDate dob = LocalDate.of(1990, 10, 20);
             Customer customer1 = new Customer("customer1", "customer1", "customer1", "99999999", "password", "customer1@gmail.com", "123 Street", DietType.VEGAN, Gender.FEMALE, ActivityLevel.HIGH);
             customer1.setDob(dob);
+//            customer1.setIsBanned(true);
             customerSessionBeanLocal.createNewCustomer(customer1);
 
             staffSessionBeanLocal.createNewStaff(new Staff("Administrator", "Admin", StaffType.ADMINISTRATOR, "admin", "password"));
