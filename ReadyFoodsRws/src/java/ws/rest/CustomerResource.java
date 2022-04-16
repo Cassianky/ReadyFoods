@@ -91,7 +91,7 @@ public class CustomerResource {
 
     @Path("banCustomer/{customerId}")
     @GET
-   @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response banCustomer(@QueryParam("username") String username,
             @QueryParam("password") String password,
@@ -101,13 +101,37 @@ public class CustomerResource {
 
             System.out.println("********** CustomerResource.banCustomer(): Staff "
                     + staff.getUsername() + " login remotely via web service");
-            
+
             customerSessionBean.banCustomer(customerId);
 
             return Response.status(Status.OK).build();
         } catch (InvalidLoginCredentialException ex) {
             return Response.status(Status.UNAUTHORIZED).entity(ex.getMessage()).build();
-        
+
+        } catch (Exception ex) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
+
+    @Path("unbanCustomer/{customerId}")
+    @GET
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response unbanCustomer(@QueryParam("username") String username,
+            @QueryParam("password") String password,
+            @PathParam("customerId") Long customerId) {
+        try {
+            Staff staff = staffSessionBean.staffLogin(username, password);
+
+            System.out.println("********** CustomerResource.banCustomer(): Staff "
+                    + staff.getUsername() + " login remotely via web service");
+
+            customerSessionBean.unbanCustomer(customerId);
+
+            return Response.status(Status.OK).build();
+        } catch (InvalidLoginCredentialException ex) {
+            return Response.status(Status.UNAUTHORIZED).entity(ex.getMessage()).build();
+
         } catch (Exception ex) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
