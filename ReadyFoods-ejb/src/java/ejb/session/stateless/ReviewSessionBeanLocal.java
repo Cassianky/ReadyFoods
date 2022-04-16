@@ -18,5 +18,7 @@ public interface ReviewSessionBeanLocal {
     public Review retrieveReviewByReviewId(Long reviewId) throws ReviewNotFoundException;
 
     public Long createNewReview(Review newReview, Long customerId, Long recipeId) throws CustomerNotFoundException, UnknownPersistenceException, InputDataValidationException;
+
+    public void deleteReview(Long reviewId);
     
 }

@@ -48,6 +48,11 @@ public class Review implements Serializable {
     @JoinColumn(nullable = false)
     private Customer customer;
     
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    private Recipe recipe;
+    
+    
     public Review() {
     }
 
@@ -129,6 +134,20 @@ public class Review implements Serializable {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    /**
+     * @return the recipe
+     */
+    public Recipe getRecipe() {
+        return recipe;
+    }
+
+    /**
+     * @param recipe the recipe to set
+     */
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
     }
     
 }

@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
@@ -79,7 +80,7 @@ public class Recipe implements Serializable {
     @NotNull
     private String videoURL;
 
-    @OneToMany
+    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)
     private List<Review> reviews;
     
     @OneToMany
