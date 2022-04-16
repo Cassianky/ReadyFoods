@@ -36,6 +36,10 @@ h1 {
     float: left;
 }
 
+.ui-datatable table {
+   table-layout: auto !important;
+}
+
 a:link, a:visited {
     color: #045491;
     font-weight : bold;
