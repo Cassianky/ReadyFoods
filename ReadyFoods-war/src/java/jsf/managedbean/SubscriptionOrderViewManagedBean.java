@@ -139,7 +139,9 @@ public class SubscriptionOrderViewManagedBean implements Serializable {
     }
 
     public boolean canUpdateOrderStatus(OrderEntity order) {
-        return order.getStatus() == Status.PROCESSED;
+        return order.getStatus() == Status.PROCESSED || 
+                order.getStatus() == Status.DELIVERED || 
+                order.getStatus() == Status.ONTHEWAY  ;
 
     }
 
