@@ -50,21 +50,22 @@ public class OrderEntityResource {
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveAllEnquires(@QueryParam("username") String username,
+    public Response retrieveAllOrders(@QueryParam("username") String username,
             @QueryParam("password") String password) {
         try {
 
             Staff staff = staffSessionBean.staffLogin(username, password);
 
-            System.out.println("********** CustomerResource.retrieveAllOrders(): Staff "
+            System.out.println("********** CustomerResource.retrieveAllNormalOrders(): Staff "
                     + staff.getUsername() + " login remotely via web service");
 
-            List<OrderEntity> orders = orderEntitySessionBean.retrieveAllOrders();
+            List<OrderEntity> orders = orderEntitySessionBean.retrieveAllNormalOrders();
 
             for (OrderEntity order : orders) {
                 System.out.println("****************************");
                 System.out.println(order.getOrderEntityId());
                 order.setDateForDelivery(null);
+                order.setOrderLineItems(null);
 
                 order.getCustomer().getEnquiries().clear();
                 order.getCustomer().getFoodDiaryRecords().clear();

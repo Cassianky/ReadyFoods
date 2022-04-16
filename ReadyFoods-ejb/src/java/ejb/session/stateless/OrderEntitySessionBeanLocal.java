@@ -38,4 +38,6 @@ public interface OrderEntitySessionBeanLocal {
 
     public List<OrderEntity> retrieveAllSubscriptionOrders();
 
+    public List<OrderEntity> retrieveAllNormalOrders();
+
 }

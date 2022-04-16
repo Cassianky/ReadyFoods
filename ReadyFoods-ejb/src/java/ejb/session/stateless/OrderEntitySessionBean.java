@@ -209,6 +209,15 @@ public class OrderEntitySessionBean implements OrderEntitySessionBeanLocal {
 
         return query.getResultList();
     }
+    
+    @Override
+    public List<OrderEntity> retrieveAllNormalOrders() {
+        Query query = entityManager.createQuery("SELECT o FROM OrderEntity o WHERE o.customer IS NOT NULL");
+
+        return query.getResultList();
+    }
+    
+    
 
     @Override
     public List<OrderEntity> retrieveAllOrdersForACustomer(Long customerId
