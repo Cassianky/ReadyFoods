@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.Customer;
+import entity.OrderEntity;
 import entity.Subscription;
 import java.util.List;
 import java.util.Set;
@@ -22,6 +23,7 @@ import util.exception.CreateNewSubscriptionException;
 import util.exception.CustomerNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.NoOngoingSubscriptionException;
+import util.exception.OrderNotFoundException;
 import util.exception.SubscriptionNotFoundException;
 
 /**
@@ -30,6 +32,9 @@ import util.exception.SubscriptionNotFoundException;
  */
 @Stateless
 public class SubscriptionSessionBean implements SubscriptionSessionBeanLocal {
+
+    @EJB(name = "OrderEntitySessionBeanLocal")
+    private OrderEntitySessionBeanLocal orderEntitySessionBeanLocal;
 
     @EJB(name = "CustomerSessionBeanLocal")
     private CustomerSessionBeanLocal customerSessionBeanLocal;
@@ -75,8 +80,20 @@ public class SubscriptionSessionBean implements SubscriptionSessionBeanLocal {
     // basic cancellation w no edge case check
     public void cancelSubscription(Long subscriptionId) throws SubscriptionNotFoundException {
         Subscription subToCancel = retrieveSubscriptionBySubscriptionId(subscriptionId);
+
         subToCancel.setOngoing(false);
 
+    }
+
+    public void cancelSubscription(Long customerId, Long subscriptionId) throws SubscriptionNotFoundException, 
+            CustomerNotFoundException, NoOngoingSubscriptionException, OrderNotFoundException {
+        Subscription subToCancel = retrieveSubscriptionBySubscriptionId(subscriptionId);
+        OrderEntity currentOrder = subToCancel.getCurrentOrder();
+        if (currentOrder != null) {
+            orderEntitySessionBeanLocal.deleteSubscriptionOrder(customerId, subscriptionId);
+            
+        }
+        subToCancel.setOngoing(false);
     }
 
     @Override

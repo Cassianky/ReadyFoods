@@ -27,24 +27,22 @@ public class ProcessRecipeSelectionManagedBean implements ProcessRecipeSelection
     // "Insert Code > Add Business Method")
     @Schedule(dayOfWeek = "7", hour = "23", minute = "59", second = "59")
     public void weeklyProcess() {
-         System.out.println("**********Processing subscription orders manually***********");
+        System.out.println("**********Processing subscription orders automatically***********");
 
         List<Subscription> ongoingSubscriptions = subscriptionSessionBeanLocal.retrieveAllOngoingSubscriptions();
 
         for (Subscription sub : ongoingSubscriptions) {
             if (sub.getCurrentOrder() == null) {
                 System.out.println("TODO: Generate for customer if they do not select");
-                
-                
-                
+
             } else {
                 System.out.println("Current order found");
                 sub.setRemainingDuration(sub.getRemainingDuration() - 1);
-                
+
                 sub.getCurrentOrder().setStatus(Status.PROCESSED);
                 sub.getCurrentOrder().setPaid(Boolean.TRUE);
                 sub.setCurrentOrder(null);
-                
+
                 if (sub.getRemainingDuration() == 0) {
                     sub.setOngoing(Boolean.FALSE);
                 }
@@ -53,7 +51,8 @@ public class ProcessRecipeSelectionManagedBean implements ProcessRecipeSelection
 
     }
 
-    public void process() {
+    public Integer process() {
+        int count = 0;
         System.out.println("**********Processing subscription orders manually***********");
 
         List<Subscription> ongoingSubscriptions = subscriptionSessionBeanLocal.retrieveAllOngoingSubscriptions();
@@ -61,22 +60,23 @@ public class ProcessRecipeSelectionManagedBean implements ProcessRecipeSelection
         for (Subscription sub : ongoingSubscriptions) {
             if (sub.getCurrentOrder() == null) {
                 System.out.println("TODO: Generate for customer if they do not select");
-                
-                
-                
+
             } else {
                 System.out.println("Current order found");
                 sub.setRemainingDuration(sub.getRemainingDuration() - 1);
-                
+
                 sub.getCurrentOrder().setStatus(Status.PROCESSED);
                 sub.getCurrentOrder().setPaid(Boolean.TRUE);
                 sub.setCurrentOrder(null);
-                
+                count++;
+
                 if (sub.getRemainingDuration() == 0) {
                     sub.setOngoing(Boolean.FALSE);
                 }
             }
         }
+        return count;
 
     }
+
 }

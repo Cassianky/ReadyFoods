@@ -205,6 +205,18 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         customerToUpdate.getBookedmarkedRecipes().remove(recipeToRemove);
     }
     
+    @Override
+    public void banCustomer(Long customerId){
+        Customer customerToBan = em.find(Customer.class,customerId);
+        customerToBan.setIsBanned(true);
+    }
+    
+    @Override
+    public void unbanCustomer(Long customerId){
+        Customer customerToBan = em.find(Customer.class,customerId);
+        customerToBan.setIsBanned(false);
+    }
+    
     //Ask angely do we need to stop when customer can update some profile stuff?
     @Override
     public void updateCustomer(Customer customer) throws CustomerNotFoundException, UpdateCustomerException, InputDataValidationException

@@ -14,7 +14,7 @@ import javax.ejb.Local;
 @Local
 public interface ProcessRecipeSelectionManagedBeanLocal {
 
-    public void process();
+    public Integer process();
 
     public void weeklyProcess();
     

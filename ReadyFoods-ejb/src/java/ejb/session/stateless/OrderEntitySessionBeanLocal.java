@@ -36,4 +36,8 @@ public interface OrderEntitySessionBeanLocal {
 
     public OrderEntity retrieveOrderByCustomerId(Long recipeId, Long customerId) throws OrderNotFoundException;
 
+    public List<OrderEntity> retrieveAllSubscriptionOrders();
+
+    public List<OrderEntity> retrieveAllNormalOrders();
+
 }

@@ -191,7 +191,7 @@ public class SubscriptionSelectRecipesManagedBean implements Serializable {
         //System.out.println(currentCustomerEntity.getDietType());
         for (OrderLineItem oli : orderLineItems) {
             Category dietType = getDietTypeForRecipe(oli.getRecipe());
-            if (dietType != null && dietType.getName().toLowerCase().equals(currentCustomerEntity.getDietType().name().toLowerCase())) {
+            if (dietType != null && dietType.getName().replaceAll("\\s+","").toLowerCase().equals(currentCustomerEntity.getDietType().name().toLowerCase())) {
                 getRecommendedLineItems().add(oli);
             } else {
                 this.otherLineItems.add(oli);
