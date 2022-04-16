@@ -17,7 +17,5 @@ import util.exception.CreateCommentException;
 public interface CommentSessionBeanLocal {
 
    public Long createNewCommentForRecipe(Long recipeId, CommentEntity newComment) throws CreateCommentException;
-
-    public void deleteComment(Long commentId, Long recipeId);
     
 }

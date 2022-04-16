@@ -50,13 +50,7 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
 
     @Override
     public List<CommentEntity> getAllComments(Recipe recipe) {
-//        Query query = em.createQuery("SELECT c FROM CommentEntity c, Recipe r WHERE r.recipeId=:inRecipeId");
-//        query.setParameter("inRecipeId",recipe.getRecipeId());
         Recipe r = em.find(Recipe.class, recipe.getRecipeId());
-        r.getComments();
-        for(CommentEntity c:r.getComments()){
-            System.out.println("ejb.session.stateless.RecipeSessionBean.getAllComments()" + c.getCommentEntityId());
-        }
         return r.getComments();
     }
 

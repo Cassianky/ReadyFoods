@@ -30,7 +30,6 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(ws.rest.CategoryResource.class);
-        resources.add(ws.rest.CommentResource.class);
         resources.add(ws.rest.CustomerResource.class);
         resources.add(ws.rest.EnquiryResource.class);
         resources.add(ws.rest.IngredientResource.class);
