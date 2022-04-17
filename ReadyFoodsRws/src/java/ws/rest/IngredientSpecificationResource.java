@@ -54,7 +54,7 @@ public class IngredientSpecificationResource {
                 Staff staff = staffSessionBeanLocal.staffLogin(createIngredientSpecificationReq.getUsername(), createIngredientSpecificationReq.getPassword());
                 System.out.println("********** IngredientResource.createIngredient(): Staff " + staff.getUsername() + " login remotely via web service");
 
-                Long newIngredientSpecificationId = ingredientSpecificaitonSessionBeanLocal.createNewIngredientSpecification(createIngredientSpecificationReq.getIngredientSpecification(), createIngredientSpecificationReq.getIngredientId());
+                Long newIngredientSpecificationId = ingredientSpecificaitonSessionBeanLocal.createNewIngredientSpecification(createIngredientSpecificationReq.getIngredientSpecification(), createIngredientSpecificationReq.getIngredient().getIngredientId());
 
                 IngredientSpecification newIngredientSpecification = ingredientSpecificaitonSessionBeanLocal.retrieveIngredientSpecificationById(newIngredientSpecificationId);
 

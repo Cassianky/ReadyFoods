@@ -1,5 +1,6 @@
 package ws.datamodel;
 
+import entity.Ingredient;
 import entity.IngredientSpecification;
 
 public class CreateIngredientSpecificationReq {
@@ -7,16 +8,16 @@ public class CreateIngredientSpecificationReq {
     private String username;
     private String password;
     private IngredientSpecification ingredientSpecification;
-    private Long ingredientId;
+    private Ingredient ingredient;
 
     public CreateIngredientSpecificationReq() {
     }
 
-    public CreateIngredientSpecificationReq(String username, String password, IngredientSpecification ingredientSpecification, Long ingredientSpecificationId) {
+    public CreateIngredientSpecificationReq(String username, String password, IngredientSpecification ingredientSpecification) {
         this.username = username;
         this.password = password;
         this.ingredientSpecification = ingredientSpecification;
-        this.ingredientId = ingredientSpecificationId;
+        this.ingredient = ingredientSpecification.getIngredient();
     }
 
     public String getUsername() {
@@ -43,12 +44,12 @@ public class CreateIngredientSpecificationReq {
         this.ingredientSpecification = ingredientSpecification;
     }
 
-    public Long getIngredientId() {
-        return ingredientId;
+    public Ingredient getIngredient() {
+        return ingredient;
     }
 
-    public void setIngredientId(Long ingredientId) {
-        this.ingredientId = ingredientId;
+    public void setIngredient(Ingredient ingredient) {
+        this.ingredient = ingredient;
     }
 
 }

@@ -21,29 +21,30 @@ import util.exception.CategoryNotFoundException;
 import util.exception.CreateRecipeException;
 import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.RecipeNotFoundException;
 import util.exception.RecipeTitleExistException;
 import util.exception.UnknownPersistenceException;
 import ws.datamodel.CreateRecipeReq;
 
 @Path("Recipe")
 public class RecipeResource {
-    
+
     @Context
     private UriInfo context;
-    
+
     private final SessionBeanLookup sessionBeanLookup;
-    
+
     private final RecipeSessionBeanLocal recipeSessionBeanLocal;
     private final StaffSessionBeanLocal staffSessionBeanLocal;
-    
+
     public RecipeResource() {
-        
+
         sessionBeanLookup = new SessionBeanLookup();
-        
+
         this.staffSessionBeanLocal = sessionBeanLookup.lookupStaffSessionBeanLocal();
         this.recipeSessionBeanLocal = sessionBeanLookup.lookupRecipeSessionBeanLocal();
     }
-    
+
     @Path("retrieveAllRecipes")
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
@@ -56,11 +57,11 @@ public class RecipeResource {
             System.out.println("********** RecipeResource.retrieveAllRecipes(): Staff " + staff.getUsername() + " login remotely via web service");
 
             List<Recipe> recipes = recipeSessionBeanLocal.retrieveAllRecipes();
-            
-            for(Recipe r : recipes) {
+
+            for (Recipe r : recipes) {
                 //r.getCategories().clear();
-                
-                for(Category c : r.getCategories()){
+
+                for (Category c : r.getCategories()) {
                     c.setParentCategory(null);
                     c.getRecipes().clear();
                 }
@@ -76,13 +77,13 @@ public class RecipeResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
-    
+
     @Path("retrieveRecipe/{recipeId}")
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveRecipe(@QueryParam("username") String username,
-            @QueryParam("password") String password, 
+            @QueryParam("password") String password,
             @QueryParam("recipeId") Long recipeId) {
 
         try {
@@ -90,14 +91,14 @@ public class RecipeResource {
             System.out.println("********** RecipeResource.retrieveRecipe(): Staff " + staff.getUsername() + " login remotely via web service");
 
             Recipe recipe = recipeSessionBeanLocal.retrieveRecipeByRecipeId(recipeId);
-            
-            for(Category c : recipe.getCategories()) {
+
+            for (Category c : recipe.getCategories()) {
                 c.getRecipes().clear();
             }
-            
-//            recipe.getCategories().clear();
 
-            GenericEntity<Recipe> genericRecipe = new GenericEntity<Recipe>(recipe){};
+//            recipe.getCategories().clear();
+            GenericEntity<Recipe> genericRecipe = new GenericEntity<Recipe>(recipe) {
+            };
 
             return Response.status(Response.Status.ACCEPTED).entity(recipe).build();
         } catch (InvalidLoginCredentialException ex) {
@@ -106,7 +107,7 @@ public class RecipeResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
-    
+
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -117,7 +118,7 @@ public class RecipeResource {
                 System.out.println("********** RecipeResource.createRecipe(): Staff " + staff.getUsername() + " login remotely via web service");
 
                 Recipe newRecipe = recipeSessionBeanLocal.createNewRecipe(createRecipeReq.getRecipe(), createRecipeReq.getCategoryIds(), createRecipeReq.getIngredientSpecificationIds());
-
+                
                 return Response.status(Response.Status.OK).entity(newRecipe).build();
             } catch (InvalidLoginCredentialException ex) {
                 return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();

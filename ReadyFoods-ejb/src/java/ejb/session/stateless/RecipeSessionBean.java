@@ -76,13 +76,14 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
                     throw new CreateRecipeException("A category must be selected for the recipe");
                 }
 
+                List<IngredientSpecification> isList = new ArrayList<>();
+                
                 for (Long isId : ingredientSpecificationId) {
-                    IngredientSpecification is = ingredientSpecificationSessionBeanLocal.retrieveIngredientSpecificationById(isId);
-                    newRecipe.getIngredientSpecificationList().add(is);
-                    System.out.println("ejb.session.stateless.RecipeSessionBean.createNewRecipe()" + is.getIngredientSpecificationId());
-
+                    isList.add(ingredientSpecificationSessionBeanLocal.retrieveIngredientSpecificationById(isId));
                 }
 
+                newRecipe.setIngredientSpecificationList(isList);
+                
                 List<Category> categoriesList = new ArrayList<>();
 
                 for (Long categoryId : categoriesId) {
