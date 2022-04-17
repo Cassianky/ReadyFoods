@@ -103,27 +103,27 @@ public class DataInitSessionBean {
             staffSessionBeanLocal.createNewStaff(new Staff("Moderator", "Moderator1", StaffType.MODERATOR, "moderator1", "password"));
 
             Ingredient ingredient1 = new Ingredient("Chicken", "Whole Chicken between 1kg to 1.5kg", IngredientUnit.Whole, new BigDecimal("10.00"), 50, 150);
-            Ingredient ingredient2 = new Ingredient("Salt", "Salt by 10 grams.unit", IngredientUnit.Gram, new BigDecimal("0.05"), 100 * 1000, 20 * 1000);
+            Ingredient ingredient2 = new Ingredient("Salt", "Sea Salt", IngredientUnit.Gram, new BigDecimal("0.05"), 100 * 1000, 20 * 1000);
             Ingredient ingredient3 = new Ingredient("Scallion", "Scallion by bunch", IngredientUnit.Whole, new BigDecimal("0.50"), 50, 10);
-            Ingredient ingredient4 = new Ingredient("Sesame Oil", "Sesame Oil by 100 ml/unit", IngredientUnit.Millitre, new BigDecimal("0.80"), 50 * 1000, 10 * 1000);
+            Ingredient ingredient4 = new Ingredient("Sesame Oil", "Pure Sesame Oil", IngredientUnit.Millitre, new BigDecimal("0.01"), 50 * 1000, 10 * 1000);
             Ingredient ingredient5 = new Ingredient("Ginger", "Whole Ginger between 15-30g", IngredientUnit.Whole, new BigDecimal("0.50"), 50, 10);
             Ingredient ingredient6 = new Ingredient("Rice", "Rice 1kg per pack", IngredientUnit.Kilogram, new BigDecimal("2.50"), 200, 50);
-            Ingredient ingredient7 = new Ingredient("Spaghetti", "Dried bunch of Spaghetti", IngredientUnit.Gram, new BigDecimal("3.50"), 200, 50);
-            Ingredient ingredient8 = new Ingredient("Olive Oil", "Olive Oil by 100 ml/unit", IngredientUnit.Millitre, new BigDecimal("1.00"), 50 * 1000, 10 * 1000);
-            Ingredient ingredient9 = new Ingredient("Beef", "100g per piece", IngredientUnit.Piece, new BigDecimal("10.00"), 75, 15);
-            Ingredient ingredient10 = new Ingredient("Tomato", "20g per piece", IngredientUnit.Piece, new BigDecimal("1.50"), 100, 20);
-            Ingredient ingredient11 = new Ingredient("Sugar", "Sugar by 10 grams/unit", IngredientUnit.Gram, new BigDecimal("0.03"), 100 * 1000, 10 * 1000);
-            Ingredient ingredient12 = new Ingredient("Pepper", "Pepper by 10 grams/unit", IngredientUnit.Gram, new BigDecimal("0.01"), 100 * 1000, 10 * 1000);
+            Ingredient ingredient7 = new Ingredient("Spaghetti", "Dried bunch of Spaghetti", IngredientUnit.Gram, new BigDecimal("0.02"), 200, 50);
+            Ingredient ingredient8 = new Ingredient("Olive Oil", "Purest Virgin Olive Oil", IngredientUnit.Millitre, new BigDecimal("0.01"), 50 * 1000, 10 * 1000);
+            Ingredient ingredient9 = new Ingredient("Beef", "100g per piece", IngredientUnit.Piece, new BigDecimal("5.00"), 75, 15);
+            Ingredient ingredient10 = new Ingredient("Tomato", "20g per piece", IngredientUnit.Piece, new BigDecimal("0.50"), 100, 20);
+            Ingredient ingredient11 = new Ingredient("Sugar", "Fine Sugar", IngredientUnit.Gram, new BigDecimal("0.01"), 100 * 1000, 10 * 1000);
+            Ingredient ingredient12 = new Ingredient("Pepper", "Pepper from Brazil", IngredientUnit.Gram, new BigDecimal("0.01"), 100 * 1000, 10 * 1000);
             Ingredient ingredient13 = new Ingredient("Garlic", "1 Piece Garlic ~20 gram", IngredientUnit.Piece, new BigDecimal("2.50"), 200, 50);
-            Ingredient ingredient14 = new Ingredient("Elbow Pasta", "Macaroni by 100grams/unit", IngredientUnit.Gram, new BigDecimal("3.00"), 100, 1000);
-            Ingredient ingredient15 = new Ingredient("Heavy Cream", "Heavy Cream by 1 cup/unit", IngredientUnit.Cup, new BigDecimal("5.00"), 100, 1000);
-            Ingredient ingredient16 = new Ingredient("Cheddar Cheese", "Cheddar Cheese by 1 cup/unit", IngredientUnit.Cup, new BigDecimal("5.00"), 100, 1000);
-            Ingredient ingredient17 = new Ingredient("Parmesan", "Parmesan by 1 cup/unit", IngredientUnit.Cup, new BigDecimal("5.00"), 100, 1000);
-            Ingredient ingredient18 = new Ingredient("White Rice", "White Rice by 1 cup/unit", IngredientUnit.Cup, new BigDecimal("2.00"), 100, 1000);
+            Ingredient ingredient14 = new Ingredient("Elbow Pasta", "Macaroni", IngredientUnit.Cup, new BigDecimal("1.50"), 100, 1000);
+            Ingredient ingredient15 = new Ingredient("Heavy Cream", "Heavy Cream", IngredientUnit.Cup, new BigDecimal("2.50"), 100, 1000);
+            Ingredient ingredient16 = new Ingredient("Cheddar Cheese", "Cheddar Cheese", IngredientUnit.Cup, new BigDecimal("3.00"), 100, 1000);
+            Ingredient ingredient17 = new Ingredient("Parmesan", "Parmesan", IngredientUnit.Cup, new BigDecimal("3.00"), 100, 1000);
+            Ingredient ingredient18 = new Ingredient("White Rice", "White Rice", IngredientUnit.Cup, new BigDecimal("2.00"), 100, 1000);
             Ingredient ingredient19 = new Ingredient("Egg", "One standard", IngredientUnit.Piece, new BigDecimal("0.50"), 100, 1000);
-            Ingredient ingredient20 = new Ingredient("Light Soy Sauce", "Light Soy Sauce by 100 ml/unit", IngredientUnit.Millitre, new BigDecimal("1.00"), 100, 1000);
-            Ingredient ingredient21 = new Ingredient("ReadyFoods' Fudge Brownie Mix", "ReadyFoods' Fudge Brownie Mix by 500 grams/unit", IngredientUnit.Gram, new BigDecimal("7.00"), 100, 1000);
-            Ingredient ingredient22 = new Ingredient("Vegetable Oil", "Vegetable Oil by 100 ml/unit", IngredientUnit.Millitre, new BigDecimal("1.00"), 50 * 1000, 10 * 1000);
+            Ingredient ingredient20 = new Ingredient("Light Soy Sauce", "Light Soy Sauce", IngredientUnit.Millitre, new BigDecimal("0.01"), 100, 1000);
+            Ingredient ingredient21 = new Ingredient("ReadyFoods' Fudge Brownie Mix", "ReadyFoods' Fudge Brownie Mix", IngredientUnit.Gram, new BigDecimal("0.01"), 100, 1000);
+            Ingredient ingredient22 = new Ingredient("Vegetable Oil", "Vegetable Oil", IngredientUnit.Millitre, new BigDecimal("0.01"), 50 * 1000, 10 * 1000);
 
             Long ingredient1Id = ingredientSessionBeanLocal.createNewIngredient(ingredient1);
             Long ingredient2Id = ingredientSessionBeanLocal.createNewIngredient(ingredient2);
@@ -150,38 +150,38 @@ public class DataInitSessionBean {
 
             //Chicken Rice
             IngredientSpecification ingredientSpecifcation1 = new IngredientSpecification(1);
-            IngredientSpecification ingredientSpecifcation2 = new IngredientSpecification(50);
+            IngredientSpecification ingredientSpecifcation2 = new IngredientSpecification(10);
             IngredientSpecification ingredientSpecifcation3 = new IngredientSpecification(1, PreparationMethod.Chopped);
-            IngredientSpecification ingredientSpecifcation4 = new IngredientSpecification(30);
+            IngredientSpecification ingredientSpecifcation4 = new IngredientSpecification(20);
             IngredientSpecification ingredientSpecifcation5 = new IngredientSpecification(1, PreparationMethod.Sliced);
             IngredientSpecification ingredientSpecifcation6 = new IngredientSpecification(1);
 
             //Spaghetti Bolognese
-            IngredientSpecification ingredientSpecifcation7 = new IngredientSpecification(1);
-            IngredientSpecification ingredientSpecifcation8 = new IngredientSpecification(1);
+            IngredientSpecification ingredientSpecifcation7 = new IngredientSpecification(100);
+            IngredientSpecification ingredientSpecifcation8 = new IngredientSpecification(10);
             IngredientSpecification ingredientSpecifcation9 = new IngredientSpecification(1, PreparationMethod.Minced);
-            IngredientSpecification ingredientSpecifcation10 = new IngredientSpecification(1, PreparationMethod.Crushed);
-            IngredientSpecification ingredientSpecifcation11 = new IngredientSpecification(1);
-            IngredientSpecification ingredientSpecifcation12 = new IngredientSpecification(1);
-            IngredientSpecification ingredientSpecifcation13 = new IngredientSpecification(1);
+            IngredientSpecification ingredientSpecifcation10 = new IngredientSpecification(2, PreparationMethod.Crushed);
+            IngredientSpecification ingredientSpecifcation11 = new IngredientSpecification(5);
+            IngredientSpecification ingredientSpecifcation12 = new IngredientSpecification(5);
+            IngredientSpecification ingredientSpecifcation13 = new IngredientSpecification(5);
 
             //Mac and Cheese
-            IngredientSpecification ingredientSpecifcation14 = new IngredientSpecification(300);
+            IngredientSpecification ingredientSpecifcation14 = new IngredientSpecification(1);
             IngredientSpecification ingredientSpecifcation15 = new IngredientSpecification(1);
             IngredientSpecification ingredientSpecifcation16 = new IngredientSpecification(1);
             IngredientSpecification ingredientSpecifcation17 = new IngredientSpecification(1);
-            IngredientSpecification ingredientSpecifcation2MacAndCheese = new IngredientSpecification(10);
+            IngredientSpecification ingredientSpecifcation2MacAndCheese = new IngredientSpecification(5);
 
             //Egg Fried Rice
             IngredientSpecification ingredientSpecifcation18 = new IngredientSpecification(2);
             IngredientSpecification ingredientSpecifcation19 = new IngredientSpecification(3);
-            IngredientSpecification ingredientSpecifcation20 = new IngredientSpecification(20);
+            IngredientSpecification ingredientSpecifcation20 = new IngredientSpecification(10);
             IngredientSpecification ingredientSpecifcation3EggFriedRice = new IngredientSpecification(1);
             IngredientSpecification ingredientSpecifcation13EggFriedRice = new IngredientSpecification(1);
-            IngredientSpecification ingredientSpecifcation4EggFriedRice = new IngredientSpecification(1);
-            IngredientSpecification ingredientSpecifcation2EggFriedRice = new IngredientSpecification(1);
-            IngredientSpecification ingredientSpecifcation12EggFriedRice = new IngredientSpecification(1);
-            IngredientSpecification ingredientSpecifcation8EggFriedRice = new IngredientSpecification(1);
+            IngredientSpecification ingredientSpecifcation4EggFriedRice = new IngredientSpecification(10);
+            IngredientSpecification ingredientSpecifcation2EggFriedRice = new IngredientSpecification(5);
+            IngredientSpecification ingredientSpecifcation12EggFriedRice = new IngredientSpecification(5);
+            IngredientSpecification ingredientSpecifcation8EggFriedRice = new IngredientSpecification(10);
 
             //For Fudge Brownie
             IngredientSpecification ingredientSpecifcation21 = new IngredientSpecification(500);
