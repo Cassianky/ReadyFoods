@@ -77,7 +77,12 @@ public class RecipeViewManagedBean implements Serializable {
             for(Review review:reviews){
                 rating += review.getRating();
             }
-            avgRating = rating / reviews.size();
+            if(reviews.size() == 0){
+                avgRating = 0;
+            } else {
+                avgRating = rating / reviews.size();
+            }
+            
             System.out.println("jsf.managedbean.RecipeViewManagedBean.postConstruct()" + avgRating);
             Customer currentCustomer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
             Customer customerRetrieved = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomer.getCustomerId());
