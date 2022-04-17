@@ -76,63 +76,46 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     }
 
     @Override
-    public Long createNewCustomer(Customer newCustomer) throws CustomerEmailExistsException, UnknownPersistenceException, InputDataValidationException 
-    {
-        Set<ConstraintViolation<Customer>>constraintViolations = validator.validate(newCustomer);
-        
-        if(constraintViolations.isEmpty())
-        {
-            try
-            {
+    public Long createNewCustomer(Customer newCustomer) throws CustomerEmailExistsException, UnknownPersistenceException, InputDataValidationException {
+        Set<ConstraintViolation<Customer>> constraintViolations = validator.validate(newCustomer);
+
+        if (constraintViolations.isEmpty()) {
+            try {
                 em.persist(newCustomer);
                 em.flush();
 
                 return newCustomer.getCustomerId();
-            }
-            catch(PersistenceException ex)
-            {
-                if(ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException"))
-                {
-                    if(ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException"))
-                    {
+            } catch (PersistenceException ex) {
+                if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
+                    if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
                         throw new CustomerEmailExistsException();
-                    }
-                    else
-                    {
+                    } else {
                         throw new UnknownPersistenceException(ex.getMessage());
                     }
-                }
-                else
-                {
+                } else {
                     throw new UnknownPersistenceException(ex.getMessage());
                 }
             }
-        }
-        else
-        {
+        } else {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
 
     @Override
-    public void updatePassword(Customer customer, String oldPassword, String newPassword) throws InputDataValidationException, CustomerNotFoundException, InvalidLoginCredentialException
-    {
-        if(customer != null && customer.getCustomerId() != null)
-        {
-            Set<ConstraintViolation<Customer>>constraintViolations = validator.validate(customer);
-        
-            if(constraintViolations.isEmpty())
-            {
+    public void updatePassword(Customer customer, String oldPassword, String newPassword) throws InputDataValidationException, CustomerNotFoundException, InvalidLoginCredentialException {
+        if (customer != null && customer.getCustomerId() != null) {
+            Set<ConstraintViolation<Customer>> constraintViolations = validator.validate(customer);
+
+            if (constraintViolations.isEmpty()) {
                 Customer customerToUpdate = retrieveCustomerByCustomerId(customer.getCustomerId());
                 String oldPasswordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(oldPassword + customer.getSalt()));
-            
+
                 if (customer.getPassword().equals(oldPasswordHash)) {
-                customerToUpdate.setSalt(CryptographicHelper.getInstance().generateRandomString(32));
-                customerToUpdate.setPassword(newPassword);
-            } else 
-            {
-                throw new InvalidLoginCredentialException("Customer does not exist or invalid password!");
-            }
+                    customerToUpdate.setSalt(CryptographicHelper.getInstance().generateRandomString(32));
+                    customerToUpdate.setPassword(newPassword);
+                } else {
+                    throw new InvalidLoginCredentialException("Customer does not exist or invalid password!");
+                }
             } else {
                 throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
             }
@@ -140,40 +123,34 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
             throw new CustomerNotFoundException("Customer ID not provided for customer to be updated");
         }
     }
-            
+
     @Override
-    public List<Customer> retrieveAllCustomers()
-    {
+    public List<Customer> retrieveAllCustomers() {
         Query query = em.createQuery("SELECT c FROM Customer c");
-        
+
         return query.getResultList();
     }
-    
+
     @Override
-    public Customer retrieveCustomerByEmail(String email) throws CustomerNotFoundException
-    {
+    public Customer retrieveCustomerByEmail(String email) throws CustomerNotFoundException {
         Query query = em.createQuery("SELECT c FROM Customer c WHERE c.email = :inEmail");
         query.setParameter("inEmail", email);
 
-        try 
-        {
+        try {
             return (Customer) query.getSingleResult();
-        } 
-        catch (NoResultException | NonUniqueResultException ex) 
-        {
+        } catch (NoResultException | NonUniqueResultException ex) {
             throw new CustomerNotFoundException("Customer Email " + email + " does not exist!");
         }
     }
 
     @Override
-    public Customer customerLogin(String email, String password) throws InvalidLoginCredentialException 
-    {
+    public Customer customerLogin(String email, String password) throws InvalidLoginCredentialException {
         try {
             Customer customer = retrieveCustomerByEmail(email);
             String passwordHash = CryptographicHelper.getInstance().byteArrayToHexString(CryptographicHelper.getInstance().doMD5Hashing(password + customer.getSalt()));
             System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
             if (customer.getPassword().equals(passwordHash)) {
-                 System.out.println("###########################################################################");
+                System.out.println("###########################################################################");
                 //May not need to load the enquiries here
                 customer.getEnquiries().size();
 
@@ -183,78 +160,66 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
                 customer.getFoods().size();
                 customer.getCreditCard();
                 return customer;
-            } else 
-            {
+            } else {
                 throw new InvalidLoginCredentialException("Customer does not exist or invalid password!");
             }
-        } catch (CustomerNotFoundException ex) 
-        {
+        } catch (CustomerNotFoundException ex) {
             throw new InvalidLoginCredentialException("Customer does not exist or invalid password!");
         }
     }
-    
+
     @Override
-    public void addBookmarkedRecipe(Recipe recipeToAdd, Long customerId){
-        Customer customerToUpdate = em.find(Customer.class,customerId);
+    public void addBookmarkedRecipe(Recipe recipeToAdd, Long customerId) {
+        Customer customerToUpdate = em.find(Customer.class, customerId);
         customerToUpdate.getBookedmarkedRecipes().add(recipeToAdd);
     }
-    
+
     @Override
-    public void removeBookmarkedRecipe(Recipe recipeToRemove, Long customerId){
-        Customer customerToUpdate = em.find(Customer.class,customerId);
+    public void removeBookmarkedRecipe(Recipe recipeToRemove, Long customerId) {
+        Customer customerToUpdate = em.find(Customer.class, customerId);
         customerToUpdate.getBookedmarkedRecipes().remove(recipeToRemove);
     }
-    
+
     @Override
-    public void banCustomer(Long customerId){
-        Customer customerToBan = em.find(Customer.class,customerId);
+    public void banCustomer(Long customerId) {
+        Customer customerToBan = em.find(Customer.class, customerId);
         customerToBan.setIsBanned(true);
     }
-    
+
     @Override
-    public void unbanCustomer(Long customerId){
-        Customer customerToBan = em.find(Customer.class,customerId);
+    public void unbanCustomer(Long customerId) {
+        Customer customerToBan = em.find(Customer.class, customerId);
         customerToBan.setIsBanned(false);
     }
-    
+
     //Ask angely do we need to stop when customer can update some profile stuff?
     @Override
-    public void updateCustomer(Customer customer) throws CustomerNotFoundException, UpdateCustomerException, InputDataValidationException
-    {
-        if(customer != null && customer.getCustomerId() != null)
-        {
-            Set<ConstraintViolation<Customer>>constraintViolations = validator.validate(customer);
-        
-            if(constraintViolations.isEmpty())
-            {
+    public void updateCustomer(Customer customer) throws CustomerNotFoundException, UpdateCustomerException, InputDataValidationException {
+        if (customer != null && customer.getCustomerId() != null) {
+            Set<ConstraintViolation<Customer>> constraintViolations = validator.validate(customer);
+
+            if (constraintViolations.isEmpty()) {
                 Customer customerToUpdate = retrieveCustomerByCustomerId(customer.getCustomerId());
 
-                if(customerToUpdate.getEmail().equals(customer.getEmail()))
-                {
-                   customerToUpdate.setFirstName(customer.getFirstName());
-                   customerToUpdate.setLastName(customer.getLastName());
-                   customerToUpdate.setUserName(customer.getUserName());
-                   //Cannot update email
-                   //customerToUpdate.setEmail(customer.getEmail());
-                   customerToUpdate.setContactNumber(customer.getContactNumber());
-                   customerToUpdate.setAddress(customer.getAddress());
-                   customerToUpdate.setProfilePicture(customer.getProfilePicture());
-                   customerToUpdate.setDob(customer.getDob());
-                   customerToUpdate.setActivityLevel(customer.getActivityLevel());
-                   customerToUpdate.setDietType(customer.getDietType());
-                }
-                else
-                {
+                if (customerToUpdate.getEmail().equals(customer.getEmail())) {
+                    customerToUpdate.setFirstName(customer.getFirstName());
+                    customerToUpdate.setLastName(customer.getLastName());
+                    customerToUpdate.setUserName(customer.getUserName());
+                    //Cannot update email
+                    //customerToUpdate.setEmail(customer.getEmail());
+                    customerToUpdate.setContactNumber(customer.getContactNumber());
+                    customerToUpdate.setAddress(customer.getAddress());
+                    customerToUpdate.setProfilePicture(customer.getProfilePicture());
+                    customerToUpdate.setDob(customer.getDob());
+                    customerToUpdate.setActivityLevel(customer.getActivityLevel());
+                    customerToUpdate.setDietType(customer.getDietType());
+                } else {
                     throw new UpdateCustomerException("Email of customer record to be updated does not match the existing record");
                 }
-            }
-            else
-            {
+            } else {
                 throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
             }
-        }
-        else
-        {
+        } else {
             throw new CustomerNotFoundException("Customer ID not provided for customer to be updated");
         }
     }
@@ -415,47 +380,42 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     @Override
     public List<FoodDiaryRecord> topFoodForEachMacro(Long customerId, String typeMacro) {
         List<FoodDiaryRecord> records = new ArrayList<>();
-        if(typeMacro.equals("calories"))
-        {   
-        Query query = em.createQuery("SELECT df from FoodDiaryRecord df WHERE df.customer.customerId = :inCustomerId AND df.startDate >= :inStartDate1"
-                + " AND df.calories = (SELECT MAX(df2.calories) FROM FoodDiaryRecord df2 WHERE df2.customer.customerId = :inCustomerId)");
-        query.setParameter("inCustomerId", customerId);
-        query.setParameter("inStartDate1", LocalDate.now().with(previousOrSame(MONDAY)).atTime(0, 0));
-        records = query.getResultList();
-        } else if(typeMacro.equals("carbs"))
-        {
-        Query query = em.createQuery("SELECT df from FoodDiaryRecord df WHERE df.customer.customerId = :inCustomerId AND df.startDate >= :inStartDate1"
-                + " AND df.carbs = (SELECT MAX(df2.carbs) FROM FoodDiaryRecord df2 WHERE df2.customer.customerId = :inCustomerId)");
-        query.setParameter("inCustomerId", customerId);
-        query.setParameter("inStartDate1", LocalDate.now().with(previousOrSame(MONDAY)).atTime(0, 0));
-        records = query.getResultList();
-        } else if(typeMacro.equals("protein"))
-        {
-        Query query = em.createQuery("SELECT df from FoodDiaryRecord df WHERE df.customer.customerId = :inCustomerId AND df.startDate >= :inStartDate1"
-                + " AND df.protein = (SELECT MAX(df2.protein) FROM FoodDiaryRecord df2 WHERE df2.customer.customerId = :inCustomerId)");
-        query.setParameter("inCustomerId", customerId);
-        query.setParameter("inStartDate1", LocalDate.now().with(previousOrSame(MONDAY)).atTime(0, 0));
-        records = query.getResultList();
-        } else if(typeMacro.equals("fats"))
-        {
-        Query query = em.createQuery("SELECT df from FoodDiaryRecord df WHERE df.customer.customerId = :inCustomerId AND df.startDate >= :inStartDate1"
-                + " AND df.fats = (SELECT MAX(df2.fats) FROM FoodDiaryRecord df2 WHERE df2.customer.customerId = :inCustomerId)");
-        query.setParameter("inCustomerId", customerId);
-        query.setParameter("inStartDate1", LocalDate.now().with(previousOrSame(MONDAY)).atTime(0, 0));
-        records = query.getResultList();
-        } else if(typeMacro.equals("sugar"))
-        {
-        Query query = em.createQuery("SELECT df from FoodDiaryRecord df WHERE df.customer.customerId = :inCustomerId AND df.startDate >= :inStartDate1"
-                + " AND df.sugar = (SELECT MAX(df2.sugar) FROM FoodDiaryRecord df2 WHERE df2.customer.customerId = :inCustomerId)");
-        query.setParameter("inCustomerId", customerId);
-        query.setParameter("inStartDate1", LocalDate.now().with(previousOrSame(MONDAY)).atTime(0, 0));
-        records = query.getResultList();
+        if (typeMacro.equals("calories")) {
+            Query query = em.createQuery("SELECT df from FoodDiaryRecord df WHERE df.customer.customerId = :inCustomerId AND df.startDate >= :inStartDate1"
+                    + " AND df.calories = (SELECT MAX(df2.calories) FROM FoodDiaryRecord df2 WHERE df2.customer.customerId = :inCustomerId)");
+            query.setParameter("inCustomerId", customerId);
+            query.setParameter("inStartDate1", LocalDate.now().with(previousOrSame(MONDAY)).atTime(0, 0));
+            records = query.getResultList();
+        } else if (typeMacro.equals("carbs")) {
+            Query query = em.createQuery("SELECT df from FoodDiaryRecord df WHERE df.customer.customerId = :inCustomerId AND df.startDate >= :inStartDate1"
+                    + " AND df.carbs = (SELECT MAX(df2.carbs) FROM FoodDiaryRecord df2 WHERE df2.customer.customerId = :inCustomerId)");
+            query.setParameter("inCustomerId", customerId);
+            query.setParameter("inStartDate1", LocalDate.now().with(previousOrSame(MONDAY)).atTime(0, 0));
+            records = query.getResultList();
+        } else if (typeMacro.equals("protein")) {
+            Query query = em.createQuery("SELECT df from FoodDiaryRecord df WHERE df.customer.customerId = :inCustomerId AND df.startDate >= :inStartDate1"
+                    + " AND df.protein = (SELECT MAX(df2.protein) FROM FoodDiaryRecord df2 WHERE df2.customer.customerId = :inCustomerId)");
+            query.setParameter("inCustomerId", customerId);
+            query.setParameter("inStartDate1", LocalDate.now().with(previousOrSame(MONDAY)).atTime(0, 0));
+            records = query.getResultList();
+        } else if (typeMacro.equals("fats")) {
+            Query query = em.createQuery("SELECT df from FoodDiaryRecord df WHERE df.customer.customerId = :inCustomerId AND df.startDate >= :inStartDate1"
+                    + " AND df.fats = (SELECT MAX(df2.fats) FROM FoodDiaryRecord df2 WHERE df2.customer.customerId = :inCustomerId)");
+            query.setParameter("inCustomerId", customerId);
+            query.setParameter("inStartDate1", LocalDate.now().with(previousOrSame(MONDAY)).atTime(0, 0));
+            records = query.getResultList();
+        } else if (typeMacro.equals("sugar")) {
+            Query query = em.createQuery("SELECT df from FoodDiaryRecord df WHERE df.customer.customerId = :inCustomerId AND df.startDate >= :inStartDate1"
+                    + " AND df.sugar = (SELECT MAX(df2.sugar) FROM FoodDiaryRecord df2 WHERE df2.customer.customerId = :inCustomerId)");
+            query.setParameter("inCustomerId", customerId);
+            query.setParameter("inStartDate1", LocalDate.now().with(previousOrSame(MONDAY)).atTime(0, 0));
+            records = query.getResultList();
         }
-        
+
         return records;
 
     }
-    
+
     @Override
     @Asynchronous
     public Future<Boolean> sendWelcomeEmail(String name, String email, String path) throws InterruptedException {
@@ -463,7 +423,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         Boolean result = emailManager.email(name, "readyfoodscorporation@gmail.com", email, path);
         return new AsyncResult<>(result);
     }
-    
+
     @Override
     @Asynchronous
     public Future<Boolean> sendOrderInvoiceEmail(String name, String email, String path) throws InterruptedException {
@@ -471,7 +431,6 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
         Boolean result = emailManager.emailOrderInvoice(name, "readyfoodscorporation@gmail.com", email, path);
         return new AsyncResult<>(result);
     }
-
 
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Customer>> constraintViolations) {
         String msg = "Input data validation error!:";

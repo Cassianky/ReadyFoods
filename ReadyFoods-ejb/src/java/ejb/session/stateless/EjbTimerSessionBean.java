@@ -5,6 +5,7 @@
  */
 package ejb.session.stateless;
 
+import entity.Ingredient;
 import entity.Recipe;
 import entity.RecipeOfTheDay;
 import static java.lang.Math.random;
@@ -44,7 +45,7 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanLocal {
     public void recipeOfTheDay() {
         
         LocalDate today = LocalDate.now();
-        System.out.print("********** EjbTimerSessionBean.morningRoomAllocationTimer(): Timeout at " + today);
+        System.out.print("********** EjbTimerSessionBean.recipeOfTheDay(): Timeout at " + today);
         Query query = em.createQuery("SELECT rd FROM RecipeOfTheDay rd");
         List<RecipeOfTheDay> recipes = query.getResultList();
         for(RecipeOfTheDay recipe: recipes)
@@ -74,6 +75,23 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanLocal {
         System.out.print("Recipe Of The Day" + newRecipeOfTheDayId);
         em.persist(newRecipeOfTheDay);
         em.flush();
+    }
+    
+    @Override
+    @Schedule(hour = "2", info = "reorderIngredientQuantity")
+    //@Schedule(hour = "*", minute = "*", second = "*/5", info = "recipeOfTheDay")
+    public void reorderIngredientQuantity() {
+        
+        LocalDate today = LocalDate.now();
+        System.out.print("********** EjbTimerSessionBean.reorderIngredientQuantity(): Timeout at " + today);
+        Query query = em.createQuery("SELECT i FROM Ingredient i");
+        List<Ingredient> ingredients = query.getResultList();
+        for(Ingredient ingredient: ingredients)
+        {
+            Integer reorderQty = ingredient.getReorderQuantity();
+            Integer stockQty = ingredient.getStockQuantity();
+            ingredient.setStockQuantity(reorderQty + stockQty);
+        }
     }
     
     @Override

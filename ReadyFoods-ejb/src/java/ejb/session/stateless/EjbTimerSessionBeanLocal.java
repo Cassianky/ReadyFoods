@@ -21,5 +21,7 @@ public interface EjbTimerSessionBeanLocal {
     public List<RecipeOfTheDay> retrieveRecipeOftheDay();
 
     public void recipeOfTheDayInitialise();
+
+    public void reorderIngredientQuantity();
     
 }

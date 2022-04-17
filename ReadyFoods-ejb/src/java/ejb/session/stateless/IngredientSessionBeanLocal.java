@@ -13,6 +13,7 @@ import util.exception.IngredientInsufficientStockQuantityException;
 import util.exception.IngredientNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.UnknownPersistenceException;
+import util.exception.UpdateIngredientException;
 
 /**
  *
@@ -30,5 +31,6 @@ public interface IngredientSessionBeanLocal {
     public Long createNewIngredient(Ingredient newIngredient) throws IngredientExistsException, UnknownPersistenceException, InputDataValidationException;
 
     public List<Ingredient> retrieveAllIngredients();
-    
+
+    public void updateIngredient(Ingredient ingredient) throws IngredientNotFoundException, InputDataValidationException, UpdateIngredientException;
 }

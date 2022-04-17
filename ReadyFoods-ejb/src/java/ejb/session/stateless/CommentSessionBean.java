@@ -42,6 +42,20 @@ public class CommentSessionBean implements CommentSessionBeanLocal {
         }
         return newComment.getCommentEntityId();
     }
+    
+    @Override
+    public void deleteComment(Long commentId, Long recipeId){
+        Recipe recipe = em.find(Recipe.class,recipeId);
+        CommentEntity comment = em.find(CommentEntity.class, commentId);
+        for(CommentEntity c : recipe.getComments()){
+            if(c.getCommentEntityId() == commentId){
+                recipe.getComments().remove(c);
+                break;
+            }
+        }    
+        em.remove(comment);
+        em.flush();     
+    }
 
     
 }

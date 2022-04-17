@@ -7,6 +7,7 @@ package jsf.managedbean;
 
 import ejb.session.stateless.CommentSessionBeanLocal;
 import entity.CommentEntity;
+import entity.Customer;
 import entity.Recipe;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
@@ -44,7 +45,10 @@ public class CommentsManagedBean implements Serializable {
     public void createNewComment(ActionEvent event){
         Recipe recipe = (Recipe)event.getComponent().getAttributes().get("recipeToComment");
         Date currentDate = new Date();
+        Customer customer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
+        customerName = customer.getUserName();
         CommentEntity newComment = new CommentEntity(currentDate,description,customerName);
+        
         try {
             Long commentId = commentSessionBeanLocal.createNewCommentForRecipe(recipe.getRecipeId(), newComment);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Comment added succesfully!", "Comment ID: " + commentId));

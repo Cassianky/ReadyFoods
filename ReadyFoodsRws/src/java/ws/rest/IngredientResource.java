@@ -10,6 +10,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.QueryParam;
@@ -22,7 +23,10 @@ import util.exception.IngredientNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.UnknownPersistenceException;
+import util.exception.UpdateCategoryException;
+import util.exception.UpdateIngredientException;
 import ws.datamodel.CreateIngredientReq;
+import ws.datamodel.UpdateIngredientReq;
 
 /**
  * REST Web Service
@@ -78,7 +82,7 @@ public class IngredientResource {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveIngredient(@QueryParam("username") String username,
-            @QueryParam("password") String password, 
+            @QueryParam("password") String password,
             @QueryParam("ingredientId") Long ingredientId) {
 
         try {
@@ -87,7 +91,8 @@ public class IngredientResource {
 
             Ingredient ingredient = ingredientSessionBeanLocal.retrieveIngredientByIngredientId(ingredientId);
 
-            GenericEntity<Ingredient> genericIngredient = new GenericEntity<Ingredient>(ingredient){};
+            GenericEntity<Ingredient> genericIngredient = new GenericEntity<Ingredient>(ingredient) {
+            };
 
             return Response.status(Status.ACCEPTED).entity(ingredient).build();
         } catch (InvalidLoginCredentialException ex) {
@@ -122,5 +127,27 @@ public class IngredientResource {
             return Response.status(Response.Status.BAD_REQUEST).entity("Invalid create new product request").build();
         }
     }
-    
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateIngredient(UpdateIngredientReq updateIngredientReq) {
+        if (updateIngredientReq != null) {
+            try {
+                Staff staff = staffSessionBeanLocal.staffLogin(updateIngredientReq.getUsername(),
+                        updateIngredientReq.getPassword());
+                ingredientSessionBeanLocal.updateIngredient(updateIngredientReq.getIngredient());
+                return Response.status(Response.Status.OK).build();
+            } catch (InvalidLoginCredentialException ex) {
+                return Response.status(Status.UNAUTHORIZED).entity(ex.getMessage()).build();
+            } catch (UpdateIngredientException ex) {
+                return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
+            } catch (Exception ex) {
+                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+            }
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid update category request").build();
+        }
+    }
+
 }
