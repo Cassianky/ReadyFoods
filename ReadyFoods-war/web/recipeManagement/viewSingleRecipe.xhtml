@@ -101,7 +101,7 @@
                         onclick="PF('dialogAddReview').show()" 
                         title="Add Review"
                         value="#{recipeViewManagedBean.customerHasBoughtRecipe ? 'Add a Review' : 'Buy Recipe To Add Review'}"
-                        actionListener="#{recipeViewManagedBean.addReview}"
+                        
                         icon="#{recipeViewManagedBean.customerHasBoughtRecipe ? 'pi pi-star-o' : 'pi pi-dollar' }"
                         disabled="#{recipeViewManagedBean.customerHasBoughtRecipe == false || profileManagedBean.currentCustomer.isBanned}"
                         />
