@@ -179,6 +179,12 @@ public class ProfileManagedBean implements Serializable {
      * @return the currentCustomer
      */
     public Customer getCurrentCustomer() {
+        try {
+            Customer c = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomer.getCustomerId());
+            currentCustomer = c;
+        } catch (CustomerNotFoundException ex) {
+            ex.printStackTrace();
+        }
         return currentCustomer;
     }
 
