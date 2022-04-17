@@ -23,6 +23,7 @@ import util.exception.IngredientInsufficientStockQuantityException;
 import util.exception.IngredientNotFoundException;
 import util.exception.InputDataValidationException;
 import util.exception.UnknownPersistenceException;
+import util.exception.UpdateIngredientException;
 
 /**x
  *
@@ -91,6 +92,37 @@ public class IngredientSessionBean implements IngredientSessionBeanLocal {
         }
 
         return msg;
+    }
+    
+    @Override
+    public void updateIngredient(Ingredient ingredient) throws IngredientNotFoundException, InputDataValidationException, UpdateIngredientException
+    {
+        if(ingredient != null && ingredient.getIngredientId() != null)
+        {
+            Set<ConstraintViolation<Ingredient>>constraintViolations = validator.validate(ingredient);
+            
+            if(constraintViolations.isEmpty())
+            {
+                Ingredient ingredientToUpdate = retrieveIngredientByIngredientId(ingredient.getIngredientId());
+                
+                if((ingredientToUpdate.getIngredientId()).equals(ingredient.getIngredientId()))
+                {
+                    ingredientToUpdate.setName(ingredient.getName());
+                    ingredientToUpdate.setDescription(ingredient.getDescription());
+                    ingredientToUpdate.setIngredientUnit(ingredient.getIngredientUnit());
+                    ingredientToUpdate.setUnitPrice(ingredient.getUnitPrice());
+                    ingredientToUpdate.setReorderQuantity(ingredient.getReorderQuantity());
+                    ingredientToUpdate.setStockQuantity(ingredient.getStockQuantity());
+                } else {
+                    throw new UpdateIngredientException("ID of ingredient record does not match existing records");
+       
+                }
+            } else {
+                throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
+            }
+        } else {
+            throw new IngredientNotFoundException("Ingredient ID " + ingredient.getIngredientId() + " does not exist!");
+        }
     }
 
     @Override
