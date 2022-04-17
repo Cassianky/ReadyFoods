@@ -51,6 +51,7 @@ public class IngredientSessionBean implements IngredientSessionBeanLocal {
         Set<ConstraintViolation<Ingredient>> constraintViolations = validator.validate(newIngredient);
         if (constraintViolations.isEmpty()) {
             try {
+                System.out.println(newIngredient.getUnitPrice());
                 em.persist(newIngredient);
                 em.flush();
                 System.out.println("********ejb.session.stateless.IngredientSessionBean.createNewIngredient()");
