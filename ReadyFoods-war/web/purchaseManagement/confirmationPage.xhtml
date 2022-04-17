@@ -9,11 +9,14 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:define name="content">
-        <h1>Confirmation Page</h1>
         <h:form>
-            <h:outputText style="text-align: center;font-size: 40px;font-weight: bold;color: #94774b;" value="THANK YOU FOR SHOPPING WITH READYFOODS!"/>
-            <p:commandButton value="Send Order Invoice to Email" actionListener="#{jasperReportManagedBean.generateReport}" ajax="false">
-            </p:commandButton>
+            <div class="confirm-bg"> 
+                <h1 class="home-header">Thank you for shopping with ReadyFoods!</h1>
+                <div class="home-button">
+                    <p:commandButton class="home-button" value="Click to send Order Invoice to Email" actionListener="#{jasperReportManagedBean.generateReport}" ajax="false"/>&nbsp;
+                    <p:commandButton class="home-button" actionListener="#{loginManagedBeanRF.toViewAllRecipesPage}" value="View More Recipes!"></p:commandButton>
+                </div>
+            </div>
         </h:form>
     </ui:define>
 
