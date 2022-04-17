@@ -51,6 +51,11 @@ public class LoginManagedBeanRF implements Serializable {
     {
          FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getApplicationContextPath() + "/registerCustomer.xhtml");
     }
+    
+    public void toViewAllRecipesPage(ActionEvent event) throws IOException
+    {
+         FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getApplicationContextPath() + "/recipeManagement/viewAllRecipe.xhtml");
+    }
      
     public void logout(ActionEvent event) throws IOException
     {
