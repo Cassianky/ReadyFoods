@@ -100,9 +100,21 @@ public class RecipeViewManagedBean implements Serializable {
     }
 
     public void updateRating(Integer ratingg){
-        rating += ratingg;
-        avgRating = rating / reviews.size();
+        try {
+            rating += ratingg;
+            recipe = recipeSessionBeanLocal.retrieveRecipeByRecipeId(getRecipeId());
+            
+            reviews = recipe.getReviews();
+            if(reviews.size() == 0){
+                avgRating = rating;
+            } else {
+                avgRating = rating / reviews.size();
+            }
+            
             System.out.println("jsf.managedbean.RecipeViewManagedBean.postConstruct()" + avgRating);
+        } catch (RecipeNotFoundException ex) {
+            Logger.getLogger(RecipeViewManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public Recipe getRecipe() {
