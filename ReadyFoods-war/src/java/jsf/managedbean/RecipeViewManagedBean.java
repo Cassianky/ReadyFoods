@@ -69,6 +69,7 @@ public class RecipeViewManagedBean implements Serializable {
     @PostConstruct
     public void postConstruct() {
         try {
+            System.out.println("Recipe view managed bean");
             recipe = recipeSessionBeanLocal.retrieveRecipeByRecipeId(getRecipeId());
             comments = recipe.getComments();
             reviews = recipe.getReviews();
