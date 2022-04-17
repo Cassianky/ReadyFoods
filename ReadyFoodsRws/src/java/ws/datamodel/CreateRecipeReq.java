@@ -8,18 +8,16 @@ public class CreateRecipeReq {
     private String username;
     private String password;
     private Recipe recipe;
-    private Long recipeId;
     private List<Long> categoryIds;
     private List<Long> ingredientSpecificationIds;
 
     public CreateRecipeReq() {
     }
 
-    public CreateRecipeReq(String username, String password, Recipe recipe, Long recipeId, List<Long> categoryIds, List<Long> ingredientSpecificationIds) {
+    public CreateRecipeReq(String username, String password, Recipe recipe, List<Long> categoryIds, List<Long> ingredientSpecificationIds) {
         this.username = username;
         this.password = password;
         this.recipe = recipe;
-        this.recipeId = recipeId;
         this.categoryIds = categoryIds;
         this.ingredientSpecificationIds = ingredientSpecificationIds;
     }
@@ -48,15 +46,7 @@ public class CreateRecipeReq {
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
     }
-
-    public Long getRecipeId() {
-        return recipeId;
-    }
-
-    public void setRecipeId(Long recipeId) {
-        this.recipeId = recipeId;
-    }
-
+    
     public List<Long> getCategoryIds() {
         return categoryIds;
     }

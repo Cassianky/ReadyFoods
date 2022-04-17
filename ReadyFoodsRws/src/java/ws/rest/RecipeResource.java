@@ -116,10 +116,11 @@ public class RecipeResource {
             try {
                 Staff staff = staffSessionBeanLocal.staffLogin(createRecipeReq.getUsername(), createRecipeReq.getPassword());
                 System.out.println("********** RecipeResource.createRecipe(): Staff " + staff.getUsername() + " login remotely via web service");
-
+                System.out.println("******cate size***: " + createRecipeReq.getCategoryIds().size());
+                System.out.println("******ingre spec size***: " + createRecipeReq.getIngredientSpecificationIds().size());
                 Recipe newRecipe = recipeSessionBeanLocal.createNewRecipe(createRecipeReq.getRecipe(), createRecipeReq.getCategoryIds(), createRecipeReq.getIngredientSpecificationIds());
                 
-                return Response.status(Response.Status.OK).entity(newRecipe).build();
+                return Response.status(Response.Status.OK).entity(newRecipe.getRecipeId()).build();
             } catch (InvalidLoginCredentialException ex) {
                 return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();
             } catch (RecipeTitleExistException ex) {

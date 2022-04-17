@@ -8,13 +8,16 @@ package ws.rest;
 import ejb.session.stateless.IngredientSpecificaitonSessionBeanLocal;
 import ejb.session.stateless.StaffSessionBeanLocal;
 import entity.IngredientSpecification;
+import entity.Recipe;
 import entity.Staff;
+import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import util.exception.IngredientExistsException;
@@ -58,7 +61,9 @@ public class IngredientSpecificationResource {
 
                 IngredientSpecification newIngredientSpecification = ingredientSpecificaitonSessionBeanLocal.retrieveIngredientSpecificationById(newIngredientSpecificationId);
 
-                return Response.status(Response.Status.OK).entity(newIngredientSpecification).build();
+//                GenericEntity<IngredientSpecification> genericIngredientSpec = new GenericEntity<IngredientSpecification>(newIngredientSpecification){};
+                
+                return Response.status(Response.Status.OK).entity(newIngredientSpecification.getIngredientSpecificationId()).build();
             } catch (InvalidLoginCredentialException ex) {
                 return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();
             } catch (IngredientExistsException ex) {

@@ -66,7 +66,6 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
             RecipeTitleExistException, UnknownPersistenceException,
             InputDataValidationException {
 
-//front end to take in a list of categories id, refer to product management xhtml
         Set<ConstraintViolation<Recipe>> constraintViolations = validator.validate(newRecipe);
 
         if (constraintViolations.isEmpty()) {
@@ -79,22 +78,30 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
                 List<IngredientSpecification> isList = new ArrayList<>();
                 
                 for (Long isId : ingredientSpecificationId) {
+                    System.out.println("******checking ingredient spec id: " + isId + "***********");
                     isList.add(ingredientSpecificationSessionBeanLocal.retrieveIngredientSpecificationById(isId));
                 }
 
+                for (IngredientSpecification is : isList) {
+                    System.out.println("Ingredient: " + is.getIngredient().getName() + ", Quantity: " + is.getQuantityPerServing());
+                }
+
                 newRecipe.setIngredientSpecificationList(isList);
-                
+
                 List<Category> categoriesList = new ArrayList<>();
 
                 for (Long categoryId : categoriesId) {
-                    categoriesList.add(categorySessionBeanLocal.
-                            retrieveCategoryByCategoryId(categoryId));
+                    categoriesList.add(categorySessionBeanLocal.retrieveCategoryByCategoryId(categoryId));
+                }
+                
+                 for (Category c : categoriesList) {
+                    System.out.println("Category: " + c.getName() + " has been added to recipe");
                 }
 
                 newRecipe.setCategories(categoriesList);
                 em.persist(newRecipe);
                 em.flush();
-                
+
                 return newRecipe;
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
