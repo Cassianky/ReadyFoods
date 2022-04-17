@@ -1,6 +1,7 @@
 package ws.rest;
 
 import ejb.session.stateless.IngredientSessionBeanLocal;
+import ejb.session.stateless.IngredientSpecificaitonSessionBeanLocal;
 import ejb.session.stateless.RecipeSessionBeanLocal;
 import ejb.session.stateless.StaffSessionBeanLocal;
 import java.util.logging.Level;
@@ -45,5 +46,16 @@ public class SessionBeanLookup {
             throw new RuntimeException(ne);
         }
     }
+    
+    public IngredientSpecificaitonSessionBeanLocal lookupIngredientSpecificationSessionBeanLocal() {
+        try {
+            javax.naming.Context c = new InitialContext();
+            return (IngredientSpecificaitonSessionBeanLocal) c.lookup("java:global/ReadyFoods/ReadyFoods-ejb/IngredientSpecificationSessionBean!ejb.session.stateless.IngredientSpecificaitonSessionBeanLocal");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
 
 }

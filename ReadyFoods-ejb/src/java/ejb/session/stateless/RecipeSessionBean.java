@@ -93,7 +93,8 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
                 newRecipe.setCategories(categoriesList);
                 em.persist(newRecipe);
                 em.flush();
-
+                
+                return newRecipe;
             } catch (PersistenceException ex) {
                 if (ex.getCause() != null && ex.getCause().getClass().getName().equals("org.eclipse.persistence.exceptions.DatabaseException")) {
                     if (ex.getCause().getCause() != null && ex.getCause().getCause().getClass().getName().equals("java.sql.SQLIntegrityConstraintViolationException")) {
@@ -110,7 +111,7 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
         } else {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
-        return newRecipe;
+        return null;
     }
 
     @Override
@@ -263,7 +264,7 @@ public class RecipeSessionBean implements RecipeSessionBeanLocal {
             }
         }
     }
-    
+
     private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<Recipe>> constraintViolations) {
         String msg = "Input data validation error!:";
 

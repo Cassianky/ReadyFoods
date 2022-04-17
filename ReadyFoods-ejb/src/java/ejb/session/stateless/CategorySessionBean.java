@@ -34,14 +34,12 @@ public class CategorySessionBean implements CategorySessionBeanLocal {
 
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
-    
-    
 
     public CategorySessionBean() {
         this.validatorFactory = Validation.buildDefaultValidatorFactory();
         this.validator = validatorFactory.getValidator();
     }
-    
+
     @Override
     public Category createNewCategory(Category newCategory, Long parentCategoryId) throws CreateCategoryException, InputDataValidationException {
         Set<ConstraintViolation<Category>> constraintViolations = validator.validate(newCategory);
@@ -75,15 +73,12 @@ public class CategorySessionBean implements CategorySessionBeanLocal {
             throw new InputDataValidationException(prepareInputDataValidationErrorsMessage(constraintViolations));
         }
     }
-    
+
     @Override
-    public void updateCategory(Category category) throws UpdateCategoryException, CategoryNotFoundException, InputDataValidationException
-    {
+    public void updateCategory(Category category) throws UpdateCategoryException, CategoryNotFoundException, InputDataValidationException {
         Boolean isParentDiet = true;
-        if(category.getParentCategory() != null)
-        {
-            if(category.getParentCategory().getName().equals("Diet Type"))
-            {
+        if (category.getParentCategory() != null) {
+            if (category.getParentCategory().getName().equals("Diet Type")) {
                 isParentDiet = true;
             } else {
                 isParentDiet = false;
@@ -91,16 +86,13 @@ public class CategorySessionBean implements CategorySessionBeanLocal {
         } else if ((category.getName()).equals("Diet Type") == false) {
             isParentDiet = false;
         }
-        
-        if(category != null && category.getCategoryId() != null && isParentDiet == false)
-        {
-            Set<ConstraintViolation<Category>>constraintViolations = validator.validate(category);
-            if(constraintViolations.isEmpty())
-            {
+
+        if (category != null && category.getCategoryId() != null && isParentDiet == false) {
+            Set<ConstraintViolation<Category>> constraintViolations = validator.validate(category);
+            if (constraintViolations.isEmpty()) {
                 Category categoryToUpdate = retrieveCategoryByCategoryId(category.getCategoryId());
-                
-                if(categoryToUpdate.getCategoryId().equals(category.getCategoryId()))
-                {
+
+                if (categoryToUpdate.getCategoryId().equals(category.getCategoryId())) {
                     categoryToUpdate.setName(category.getName());
                     categoryToUpdate.setDescription(category.getDescription());
                 } else {
@@ -160,6 +152,37 @@ public class CategorySessionBean implements CategorySessionBeanLocal {
     }
 
     @Override
+    public List<Category> retrieveNonDietTypeSubCategories() {
+        List<Category> nonDietSubCategories = new ArrayList<>();
+        List<Category> subCategories = retrieveAllSubCategories();
+        subCategories.size();
+        subCategories.forEach(result -> result.getRecipes());
+        
+        for(Category c : subCategories) {
+            if(!c.getParentCategory().getName().equals("Diet Type")) {
+                nonDietSubCategories.add(c);
+            }
+        }
+        return nonDietSubCategories;
+    }
+    
+    @Override
+    public List<Category> retrieveDietTypeSubCategories() {
+        List<Category> dietSubCategories = new ArrayList<>();
+        List<Category> subCategories = retrieveAllSubCategories();
+        subCategories.size();
+        subCategories.forEach(result -> result.getRecipes());
+        
+        for(Category c : subCategories) {
+            if(c.getParentCategory().getName().equals("Diet Type")) {
+                dietSubCategories.add(c);
+            }
+        }
+        return dietSubCategories;
+    }
+    
+
+    @Override
     public List<Category> retrieveSubCategoriesByParentId(Long parentId) throws CategoryNotFoundException {
         Query query = em.createQuery("SELECT c FROM Category c WHERE c.parentCategory.categoryId =:inCategoryID ");
         query.setParameter("inCategoryId", parentId);
@@ -174,21 +197,21 @@ public class CategorySessionBean implements CategorySessionBeanLocal {
             throw new CategoryNotFoundException("Please select a parent category!");
         }
     }
-    
+
     @Override
     public Category retrieveRecipeDietType(Long recipeId) throws CategoryNotFoundException, RecipeNotFoundException {
         Recipe recipe = recipeSessionBeanLocal.retrieveRecipeByRecipeId(recipeId);
         List<Category> cats = recipe.getCategories();
-        
+
         for (Category cat : cats) {
             //System.out.println(cat);
             if (cat.getParentCategory() != null && cat.getParentCategory().getName().equals("Diet Type")) {
                 return cat;
             }
         }
-        
+
         throw new CategoryNotFoundException("Recipe has no diet type.");
-        
+
     }
 
     @Override

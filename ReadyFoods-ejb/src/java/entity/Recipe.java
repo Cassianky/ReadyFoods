@@ -76,8 +76,7 @@ public class Recipe implements Serializable {
     //to be added in subsequently
     @Column
     private String picUrl;
-    @Column(nullable = false)
-    @NotNull
+    @Column
     private String videoURL;
 
     @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY)

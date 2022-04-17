@@ -107,6 +107,62 @@ public class CategoryResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
+    
+    @Path("retrieveNonDietCategories")
+    @GET
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveNonDietCategories(@QueryParam("username") String username,
+            @QueryParam("password") String password) {
+        try {
+            Staff staff = staffSessionBeanLocal.staffLogin(username, password);
+            System.out.println("********** CategoryResource.retrieveNonDietCategories(): Staff "
+                    + staff.getUsername() + " login remotely via web service");
+
+            List<Category> categories = categorySessionBeanLocal.retrieveNonDietTypeSubCategories();
+
+            for (Category category : categories) {
+                category.getParentCategory().getSubCategories().clear();
+                category.getSubCategories().clear();
+                category.getRecipes().clear();
+            }
+            GenericEntity<List<Category>> genericEntity = new GenericEntity<List<Category>>(categories) {
+            };
+            return Response.status(Status.OK).entity(genericEntity).build();
+        } catch (InvalidLoginCredentialException ex) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
+    
+    @Path("retrieveDietCategories")
+    @GET
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveDietCategories(@QueryParam("username") String username,
+            @QueryParam("password") String password) {
+        try {
+            Staff staff = staffSessionBeanLocal.staffLogin(username, password);
+            System.out.println("********** CategoryResource.retrieveDietCategories(): Staff "
+                    + staff.getUsername() + " login remotely via web service");
+
+            List<Category> categories = categorySessionBeanLocal.retrieveDietTypeSubCategories();
+
+            for (Category category : categories) {
+                category.getParentCategory().getSubCategories().clear();
+                category.getSubCategories().clear();
+                category.getRecipes().clear();
+            }
+            GenericEntity<List<Category>> genericEntity = new GenericEntity<List<Category>>(categories) {
+            };
+            return Response.status(Status.OK).entity(genericEntity).build();
+        } catch (InvalidLoginCredentialException ex) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+        }
+    }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
