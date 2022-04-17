@@ -102,6 +102,7 @@ public class MyFoodsManagedBean implements Serializable {
                         new FacesMessage(FacesMessage.SEVERITY_INFO,
                                 "New Food Created Successfully: ", null));
                 foodToCreate = new Food();
+                selectedRecipe = null;
             } else {
                 foodSessionBeanLocal.createNewFood(foodToCreate, currentCustomer.getCustomerId());
                 foods.add(foodToCreate);
