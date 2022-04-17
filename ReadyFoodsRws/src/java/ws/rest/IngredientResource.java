@@ -26,7 +26,7 @@ import util.exception.UnknownPersistenceException;
 import util.exception.UpdateCategoryException;
 import util.exception.UpdateIngredientException;
 import ws.datamodel.CreateIngredientReq;
-import ws.datamodel.UpdateIngredientReq;
+import ws.datamodel.UpdateIngredientsReq;
 
 /**
  * REST Web Service
@@ -59,8 +59,10 @@ public class IngredientResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveAllIngredients(@QueryParam("username") String username,
             @QueryParam("password") String password) {
-
+        System.out.println("Username" + username);
+        System.out.println("password123" + password);
         try {
+        
             Staff staff = staffSessionBeanLocal.staffLogin(username, password);
             System.out.println("********** IngredientResource.retrieveAllIngredients(): Staff " + staff.getUsername() + " login remotely via web service");
 
@@ -131,12 +133,12 @@ public class IngredientResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateIngredient(UpdateIngredientReq updateIngredientReq) {
-        if (updateIngredientReq != null) {
+    public Response updateIngredient(UpdateIngredientsReq updateIngredientsReq) {
+        if (updateIngredientsReq != null) {
             try {
-                Staff staff = staffSessionBeanLocal.staffLogin(updateIngredientReq.getUsername(),
-                        updateIngredientReq.getPassword());
-                ingredientSessionBeanLocal.updateIngredient(updateIngredientReq.getIngredient());
+                Staff staff = staffSessionBeanLocal.staffLogin(updateIngredientsReq.getUsername(),
+                        updateIngredientsReq.getPassword());
+                ingredientSessionBeanLocal.updateIngredient(updateIngredientsReq.getIngredient());
                 return Response.status(Response.Status.OK).build();
             } catch (InvalidLoginCredentialException ex) {
                 return Response.status(Status.UNAUTHORIZED).entity(ex.getMessage()).build();

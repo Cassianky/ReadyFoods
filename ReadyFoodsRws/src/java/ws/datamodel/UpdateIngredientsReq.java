@@ -11,15 +11,15 @@ import entity.Ingredient;
  *
  * @author ngcas
  */
-public class UpdateIngredientReq {
+public class UpdateIngredientsReq {
     private String username;
     private String password;
     private Ingredient ingredient;
 
-    public UpdateIngredientReq() {
+    public UpdateIngredientsReq() {
     }
 
-    public UpdateIngredientReq(String username, String password, Ingredient ingredient) {
+    public UpdateIngredientsReq(String username, String password, Ingredient ingredient) {
         this.username = username;
         this.password = password;
         this.ingredient = ingredient;
