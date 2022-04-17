@@ -37,4 +37,8 @@ public interface CategorySessionBeanLocal {
 
      public void updateCategory(Category category) throws UpdateCategoryException, CategoryNotFoundException, InputDataValidationException;
 
+    public List<Category> retrieveDietTypeSubCategories();
+
+    public List<Category> retrieveNonDietTypeSubCategories();
+
 }

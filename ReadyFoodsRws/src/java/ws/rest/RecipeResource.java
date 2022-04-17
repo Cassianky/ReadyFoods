@@ -116,7 +116,7 @@ public class RecipeResource {
                 Staff staff = staffSessionBeanLocal.staffLogin(createRecipeReq.getUsername(), createRecipeReq.getPassword());
                 System.out.println("********** RecipeResource.createRecipe(): Staff " + staff.getUsername() + " login remotely via web service");
 
-                Recipe newRecipe = recipeSessionBeanLocal.createNewRecipe(createRecipeReq.getRecipe(), createRecipeReq.getIngredientSpecificationIds(), createRecipeReq.getCategoryIds());
+                Recipe newRecipe = recipeSessionBeanLocal.createNewRecipe(createRecipeReq.getRecipe(), createRecipeReq.getCategoryIds(), createRecipeReq.getIngredientSpecificationIds());
 
                 return Response.status(Response.Status.OK).entity(newRecipe).build();
             } catch (InvalidLoginCredentialException ex) {
