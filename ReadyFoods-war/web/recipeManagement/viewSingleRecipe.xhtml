@@ -105,10 +105,17 @@
                         icon="#{recipeViewManagedBean.customerHasBoughtRecipe ? 'pi pi-star-o' : 'pi pi-dollar' }"
                         disabled="#{recipeViewManagedBean.customerHasBoughtRecipe == false || profileManagedBean.currentCustomer.isBanned}"
                         />
+                    <br></br>
+                    <h:outputText value="The average rating for this recipe is "/>
+                    <h:outputText style="font-size: 20px" value="#{recipeViewManagedBean.avgRating}"/>
+                    <p:rating  id="averageRating" value="#{recipeViewManagedBean.avgRating}" stars="5" cancel="false" readonly="true">
+                            </p:rating>
+                    <br></br>
                     <p:dataScroller value="#{recipeViewManagedBean.reviews}" var="review" chunkSize="5">
                         <f:facet name="header">
                             Scroll Down to Load More Reviews
                         </f:facet>
+                        
                         <h:panelGrid style="width:100%;" >
 
                             <h:outputText value="#{review.reviewDate}" style="float: right; text-align: right; font-size: 11px; color: grey; font-style: italic"/>&#160;

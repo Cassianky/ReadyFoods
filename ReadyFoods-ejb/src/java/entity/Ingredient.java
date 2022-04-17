@@ -28,7 +28,7 @@ public class Ingredient implements Serializable {
     @Column(length = 128)
     @Size(max = 128)
     private String description;
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 11, scale = 2)
     @NotNull
     IngredientUnit ingredientUnit; //ml, pcs, etc.
     @NotNull

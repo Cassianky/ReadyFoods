@@ -20,6 +20,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.inject.Inject;
 import javax.persistence.Column;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -59,6 +60,10 @@ public class ReviewManagedBean implements Serializable {
     @Min(1)
     @Max(5)
     private Integer rating;
+    
+    @Inject
+    private RecipeViewManagedBean recipeViewManagedBean;
+    
     public ReviewManagedBean() {
     }
     
@@ -72,7 +77,9 @@ public class ReviewManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Review added succesfully!", "Review ID: " + reviewId));
             setTitle(null);
             setDescription(null);
+            recipeViewManagedBean.updateRating(getRating());
             setRating(null);
+            
                     
         } catch (CustomerNotFoundException ex) {
             Logger.getLogger(ReviewManagedBean.class.getName()).log(Level.SEVERE, null, ex);

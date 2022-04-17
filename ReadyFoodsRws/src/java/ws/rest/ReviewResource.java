@@ -110,7 +110,7 @@ public class ReviewResource {
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteStaff(
+    public Response deleteReview(
             @QueryParam("username") String username,
             @QueryParam("password") String password,
             @PathParam("reviewId") Long reviewId) {

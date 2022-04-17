@@ -54,10 +54,16 @@ public class RecipeViewManagedBean implements Serializable {
     private Boolean isBookmarked;
 
     private Boolean customerHasBoughtRecipe;
+    
+    private Integer rating;
+    
+    private Integer avgRating;
+    
 
     public RecipeViewManagedBean() {
         recipeId = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("recipeToView");
         customerHasBoughtRecipe = false;
+        rating = 0;
     }
 
     @PostConstruct
@@ -66,6 +72,18 @@ public class RecipeViewManagedBean implements Serializable {
             recipe = recipeSessionBeanLocal.retrieveRecipeByRecipeId(getRecipeId());
             comments = recipe.getComments();
             reviews = recipe.getReviews();
+            rating = 0;
+            avgRating = 0;
+            for(Review review:reviews){
+                rating += review.getRating();
+            }
+            if(reviews.size() == 0){
+                avgRating = 0;
+            } else {
+                avgRating = rating / reviews.size();
+            }
+            
+            System.out.println("jsf.managedbean.RecipeViewManagedBean.postConstruct()" + avgRating);
             Customer currentCustomer = (Customer) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomer");
             Customer customerRetrieved = customerSessionBeanLocal.retrieveCustomerByCustomerId(currentCustomer.getCustomerId());
             for (Recipe bookmarkedRecipe : customerRetrieved.getBookedmarkedRecipes()) {
@@ -81,8 +99,10 @@ public class RecipeViewManagedBean implements Serializable {
         System.out.println(formattedRecipeSteps);
     }
 
-    public void addReview() {
-
+    public void updateRating(Integer ratingg){
+        rating += ratingg;
+        avgRating = rating / reviews.size();
+            System.out.println("jsf.managedbean.RecipeViewManagedBean.postConstruct()" + avgRating);
     }
 
     public Recipe getRecipe() {
@@ -134,6 +154,8 @@ public class RecipeViewManagedBean implements Serializable {
      * @return the reviews
      */
     public List<Review> getReviews() {
+        reviews = recipeSessionBeanLocal.getAllReviews(recipe);
+      
         return recipeSessionBeanLocal.getAllReviews(recipe);
     }
 
@@ -201,6 +223,34 @@ public class RecipeViewManagedBean implements Serializable {
      */
     public void setCustomerHasBoughtRecipe(Boolean customerHasBoughtRecipe) {
         this.customerHasBoughtRecipe = customerHasBoughtRecipe;
+    }
+
+    /**
+     * @return the rating
+     */
+    public Integer getRating() {
+        return rating;
+    }
+
+    /**
+     * @param rating the rating to set
+     */
+    public void setRating(Integer rating) {
+        this.rating = rating;
+    }
+
+    /**
+     * @return the avgRating
+     */
+    public Integer getAvgRating() {
+        return avgRating;
+    }
+
+    /**
+     * @param avgRating the avgRating to set
+     */
+    public void setAvgRating(Integer avgRating) {
+        this.avgRating = avgRating;
     }
 
 }
